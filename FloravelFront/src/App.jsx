@@ -13,6 +13,9 @@ import Cadastro from './Screen/Auth/CadastroScreen';
 import Login from './Screen/Auth/LoginScreen';
 // import ConsentPrivacy from './Screen/Auth/ConsentPrivacy';
 
+// Dashboard RH Corporativo
+import DashboardRh from './Screen/DashboardRh/DashboardRh';
+
 function App() {
   return (
     <BrowserRouter>
@@ -20,6 +23,9 @@ function App() {
       <Routes>
         {/* Landing page com Header e Footer gerais */}
         <Route path="/" element={<Layout><Landing /></Layout>} />
+
+        {/* Dashboard Corporativo B2B (Painel RH) */}
+        <Route path="/dashboard-rh" element={<DashboardRh />} />
 
         {/* Telas sem header/footer (apenas formulário centralizado) */}
         <Route path="/login" element={<Login />} />
