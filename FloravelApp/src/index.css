@@ -1,21 +1,26 @@
 /* Importa o Tailwind CSS v4 */
 @import "tailwindcss";
 
-/* Define o seu Design System (Isto substitui o antigo tailwind.config.js) */
+/* Define o seu Design System Oficial Florável */
 @theme {
-  /* Cores da Marca */
-  --color-primary: #1F3224;
-  --color-secondary: #E8A9B8;
+  /* Cores da Marca (Tokens Oficiais) */
+  --color-primary: #294D33; /* Verde Escuro Autoridade/CTAs */
+  --color-secondary: #E8A9BB; /* Rosa Antigo Destaques */
   --color-apoio: #516B55;
-  --color-superficie: #F4DDE5;
-  --color-fundo: #FCF7F9;
+  --color-superficie: #F4DDE5; /* Rosa Claro Acolhimento */
+  --color-fundo: #FCF7F9; /* Branco Rosado Canvas Principal */
 
-  /* Tons de Cinza */
-  --color-gray1: #333333;
+  --color-verde-escuro: #294D33;
+  --color-rosa-claro: #F4DDE5;
+  --color-rosa-antigo: #E8A9BB;
+  --color-verde-salvia: #EBF3ED;
+
+  /* Tons Neutros Acolhedores */
+  --color-gray1: #2B2829;
   --color-gray2: #4F4F4F;
-  --color-gray3: #828282;
-  --color-gray4: #BDBDBD;
-  --color-gray5: #E0E0E0;
+  --color-gray3: #756F72;
+  --color-gray4: #A8A2A5;
+  --color-gray5: #EFE9EB;
 
   /* Cores de Estado */
   --color-info: #2F80ED;
@@ -28,45 +33,98 @@
   --font-dmsans: "DM Sans", sans-serif;
 }
 
-
 /* 1. ROLAGEM SUAVE (SMOOTH SCROLL) GLOBAL */
 html, body {
   scroll-behavior: smooth;
+  background-color: #FCF7F9;
 }
 
 /* 2. EFEITO DE "MOLA" EM TODOS OS BOTÕES */
-/* Sempre que a mãe clicar num botão, ele encolhe ligeiramente (efeito touch) */
 button {
-  transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+  transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 button:active {
-  transform: scale(0.96) !important;
+  transform: scale(0.97);
 }
 
-/* 3. EFEITO DE DESLIZAR (SLIDE UP) PARA AS PÁGINAS */
-/* Como já tínhamos colocado a classe "animate-fadeIn" nas telas, 
-   agora vamos dizer ao CSS para fazer essa animação deslizar de baixo para cima */
+/* 3. ANIMAÇÕES DE ENTRADA SUAVE */
 .animate-fadeIn {
-  animation: slideUpFade 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: slideUpFade 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @keyframes slideUpFade {
   0% {
     opacity: 0;
-    transform: translateY(20px); /* Começa 20 pixels mais abaixo */
+    transform: translateY(8px);
   }
   100% {
     opacity: 1;
-    transform: translateY(0); /* Termina na posição original */
+    transform: translateY(0);
   }
 }
 
-/* 4. EFEITO DE DESLIZAR LATERAL PARA A SIDEBAR (Menus) */
-.animate-slideRight {
-  animation: slideRightFade 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+.animate-scaleUp {
+  animation: scaleUpModal 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-@keyframes slideRightFade {
-  0% { opacity: 0; transform: translateX(-15px); }
-  100% { opacity: 1; transform: translateX(0); }
+@keyframes scaleUpModal {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* 4. REGRAS GLOBAIS DE ACESSIBILIDADE */
+.font-scale-normal {
+  font-size: 16px;
+}
+.font-scale-large {
+  font-size: 18px;
+}
+.font-scale-extra {
+  font-size: 20px;
+}
+.font-scale-huge {
+  font-size: 22px;
+}
+
+.spacing-expanded * {
+  line-height: 1.8 !important;
+  letter-spacing: 0.035em !important;
+  word-spacing: 0.08em !important;
+}
+
+.reduce-motion * {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
+}
+
+/* Filtros de Daltonismo */
+.filter-deuteranopia {
+  filter: contrast(1.15) hue-rotate(-15deg) saturate(1.1);
+}
+
+.filter-protanopia {
+  filter: contrast(1.2) hue-rotate(18deg) saturate(1.2);
+}
+
+.filter-tritanopia {
+  filter: contrast(1.2) hue-rotate(180deg) saturate(0.9);
+}
+
+.filter-high-contrast {
+  filter: contrast(1.4) brightness(0.95);
+}
+
+.filter-high-contrast * {
+  text-shadow: 0 0 1px rgba(0, 0, 0, 0.15);
+}
+
+.filter-monochrome {
+  filter: grayscale(100%) contrast(1.2);
 }
