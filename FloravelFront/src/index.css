@@ -1,9 +1,111 @@
 @import "tailwindcss";
 
-/* Cole no FINAL do seu src/index.css */
-.font-display { font-family: 'Newsreader', Georgia, serif; }
-.font-body { font-family: 'Nunito', system-ui, sans-serif; }
+@theme {
+  /* ========================================================
+     BRAND GUIDE OFICIAL FLORÁVEL - TOKENS DE CORES
+  ======================================================== */
+  --color-verde-escuro: #294D33;
+  --color-verde-primario: #1F3224;
+  --color-rosa-antigo: #E8A9BB;
+  --color-verde-natural: #516B55;
+  --color-rosa-claro: #F4DDE5;
+  --color-branco-rosado: #FCF7F9;
+  --color-floravel-logo: #868961;
 
+  /* Cores de Apoio do Brand Guide */
+  --color-destaques: #A8435F;
+  --color-atencao: #F2E3C6;
+  --color-atencao-dark: #B26A00;
+  --color-erro: #F3D6D9;
+  --color-erro-dark: #9B3B4A;
+  --color-opcional-verde: #2A4030;
+  --color-opcional-vinho: #8E3A52;
+
+  /* Mapeamento semântico Florável */
+  --color-floravel-verde-escuro: #294D33;
+  --color-floravel-rosa-antigo: #E8A9BB;
+  --color-floravel-verde-natural: #516B55;
+  --color-floravel-rosa-claro: #F4DDE5;
+  --color-floravel-branco-rosado: #FCF7F9;
+  --color-floravel-bg: #FCF7F9;
+
+  /* Compatibilidade com design tokens anteriores */
+  --color-floravel-pink: #E8A9BB;
+  --color-floravel-pink-light: #F4DDE5;
+  --color-floravel-pink-dark: #294D33;
+  --color-floravel-sage: #516B55;
+  --color-floravel-sage-light: #F4DDE5;
+  --color-floravel-sage-dark: #294D33;
+
+  /* ========================================================
+     BRAND GUIDE OFICIAL FLORÁVEL - TIPOGRAFIA
+  ======================================================== */
+  --font-fraunces: 'Fraunces', Georgia, serif;
+  --font-nunito: 'Nunito', system-ui, -apple-system, sans-serif;
+  --font-dmsans: 'DM Sans', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Fraunces', Georgia, serif;
+  --font-sans: 'DM Sans', 'Nunito', system-ui, -apple-system, sans-serif;
+}
+
+/* ========================================================
+   CLASSES UTILITÁRIAS DE TIPOGRAFIA (BRAND GUIDE)
+======================================================== */
+.font-display, .font-serif, .font-fraunces { font-family: 'Fraunces', Georgia, serif; }
+.font-sub, .font-nunito { font-family: 'Nunito', sans-serif; }
+.font-body, .font-sans, .font-dmsans { font-family: 'DM Sans', sans-serif; }
+
+/* Escala Fraunces (Line-height 1.1x) */
+.heading-1 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 48px;
+  line-height: 1.1;
+}
+.heading-2 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 40px;
+  line-height: 1.1;
+}
+.heading-3 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 32px;
+  line-height: 1.1;
+}
+
+/* Escala DM Sans (Line-height 1.4x) */
+.text-body-lg {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 20px;
+  line-height: 1.4;
+}
+.text-body {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 18px;
+  line-height: 1.4;
+}
+.btn-text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 17px;
+  line-height: 1.4;
+}
+.nav-text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  line-height: 1.4;
+}
+.label-text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.4;
+}
+.apoio-text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* ========================================================
+   ANIMAÇÕES & TRANSIÇÕES EDITORIAIS
+======================================================== */
 @keyframes letter-in {
   from { opacity: 0; transform: translateY(.55em) rotate(4deg); filter: blur(8px); }
   to   { opacity: 1; transform: none; filter: blur(0); }
@@ -15,6 +117,10 @@
 @keyframes float     { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 @keyframes drift     { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(40px, -30px) scale(1.12); } }
 @keyframes nudge     { 0%, 100% { transform: scaleY(.4); opacity: .4; } 50% { transform: scaleY(1); opacity: 1; } }
+@keyframes pulse-subtle { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.85; transform: scale(1.03); } }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+.animate-fadeIn { animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
 .letter {
   display: inline-block; opacity: 0;
@@ -36,10 +142,18 @@
   }
 }
 
-html { scroll-behavior: smooth; }
- 
+html { 
+  scroll-behavior: smooth; 
+  background-color: #FCF7F9;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background-color: #FCF7F9;
+  color: #294D33;
+}
+
 /* Animações só começam quando a seção entra na tela (componente Reveal) */
 [data-reveal]:not([data-visible]) :is(.letter, .fade-up, .fade-left, .grow-x) {
   animation-play-state: paused;
 }
- 
