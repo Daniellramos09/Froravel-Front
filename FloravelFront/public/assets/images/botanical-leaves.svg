@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" fill="none" class="w-full h-full">
+  <defs>
+    <!-- Gradientes sutis para as folhas e galhos botânicos Florável -->
+    <linearGradient id="leafGradDark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#294D33" />
+      <stop offset="100%" stop-color="#1b3422" />
+    </linearGradient>
+    <linearGradient id="leafGradNatural" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#516B55" />
+      <stop offset="100%" stop-color="#294D33" />
+    </linearGradient>
+    <linearGradient id="roseAccent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E8A9BB" />
+      <stop offset="100%" stop-color="#F4DDE5" />
+    </linearGradient>
+    <filter id="softGlow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#294D33" flood-opacity="0.12" />
+    </filter>
+  </defs>
+
+  <!-- ================= RAMO ESQUERDO (Brotando da base até a altura dos ombros) ================= -->
+  <g class="botanical-branch-left" filter="url(#softGlow)">
+    <!-- Haste principal curva esquerda -->
+    <path d="M 85 540 C 70 420, 110 300, 155 210 C 175 170, 205 130, 245 95" 
+          stroke="#294D33" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+    
+    <!-- Haste secundária inferior esquerda -->
+    <path d="M 115 450 C 60 410, 45 340, 65 280" 
+          stroke="#516B55" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+
+    <!-- Folhas da haste secundária inferior esquerda -->
+    <path d="M 65 280 C 45 250, 40 220, 50 195 C 75 215, 80 250, 65 280 Z" fill="url(#leafGradNatural)"/>
+    <path d="M 55 330 C 25 315, 10 290, 20 270 C 40 280, 50 305, 55 330 Z" fill="url(#leafGradDark)"/>
+    <path d="M 85 385 C 50 375, 35 350, 45 335 C 68 345, 80 365, 85 385 Z" fill="url(#leafGradNatural)"/>
+
+    <!-- Folhas do caule principal esquerdo (Verde Natural #516B55 e Verde Escuro #294D33) -->
+    <path d="M 130 380 C 95 345, 90 295, 115 270 C 135 305, 145 350, 130 380 Z" fill="url(#leafGradNatural)"/>
+    <path d="M 148 355 C 175 325, 205 320, 215 340 C 190 365, 160 370, 148 355 Z" fill="url(#leafGradDark)"/>
+    
+    <path d="M 145 295 C 110 265, 115 215, 138 190 C 155 225, 160 265, 145 295 Z" fill="url(#leafGradDark)"/>
+    <path d="M 162 260 C 195 235, 230 238, 235 258 C 205 278, 175 280, 162 260 Z" fill="url(#leafGradNatural)"/>
+
+    <path d="M 175 200 C 145 168, 155 125, 185 105 C 198 140, 195 175, 175 200 Z" fill="url(#leafGradNatural)"/>
+    <path d="M 195 170 C 225 142, 260 150, 265 170 C 235 190, 208 190, 195 170 Z" fill="url(#leafGradDark)"/>
+
+    <!-- Ponta delicada superior esquerda -->
+    <path d="M 245 95 C 235 70, 245 45, 265 40 C 275 65, 265 88, 245 95 Z" fill="url(#leafGradDark)"/>
+    
+    <!-- Botões florais delicados em tom Rosa Antigo (#E8A9BB) -->
+    <circle cx="215" cy="115" r="5" fill="url(#roseAccent)" />
+    <circle cx="120" cy="225" r="4.5" fill="url(#roseAccent)" />
+    <circle cx="75" cy="305" r="4" fill="url(#roseAccent)" />
+  </g>
+
+  <!-- ================= RAMO DIREITO (Brotando da lateral média até o topo) ================= -->
+  <g class="botanical-branch-right" filter="url(#softGlow)">
+    <!-- Haste principal curva direita contornando o círculo -->
+    <path d="M 550 500 C 565 390, 530 280, 480 190 C 455 145, 420 105, 375 75" 
+          stroke="#294D33" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+
+    <!-- Haste lateral para o canto superior direito -->
+    <path d="M 515 320 C 565 285, 595 225, 585 160" 
+          stroke="#516B55" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+
+    <!-- Folhas da haste lateral direita -->
+    <path d="M 585 160 C 605 130, 615 100, 595 85 C 575 110, 570 140, 585 160 Z" fill="url(#leafGradNatural)"/>
+    <path d="M 570 215 C 600 198, 620 170, 610 150 C 585 165, 575 190, 570 215 Z" fill="url(#leafGradDark)"/>
+    <path d="M 545 270 C 580 255, 600 230, 590 215 C 568 228, 552 250, 545 270 Z" fill="url(#leafGradNatural)"/>
+
+    <!-- Folhas do caule principal direito -->
+    <path d="M 510 375 C 545 340, 550 290, 525 265 C 505 300, 495 345, 510 375 Z" fill="url(#leafGradDark)"/>
+    <path d="M 490 345 C 460 315, 430 315, 420 335 C 445 360, 475 362, 490 345 Z" fill="url(#leafGradNatural)"/>
+
+    <path d="M 485 270 C 520 240, 515 190, 490 168 C 475 200, 470 240, 485 270 Z" fill="url(#leafGradNatural)"/>
+    <path d="M 465 240 C 435 210, 400 215, 395 235 C 422 258, 452 258, 465 240 Z" fill="url(#leafGradDark)"/>
+
+    <path d="M 445 175 C 475 140, 465 98, 435 80 C 420 115, 425 152, 445 175 Z" fill="url(#leafGradDark)"/>
+    <path d="M 420 145 C 390 118, 355 125, 350 145 C 380 165, 408 165, 420 145 Z" fill="url(#leafGradNatural)"/>
+
+    <!-- Folha do ápice direito -->
+    <path d="M 375 75 C 385 50, 375 25, 355 20 C 345 45, 355 68, 375 75 Z" fill="url(#leafGradNatural)"/>
+
+    <!-- Botões florais delicados em Rosa Antigo (#E8A9BB) -->
+    <circle cx="410" cy="95" r="5" fill="url(#roseAccent)" />
+    <circle cx="505" cy="205" r="4.5" fill="url(#roseAccent)" />
+    <circle cx="555" cy="285" r="4" fill="url(#roseAccent)" />
+  </g>
+</svg>

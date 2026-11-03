@@ -1,127 +1,184 @@
-// src/Components/Layout/Footer.jsx
+import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import Reveal from "../Reveal/Reveal";
+import FloravelLogo from "../Common/FloravelLogo";
+import { ShieldCheck, Heart } from "lucide-react";
 
-const secoes = [["Início", "inicio"], ["Sobre", "sobre"], ["Recursos", "recursos"], ["Contato", "contato"]];
-const comunidade = [["Biblioteca", "/biblioteca"], ["Blog", "/blog"], ["Comunidade", "/comunidade"], ["Central de ajuda", "/ajuda"]];
-const servicos = [["Apoio emocional", "/apoio"], ["Profissionais", "/profissionais"], ["Parceiros", "/parceiros"], ["Agendamento", "/agendamento"]];
-
-// Troque os "#" pelos links reais das redes
 const redes = [
-  { nome: "Instagram", href: "#", icone: (<><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r=".6" /></>) },
-  { nome: "LinkedIn", href: "#", icone: (<><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z" /><rect x="2" y="9" width="4" height="12" /><circle cx="4" cy="4" r="2" /></>) },
-  { nome: "WhatsApp", href: "#", icone: <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z" /> },
+  { 
+    nome: "Instagram", 
+    href: "#", 
+    svg: (
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+      </svg>
+    ) 
+  },
+  { 
+    nome: "LinkedIn", 
+    href: "#", 
+    svg: (
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z" />
+        <rect x="2" y="9" width="4" height="12" />
+        <circle cx="4" cy="4" r="2" />
+      </svg>
+    ) 
+  },
+  { 
+    nome: "WhatsApp", 
+    href: "#", 
+    svg: (
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+      </svg>
+    ) 
+  },
 ];
 
-const link =
-  "relative inline-block py-1 text-[15px] text-[#4a5a52] transition-colors duration-300 hover:text-[#a8566f] " +
-  "after:absolute after:bottom-0 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 " +
-  "after:bg-[#e59bb0] after:transition-transform after:duration-300 hover:after:scale-x-100";
+const secoes = [
+  ["Espaço da Mãe", "inicio"],
+  ["A Jornada", "jornada"],
+  ["Recursos", "recursos"],
+  ["Para Psicólogos", "psicologos"],
+  ["Florável Corporate", "corporate"],
+  ["Impacto ESG", "esg"],
+  ["Depoimentos", "depoimentos"],
+  ["Contato", "contato"]
+];
 
-const Titulo = ({ children }) => (
-  <div className="mb-5">
-    <h3 className="text-[13px] font-semibold uppercase tracking-[0.12em] text-[#3b5646]">{children}</h3>
-    <span className="mt-2 block h-px w-8 bg-[#e59bb0]" />
-  </div>
-);
+const ferramentas = [
+  ["Triagem Edimburgo", "/#jornada"],
+  ["Diário Emocional", "/#recursos"],
+  ["Cápsula do Tempo", "/#recursos"],
+  ["Rodas Comunitárias", "/#jornada"],
+  ["Terapia Perinatal", "/#psicologos"],
+  ["Painel RH Corporativo", "/dashboard-rh"]
+];
 
-const Flor = ({ size = 28 }) => (
-  <svg width={size} height={size} viewBox="0 0 32 32" aria-hidden="true">
-    <g fill="#e98aa3" opacity=".9">
-      <ellipse cx="16" cy="9" rx="4" ry="7" />
-      <ellipse cx="16" cy="9" rx="4" ry="7" transform="rotate(60 16 16)" />
-      <ellipse cx="16" cy="9" rx="4" ry="7" transform="rotate(-60 16 16)" />
-    </g>
-    <circle cx="16" cy="16" r="3" fill="#f6c6d2" />
-  </svg>
-);
+const juridico = [
+  ["Privacidade (LGPD)", "#"],
+  ["Termos de Uso", "#"],
+  ["Ética Clínica & CFP", "#"],
+  ["Relatórios de Impacto ESG", "#"]
+];
 
 export default function Footer() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
 
-  // Mesma lógica do Header: rola na landing, ou volta para "/" e rola
   const goTo = (id) => (e) => {
     e.preventDefault();
-    if (pathname !== "/") return navigate("/", { state: { scrollTo: id } });
+    if (pathname !== "/") {
+      return navigate("/", { state: { scrollTo: id } });
+    }
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
-    <footer className="font-body  bg-[#f2ebe8] text-[#2f3a36]">
-      <Reveal className="mx-auto max-w-7xl px-6 pt-14 lg:px-10">
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr_1fr_1.2fr] lg:gap-8">
-          {/* Marca */}
-          <div className="fade-up space-y-5" style={{ "--d": "0ms" }}>
-            <img src="/LogoFin.png" alt="Florável" className="h-14 w-auto" />
-            <p className="max-w-[260px] text-[15px] leading-relaxed text-[#5b6561]">
-              Um espaço seguro e acolhedor para te apoiar na sua jornada da maternidade, com informação, escuta e cuidado.
+    <footer className="bg-[#FCF7F9] text-[#294D33] border-t border-[#E8A9BB]/40 font-sans">
+      <div className="mx-auto max-w-7xl px-6 py-16 lg:px-12">
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8 pb-12 border-b border-[#E8A9BB]/30">
+          
+          {/* Coluna 1: Marca & Propósito */}
+          <div className="lg:col-span-2 space-y-4 text-left">
+            <FloravelLogo />
+            <p className="text-sm text-[#3A443E] leading-relaxed max-w-sm font-normal">
+              Maternidade real sem julgamentos. Um ecossistema de apoio emocional contínuo, triagem especializada e acolhimento clínico no seu próprio ritmo.
             </p>
-            <p className="font-display text-lg italic text-[#e59bb0]">Você também é importante.</p>
-            <div className="flex gap-3">
+            <div className="flex items-center gap-2 text-xs font-semibold text-[#294D33]">
+              <ShieldCheck size={16} />
+              <span>Plataforma em estrita conformidade com a LGPD e ética CFP</span>
+            </div>
+            <div className="pt-2 flex items-center gap-3">
               {redes.map((r) => (
-                <a key={r.nome} href={r.href} aria-label={r.nome}
-                  className="flex h-10 w-10 items-center justify-center rounded-full border border-[#efc3cf] text-[#e59bb0] transition duration-300 hover:-translate-y-1 hover:bg-[#e59bb0] hover:text-white">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">{r.icone}</svg>
+                <a 
+                  key={r.nome}
+                  href={r.href} 
+                  className="w-9 h-9 rounded-full bg-white border border-[#E8A9BB]/50 flex items-center justify-center text-[#516B55] hover:text-[#294D33] hover:border-[#294D33] transition shadow-xs"
+                  aria-label={r.nome}
+                >
+                  {r.svg}
                 </a>
               ))}
             </div>
           </div>
 
-          {/* Navegação */}
-          <div className="fade-up" style={{ "--d": "150ms" }}>
-            <Titulo>Navegação</Titulo>
-            <ul className="space-y-2">
+          {/* Coluna 2: Navegação Rápida */}
+          <div className="text-left space-y-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-[#294D33] font-nunito">
+              Navegação
+            </h4>
+            <ul className="space-y-2 text-xs sm:text-sm">
               {secoes.map(([label, id]) => (
-                <li key={id}><a href={`#${id}`} onClick={goTo(id)} className={link}>{label}</a></li>
+                <li key={id}>
+                  <a
+                    href={`#${id}`}
+                    onClick={goTo(id)}
+                    className="text-[#516B55] hover:text-[#294D33] transition-colors"
+                  >
+                    {label}
+                  </a>
+                </li>
               ))}
             </ul>
           </div>
 
-          {/* Comunidade */}
-          <div className="fade-up" style={{ "--d": "300ms" }}>
-            <Titulo>Comunidade</Titulo>
-            <ul className="space-y-2">
-              {comunidade.map(([label, to]) => (
-                <li key={to}><Link to={to} className={link}>{label}</Link></li>
+          {/* Coluna 3: Ferramentas & B2B */}
+          <div className="text-left space-y-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-[#294D33] font-nunito">
+              Ecossistema
+            </h4>
+            <ul className="space-y-2 text-xs sm:text-sm">
+              {ferramentas.map(([label, path]) => (
+                <li key={label}>
+                  <Link
+                    to={path}
+                    className="text-[#516B55] hover:text-[#294D33] transition-colors"
+                  >
+                    {label}
+                  </Link>
+                </li>
               ))}
             </ul>
           </div>
 
-          {/* Serviços */}
-          <div className="fade-up" style={{ "--d": "450ms" }}>
-            <Titulo>Serviços</Titulo>
-            <ul className="space-y-2">
-              {servicos.map(([label, to]) => (
-                <li key={to}><Link to={to} className={link}>{label}</Link></li>
+          {/* Coluna 4: Legal & Suporte */}
+          <div className="text-left space-y-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-[#294D33] font-nunito">
+              Transparência
+            </h4>
+            <ul className="space-y-2 text-xs sm:text-sm">
+              {juridico.map(([label, path]) => (
+                <li key={label}>
+                  <a
+                    href={path}
+                    className="text-[#516B55] hover:text-[#294D33] transition-colors"
+                  >
+                    {label}
+                  </a>
+                </li>
               ))}
             </ul>
+            <div className="pt-2 text-xs text-[#516B55]">
+              <p className="font-semibold text-[#294D33]">Em crise emocional?</p>
+              <p>Ligue 188 (CVV - 24h gratuito)</p>
+            </div>
           </div>
 
-          {/* Um espaço para você */}
-          <div className="fade-up sm:col-span-2 lg:col-span-1 lg:border-l lg:border-[#efc3cf] lg:pl-8" style={{ "--d": "600ms" }}>
-            <Flor size={34} />
-            <h3 className="mt-3 text-[13px] font-semibold uppercase tracking-[0.12em] text-[#3b5646]">Um espaço para você</h3>
-            <p className="mt-3 text-[15px] leading-relaxed text-[#5b6561]">
-              Cada experiência na maternidade é única. Aqui, você pode encontrar apoio e acolhimento no seu próprio ritmo.
-            </p>
-            <a href="#sobre" onClick={goTo("sobre")}
-              className="group mt-4 inline-flex items-center gap-2 border-b border-[#efc3cf] pb-1 text-[15px] text-[#e59bb0] transition-colors hover:text-[#a8566f]">
-              Conheça a Florável
-              <span className="transition-transform duration-300 group-hover:translate-x-1.5">→</span>
-            </a>
-          </div>
         </div>
 
-        {/* Linha final */}
-        <div className="fade-up mt-12 flex flex-col items-center justify-between gap-3 border-t border-[#efc3cf] py-7 text-sm text-[#5b6561] sm:flex-row"
-          style={{ "--d": "800ms" }}>
-          <p>© {new Date().getFullYear()} Florável. Todos os direitos reservados.</p>
-          <p className="flex items-center gap-2 text-xs">
-            Com acolhimento, em cada etapa <Flor size={18} />
+        {/* Rodapé inferior */}
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#516B55] font-normal">
+          <p>© {new Date().getFullYear()} Florável Saúde Materna. Todos os direitos reservados.</p>
+          <p className="flex items-center gap-1.5">
+            Feito com rigor clínico e afeto para mulheres reais.
           </p>
         </div>
-      </Reveal>
+
+      </div>
     </footer>
   );
 }

@@ -1,30 +1,76 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import HomeScreen from "./HomeScreen";
+import HeroSection from "../../Components/LandingPage/HeroSection";
 import Sobre from "./SobreScreen";
-import ComoFunciona from "./ComoFuncionaScreen";
-import Recursos from "./RecursosScreen";
+import JourneySection from "../../Components/LandingPage/JourneySection";
+import FeaturesBentoSection from "../../Components/LandingPage/FeaturesBentoSection";
+import ProfessionalsSection from "../../Components/LandingPage/ProfessionalsSection";
+import CorporateSection from "../../Components/LandingPage/CorporateSection";
+import PartnershipSection from "../../Components/LandingPage/PartnershipSection";
 import Depoimentos from "./DepoimentosScreen";
 import Contato from "./ContatoScreen";
-import FlorFinal from "./Flor";
  
 export default function Landing() {
   const { state } = useLocation();
  
-  // Veio de /login ou /cadastro clicando no menu: rola até a seção pedida
+  // Rola até a seção caso tenha vindo de outra rota com state.scrollTo
   useEffect(() => {
-    if (state?.scrollTo) document.getElementById(state.scrollTo)?.scrollIntoView();
+    if (state?.scrollTo) {
+      const el = document.getElementById(state.scrollTo);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
+    }
   }, [state]);
  
   return (
-    <>
-      <div id="inicio"><HomeScreen /></div>
-      <section id="sobre" className="bg-[#fbf1ee]"><Sobre /></section>
-      <section id="como-funciona" className="bg-gradient-to-b from-[#fbf1ee] to-[#f7e3e6]"><ComoFunciona /></section>
-      <section id="recursos" className="bg-[#f7e3e6]"><Recursos /></section>
-      <section id="depoimentos" className="bg-gradient-to-b from-[#f7e3e6] to-[#fbf1ee]"><Depoimentos /></section>
-      <section id="contato" className="bg-[#fbf1ee]"><Contato /></section>
-      <FlorFinal />
-    </>
+    <div className="bg-[#FCF7F9] text-[#294D33] selection:bg-[#F4DDE5] selection:text-[#294D33]">
+      
+      {/* 1. Hero Section Editorial (Preservada com círculo botânico & figura recortada) */}
+      <section id="inicio">
+        <HeroSection />
+      </section>
+
+      {/* 2. Manifesto Emocional & Filosofia da Marca (Split-Screen de alto impacto visual) */}
+      <section id="sobre">
+        <Sobre />
+      </section>
+
+      {/* 3. A Jornada da Mãe (Visual, intuitiva, ilustrada com setas, mockups e folder cards) */}
+      <section id="jornada">
+        <JourneySection />
+      </section>
+
+      {/* 4. Funcionalidades da Plataforma (Bento Grid Editorial & Seletor de Humor Interativo) */}
+      <section id="recursos">
+        <FeaturesBentoSection />
+      </section>
+
+      {/* 5. Clínica com Propósito (Para Psicólogos e Terapeutas B2B2C com fotos reais) */}
+      <section id="psicologos">
+        <ProfessionalsSection />
+      </section>
+
+      {/* 6. Florável Corporate (B2B - Mini Dashboard RH & Retenção de Talentos) */}
+      <section id="corporate">
+        <CorporateSection />
+      </section>
+
+      {/* 7. Alianças ESG e Patrocínios Sociais (Bloco Imersivo Verde Escuro #294D33) */}
+      <section id="esg">
+        <PartnershipSection />
+      </section>
+
+      {/* 8. Vozes Reais & Depoimentos (Cards com fotos reais de mães da pasta fotoMae) */}
+      <section id="depoimentos">
+        <Depoimentos />
+      </section>
+
+      {/* 9. Canal de Contato & Acolhimento */}
+      <section id="contato">
+        <Contato />
+      </section>
+
+    </div>
   );
 }

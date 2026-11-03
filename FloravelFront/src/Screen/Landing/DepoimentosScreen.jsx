@@ -1,89 +1,119 @@
-import Reveal from "../../Components/Reveal/Reveal";
-import SplitText from "../../Components/SplitText/SplitText";
-import { Star } from "lucide-react";
+import React from "react";
+import { Star, Heart, Quote } from "lucide-react";
 
-const testimonials = [
-  {
-    name: "Camila, 28 anos",
-    text: "Eu achava que era fraqueza minha. O Florável me mostrou que pedir ajuda é o ato mais corajoso que uma mãe pode ter.",
-  },
-  {
-    name: "Renata, 34 anos",
-    text: "Encontrei outras mães que sentiam o mesmo que eu. Pela primeira vez, não me senti sozinha nessa jornada.",
-  },
-  {
-    name: "Juliana, 31 anos",
-    text: "O quiz me ajudou a perceber que o que eu sentia tinha nome. Hoje, com acompanhamento, consigo sorrir de verdade.",
-  },
-];
+export default function DepoimentosScreen() {
+  const testimonials = [
+    {
+      nome: "Camila Moura",
+      tempo: "Puérpera (bebê de 4 meses)",
+      foto: "/img/fotoMae/fotomae.jpg",
+      texto: "Eu achava que a vontade de chorar no fim da tarde era fraqueza. A autoavaliação da Florável me mostrou que o que eu sentia tinha nome e que pedir apoio é coragem, não culpa.",
+      badge: "Triagem & Diário",
+      tagBg: "bg-[#F4DDE5] text-[#294D33]"
+    },
+    {
+      nome: "Renata Silveira",
+      tempo: "Gestante (32ª semana)",
+      foto: "/img/fotoMae/fotomae1.jpg",
+      texto: "Nas Rodas de Conversa encontrei mulheres que sentiam o mesmo medo da solidão que eu. Pela primeira vez na gravidez, senti que não precisava fingir plenitude o tempo todo.",
+      badge: "Roda Comunitária",
+      tagBg: "bg-[#FCF7F9] text-[#294D33]"
+    },
+    {
+      nome: "Juliana Ferreira",
+      tempo: "Retorno da licença (6 meses)",
+      foto: "/img/fotoMae/fotomae3.jpg",
+      texto: "Minha empresa ofereceu a Florável como benefício. O suporte da psicóloga perinatal me deu chão para lidar com a ansiedade da separação e a volta ao escritório.",
+      badge: "Florável Corporate",
+      tagBg: "bg-[#F4DDE5] text-[#294D33]"
+    }
+  ];
 
-function Stars() {
   return (
-    <div className="mb-4 flex gap-1">
-      {Array.from({ length: 5 }).map((_, i) => (
-        <Star
-          key={i}
-          className="h-4 w-4 fill-[#e2a84b] text-[#e2a84b]"
-          strokeWidth={1.2}
-        />
-      ))}
-    </div>
-  );
-}
+    <section id="depoimentos" className="relative py-24 sm:py-32 bg-[#FCF7F9] overflow-hidden border-t border-[#E8A9BB]/30">
+      
+      {/* Luz ambiente difusa */}
+      <div 
+        aria-hidden="true" 
+        className="pointer-events-none absolute bottom-10 left-1/3 w-[36rem] h-[36rem] rounded-full bg-[#F4DDE5]/35 blur-[130px] -z-10" 
+      />
 
-export default function Depoimentos() {
-  return (
-    <Reveal className="font-body mx-auto min-h-screen max-w-7xl px-6 py-28 text-[#2f3a36] lg:px-10">
-      {/* Cabeçalho */}
-      <div className="mb-16 text-center">
-        <div className="mb-5 flex items-center justify-center gap-3 text-[11px] uppercase tracking-[0.25em] text-[#5b6561]">
-          <span className="grow-x h-px w-8 bg-[#c98a9d]" />
-          <SplitText text="Depoimentos" delay={100} />
-          <span className="grow-x h-px w-8 bg-[#c98a9d]" />
+      <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-12 w-full">
+        
+        {/* Cabeçalho */}
+        <div className="text-center max-w-2xl mx-auto mb-16 sm:mb-20">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#F4DDE5] border border-[#E8A9BB]/50 shadow-xs mb-4">
+            <Heart size={13} className="fill-[#E8A9BB] text-[#294D33]" />
+            <span className="text-[11px] uppercase tracking-[0.2em] font-semibold text-[#294D33] font-sans">
+              Vozes Reais &bull; Acolhimento Comprovado
+            </span>
+          </div>
+
+          <h2 className="font-serif text-3xl sm:text-4xl lg:text-[3.25rem] font-normal text-[#294D33] leading-[1.12] tracking-[-0.015em]">
+            Histórias de quem encontrou{" "}
+            <span className="italic font-serif text-[#E8A9BB]">
+              espaço para respirar.
+            </span>
+          </h2>
+
+          <p className="mt-4 text-base text-[#3A443E] leading-relaxed font-sans font-normal">
+            Relatos verdadeiros de mulheres que transformaram sua vivência na maternidade com escuta profissional e livre de julgamentos.
+          </p>
         </div>
-        <h2 className="font-display text-[clamp(2.2rem,4.5vw,3.8rem)] font-light leading-[1.08]">
-          <SplitText text="Histórias que" delay={300} />{" "}
-          <span className="italic text-[#a8566f]">
-            <SplitText text="inspiram." delay={900} />
-          </span>
-        </h2>
-        <p className="mx-auto mt-6 max-w-xl text-[17px] leading-relaxed text-[#46504c]">
-          <SplitText
-            by="word"
-            delay={1200}
-            text="Mães reais compartilham como o Florável transformou a relação delas com a maternidade."
-          />
-        </p>
-      </div>
 
-      {/* Cards */}
-      <div className="grid gap-6 md:grid-cols-3">
-        {testimonials.map((t, i) => (
-          <article
-            key={t.name}
-            className="fade-up rounded-[28px] border border-white/60 bg-white/50 p-8 shadow-xl shadow-rose-200/30 backdrop-blur-md transition duration-300 hover:-translate-y-2 hover:shadow-2xl"
-            style={{ "--d": `${1400 + i * 250}ms` }}
-          >
-            <Stars />
-
-            <blockquote className="text-[17px] leading-relaxed text-[#38423e]">
-              &ldquo;{t.text}&rdquo;
-            </blockquote>
-
-            {/* Divisor */}
-            <div className="my-5 h-px w-12 bg-[#e6c3cd]" />
-
-            {/* Autora */}
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[#f6dfe6] to-[#fbd9c4] text-sm font-semibold text-[#a8566f]">
-                {t.name.charAt(0)}
+        {/* CARDS DE DEPOIMENTO COM FOTOS REAIS EM FORMATO DE PASTA */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {testimonials.map((item) => (
+            <div
+              key={item.nome}
+              className="pt-4 relative group"
+            >
+              {/* Folder Tab Mini */}
+              <div className="absolute top-0 left-6 z-10 px-3.5 py-1 rounded-t-xl bg-white border-t border-l border-r border-[#E8A9BB] text-[10px] font-bold text-[#294D33] uppercase tracking-wider font-nunito">
+                {item.badge}
               </div>
-              <span className="text-sm font-medium text-[#5b6561]">{t.name}</span>
+
+              {/* Corpo do Card */}
+              <div className="rounded-3xl rounded-tl-sm bg-white border border-[#E8A9BB] p-7 sm:p-8 shadow-xs hover:shadow-xl hover:shadow-[#E8A9BB]/20 transition-all duration-300 flex flex-col justify-between text-left h-full">
+                
+                <div>
+                  {/* Estrelas */}
+                  <div className="flex gap-1 mb-5">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} size={15} className="fill-[#294D33] text-[#294D33]" />
+                    ))}
+                  </div>
+
+                  <Quote size={28} className="text-[#E8A9BB]/40 mb-3" />
+
+                  <p className="text-sm sm:text-[0.95rem] text-[#294D33] leading-relaxed font-sans italic mb-8">
+                    &ldquo;{item.texto}&rdquo;
+                  </p>
+                </div>
+
+                {/* Identificação da Mãe com Foto Real */}
+                <div className="pt-4 border-t border-[#E8A9BB]/30 flex items-center gap-3.5">
+                  <img
+                    src={item.foto}
+                    alt={item.nome}
+                    className="w-11 h-11 rounded-full object-cover border-2 border-[#E8A9BB]/60 shadow-xs"
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = "/img/1.jpg";
+                    }}
+                  />
+                  <div>
+                    <h4 className="text-sm font-bold text-[#294D33] font-nunito">{item.nome}</h4>
+                    <p className="text-xs text-[#516B55] font-sans">{item.tempo}</p>
+                  </div>
+                </div>
+
+              </div>
             </div>
-          </article>
-        ))}
+          ))}
+        </div>
+
       </div>
-    </Reveal>
+    </section>
   );
 }
-
