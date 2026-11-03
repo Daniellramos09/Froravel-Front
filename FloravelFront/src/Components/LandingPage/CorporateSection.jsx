@@ -93,14 +93,14 @@ export default function CorporateSection() {
         src="/img/fotoFlores/flor6-removebg-preview.png"
         alt=""
         aria-hidden="true"
-        className="pointer-events-none absolute -top-10 -left-10 w-44 sm:w-60 opacity-75 select-none drop-shadow-sm -rotate-12 z-0"
+        className="pointer-events-none absolute top-25 right-10 w-44 sm:w-60 opacity-75 select-none drop-shadow-sm -rotate-70 z-0 -scale-x-125 scale-125"
       />
 
       <img
         src="/img/fotoFlores/florong-removebg-preview.png"
         alt=""
         aria-hidden="true"
-        className="pointer-events-none absolute bottom-10 -right-10 w-44 sm:w-64 opacity-70 select-none drop-shadow-xs rotate-12 z-0"
+        className="pointer-events-none absolute -bottom-10 -right-7 w-44 sm:w-64 opacity-70 select-none drop-shadow-xs rotate-12 z-0 scale-90"
       />
 
       {/* Luz ambiente de fundo */}

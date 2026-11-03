@@ -27,14 +27,14 @@ export default function FeaturesBentoSection() {
         src="/img/fotoFlores/flor2-removebg-preview.png"
         alt=""
         aria-hidden="true"
-        className="pointer-events-none absolute -top-10 -right-8 sm:-right-4 w-48 sm:w-64 lg:w-80 opacity-85 select-none drop-shadow-sm rotate-12 z-0"
+        className="pointer-events-none absolute top-400 -right-0 sm:-right-40 w-48 sm:w-64 lg:w-80 opacity-85 select-none drop-shadow-sm -rotate-10 z-0"
       />
 
       <img
         src="/img/fotoFlores/flor3-removebg-preview.png"
         alt=""
         aria-hidden="true"
-        className="pointer-events-none absolute bottom-16 -left-10 w-44 sm:w-60 opacity-80 select-none drop-shadow-xs -rotate-12 z-0"
+        className="pointer-events-none absolute bottom-0 -left-2 w-44 sm:w-60 opacity-80 select-none drop-shadow-xs -rotate-12 z-0"
       />
 
       {/* Luz ambiente suave para profundidade */}

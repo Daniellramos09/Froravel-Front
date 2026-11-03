@@ -86,12 +86,7 @@ export default function JourneySection() {
       className="relative py-20 sm:py-28 bg-[#FCF7F9] overflow-hidden border-t border-[#E8A9BB]/30"
     >
       {/* Flor decorativa livre no canto superior direito */}
-      <img
-        src="/img/fotoFlores/flor1-removebg-preview.png"
-        alt=""
-        aria-hidden="true"
-        className="pointer-events-none absolute -top-12 -right-10 w-44 sm:w-60 lg:w-72 opacity-85 select-none drop-shadow-sm rotate-6 z-0"
-      />
+      
 
       {/* Flor secundária livre no canto inferior esquerdo */}
       <img

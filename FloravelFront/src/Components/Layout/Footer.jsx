@@ -77,8 +77,16 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-[#FCF7F9] text-[#294D33] border-t border-[#E8A9BB]/40 font-sans">
-      <div className="mx-auto max-w-7xl px-6 py-16 lg:px-12">
+    <footer className="relative bg-[#FCF7F9] text-[#294D33] border-t border-[#E8A9BB]/40 font-sans overflow-hidden">
+      
+      {/* Flor decorativa branca no canto inferior esquerdo */}
+      <img
+        src="/img/fotoFlores/flor1-removebg-preview.png"
+        alt=""
+        aria-hidden="true"
+          className="pointer-events-none absolute bottom-0 -left-35 -ml-10 w-44 sm:w-60 lg:w-120 opacity-60 select-none drop-shadow-xs z-0 transition-all duration-300"      />
+
+      <div className="mx-auto max-w-7xl px-6 py-16 lg:px-12 relative z-10">
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8 pb-12 border-b border-[#E8A9BB]/30">
           

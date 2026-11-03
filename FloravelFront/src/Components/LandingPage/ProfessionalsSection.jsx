@@ -91,7 +91,7 @@ export default function ProfessionalsSection() {
         src="/img/fotoFlores/flor5-removebg-preview.png"
         alt=""
         aria-hidden="true"
-        className="pointer-events-none absolute -bottom-16 -left-10 w-44 sm:w-60 opacity-60 select-none drop-shadow-xs -rotate-12 z-0"
+        className="pointer-events-none absolute -bottom-5 -left-5 w-44 sm:w-60 opacity-60 select-none drop-shadow-xs -rotate-12 z-0 scale-70"
       />
 
       {/* Luz ambiente de transição */}

@@ -5,12 +5,12 @@ export default function Sobre() {
   return (
     <section id="sobre" className="relative bg-[#FCF7F9] py-24 sm:py-32 overflow-hidden border-t border-[#E8A9BB]/30">
       
-      {/* Flor livre sem moldura da pasta fotoFlores */}
+      {/* Flor rosa livre da pasta fotoFlores (afastada do canto com margem suave) */}
       <img
         src="/img/fotoFlores/flor5-removebg-preview.png"
         alt=""
         aria-hidden="true"
-        className="pointer-events-none absolute -top-8 -right-8 w-40 sm:w-56 opacity-60 select-none drop-shadow-xs rotate-45 z-0"
+        className="pointer-events-none absolute top-10 height-20 right-10 sm:top-30 sm:right-10 lg:top-12 lg:right-140 w-36 sm:w-48 lg:w-50 opacity-90 select-none drop-shadow-sm rotate-12 z-0 transition-all duration-300"
       />
       
       {/* Luz ambiente difusa */}
