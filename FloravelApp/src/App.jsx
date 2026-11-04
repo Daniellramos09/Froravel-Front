@@ -220,7 +220,7 @@ function AppContent() {
     >
       <LogoutModal
         isOpen={isLogoutModalOpen}
-        onConfirm={() => (window.location.href = '/')}
+        onConfirm={() => (window.location.href = import.meta.env.VITE_LANDING_URL || 'http://localhost:5173')}
         onCancel={() => setIsLogoutModalOpen(false)}
       />
 
@@ -229,11 +229,11 @@ function AppContent() {
         <div className="overflow-y-auto pr-1">
           {/* LOGOTIPO */}
           <div 
-            className="flex items-center gap-3 px-4 mb-7 cursor-pointer group"
+            className="flex items-center gap-3 px-4 mb-4 cursor-pointer group"
             onClick={() => handleTabChange('home')}
           >
             <img 
-              src="/LogoFin.png" 
+              src="/img/fotoheader/logo.png" 
               alt="Logo Florável" 
               className="h-11 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
             />
@@ -241,6 +241,16 @@ function AppContent() {
               florável
             </span>
           </div>
+
+          {/* Atalho de Navegação para o Portal Principal */}
+          <a
+            href={import.meta.env.VITE_LANDING_URL || 'http://localhost:5173'}
+            className="flex items-center justify-between px-3.5 py-2 mx-2 mb-5 rounded-xl text-xs font-semibold text-[#516B55] bg-[#FCF7F9] hover:bg-[#F4DDE5]/60 border border-[#E8A9BB]/40 transition"
+            title="Voltar para a Landing Page principal"
+          >
+            <span>← Portal Principal</span>
+            <span className="text-[10px] text-stone-400">Início</span>
+          </a>
 
           <nav className="space-y-1.5">
             <NavItem icon={<Home size={21} />} label="Início" active={activeTab === 'home'} onClick={() => handleTabChange('home')} />

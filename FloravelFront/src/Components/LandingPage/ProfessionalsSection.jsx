@@ -10,8 +10,10 @@ import {
   Calendar, 
   ShieldCheck,
   X,
-  Sparkles
+  Sparkles,
+  ExternalLink
 } from "lucide-react";
+import { APP_LINKS } from "../../utils/appLinks";
 
 export default function ProfessionalsSection() {
   const [showModal, setShowModal] = useState(false);
@@ -247,14 +249,22 @@ export default function ProfessionalsSection() {
                   </span>
                 </div>
 
-                {/* Botão de Ação do Card */}
-                <div className="pt-2">
-                  <button 
-                    onClick={() => setShowModal(true)}
+                {/* Botões de Ação do Card */}
+                <div className="pt-2 space-y-2">
+                  <a
+                    href={APP_LINKS.terapeuta}
                     className="w-full py-3.5 rounded-full bg-[#294D33] hover:bg-[#1f3c27] text-[#FCF7F9] text-xs font-semibold uppercase tracking-wider flex items-center justify-center gap-2 shadow-sm transition cursor-pointer"
                   >
+                    <span>Acessar Portal do Terapeuta</span>
+                    <ExternalLink size={14} />
+                  </a>
+
+                  <button 
+                    onClick={() => setShowModal(true)}
+                    className="w-full py-2.5 rounded-full bg-white hover:bg-[#F4DDE5]/40 text-[#294D33] border border-[#516B55]/30 text-xs font-semibold uppercase tracking-wider flex items-center justify-center gap-2 transition cursor-pointer"
+                  >
                     <Calendar size={14} />
-                    <span>Fazer credenciamento profissional</span>
+                    <span>Fazer novo credenciamento</span>
                   </button>
                 </div>
               </div>
