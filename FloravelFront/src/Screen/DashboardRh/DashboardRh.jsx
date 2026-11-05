@@ -37,6 +37,13 @@ import {
   CartesianGrid,
 } from "recharts";
 
+// Telas Internas do Dashboard B2B
+import Sidebar from "./Sidebar";
+import LicensesScreen from "./screens/LicensesScreen";
+import HealthReportsScreen from "./screens/HealthReportsScreen";
+import BillingScreen from "./screens/BillingScreen";
+import SettingsScreen from "./screens/SettingsScreen";
+
 // ==========================================
 // PALETA DE CORES CORPORATIVA FLORÁVEL
 // ==========================================
@@ -140,16 +147,8 @@ export default function DashboardRh() {
     setTimeout(() => setToastMessage(null), 3500);
   };
 
-  const menuItems = [
-    { id: "inicio", label: "Página inicial", icon: LayoutDashboard },
-    { id: "licencas", label: "Gestão de Licenças", icon: Users },
-    { id: "relatorios", label: "Relatórios de Saúde", icon: FileText },
-    { id: "faturamento", label: "Faturamento", icon: CreditCard },
-    { id: "config", label: "Configurações", icon: Settings },
-  ];
-
   return (
-    <div className="min-h-screen bg-slate-50 font-sans text-slate-800 flex flex-col lg:flex-row antialiased">
+    <div className="min-h-screen bg-[#FCF7F9] font-sans text-stone-800 flex flex-col lg:flex-row antialiased">
       {/* ========================================================= */}
       {/* TOAST DE NOTIFICAÇÃO (FEEDBACK DE AÇÃO)                   */}
       {/* ========================================================= */}
@@ -160,172 +159,49 @@ export default function DashboardRh() {
         </div>
       )}
 
-      {/* ========================================================= */}
-      {/* OVERLAY MOBILE QUANDO MENU LATERAL ESTÁ ABERTO           */}
-      {/* ========================================================= */}
-      {mobileMenuOpen && (
-        <div
-          className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 lg:hidden"
-          onClick={() => setMobileMenuOpen(false)}
-        />
-      )}
-
-      {/* ========================================================= */}
-      {/* SIDEBAR (MENU LATERAL FIXO / RESPONSIVO)                  */}
-      {/* ========================================================= */}
-      <aside
-        className={`fixed lg:sticky top-0 left-0 h-screen w-72 bg-white border-r border-slate-100 flex flex-col justify-between p-6 z-50 transition-transform duration-300 ease-in-out shrink-0 ${
-          mobileMenuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
-        }`}
-      >
-        <div className="flex flex-col h-full justify-between">
-          <div>
-            {/* Logo da Marca */}
-            <div className="flex items-center justify-between pb-8">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-[#FCE7F0] flex items-center justify-center border border-[#F4C4D4]/40 shadow-sm">
-                  {/* Ícone de flor estilizada */}
-                  <svg
-                    width="22"
-                    height="22"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="#C96E82"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M12 7.5a4.5 4.5 0 1 1 4.5 4.5M12 7.5A4.5 4.5 0 1 0 7.5 12M12 7.5V12m4.5 0a4.5 4.5 0 1 1-4.5 4.5M16.5 12H12m-4.5 0a4.5 4.5 0 1 0 4.5 4.5M7.5 12H12m0 4.5V21" />
-                  </svg>
-                </div>
-                <div>
-                  <h1
-                    className="text-lg font-bold tracking-tight text-[#1F3224] leading-tight"
-                    style={{ fontFamily: "'Fraunces', serif" }}
-                  >
-                    florável
-                  </h1>
-                  <span className="text-[11px] tracking-wider uppercase font-semibold text-slate-400 block -mt-0.5">
-                    corporate
-                  </span>
-                </div>
-              </div>
-
-              {/* Botão fechar no mobile */}
-              <button
-                className="lg:hidden p-1.5 rounded-lg text-slate-400 hover:bg-slate-100"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            {/* Links de Navegação */}
-            <nav className="space-y-1.5">
-              {menuItems.map((item) => {
-                const Icon = item.icon;
-                const isActive = activeMenu === item.id;
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => {
-                      setActiveMenu(item.id);
-                      setMobileMenuOpen(false);
-                    }}
-                    className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-2xl text-sm font-medium transition-all duration-200 text-left ${
-                      isActive
-                        ? "bg-[#FCE7F0] text-[#1F3224] font-semibold shadow-xs"
-                        : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-                    }`}
-                  >
-                    <Icon
-                      className={`w-4 h-4 ${
-                        isActive ? "text-[#C96E82]" : "text-slate-400"
-                      }`}
-                    />
-                    <span>{item.label}</span>
-                  </button>
-                );
-              })}
-            </nav>
-          </div>
-
-          {/* Área Inferior da Sidebar */}
-          <div className="pt-6 space-y-4">
-            {/* Card "Ofereça Apoio" */}
-            <div className="bg-[#FCE7F0]/70 border border-[#F4C4D4]/50 rounded-2xl p-4.5 transition-all hover:bg-[#FCE7F0]">
-              <div className="w-8 h-8 rounded-xl bg-white/80 flex items-center justify-center text-[#C96E82] mb-3 shadow-xs">
-                <HeartHandshake className="w-4 h-4" />
-              </div>
-              <h4 className="text-sm font-bold text-[#1F3224] mb-1">
-                Ofereça apoio
-              </h4>
-              <p className="text-xs text-slate-600 leading-relaxed mb-3">
-                Cuidando de quem faz a TechCorp acontecer. Ofereça apoio para
-                suas colaboradoras.
-              </p>
-              <a
-                href="#agendar"
-                className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#C96E82] hover:text-[#9e465a] transition-colors"
-              >
-                <span>Conhecer planos extras</span>
-                <span className="text-sm leading-none">→</span>
-              </a>
-            </div>
-
-            {/* Perfil do Gestor RH */}
-            <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-full bg-[#EBF3EE] text-[#73937E] font-bold text-xs flex items-center justify-center border border-[#73937E]/20">
-                  TC
-                </div>
-                <div className="text-left">
-                  <div className="flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                    <span className="text-xs font-semibold text-slate-700">
-                      TechCorp RH
-                    </span>
-                  </div>
-                  <span className="text-[10px] text-slate-400 block">
-                    admin@techcorp.com.br
-                  </span>
-                </div>
-              </div>
-              <button
-                title="Sair"
-                className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-lg transition-colors"
-              >
-                <LogOut className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-        </div>
-      </aside>
+      {/* Navegação Lateral (Sidebar) com Acessibilidade WCAG */}
+      <Sidebar
+        activeMenu={activeMenu}
+        setActiveMenu={setActiveMenu}
+        mobileMenuOpen={mobileMenuOpen}
+        setMobileMenuOpen={setMobileMenuOpen}
+      />
 
       {/* ========================================================= */}
       {/* CONTEÚDO PRINCIPAL (HEADER + KPIS + GRÁFICOS + INSIGHTS)  */}
       {/* ========================================================= */}
       <main className="flex-1 flex flex-col min-w-0 pb-16">
         {/* TOP BAR / CABEÇALHO */}
-        <header className="sticky top-0 bg-slate-50/90 backdrop-blur-md z-30 px-6 lg:px-10 py-4 flex items-center justify-between border-b border-slate-200/50">
+        <header className="sticky top-0 bg-[#FCF7F9]/90 backdrop-blur-md z-30 px-6 lg:px-10 py-4 flex items-center justify-between border-b border-stone-200/60">
           <div className="flex items-center gap-3">
             {/* Botão Menu Hambúrguer (Mobile) */}
             <button
               onClick={() => setMobileMenuOpen(true)}
-              className="lg:hidden p-2 rounded-xl text-slate-600 bg-white border border-slate-200 shadow-xs"
-              aria-label="Abrir menu"
+              className="lg:hidden p-2 rounded-xl text-stone-600 bg-white border border-stone-200 shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#294D33]"
+              aria-label="Abrir menu lateral"
             >
               <Menu className="w-5 h-5" />
             </button>
 
-            {/* Botão Voltar / Breadcrumb */}
-            <button
-              onClick={() => window.history.back()}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-slate-200/80 text-xs font-medium text-slate-600 hover:text-slate-900 hover:border-slate-300 transition-colors shadow-2xs"
+            {/* Botão Voltar para o Portal Principal (Landing Page) */}
+            <a
+              href="/"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#F4DDE5]/80 hover:bg-[#F4DDE5] text-xs font-semibold text-[#294D33] transition-colors shadow-2xs"
+              title="Voltar à Landing Page principal"
             >
               <ChevronLeft className="w-3.5 h-3.5" />
-              <span>Página Inicial</span>
-            </button>
+              <span>Portal Principal</span>
+            </a>
+
+            {/* Breadcrumb interno */}
+            {activeMenu !== "inicio" && (
+              <button
+                onClick={() => setActiveMenu("inicio")}
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-stone-200 text-xs font-semibold text-stone-700 hover:text-[#294D33] hover:border-stone-300 transition-colors shadow-2xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#294D33]"
+              >
+                <span>Voltar ao Overview</span>
+              </button>
+            )}
           </div>
 
           {/* Lado Direito: Data, Notificações, Exportar e Avatar */}
@@ -383,9 +259,11 @@ export default function DashboardRh() {
 
         {/* CONTAINER DO DASHBOARD */}
         <div className="px-6 lg:px-10 pt-6 space-y-6 max-w-7xl">
-          {/* ========================================================= */}
-          {/* BANNER PRIVACIDADE (LGPD) & BOAS-VINDAS                   */}
-          {/* ========================================================= */}
+          {activeMenu === "inicio" && (
+            <>
+              {/* ========================================================= */}
+              {/* BANNER PRIVACIDADE (LGPD) & BOAS-VINDAS                   */}
+              {/* ========================================================= */}
           <div className="space-y-4">
             <div>
               <h2
@@ -816,6 +694,27 @@ export default function DashboardRh() {
               </div>
             </div>
           </section>
+            </>
+          )}
+
+          {/* ========================================================= */}
+          {/* TELAS INTERNAS DO DASHBOARD B2B FLORÁVEL CORPORATE        */}
+          {/* ========================================================= */}
+          {activeMenu === "licencas" && (
+            <LicensesScreen onTriggerToast={setToastMessage} />
+          )}
+
+          {activeMenu === "relatorios" && (
+            <HealthReportsScreen onTriggerToast={setToastMessage} />
+          )}
+
+          {activeMenu === "faturamento" && (
+            <BillingScreen onTriggerToast={setToastMessage} />
+          )}
+
+          {activeMenu === "config" && (
+            <SettingsScreen onTriggerToast={setToastMessage} />
+          )}
         </div>
       </main>
     </div>

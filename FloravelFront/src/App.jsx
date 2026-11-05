@@ -1,9 +1,10 @@
-import './App.css'
+import './App.css';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import HeroLanding from './Components/HeroLanding/HeroLanding';
 
 import ScrollToTop from './Components/Layout/ScrollToTop';
 import Layout from './Components/Layout/Layout';
+import { AccessibilityProvider } from './Components/Accessibility/AccessibilityContext';
 
 // Landing (Início, Sobre, Recursos e Contato numa página só)
 import Landing from './Screen/Landing/Landing';
@@ -11,30 +12,31 @@ import Landing from './Screen/Landing/Landing';
 // Auth
 import Cadastro from './Screen/Auth/CadastroScreen';
 import Login from './Screen/Auth/LoginScreen';
-// import ConsentPrivacy from './Screen/Auth/ConsentPrivacy';
 
 // Dashboard RH Corporativo
 import DashboardRh from './Screen/DashboardRh/DashboardRh';
 
 function App() {
   return (
-    <BrowserRouter>
-      <ScrollToTop />
-      <Routes>
-        {/* Landing page com Header e Footer gerais */}
-        <Route path="/" element={<Layout><Landing /></Layout>} />
+    <AccessibilityProvider>
+      <BrowserRouter>
+        <ScrollToTop />
+        <Routes>
+          {/* Landing page com Header e Footer gerais */}
+          <Route path="/" element={<Layout><Landing /></Layout>} />
 
-        {/* Dashboard Corporativo B2B (Painel RH) */}
-        <Route path="/dashboard-rh" element={<DashboardRh />} />
+          {/* Dashboard Corporativo B2B (Painel RH) */}
+          <Route path="/dashboard-rh" element={<DashboardRh />} />
 
-        {/* Telas sem header/footer (apenas formulário centralizado) */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/cadastro" element={<Cadastro />} />
+          {/* Telas sem header/footer (apenas formulário centralizado) */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/cadastro" element={<Cadastro />} />
 
-        {/* Qualquer endereço inexistente (ex.: o antigo /sobre) volta para a landing */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </BrowserRouter>
+          {/* Qualquer endereço inexistente volta para a landing */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </AccessibilityProvider>
   );
 }
 

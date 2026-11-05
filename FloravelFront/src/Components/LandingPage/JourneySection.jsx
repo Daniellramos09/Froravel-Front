@@ -8,6 +8,7 @@ import {
   ArrowRight,
   ChevronRight
 } from "lucide-react";
+import { APP_LINKS } from "../../utils/appLinks";
 
 // Ícone botânico minimalista de Flor Fechada (Botão) para o Nó 01
 function FlowerBudIcon({ className = "w-6 h-6", strokeWidth = 1.8 }) {
@@ -250,14 +251,14 @@ export default function JourneySection() {
                 </p>
               </div>
 
-              <div className="flex-shrink-0">
-                <Link
-                  to="/cadastro"
+              <div className="flex-shrink-0 flex items-center gap-2.5">
+                <a
+                  href={APP_LINKS.mae}
                   className="inline-flex items-center gap-2 py-3 px-6 rounded-full bg-[#294D33] hover:bg-[#1f3c27] text-white text-xs font-semibold uppercase tracking-wider transition-all duration-300 shadow-xs hover:scale-102"
                 >
-                  <span>Iniciar gratuitamente</span>
+                  <span>Acessar Espaço da Mãe</span>
                   <ArrowRight size={13} />
-                </Link>
+                </a>
               </div>
             </div>
 
