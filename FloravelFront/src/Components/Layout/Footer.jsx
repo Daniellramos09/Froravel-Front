@@ -52,7 +52,7 @@ const secoes = [
 const ferramentas = [
   { label: "🌸 Espaço da Mãe", url: APP_LINKS.mae, isExternal: true },
   { label: "🩺 Portal do Terapeuta", url: APP_LINKS.terapeuta, isExternal: true },
-  { label: "🏢 Dashboard RH Corporativo", url: "/dashboard-rh", isExternal: false },
+  { label: "🏢 Dashboard RH Corporativo", url: APP_LINKS.rh, isExternal: true },
   { label: "Triagem Edimburgo", url: "/#jornada", isExternal: false },
   { label: "Diário Emocional", url: "/#recursos", isExternal: false },
   { label: "Rodas Comunitárias", url: "/#jornada", isExternal: false },
@@ -85,7 +85,7 @@ export default function Footer() {
         src="/img/fotoFlores/flor1-removebg-preview.png"
         alt=""
         aria-hidden="true"
-          className="pointer-events-none absolute bottom-0 -left-35 -ml-10 w-44 sm:w-60 lg:w-120 opacity-60 select-none drop-shadow-xs z-0 transition-all duration-300"      />
+          className="flor-sway-b pointer-events-none absolute bottom-0 -left-35 -ml-10 w-44 sm:w-60 lg:w-120 opacity-60 select-none drop-shadow-xs z-0 transition-all duration-300"      />
 
       <div className="mx-auto max-w-7xl px-6 py-16 lg:px-12 relative z-10">
         

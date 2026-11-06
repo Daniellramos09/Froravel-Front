@@ -124,7 +124,7 @@
 
 .letter {
   display: inline-block; opacity: 0;
-  animation: letter-in .8s cubic-bezier(.2, .8, .2, 1) forwards;
+  animation: letter-in var(--dur, .8s) cubic-bezier(.2, .8, .2, 1) forwards;
   animation-delay: calc(var(--d, 0ms) + var(--i, 0) * var(--s, 32ms));
 }
 .fade-up   { opacity: 0; animation: fade-up .9s cubic-bezier(.2, .8, .2, 1) forwards; animation-delay: var(--d, 0ms); }
@@ -158,6 +158,108 @@ body {
   animation-play-state: paused;
 }
 
+/* O hero só começa a animar quando o efeito de carregamento (index.html) sai */
+.is-loading :is(.letter, .animate-fadeIn) {
+  animation-play-state: paused;
+}
+
+/* ========================================================
+   EFEITOS DA LANDING PAGE
+======================================================== */
+
+/* Revelação ao rolar (ver useScrollReveal):
+   .sr = o próprio elemento entra | .sr-group = os filhos diretos entram um a um.
+   A animação não usa fill "forwards" de propósito: ao terminar, o elemento fica
+   sem transform e os modais (position: fixed) dentro das seções seguem normais. */
+.sr:not([data-sr-in]),
+.sr-group:not([data-sr-in]) > * {
+  opacity: 0;
+  transform: translateY(26px);
+}
+.sr[data-sr-in],
+.sr-group[data-sr-in] > * {
+  animation: fade-up .9s cubic-bezier(.2, .8, .2, 1) backwards;
+  animation-delay: calc(var(--sr-i, 0) * 110ms);
+}
+.sr-group > :nth-child(2) { --sr-i: 1; }
+.sr-group > :nth-child(3) { --sr-i: 2; }
+.sr-group > :nth-child(4) { --sr-i: 3; }
+.sr-group > :nth-child(n + 5) { --sr-i: 4; }
+
+/* Faixa de palavras da marca */
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 48s linear infinite;
+}
+.marquee-mask {
+  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+.marquee-mask:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+/* Flores dos cantos balançando, como se houvesse uma brisa.
+   Só usa "transform", então a rotação e a escala definidas em cada flor continuam valendo.
+   As três variações têm ritmos diferentes para as flores não se moverem juntas. */
+@keyframes flor-sway {
+  0%   { transform: rotate(-2.5deg) translate(0, 0); }
+  40%  { transform: rotate(1deg) translate(3px, -4px); }
+  70%  { transform: rotate(-.5deg) translate(-2px, -2px); }
+  100% { transform: rotate(2.5deg) translate(2px, -5px); }
+}
+.flor-sway,
+.flor-sway-b,
+.flor-sway-c {
+  transform-origin: 50% 75%;
+  will-change: transform;
+  animation: flor-sway 7s ease-in-out -2s infinite alternate;
+}
+.flor-sway-b { animation-duration: 9s; animation-delay: -5s; }
+.flor-sway-c { animation-duration: 8s; animation-delay: -11s; animation-direction: alternate-reverse; }
+
+/* Brilho que atravessa o botão principal */
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+}
+.btn-shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, .28) 50%, transparent 65%);
+  transform: translateX(-110%);
+  pointer-events: none;
+}
+@media (hover: hover) {
+  .btn-shine:hover::after {
+    transform: translateX(110%);
+    transition: transform .85s cubic-bezier(.2, .8, .2, 1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sr, .sr-group > * {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+  .marquee-track { animation: none; }
+  .flor-sway, .flor-sway-b, .flor-sway-c { animation: none; }
+  .btn-shine::after { display: none; }
+}
+
+/* Ao imprimir ou salvar em PDF, nada depende de ter rolado a página */
+@media print {
+  .sr, .sr-group > * {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
 /* ========================================================
    REGRAS DE ACESSIBILIDADE FLORÁVEL (DALTONISMO & VISÃO)
 ======================================================== */
@@ -189,6 +291,16 @@ body {
   animation: none !important;
   transition: none !important;
   scroll-behavior: auto !important;
+}
+
+/* Sem animação, nada pode ficar preso no estado inicial invisível */
+.reduce-motion :is(.letter, .sr, .sr-group > *) {
+  opacity: 1 !important;
+  transform: none !important;
+  filter: none !important;
+}
+.reduce-motion .btn-shine::after {
+  display: none;
 }
 
 .animate-scaleUp {

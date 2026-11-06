@@ -1,5 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
+import ScrollProgress from "../../Components/Effects/ScrollProgress";
+import BrandMarquee from "../../Components/Effects/BrandMarquee";
+import useScrollReveal from "../../Components/Effects/useScrollReveal";
 import HeroSection from "../../Components/LandingPage/HeroSection";
 import Sobre from "./SobreScreen";
 import JourneySection from "../../Components/LandingPage/JourneySection";
@@ -12,7 +15,9 @@ import Contato from "./ContatoScreen";
  
 export default function Landing() {
   const { state } = useLocation();
- 
+  const rootRef = useRef(null);
+  useScrollReveal(rootRef);
+
   // Rola até a seção caso tenha vindo de outra rota com state.scrollTo
   useEffect(() => {
     if (state?.scrollTo) {
@@ -24,12 +29,15 @@ export default function Landing() {
   }, [state]);
  
   return (
-    <div className="bg-[#FCF7F9] text-[#294D33] selection:bg-[#F4DDE5] selection:text-[#294D33]">
-      
+    <div ref={rootRef} className="bg-[#FCF7F9] text-[#294D33] selection:bg-[#F4DDE5] selection:text-[#294D33]">
+      <ScrollProgress />
+
       {/* 1. Hero Section Editorial (Preservada com círculo botânico & figura recortada) */}
       <section id="inicio">
         <HeroSection />
       </section>
+
+      <BrandMarquee />
 
       {/* 2. Manifesto Emocional & Filosofia da Marca (Split-Screen de alto impacto visual) */}
       <section id="sobre">

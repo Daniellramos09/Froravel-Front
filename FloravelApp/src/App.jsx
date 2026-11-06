@@ -3,8 +3,9 @@ import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import {
   Home, ClipboardList, HeartHandshake, MessageSquare, Calendar, Bell,
-  LogOut, ArrowRight, ChevronLeft, BookOpen, Eye
+  LogOut, ArrowRight, ChevronLeft, BookOpen, Eye, Menu
 } from 'lucide-react';
+import InstallAppButton from './Components/Pwa/InstallAppButton';
 
 // IMPORTANDO AS TELAS
 import DashboardScreen from './Screen/Dashboard/DashboardScreen';
@@ -135,6 +136,7 @@ function AppContent() {
 
   // 2. ESTADOS DOS MODAIS/MENUS
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isNotifOpen, setIsNotifOpen] = useState(false);
   const [currentNotifs, setCurrentNotifs] = useState([]);
   const [hasUnread, setHasUnread] = useState(true);
@@ -172,6 +174,7 @@ function AppContent() {
   };
 
   const handleTabChange = (newTab) => {
+    setIsMenuOpen(false);
     if (newTab !== activeTab) {
       setHistory(prev => [...prev, newTab]);
       setActiveTab(newTab);
@@ -214,7 +217,7 @@ function AppContent() {
 
   return (
     <div
-      className={`flex h-screen bg-[#FCF7F9] font-dmsans text-[#2B2829] relative overflow-hidden transition-all duration-300 ${getFilterStyle()} ${getFontSizeClass()} ${
+      className={`flex h-dvh bg-[#FCF7F9] font-dmsans text-[#2B2829] relative overflow-hidden transition-all duration-300 ${getFilterStyle()} ${getFontSizeClass()} ${
         reducedMotion ? 'reduce-motion' : ''
       } ${expandedSpacing ? 'spacing-expanded' : ''}`}
     >
@@ -225,7 +228,19 @@ function AppContent() {
       />
 
       {/* SIDEBAR LATERAL ESQUERDA COM FEEDBACK VISUAL PREMIUM */}
-      <aside className="w-76 bg-white border-r border-stone-100 shadow-sm flex flex-col justify-between py-6 px-4 z-30 flex-shrink-0">
+      {/* No computador fica fixa; no celular abre pelo botão de menu, por cima do conteúdo */}
+      {isMenuOpen && (
+        <div
+          className="lg:hidden fixed inset-0 z-40 bg-black/40"
+          onClick={() => setIsMenuOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 w-76 max-w-[85vw] transition-transform duration-300 lg:static lg:z-30 lg:max-w-none lg:translate-x-0 bg-white border-r border-stone-100 shadow-sm flex flex-col justify-between py-6 px-4 flex-shrink-0 ${
+          isMenuOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
+      >
         <div className="overflow-y-auto pr-1">
           {/* LOGOTIPO */}
           <div 
@@ -316,12 +331,20 @@ function AppContent() {
       </aside>
 
       {/* ÁREA PRINCIPAL (MAIN CONTENT) */}
-      <main className="flex-1 flex flex-col h-screen overflow-hidden bg-[#FCF7F9]">
+      <main className="flex-1 min-w-0 flex flex-col h-dvh overflow-hidden bg-[#FCF7F9]">
 
         {/* CABEÇALHO SUPERIOR */}
-        <header className="h-20 flex items-center justify-between px-8 bg-white border-b border-stone-100 shadow-xs z-20">
-          <div className="flex items-center gap-3 text-[15px]">
-            <button 
+        <header className="h-16 sm:h-20 flex-shrink-0 flex items-center justify-between gap-2 px-3 sm:px-8 bg-white border-b border-stone-100 shadow-xs z-20">
+          <div className="flex items-center gap-2 sm:gap-3 text-[15px] min-w-0">
+            <button
+              type="button"
+              onClick={() => setIsMenuOpen(true)}
+              aria-label="Abrir menu"
+              className="lg:hidden p-2 border border-stone-200 rounded-xl text-[#294D33] hover:bg-[#FCF7F9] transition cursor-pointer active:scale-95"
+            >
+              <Menu size={20} />
+            </button>
+            <button
               className="p-2 border border-stone-200 rounded-xl hover:bg-[#FCF7F9] hover:border-stone-300 transition disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer active:scale-95" 
               onClick={handleGoBack} 
               disabled={history.length <= 1}
@@ -329,17 +352,22 @@ function AppContent() {
             >
               <ChevronLeft size={20} />
             </button>
-            <span className="font-bold text-[#294D33] text-base sm:text-lg">
+            <span className="font-bold text-[#294D33] text-base sm:text-lg truncate">
               {getScreenTitle()}
             </span>
           </div>
 
-          <div className="flex items-center gap-3 sm:gap-4">
+          <div className="flex items-center gap-1 sm:gap-4 flex-shrink-0">
+            <InstallAppButton className="p-2.5 sm:px-4 bg-[#294D33] text-white hover:bg-[#1f3c27]" />
+
             {/* BARRA RÁPIDA DE ACESSIBILIDADE NO TOPO */}
-            <AccessibilityQuickBar
-              activeTab={activeTab}
-              onOpenAccessibilityTab={() => handleTabChange('accessibility')}
-            />
+            {/* No celular não cabe: a acessibilidade fica no menu */}
+            <div className="hidden md:block">
+              <AccessibilityQuickBar
+                activeTab={activeTab}
+                onOpenAccessibilityTab={() => handleTabChange('accessibility')}
+              />
+            </div>
 
             {/* NOTIFICAÇÕES */}
             <div className="relative" ref={notifRef}>
@@ -374,7 +402,7 @@ function AppContent() {
 
             {/* AVATAR */}
             <div 
-              className="w-10 h-10 rounded-full bg-[#F4DDE5] text-[#294D33] flex items-center justify-center font-bold text-[14px] cursor-pointer hover:ring-2 hover:ring-[#294D33]/30 hover:scale-105 active:scale-95 transition-all" 
+              className="hidden sm:flex w-10 h-10 rounded-full bg-[#F4DDE5] text-[#294D33] flex items-center justify-center font-bold text-[14px] cursor-pointer hover:ring-2 hover:ring-[#294D33]/30 hover:scale-105 active:scale-95 transition-all" 
               onClick={() => handleTabChange('perfil')}
               title="Meu Perfil"
             >

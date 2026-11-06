@@ -1,5 +1,3 @@
-// src/Screen/DashboardRh/Sidebar.jsx
-import React from "react";
 import {
   LayoutDashboard,
   Users,

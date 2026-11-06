@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { APP_LINKS, navigateToApp } from '../../utils/appLinks';
-import { ArrowLeft, ExternalLink, ShieldCheck } from 'lucide-react';
+import { ArrowLeft, ExternalLink } from 'lucide-react';
 
 const LOGIN_IMAGE = '/login-bg.png';
 const LOGO = '/img/fotoheader/logo.png';
@@ -12,7 +13,12 @@ const PAPEIS = [
 ];
 
 export default function LoginScreen() {
-  const [papel, setPapel] = useState('mae');
+  // "Acessar Portais" abre o login já no perfil escolhido: /login?perfil=terapeuta
+  const [searchParams] = useSearchParams();
+  const [papel, setPapel] = useState(() => {
+    const perfil = searchParams.get('perfil');
+    return PAPEIS.some((p) => p.id === perfil) ? perfil : 'mae';
+  });
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [mostrarSenha, setMostrarSenha] = useState(false);

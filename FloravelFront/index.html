@@ -12,8 +12,161 @@
       href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
       rel="stylesheet"
     />
+    <link rel="preload" as="image" href="/LogoFin.png" />
+
+    <!-- Efeito de carregamento: fica aqui (e não no React) para aparecer no instante do reload -->
+    <style>
+      #page-loader {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 18px;
+        padding: 24px;
+        text-align: center;
+        background:
+          radial-gradient(circle at 50% 42%, #f4dde5 0%, rgba(244, 221, 229, 0) 58%),
+          #fcf7f9;
+        transition: opacity 0.7s ease 0.12s, visibility 0s linear 0.82s;
+      }
+      #page-loader.is-leaving {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+      .loader-flower {
+        position: relative;
+        width: 196px;
+        height: 196px;
+        transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.6s ease;
+      }
+      .is-leaving .loader-flower {
+        transform: scale(1.3);
+        opacity: 0;
+      }
+      .loader-petals {
+        display: block;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+        animation: loader-breathe 3s ease-in-out infinite;
+      }
+      .loader-petal {
+        transform-box: view-box;
+        transform-origin: 0 0;
+        animation: loader-bloom 0.75s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+        animation-delay: calc(var(--i) * 70ms);
+      }
+      .loader-logo {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 84px;
+        height: 84px;
+        margin: -42px 0 0 -42px;
+        border-radius: 50%;
+        background: #fff;
+        object-fit: contain;
+        box-shadow: 0 8px 24px rgba(41, 77, 51, 0.12);
+        animation: loader-rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.15s backwards;
+      }
+      .loader-name {
+        margin: 0;
+        font-family: "Fraunces", Georgia, serif;
+        font-size: 30px;
+        line-height: 1.1;
+        color: #294d33;
+        animation: loader-rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.45s backwards;
+      }
+      .loader-tagline {
+        margin: -10px 0 0;
+        font-family: "Fraunces", Georgia, serif;
+        font-style: italic;
+        font-size: 16px;
+        color: #a8435f;
+        animation: loader-rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.65s backwards;
+      }
+      #page-loader.is-still,
+      #page-loader.is-still * {
+        animation: none;
+        transition: none;
+      }
+      @keyframes loader-bloom {
+        from { transform: scale(0.1); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+      }
+      @keyframes loader-breathe {
+        0%, 100% { transform: rotate(0deg) scale(0.97); }
+        50% { transform: rotate(10deg) scale(1.03); }
+      }
+      @keyframes loader-rise {
+        from { transform: translateY(10px); opacity: 0; }
+        to { transform: none; opacity: 1; }
+      }
+    </style>
   </head>
   <body>
+    <div id="page-loader" role="status" aria-label="Carregando a Florável">
+      <div class="loader-flower" aria-hidden="true">
+        <svg class="loader-petals" viewBox="-100 -100 200 200">
+          <g transform="rotate(0)"><path class="loader-petal" style="--i:0" fill="#E8A9BB" d="M0 -22C26 -40 26 -76 0 -96C-26 -76 -26 -40 0 -22Z" /></g>
+          <g transform="rotate(45)"><path class="loader-petal" style="--i:1" fill="#F4DDE5" stroke="#E8A9BB" d="M0 -22C26 -40 26 -76 0 -96C-26 -76 -26 -40 0 -22Z" /></g>
+          <g transform="rotate(90)"><path class="loader-petal" style="--i:2" fill="#E8A9BB" d="M0 -22C26 -40 26 -76 0 -96C-26 -76 -26 -40 0 -22Z" /></g>
+          <g transform="rotate(135)"><path class="loader-petal" style="--i:3" fill="#F4DDE5" stroke="#E8A9BB" d="M0 -22C26 -40 26 -76 0 -96C-26 -76 -26 -40 0 -22Z" /></g>
+          <g transform="rotate(180)"><path class="loader-petal" style="--i:4" fill="#E8A9BB" d="M0 -22C26 -40 26 -76 0 -96C-26 -76 -26 -40 0 -22Z" /></g>
+          <g transform="rotate(225)"><path class="loader-petal" style="--i:5" fill="#F4DDE5" stroke="#E8A9BB" d="M0 -22C26 -40 26 -76 0 -96C-26 -76 -26 -40 0 -22Z" /></g>
+          <g transform="rotate(270)"><path class="loader-petal" style="--i:6" fill="#E8A9BB" d="M0 -22C26 -40 26 -76 0 -96C-26 -76 -26 -40 0 -22Z" /></g>
+          <g transform="rotate(315)"><path class="loader-petal" style="--i:7" fill="#F4DDE5" stroke="#E8A9BB" d="M0 -22C26 -40 26 -76 0 -96C-26 -76 -26 -40 0 -22Z" /></g>
+        </svg>
+        <img class="loader-logo" src="/LogoFin.png" alt="" />
+      </div>
+      <p class="loader-name">Florável</p>
+      <p class="loader-tagline">Um espaço para você respirar.</p>
+    </div>
+    <script>
+      (function () {
+        var loader = document.getElementById("page-loader");
+        // O efeito é só da landing page: login e dashboard abrem direto
+        if (location.pathname !== "/") {
+          loader.remove();
+          return;
+        }
+
+        var html = document.documentElement;
+        var still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        try {
+          still = still || localStorage.getItem("floravel_front_reduced_motion") === "true";
+        } catch (e) {}
+
+        html.classList.add("is-loading");
+        if (still) loader.classList.add("is-still");
+
+        var MIN_MS = still ? 150 : 1500; // tempo mínimo para a flor abrir
+        var MAX_MS = still ? 1500 : 3200; // nunca segura a página além disso
+        var start = performance.now();
+        var finished = false;
+
+        function finish() {
+          if (finished) return;
+          finished = true;
+          var wait = Math.max(0, MIN_MS - (performance.now() - start));
+          setTimeout(function () {
+            html.classList.remove("is-loading");
+            loader.classList.add("is-leaving");
+            setTimeout(function () {
+              loader.remove();
+            }, still ? 0 : 900);
+          }, wait);
+        }
+
+        if (document.readyState === "complete") finish();
+        else window.addEventListener("load", finish);
+        setTimeout(finish, MAX_MS);
+      })();
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

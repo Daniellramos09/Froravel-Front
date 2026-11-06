@@ -27,14 +27,14 @@ export default function FeaturesBentoSection() {
         src="/img/fotoFlores/flor2-removebg-preview.png"
         alt=""
         aria-hidden="true"
-        className="pointer-events-none absolute top-400 -right-0 sm:-right-40 w-48 sm:w-64 lg:w-80 opacity-85 select-none drop-shadow-sm -rotate-10 z-0"
+        className="flor-sway-c pointer-events-none absolute top-400 -right-0 sm:-right-40 w-48 sm:w-64 lg:w-80 opacity-85 select-none drop-shadow-sm -rotate-10 z-0"
       />
 
       <img
         src="/img/fotoFlores/flor3-removebg-preview.png"
         alt=""
         aria-hidden="true"
-        className="pointer-events-none absolute bottom-0 -left-2 w-44 sm:w-60 opacity-80 select-none drop-shadow-xs -rotate-12 z-0"
+        className="flor-sway pointer-events-none absolute bottom-0 -left-2 w-44 sm:w-60 opacity-80 select-none drop-shadow-xs -rotate-12 z-0"
       />
 
       {/* Luz ambiente suave para profundidade */}
@@ -46,7 +46,7 @@ export default function FeaturesBentoSection() {
       <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
         
         {/* CABEÇALHO DA SEÇÃO */}
-        <div className="max-w-3xl mb-16 sm:mb-20 text-left">
+        <div className="sr-group max-w-3xl mb-16 sm:mb-20 text-left">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 border border-[#294D33]/15 shadow-xs mb-4">
             <Sparkles size={14} className="text-[#294D33]" />
             <span className="text-[11px] uppercase tracking-[0.2em] font-semibold text-[#294D33] font-sans">
@@ -69,7 +69,7 @@ export default function FeaturesBentoSection() {
         {/* ========================================================
             1. BLOCO DIÁRIO/ESCUTA (LAYOUT 50/50 COM FOTO REAL RENOVADA)
         ======================================================== */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center mb-16">
+        <div className="sr-group grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center mb-16">
           
           {/* LADO ESQUERDO: Nova Fotografia Real de Alta Resolução com Mini-Badge de Vidro */}
           <div className="lg:col-span-6 relative">
@@ -161,7 +161,7 @@ export default function FeaturesBentoSection() {
         {/* ========================================================
             2. BLOCO CÁPSULA DO TEMPO (CARD TÁTIL RETANGULAR LARGO)
         ======================================================== */}
-        <div className="mb-16 rounded-[2.5rem] bg-white p-8 sm:p-12 lg:p-14 shadow-xl shadow-[#294D33]/8 text-left relative overflow-hidden border-2 border-white">
+        <div className="sr mb-16 rounded-[2.5rem] bg-white p-8 sm:p-12 lg:p-14 shadow-xl shadow-[#294D33]/8 text-left relative overflow-hidden border-2 border-white">
           
           {/* Elemento de iluminação interna */}
           <div 
@@ -249,7 +249,7 @@ export default function FeaturesBentoSection() {
         {/* ========================================================
             3. CARDS COMPLEMENTARES EDITORIAIS (RODAS & TRIAGEM EPDS)
         ======================================================== */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
+        <div className="sr-group grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
           
           {/* Card Rodas de Conversa */}
           <div className="p-8 rounded-[2.5rem] bg-white border border-white shadow-lg shadow-[#294D33]/6 flex flex-col justify-between">

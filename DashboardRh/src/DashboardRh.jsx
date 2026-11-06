@@ -1,15 +1,9 @@
-import React, { useState, useMemo } from "react";
+import  { useState } from "react";
 import {
-  LayoutDashboard,
   Users,
-  FileText,
-  CreditCard,
-  Settings,
-  LogOut,
   Bell,
   Download,
   Menu,
-  X,
   ChevronLeft,
   ShieldCheck,
   Activity,
@@ -19,7 +13,6 @@ import {
   Sparkles,
   HelpCircle,
   CheckCircle2,
-  HeartHandshake,
   FileSpreadsheet,
   FileCheck2,
   ExternalLink,
@@ -43,6 +36,7 @@ import LicensesScreen from "./screens/LicensesScreen";
 import HealthReportsScreen from "./screens/HealthReportsScreen";
 import BillingScreen from "./screens/BillingScreen";
 import SettingsScreen from "./screens/SettingsScreen";
+import { LANDING_URL } from "./utils/appLinks";
 
 // ==========================================
 // PALETA DE CORES CORPORATIVA FLORÁVEL
@@ -185,7 +179,7 @@ export default function DashboardRh() {
 
             {/* Botão Voltar para o Portal Principal (Landing Page) */}
             <a
-              href="/"
+              href={LANDING_URL}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#F4DDE5]/80 hover:bg-[#F4DDE5] text-xs font-semibold text-[#294D33] transition-colors shadow-2xs"
               title="Voltar à Landing Page principal"
             >

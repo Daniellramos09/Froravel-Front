@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Sparkles, Heart, ShieldCheck, CheckCircle2, X } from "lucide-react";
 import { BotanicalBranch, MaternalLineArt, OrganicHeroBackdrop } from "../../Components/Common/BotanicalDecor";

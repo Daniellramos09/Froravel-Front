@@ -41,7 +41,7 @@ export default function DepoimentosScreen() {
       <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-12 w-full">
         
         {/* Cabeçalho */}
-        <div className="text-center max-w-2xl mx-auto mb-16 sm:mb-20">
+        <div className="sr-group text-center max-w-2xl mx-auto mb-16 sm:mb-20">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#F4DDE5] border border-[#E8A9BB]/50 shadow-xs mb-4">
             <Heart size={13} className="fill-[#E8A9BB] text-[#294D33]" />
             <span className="text-[11px] uppercase tracking-[0.2em] font-semibold text-[#294D33] font-sans">
@@ -62,7 +62,7 @@ export default function DepoimentosScreen() {
         </div>
 
         {/* CARDS DE DEPOIMENTO COM FOTOS REAIS EM FORMATO DE PASTA */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="sr-group grid grid-cols-1 md:grid-cols-3 gap-8">
           {testimonials.map((item) => (
             <div
               key={item.nome}

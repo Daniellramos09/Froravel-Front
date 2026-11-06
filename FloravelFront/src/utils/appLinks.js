@@ -14,14 +14,13 @@ export const APP_LINKS = {
   // Painel do Terapeuta / Psicólogo (TerapeutaApp)
   terapeuta: import.meta.env.VITE_TERAPEUTA_APP_URL || 'http://localhost:5175',
 
-  // Dashboard RH Corporativo (Rota interna de FloravelFront e standalone dashboardRh)
-  rh: '/dashboard-rh',
-  rhStandalone: import.meta.env.VITE_RH_APP_URL || 'http://localhost:5176',
+  // Dashboard RH Corporativo (DashboardRh)
+  rh: import.meta.env.VITE_RH_APP_URL || 'http://localhost:5176',
 };
 
 /**
  * Redireciona o usuário para a interface solicitada.
- * @param {'landing' | 'mae' | 'terapeuta' | 'rh' | 'rhStandalone'} appKey
+ * @param {'landing' | 'mae' | 'terapeuta' | 'rh'} appKey
  */
 export function navigateToApp(appKey) {
   const target = APP_LINKS[appKey] || '/';

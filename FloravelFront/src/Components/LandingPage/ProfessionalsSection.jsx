@@ -86,14 +86,14 @@ export default function ProfessionalsSection() {
         src="/img/fotoFlores/flor4-removebg-preview.png"
         alt=""
         aria-hidden="true"
-        className="pointer-events-none absolute -top-12 -right-8 sm:-right-4 w-44 sm:w-60 lg:w-72 opacity-85 select-none drop-shadow-sm rotate-12 z-0"
+        className="flor-sway-b pointer-events-none absolute -top-12 -right-8 sm:-right-4 w-44 sm:w-60 lg:w-72 opacity-85 select-none drop-shadow-sm rotate-12 z-0"
       />
 
       <img
         src="/img/fotoFlores/flor5-removebg-preview.png"
         alt=""
         aria-hidden="true"
-        className="pointer-events-none absolute -bottom-5 -left-5 w-44 sm:w-60 opacity-60 select-none drop-shadow-xs -rotate-12 z-0 scale-70"
+        className="flor-sway-c pointer-events-none absolute -bottom-5 -left-5 w-44 sm:w-60 opacity-60 select-none drop-shadow-xs -rotate-12 z-0 scale-70"
       />
 
       {/* Luz ambiente de transição */}
@@ -107,7 +107,7 @@ export default function ProfessionalsSection() {
         {/* ========================================================
             CABEÇALHO EDITORIAL
         ======================================================== */}
-        <div className="max-w-3xl mb-16 sm:mb-20 text-left">
+        <div className="sr-group max-w-3xl mb-16 sm:mb-20 text-left">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 border border-[#516B55]/30 shadow-xs mb-4">
             <span className="w-2 h-2 rounded-full bg-[#294D33]" />
             <span className="text-[11px] uppercase tracking-[0.2em] font-semibold text-[#294D33] font-sans">
@@ -134,7 +134,7 @@ export default function ProfessionalsSection() {
           
           {/* COLUNA DA ESQUERDA: GRADE DE 4 DIFERENCIAIS EM CARDS BRANCOS #FCF7F9 */}
           <div className="lg:col-span-7 space-y-6 text-left">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div className="sr-group grid grid-cols-1 sm:grid-cols-2 gap-5">
               {pillars.map((item) => {
                 const Icon = item.icon;
                 return (
@@ -171,7 +171,7 @@ export default function ProfessionalsSection() {
             </div>
 
             {/* BOTÃO DE CTA PARA PARCEIROS */}
-            <div className="pt-2">
+            <div className="sr pt-2">
               <button
                 onClick={() => setShowModal(true)}
                 className="group inline-flex items-center justify-center gap-3 rounded-full bg-[#294D33] hover:bg-[#1f3c27] text-[#FCF7F9] px-8 py-4 text-sm font-semibold uppercase tracking-wider shadow-md shadow-[#294D33]/20 transition-all duration-300 hover:scale-[1.02] cursor-pointer"
@@ -183,7 +183,7 @@ export default function ProfessionalsSection() {
           </div>
 
           {/* COLUNA DA DIREITA: MOCKUP FLUTUANTE COM SOMBRAS PROFUNDAS (SHADOW-2XL) */}
-          <div className="lg:col-span-5 relative flex justify-center">
+          <div className="sr lg:col-span-5 relative flex justify-center" style={{ "--sr-i": 1 }}>
             
             <div className="w-full max-w-[400px] rounded-[2.5rem] bg-white p-6 sm:p-7 shadow-2xl shadow-[#294D33]/25 border border-white text-left relative overflow-hidden transition-transform duration-500 hover:-translate-y-1">
               
@@ -276,7 +276,7 @@ export default function ProfessionalsSection() {
         </div>
 
         {/* VITRINE VISUAL DE PSICÓLOGAS DA REDE */}
-        <div className="pt-8 border-t border-[#516B55]/25 text-left">
+        <div className="sr pt-8 border-t border-[#516B55]/25 text-left">
           <p className="text-xs uppercase tracking-wider font-semibold text-[#294D33] mb-5 font-sans">
             Rede Ativa de Psicólogas Perinatais Credenciadas
           </p>

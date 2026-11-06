@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { 
-  Building2, 
+import { APP_LINKS } from "../../utils/appLinks";
+import {
+  Building2,
   TrendingUp, 
   DollarSign, 
   AlertTriangle, 
@@ -253,13 +253,13 @@ export default function CorporateScreen() {
               </div>
 
               <div className="pt-2 flex flex-wrap gap-4">
-                <Link
-                  to="/dashboard-rh"
+                <a
+                  href={APP_LINKS.rh}
                   className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-[#2F3A36] hover:bg-[#1F3224] text-white text-sm font-semibold shadow-md transition-all duration-300 hover:scale-105"
                 >
                   <span>Explorar Painel RH Interativo</span>
                   <ExternalLink size={16} />
-                </Link>
+                </a>
                 <button
                   onClick={() => setShowDemoModal(true)}
                   className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-white hover:bg-gray-50 text-[#27272A] border border-gray-300 text-sm font-semibold transition"

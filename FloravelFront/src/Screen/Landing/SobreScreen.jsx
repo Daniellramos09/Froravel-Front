@@ -1,7 +1,10 @@
 import React from "react";
 import { ArrowRight, Sparkles, Heart, Shield, CheckCircle2 } from "lucide-react";
+import useParallax from "../../Components/Effects/useParallax";
 
 export default function Sobre() {
+  const fotoRef = useParallax();
+
   return (
     <section id="sobre" className="relative bg-[#FCF7F9] py-24 sm:py-32 overflow-hidden border-t border-[#E8A9BB]/30">
       
@@ -10,7 +13,7 @@ export default function Sobre() {
         src="/img/fotoFlores/flor5-removebg-preview.png"
         alt=""
         aria-hidden="true"
-        className="pointer-events-none absolute top-10 height-20 right-10 sm:top-30 sm:right-10 lg:top-12 lg:right-140 w-36 sm:w-48 lg:w-50 opacity-90 select-none drop-shadow-sm rotate-12 z-0 transition-all duration-300"
+        className="flor-sway pointer-events-none absolute top-10 height-20 right-10 sm:top-30 sm:right-10 lg:top-12 lg:right-140 w-36 sm:w-48 lg:w-50 opacity-90 select-none drop-shadow-sm rotate-12 z-0 transition-all duration-300"
       />
       
       {/* Luz ambiente difusa */}
@@ -31,7 +34,7 @@ export default function Sobre() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
 
           {/* LADO ESQUERDO: Mensagem de Identidade & Acolhimento */}
-          <div className="lg:col-span-6 flex flex-col items-start text-left space-y-6">
+          <div className="sr-group lg:col-span-6 flex flex-col items-start text-left space-y-6">
             
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#F4DDE5] border border-[#E8A9BB]/50 shadow-xs">
               <span className="w-2 h-2 rounded-full bg-[#294D33] animate-pulse" />
@@ -95,7 +98,7 @@ export default function Sobre() {
           </div>
 
           {/* LADO DIREITO: Composição Fotográfica Orgânica com Badge Flutuante */}
-          <div className="lg:col-span-6 relative flex justify-center items-center">
+          <div className="sr lg:col-span-6 relative flex justify-center items-center" style={{ "--sr-i": 1 }}>
             
             {/* Círculo de fundo acolhedor */}
             <div className="relative w-full max-w-[420px] sm:max-w-[460px] aspect-[4/4.6] flex items-center justify-center">
@@ -105,15 +108,18 @@ export default function Sobre() {
 
               {/* Moldura da Fotografia com cantos arredondados editoriais */}
               <div className="w-[94%] h-[94%] rounded-[2.5rem] overflow-hidden bg-white shadow-2xl relative border border-white">
-                <img
-                  src="/img/fotoMae/fotomae4.jpg"
-                  alt="Mulher em momento de pausa serena e autocuidado"
-                  className="w-full h-full object-cover object-center transition-transform duration-1000 hover:scale-105"
-                  onError={(e) => {
-                    e.currentTarget.onerror = null;
-                    e.currentTarget.src = "/img/maeDescansando.jpg";
-                  }}
-                />
+                {/* Maior que a moldura para o parallax nunca mostrar as bordas da foto */}
+                <div ref={fotoRef} className="absolute inset-x-0 -inset-y-[8%]">
+                  <img
+                    src="/img/fotoMae/fotomae4.jpg"
+                    alt="Mulher em momento de pausa serena e autocuidado"
+                    className="w-full h-full object-cover object-center transition-transform duration-1000 hover:scale-105"
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = "/img/maeDescansando.jpg";
+                    }}
+                  />
+                </div>
                 {/* Gradiente sutil de iluminação */}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#294D33]/30 via-transparent to-transparent pointer-events-none" />
               </div>

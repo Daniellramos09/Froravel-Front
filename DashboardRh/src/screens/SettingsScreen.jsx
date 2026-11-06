@@ -1,7 +1,6 @@
-// src/Screen/DashboardRh/screens/SettingsScreen.jsx
-import React, { useState, useId, useRef } from "react";
+import { useState, useId, useRef } from "react";
 import {
-  Settings,
+
   Building2,
   Users,
   Bell,
@@ -11,10 +10,6 @@ import {
   Save,
   UserPlus,
   Trash2,
-  Mail,
-  Lock,
-  Phone,
-  FileBadge,
   Sparkles,
   RefreshCw,
 } from "lucide-react";

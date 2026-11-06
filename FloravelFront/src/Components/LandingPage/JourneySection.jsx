@@ -94,7 +94,7 @@ export default function JourneySection() {
         src="/img/fotoFlores/florong-removebg-preview.png"
         alt=""
         aria-hidden="true"
-        className="pointer-events-none absolute -bottom-14 -left-10 w-36 sm:w-52 opacity-60 select-none drop-shadow-xs -rotate-12 z-0"
+        className="flor-sway-b pointer-events-none absolute -bottom-14 -left-10 w-36 sm:w-52 opacity-60 select-none drop-shadow-xs -rotate-12 z-0"
       />
 
       {/* Luz ambiente suave */}
@@ -106,7 +106,7 @@ export default function JourneySection() {
       <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-12 w-full">
         
         {/* CABEÇALHO CONCISO */}
-        <div className="max-w-2xl mb-12 sm:mb-16 text-left">
+        <div className="sr-group max-w-2xl mb-12 sm:mb-16 text-left">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F4DDE5] border border-[#E8A9BB]/50 shadow-xs mb-3">
             <span className="w-2 h-2 rounded-full bg-[#294D33]" />
             <span className="text-[11px] uppercase tracking-[0.2em] font-semibold text-[#294D33] font-sans">
@@ -138,7 +138,7 @@ export default function JourneySection() {
           />
 
           {/* Grade dos 4 Nós */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
+          <div className="sr-group grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
             {steps.map((step, idx) => {
               const Icon = step.icon;
               const isSelected = activeStep === idx;
@@ -223,7 +223,7 @@ export default function JourneySection() {
         {/* ========================================================
             CARD COMPACTO DE PRÉVIA VISUAL DA ETAPA ATIVA
         ======================================================== */}
-        <div className="rounded-[2rem] bg-white border border-[#E8A9BB]/80 p-5 sm:p-7 shadow-sm text-left relative overflow-hidden">
+        <div className="sr rounded-[2rem] bg-white border border-[#E8A9BB]/80 p-5 sm:p-7 shadow-sm text-left relative overflow-hidden">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
             
             {/* Foto Real Reduzida e Polida */}

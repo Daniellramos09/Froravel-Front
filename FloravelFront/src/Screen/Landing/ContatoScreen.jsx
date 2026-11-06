@@ -23,7 +23,7 @@ export default function ContatoScreen() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           
           {/* Coluna Esquerda: Texto e Apoio */}
-          <div className="lg:col-span-5 space-y-6 text-left">
+          <div className="sr-group lg:col-span-5 space-y-6 text-left">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#F4DDE5] border border-[#E8A9BB]/50 shadow-xs">
               <MessageCircle size={13} className="text-[#294D33]" />
               <span className="text-[11px] uppercase tracking-[0.2em] font-semibold text-[#294D33] font-sans">
@@ -59,7 +59,7 @@ export default function ContatoScreen() {
           </div>
 
           {/* Coluna Direita: Formulário de Contato com Estilo Refinado */}
-          <div className="lg:col-span-7">
+          <div className="sr lg:col-span-7" style={{ "--sr-i": 1 }}>
             <div className="rounded-[2.5rem] bg-white p-8 sm:p-11 border border-[#E8A9BB] shadow-lg shadow-[#294D33]/5 text-left">
               {!sent ? (
                 <form onSubmit={handleSubmit} className="space-y-4">

@@ -1,7 +1,5 @@
-// src/Screen/DashboardRh/screens/HealthReportsScreen.jsx
-import React, { useState } from "react";
+import { useState } from "react";
 import {
-  Download,
   FileCheck2,
   RefreshCw,
   CheckCircle2,

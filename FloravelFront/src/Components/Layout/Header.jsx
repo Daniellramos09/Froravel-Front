@@ -4,7 +4,6 @@ import { ArrowRight, Menu, X, Volume2, VolumeX, ChevronDown } from "lucide-react
 import FloravelLogo from "../Common/FloravelLogo";
 import { useAccessibility } from "../Accessibility/AccessibilityContext";
 import AccessibilityModal from "../Accessibility/AccessibilityModal";
-import { APP_LINKS } from "../../utils/appLinks";
 
 // Ícone Universal de Acessibilidade / Pessoa na Cadeira de Rodas
 function WheelchairIcon({ size = 18, className = "" }) {
@@ -213,8 +212,9 @@ export default function Header() {
                   </div>
 
                   {/* 1. Espaço da Mãe */}
-                  <a
-                    href={APP_LINKS.mae}
+                  <Link
+                    to="/login?perfil=mae"
+                    onClick={() => setPortalDropdownOpen(false)}
                     className="flex items-start gap-3 p-2.5 rounded-2xl hover:bg-[#FCF7F9] transition group"
                   >
                     <div className="w-9 h-9 rounded-xl bg-[#FCE7F0] text-lg flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform">
@@ -233,11 +233,12 @@ export default function Header() {
                         Diário emocional, triagem EPDS, rodas e rede de apoio solidária
                       </p>
                     </div>
-                  </a>
+                  </Link>
 
                   {/* 2. Portal do Terapeuta */}
-                  <a
-                    href={APP_LINKS.terapeuta}
+                  <Link
+                    to="/login?perfil=terapeuta"
+                    onClick={() => setPortalDropdownOpen(false)}
                     className="flex items-start gap-3 p-2.5 rounded-2xl hover:bg-[#FCF7F9] transition group"
                   >
                     <div className="w-9 h-9 rounded-xl bg-[#EBF3EE] text-lg flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform">
@@ -256,11 +257,11 @@ export default function Header() {
                         Agenda clínica, mães atendidas e sala de acolhimento
                       </p>
                     </div>
-                  </a>
+                  </Link>
 
                   {/* 3. Dashboard RH Corporativo */}
                   <Link
-                    to="/dashboard-rh"
+                    to="/login?perfil=rh"
                     onClick={() => setPortalDropdownOpen(false)}
                     className="flex items-start gap-3 p-2.5 rounded-2xl hover:bg-[#FCF7F9] transition group"
                   >
@@ -376,26 +377,26 @@ export default function Header() {
                 Acessar Plataformas:
               </p>
 
-              <a
-                href={APP_LINKS.mae}
+              <Link
+                to="/login?perfil=mae"
                 onClick={() => setMobileMenuOpen(false)}
                 className="py-2.5 px-4 text-left text-xs font-bold text-[#294D33] bg-[#FCE7F0] rounded-xl flex items-center justify-between"
               >
                 <span>🌸 Espaço da Mãe</span>
                 <span className="text-[10px] text-emerald-800 font-semibold">Acessar →</span>
-              </a>
+              </Link>
 
-              <a
-                href={APP_LINKS.terapeuta}
+              <Link
+                to="/login?perfil=terapeuta"
                 onClick={() => setMobileMenuOpen(false)}
                 className="py-2.5 px-4 text-left text-xs font-bold text-[#294D33] bg-[#EBF3EE] rounded-xl flex items-center justify-between"
               >
                 <span>🩺 Portal do Terapeuta</span>
                 <span className="text-[10px] text-emerald-800 font-semibold">Acessar →</span>
-              </a>
+              </Link>
 
               <Link
-                to="/dashboard-rh"
+                to="/login?perfil=rh"
                 onClick={() => setMobileMenuOpen(false)}
                 className="py-2.5 px-4 text-left text-xs font-bold text-[#294D33] bg-[#FDF4E7] rounded-xl flex items-center justify-between"
               >

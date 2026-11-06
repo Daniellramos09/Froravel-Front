@@ -1,15 +1,16 @@
 // src/components/SplitText/SplitText.jsx
 // Faz o texto aparecer letra por letra (by="letter") ou palavra por palavra (by="word").
-export default function SplitText({ text, delay = 0, by = "letter", className = "" }) {
+export default function SplitText({ text, delay = 0, by = "letter", stagger, className = "" }) {
   const words = text.split(" ");
   let i = 0;
 
   return (
     <span
       className={className}
-      aria-label={text}
-      style={{ "--d": `${delay}ms`, "--s": by === "word" ? "55ms" : "32ms" }}
+      style={{ "--d": `${delay}ms`, "--s": `${stagger ?? (by === "word" ? 55 : 32)}ms` }}
     >
+      {/* Leitores de tela recebem a frase inteira, não letra por letra */}
+      <span className="sr-only select-none">{text}</span>
       {words.map((word, w) => (
         <span key={w} aria-hidden="true">
           <span className="inline-block whitespace-nowrap">

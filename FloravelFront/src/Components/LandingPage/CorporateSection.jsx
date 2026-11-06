@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { 
-  Building2, 
+import { APP_LINKS } from "../../utils/appLinks";
+import {
+  Building2,
   TrendingUp, 
   CheckCircle, 
   ShieldCheck, 
@@ -93,14 +93,14 @@ export default function CorporateSection() {
         src="/img/fotoFlores/flor6-removebg-preview.png"
         alt=""
         aria-hidden="true"
-        className="pointer-events-none absolute top-25 right-10 w-44 sm:w-60 opacity-75 select-none drop-shadow-sm -rotate-70 z-0 -scale-x-125 scale-125"
+        className="flor-sway pointer-events-none absolute top-25 right-10 w-44 sm:w-60 opacity-75 select-none drop-shadow-sm -rotate-70 z-0 -scale-x-125 scale-125"
       />
 
       <img
         src="/img/fotoFlores/florong-removebg-preview.png"
         alt=""
         aria-hidden="true"
-        className="pointer-events-none absolute -bottom-10 -right-7 w-44 sm:w-64 opacity-70 select-none drop-shadow-xs rotate-12 z-0 scale-90"
+        className="flor-sway-b pointer-events-none absolute -bottom-10 -right-7 w-44 sm:w-64 opacity-70 select-none drop-shadow-xs rotate-12 z-0 scale-90"
       />
 
       {/* Luz ambiente de fundo */}
@@ -112,7 +112,7 @@ export default function CorporateSection() {
       <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
         
         {/* CABEÇALHO */}
-        <div className="max-w-3xl mb-16 sm:mb-20 text-left">
+        <div className="sr-group max-w-3xl mb-16 sm:mb-20 text-left">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#F4DDE5] border border-[#E8A9BB]/50 shadow-xs mb-4">
             <Building2 size={14} className="text-[#294D33]" />
             <span className="text-[11px] uppercase tracking-[0.2em] font-semibold text-[#294D33] font-sans">
@@ -135,7 +135,7 @@ export default function CorporateSection() {
         {/* ========================================================
             BENTO-GRID CORPORATIVO COM AS 3 MÉTRICAS ESSENCIAIS
         ======================================================== */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        <div className="sr-group grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           {corporateMetrics.map((item) => (
             <div 
               key={item.kpi}
@@ -170,7 +170,7 @@ export default function CorporateSection() {
         {/* ========================================================
             REPRESENTAÇÃO VISUAL DO DASHBOARD DE RH CORPORATIVO
         ======================================================== */}
-        <div className="rounded-[2.5rem] bg-white border border-[#E8A9BB] p-7 sm:p-10 shadow-lg shadow-[#294D33]/5 mb-16 text-left">
+        <div className="sr rounded-[2.5rem] bg-white border border-[#E8A9BB] p-7 sm:p-10 shadow-lg shadow-[#294D33]/5 mb-16 text-left">
           
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#E8A9BB]/30">
             <div>
@@ -186,13 +186,13 @@ export default function CorporateSection() {
             </div>
 
             <div className="flex items-center gap-3">
-              <Link
-                to="/dashboard-rh"
+              <a
+                href={APP_LINKS.rh}
                 className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full bg-[#F4DDE5] text-[#294D33] text-xs font-semibold hover:bg-[#E8A9BB]/60 transition"
               >
                 <span>Ver demonstração interativa</span>
                 <ExternalLink size={13} />
-              </Link>
+              </a>
             </div>
           </div>
 
@@ -230,7 +230,7 @@ export default function CorporateSection() {
         {/* ========================================================
             PLANOS CORPORATIVOS ESTRUTURADOS
         ======================================================== */}
-        <div className="text-left mb-6">
+        <div className="sr text-left mb-6">
           <h3 className="font-serif text-2xl font-normal text-[#294D33]">
             Planos Corporativos Estruturados
           </h3>
@@ -239,7 +239,7 @@ export default function CorporateSection() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="sr-group grid grid-cols-1 md:grid-cols-3 gap-6">
           {plans.map((p) => (
             <div 
               key={p.name}

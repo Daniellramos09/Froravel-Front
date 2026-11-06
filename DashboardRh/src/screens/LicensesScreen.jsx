@@ -1,7 +1,6 @@
 // src/Screen/DashboardRh/screens/LicensesScreen.jsx
-import React, { useState, useId, useEffect } from "react";
+import { useState, useId, useEffect } from "react";
 import {
-  Users,
   UserPlus,
   Search,
   MoreVertical,

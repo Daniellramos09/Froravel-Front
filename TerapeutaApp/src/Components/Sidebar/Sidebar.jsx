@@ -10,6 +10,7 @@ import {
   ArrowLeft,
   Home,
 } from 'lucide-react';
+import InstallAppButton from '../Pwa/InstallAppButton';
 
 const menuItems = [
   { name: 'Visão geral', path: '/painel', icon: LayoutGrid },
@@ -18,11 +19,20 @@ const menuItems = [
   { name: 'Sala de acolhimento', path: '/sala', icon: Video },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ isOpen, onClose }) {
   const landingUrl = import.meta.env.VITE_LANDING_URL || 'http://localhost:5173';
 
   return (
-    <aside className="hidden md:flex w-72 flex-shrink-0 flex-col justify-between bg-white border-r border-[#f0e4e4] px-6 py-8 sticky top-0 h-screen">
+    <>
+    {isOpen && (
+      <div className="md:hidden fixed inset-0 z-40 bg-black/40" onClick={onClose} aria-hidden="true" />
+    )}
+    {/* No computador fica fixa ao lado; no celular abre pelo botão de menu, por cima do conteúdo */}
+    <aside
+      className={`fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] overflow-y-auto transition-transform duration-300 md:sticky md:top-0 md:z-auto md:max-w-none md:translate-x-0 h-dvh md:h-screen flex flex-shrink-0 flex-col justify-between gap-6 bg-white border-r border-[#f0e4e4] px-6 py-8 ${
+        isOpen ? 'translate-x-0' : '-translate-x-full'
+      }`}
+    >
       <div>
         {/* Logo com link direto para Landing Page */}
         <div 
@@ -69,6 +79,7 @@ export default function Sidebar() {
               key={path}
               to={path}
               end
+              onClick={onClose}
               className={({ isActive }) =>
                 `flex items-center gap-3.5 px-4 py-2.5 rounded-2xl text-[14px] font-medium transition-colors ${
                   isActive
@@ -86,6 +97,11 @@ export default function Sidebar() {
 
       {/* Rodapé */}
       <div className="space-y-4">
+        {/* No celular o botão fica na barra superior */}
+        <div className="hidden md:block">
+          <InstallAppButton className="w-full py-2.5 bg-[#f3d5da] text-[#9b4f55] hover:bg-[#ecc6cd]" />
+        </div>
+
         <div className="rounded-3xl bg-[#e1e8d5] p-4">
           <HeartHandshake className="w-5 h-5 text-[#4f6340] mb-2" />
           <p className="text-sm font-bold text-[#3b4a2f]">Cuidar de quem cuida</p>
@@ -115,5 +131,6 @@ export default function Sidebar() {
         </div>
       </div>
     </aside>
+    </>
   );
 }
