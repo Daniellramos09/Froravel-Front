@@ -161,7 +161,7 @@ export default function Header() {
             <button
               type="button"
               onClick={readPageOverview}
-              className={`w-9 h-9 rounded-full border transition-all flex items-center justify-center cursor-pointer relative shadow-2xs shrink-0 ${
+              className={`w-9 h-9 rounded-full border transition-all hidden md:flex items-center justify-center cursor-pointer relative shadow-2xs shrink-0 ${
                 isSpeaking 
                   ? "bg-[#294D33] text-white border-[#294D33] animate-pulse" 
                   : "bg-white/90 hover:bg-[#F4DDE5] text-[#294D33] border-[#E8A9BB]/50"
@@ -179,7 +179,7 @@ export default function Header() {
             <button
               type="button"
               onClick={() => setIsAccessModalOpen(true)}
-              className="w-9 h-9 rounded-full bg-white/90 hover:bg-[#F4DDE5] text-[#294D33] border border-[#E8A9BB]/50 flex items-center justify-center transition-all shadow-2xs cursor-pointer hover:scale-105 active:scale-95 relative shrink-0"
+              className="w-9 h-9 rounded-full bg-white/90 hover:bg-[#F4DDE5] text-[#294D33] border border-[#E8A9BB]/50 hidden md:flex items-center justify-center transition-all shadow-2xs cursor-pointer hover:scale-105 active:scale-95 relative shrink-0"
               title={`Acessibilidade: Tamanho de fonte (${fontScaleText}), daltonismo e leitor de tela`}
               aria-label="Abrir painel de acessibilidade"
             >
@@ -194,7 +194,7 @@ export default function Header() {
               <button
                 type="button"
                 onClick={() => setPortalDropdownOpen(!portalDropdownOpen)}
-                className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#F4DDE5] hover:bg-[#E8A9BB]/60 text-[#294D33] text-xs font-bold border border-[#E8A9BB]/60 transition shadow-2xs cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#294D33]"
+                className="hidden md:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#F4DDE5] hover:bg-[#E8A9BB]/60 text-[#294D33] text-xs font-bold border border-[#E8A9BB]/60 transition shadow-2xs cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#294D33]"
                 aria-expanded={portalDropdownOpen}
                 aria-label="Abrir menu de acesso aos portais da plataforma"
               >
@@ -289,7 +289,7 @@ export default function Header() {
             {/* LINK ENTRAR / LOGIN */}
             <Link 
               to="/login" 
-              className="hidden sm:inline-flex text-xs font-bold text-[#516B55] hover:text-[#294D33] px-2 py-1.5 transition-colors font-sans whitespace-nowrap"
+              className="inline-flex rounded-full border border-[#E8A9BB] bg-white/90 px-4 py-2 md:border-0 md:bg-transparent md:px-2 md:py-1.5 text-xs font-bold text-[#294D33] md:text-[#516B55] hover:text-[#294D33] transition-colors font-sans whitespace-nowrap"
             >
               Entrar
             </Link>
@@ -298,7 +298,7 @@ export default function Header() {
             <a
               href="#inicio"
               onClick={goTo("inicio")}
-              className="inline-flex items-center gap-1.5 rounded-full bg-[#294D33] hover:bg-[#1f3c27] px-3.5 sm:px-5 py-2 text-xs font-bold text-[#FCF7F9] shadow-sm transition-all duration-200 hover:scale-[1.03] active:scale-95 font-sans whitespace-nowrap cursor-pointer shrink-0"
+              className="hidden md:inline-flex items-center gap-1.5 rounded-full bg-[#294D33] hover:bg-[#1f3c27] px-5 py-2 text-xs font-bold text-[#FCF7F9] shadow-sm transition-all duration-200 hover:scale-[1.03] active:scale-95 font-sans whitespace-nowrap cursor-pointer shrink-0"
             >
               <span>Autoavaliação</span>
               <ArrowRight size={13} />
@@ -309,7 +309,8 @@ export default function Header() {
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="xl:hidden p-2 text-[#294D33] hover:bg-[#F4DDE5] rounded-xl transition cursor-pointer shrink-0 ml-0.5"
-              aria-label="Abrir menu de navegação"
+              aria-label={mobileMenuOpen ? "Fechar menu de navegação" : "Abrir menu de navegação"}
+              aria-expanded={mobileMenuOpen}
             >
               {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
@@ -321,14 +322,40 @@ export default function Header() {
             4. MENU MOBILE DROPDOWN COM CONTROLES DE ACESSIBILIDADE
         ======================================================== */}
         {mobileMenuOpen && (
-          <div className="xl:hidden bg-[#FCF7F9] border-b border-[#E8A9BB]/40 px-5 py-5 shadow-xl space-y-4 animate-fadeIn">
-            
+          <div className="xl:hidden mt-3 max-h-[calc(100dvh-4.5rem)] overflow-y-auto bg-[#FCF7F9] border-b border-[#E8A9BB]/40 px-5 py-5 shadow-xl space-y-4 animate-fadeIn">
+
+            {/* Ações principais: primeiro item do menu, sem precisar rolar */}
+            <div className="flex items-center gap-2.5">
+              <Link
+                to="/login"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex-1 text-center py-3 text-sm font-bold text-[#294D33] bg-white border border-[#E8A9BB] rounded-full"
+              >
+                Entrar
+              </Link>
+              <a
+                href="#inicio"
+                onClick={goTo("inicio")}
+                className="flex-1 text-center py-3 text-sm font-bold text-white bg-[#294D33] rounded-full shadow-md"
+              >
+                Autoavaliação
+              </a>
+            </div>
+
             {/* Barra de Acessibilidade no Mobile */}
-            <div className="bg-white rounded-2xl p-3 border border-[#E8A9BB]/40 flex items-center justify-between gap-2 shadow-2xs">
+            <div className="bg-white rounded-2xl p-3 border border-[#E8A9BB]/40 flex flex-wrap items-center justify-between gap-2 shadow-2xs">
               <span className="text-xs font-bold text-[#294D33] flex items-center gap-1.5">
                 <WheelchairIcon size={16} /> Acessibilidade
               </span>
               <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={readPageOverview}
+                  className="p-1.5 rounded-lg border border-stone-200 bg-stone-50 hover:bg-white text-stone-700"
+                  aria-label={isSpeaking ? "Parar leitura de voz" : "Ouvir audiodescrição da página"}
+                >
+                  {isSpeaking ? <VolumeX size={14} /> : <Volume2 size={14} />}
+                </button>
                 <button
                   type="button"
                   onClick={decreaseFontSize}
@@ -403,23 +430,6 @@ export default function Header() {
                 <span>🏢 Dashboard RH Corporativo</span>
                 <span className="text-[10px] text-amber-800 font-semibold">Acessar →</span>
               </Link>
-
-              <div className="flex items-center gap-2.5 pt-2">
-                <Link
-                  to="/login"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex-1 text-center py-2.5 text-xs font-bold text-[#294D33] border border-[#E8A9BB] rounded-full"
-                >
-                  Entrar
-                </Link>
-                <a
-                  href="#inicio"
-                  onClick={goTo("inicio")}
-                  className="flex-1 text-center py-2.5 text-xs font-bold text-white bg-[#294D33] rounded-full shadow-md"
-                >
-                  Autoavaliação
-                </a>
-              </div>
             </div>
 
           </div>
