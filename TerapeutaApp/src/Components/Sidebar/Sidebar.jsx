@@ -7,6 +7,8 @@ import {
   Flower2,
   HeartHandshake,
   LogOut,
+  ArrowLeft,
+  Home,
 } from 'lucide-react';
 
 const menuItems = [
@@ -17,43 +19,65 @@ const menuItems = [
 ];
 
 export default function Sidebar() {
+  const landingUrl = import.meta.env.VITE_LANDING_URL || 'http://localhost:5173';
+
   return (
     <aside className="hidden md:flex w-72 flex-shrink-0 flex-col justify-between bg-white border-r border-[#f0e4e4] px-6 py-8 sticky top-0 h-screen">
       <div>
-        {/* Logo */}
-        <div className="px-2 mb-10">
-          <div className="flex items-center gap-2">
-            <Flower2 className="w-7 h-7 text-[#9b4f55]" />
-            <span className="text-2xl font-bold text-[#9b4f55] tracking-tight">
+        {/* Logo com link direto para Landing Page */}
+        <div 
+          className="px-2 mb-6 cursor-pointer group"
+          onClick={() => (window.location.href = landingUrl)}
+          title="Voltar para a página inicial da Florável"
+        >
+          <div className="flex items-center gap-2.5">
+            <img 
+              src="/img/fotoheader/logo.png" 
+              alt="Logo Florável" 
+              className="w-8 h-8 object-contain transition-transform duration-300 group-hover:scale-105"
+            />
+            <span className="text-2xl font-bold text-[#9b4f55] tracking-tight group-hover:opacity-85 transition-opacity">
               florável
             </span>
             <span className="text-[10px] font-semibold bg-[#f3d5da] text-[#9b4f55] px-2 py-0.5 rounded-full">
               PSI
             </span>
           </div>
-          <p className="text-xs text-gray-500 mt-1 ml-9">Área profissional</p>
+          <p className="text-[11px] text-gray-500 mt-1 ml-10 flex items-center gap-1 font-medium">
+            <span>Área profissional</span>
+            <span className="text-gray-400 group-hover:text-[#9b4f55] transition-colors">← Início</span>
+          </p>
         </div>
 
+        {/* Atalho Rápido para a Landing Page */}
+        <a
+          href={landingUrl}
+          className="flex items-center gap-2.5 px-3.5 py-2 mb-4 rounded-xl text-xs font-semibold text-[#516B55] bg-[#FCF7F9] hover:bg-[#F4DDE5]/60 border border-[#E8A9BB]/40 transition"
+        >
+          <Home size={14} className="text-[#294D33]" />
+          <span>Voltar para o Portal Principal</span>
+        </a>
+
         {/* Menu */}
-        <p className="text-[11px] font-bold text-gray-500 uppercase tracking-[0.2em] px-2 mb-4">
+        <p className="text-[11px] font-bold text-gray-500 uppercase tracking-[0.2em] px-2 mb-3">
           Seu consultório
         </p>
 
-        <nav className="space-y-2">
+        <nav className="space-y-1.5">
           {menuItems.map(({ name, path, icon: Icon }) => (
             <NavLink
               key={path}
               to={path}
               end
               className={({ isActive }) =>
-                `flex items-center gap-4 px-4 py-3 rounded-full text-[15px] font-medium transition-colors ${
+                `flex items-center gap-3.5 px-4 py-2.5 rounded-2xl text-[14px] font-medium transition-colors ${
                   isActive
-                    ? 'bg-[#f3d5da] text-[#4a2327]'
+                    ? 'bg-[#f3d5da] text-[#4a2327] font-semibold shadow-2xs'
                     : 'text-gray-600 hover:bg-[#faf3f3]'
                 }`
               }
             >
-              <Icon className="w-5 h-5" />
+              <Icon className="w-4 h-4" />
               <span>{name}</span>
             </NavLink>
           ))}
@@ -66,7 +90,7 @@ export default function Sidebar() {
           <HeartHandshake className="w-5 h-5 text-[#4f6340] mb-2" />
           <p className="text-sm font-bold text-[#3b4a2f]">Cuidar de quem cuida</p>
           <p className="text-xs text-[#5c6b4f] mt-1 leading-relaxed">
-            Ambiente demonstrativo com dados fictícios. Não use informações reais.
+            Ambiente clínico de acolhimento seguro.
           </p>
         </div>
 
@@ -77,10 +101,15 @@ export default function Sidebar() {
             </div>
             <div>
               <p className="text-sm font-bold text-[#4a2327]">Dra. Helena Souza</p>
-              <p className="text-xs text-gray-500">Psicóloga</p>
+              <p className="text-xs text-gray-500">CRP 06/142980</p>
             </div>
           </div>
-          <button className="text-gray-400 hover:text-[#9b4f55]" aria-label="Sair">
+          <button 
+            onClick={() => (window.location.href = landingUrl)}
+            className="text-gray-400 hover:text-[#9b4f55] p-2 rounded-xl hover:bg-stone-50 transition cursor-pointer" 
+            title="Sair e voltar à página inicial"
+            aria-label="Sair"
+          >
             <LogOut className="w-5 h-5" />
           </button>
         </div>

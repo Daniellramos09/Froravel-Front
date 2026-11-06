@@ -2,6 +2,7 @@ import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import FloravelLogo from "../Common/FloravelLogo";
 import { ShieldCheck, Heart } from "lucide-react";
+import { APP_LINKS } from "../../utils/appLinks";
 
 const redes = [
   { 
@@ -49,12 +50,12 @@ const secoes = [
 ];
 
 const ferramentas = [
-  ["Triagem Edimburgo", "/#jornada"],
-  ["Diário Emocional", "/#recursos"],
-  ["Cápsula do Tempo", "/#recursos"],
-  ["Rodas Comunitárias", "/#jornada"],
-  ["Terapia Perinatal", "/#psicologos"],
-  ["Painel RH Corporativo", "/dashboard-rh"]
+  { label: "🌸 Espaço da Mãe", url: APP_LINKS.mae, isExternal: true },
+  { label: "🩺 Portal do Terapeuta", url: APP_LINKS.terapeuta, isExternal: true },
+  { label: "🏢 Dashboard RH Corporativo", url: "/dashboard-rh", isExternal: false },
+  { label: "Triagem Edimburgo", url: "/#jornada", isExternal: false },
+  { label: "Diário Emocional", url: "/#recursos", isExternal: false },
+  { label: "Rodas Comunitárias", url: "/#jornada", isExternal: false },
 ];
 
 const juridico = [
@@ -140,14 +141,23 @@ export default function Footer() {
               Ecossistema
             </h4>
             <ul className="space-y-2 text-xs sm:text-sm">
-              {ferramentas.map(([label, path]) => (
-                <li key={label}>
-                  <Link
-                    to={path}
-                    className="text-[#516B55] hover:text-[#294D33] transition-colors"
-                  >
-                    {label}
-                  </Link>
+              {ferramentas.map((item) => (
+                <li key={item.label}>
+                  {item.isExternal ? (
+                    <a
+                      href={item.url}
+                      className="text-[#516B55] hover:text-[#294D33] font-medium transition-colors inline-flex items-center gap-1"
+                    >
+                      <span>{item.label}</span>
+                    </a>
+                  ) : (
+                    <Link
+                      to={item.url}
+                      className="text-[#516B55] hover:text-[#294D33] transition-colors"
+                    >
+                      {item.label}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>

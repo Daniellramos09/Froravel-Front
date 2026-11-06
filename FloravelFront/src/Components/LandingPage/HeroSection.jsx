@@ -14,8 +14,10 @@ import {
   Calendar, 
   Smartphone,
   ChevronDown,
-  Layers
+  Layers,
+  ExternalLink
 } from "lucide-react";
+import { APP_LINKS } from "../../utils/appLinks";
 
 // ========================================================
 // 4 NOVOS HEADERS EDITORIAIS SEM MOLDURA (PASTA FOTOHEADER)
@@ -759,13 +761,13 @@ export default function HeroSection({ onOpenQuiz }) {
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-3">
-                  <Link
-                    to="/cadastro"
-                    onClick={handleResetQuiz}
-                    className="flex-1 py-3.5 px-6 rounded-full bg-[#294D33] text-[#FCF7F9] text-sm font-semibold hover:bg-[#1f3c27] transition text-center shadow-md font-sans"
+                  <a
+                    href={APP_LINKS.mae}
+                    className="flex-1 py-3.5 px-6 rounded-full bg-[#294D33] text-[#FCF7F9] text-sm font-semibold hover:bg-[#1f3c27] transition text-center shadow-md font-sans flex items-center justify-center gap-2 cursor-pointer"
                   >
-                    Criar conta gratuita
-                  </Link>
+                    <span>Entrar no Espaço da Mãe</span>
+                    <ExternalLink size={14} />
+                  </a>
                   <button
                     onClick={handleResetQuiz}
                     className="py-3.5 px-6 rounded-full bg-transparent text-[#294D33] border border-[#E8A9BB] text-sm font-semibold hover:bg-[#F4DDE5]/40 transition cursor-pointer font-sans"
