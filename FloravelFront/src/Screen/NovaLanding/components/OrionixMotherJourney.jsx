@@ -234,7 +234,7 @@ export default function OrionixMotherJourney() {
           </div>
 
           {/* 2. COLUNA CENTRAL: SERVICE COLUMN (SCROLL NATURAL FLUIDO) */}
-          <div className="lg:col-span-6 flex flex-col items-center py-8 lg:pt-[14vh] lg:pb-[24vh]">
+          <div className="lg:col-span-6 flex flex-col items-center py-4 lg:pt-[14vh] lg:pb-[24vh]">
             {JOURNEY_STEPS.map((st, idx) => {
               const isAct = idx === activeStep;
               return (
@@ -242,13 +242,13 @@ export default function OrionixMotherJourney() {
                   key={st.number}
                   ref={(el) => (itemRefs.current[idx] = el)}
                   onClick={() => scrollToStep(idx)}
-                  className={`w-full max-w-[460px] py-10 sm:py-14 lg:py-20 transition-all duration-500 cursor-pointer text-left ${
+                  className={`w-full max-w-[460px] py-6 sm:py-10 lg:py-20 transition-all duration-500 cursor-pointer text-left ${
                     isAct
                       ? "opacity-100 blur-none"
-                      : "opacity-40 lg:blur-[4px] hover:opacity-65"
+                      : "opacity-45 lg:opacity-40 lg:blur-[4px] hover:opacity-65"
                   }`}
                 >
-                  <div className="lg:hidden mb-6 aspect-[4/3] w-full rounded-[24px] overflow-hidden shadow-sm">
+                  <div className="lg:hidden mb-4 aspect-[16/10] w-full rounded-[20px] overflow-hidden shadow-xs">
                     <img
                       src={st.image}
                       alt={st.title}
@@ -260,17 +260,17 @@ export default function OrionixMotherJourney() {
                     />
                   </div>
 
-                  <div className="space-y-4">
-                    <h3 className="font-serif text-2xl sm:text-3xl lg:text-[2.6rem] font-normal text-[#1F3A27] leading-[1.1] tracking-[-0.025em]">
+                  <div className="space-y-2.5 lg:space-y-4">
+                    <h3 className="font-serif text-xl sm:text-2xl lg:text-[2.6rem] font-normal text-[#1F3A27] leading-[1.12] tracking-[-0.025em]">
                       {st.title}
                     </h3>
 
-                    <p className="text-base text-[#3A443E] leading-[1.55] font-sans">
+                    <p className="text-sm sm:text-base text-[#3A443E] leading-[1.5] font-sans">
                       {st.description}
                     </p>
                   </div>
 
-                  <div className="flex flex-wrap gap-2 mt-7">
+                  <div className="hidden sm:flex flex-wrap gap-2 mt-5 lg:mt-7">
                     {st.tags.map((tag) => (
                       <span
                         key={tag}

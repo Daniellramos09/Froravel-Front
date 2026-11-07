@@ -79,7 +79,7 @@ export default function HomeCheckIn({
       default:
         return (
           <>
-            Só você vê esta resposta.{' '}
+            <span className="hidden @3xl:inline">Só você vê esta resposta. </span>
             <button type="button" onClick={onOpenDiary} className={linkBtn}>
               Abrir diário emocional
             </button>
@@ -97,19 +97,22 @@ export default function HomeCheckIn({
   };
 
   return (
-    <section aria-labelledby="checkin-titulo">
+    <section
+      aria-labelledby="checkin-titulo"
+      className="rounded-2xl bg-white/80 border border-[#E4DAD5]/70 p-4 @3xl:bg-transparent @3xl:border-none @3xl:p-0"
+    >
       <h2
         id="checkin-titulo"
-        className="font-fraunces text-[28px] @5xl:text-[30px] leading-[1.15] tracking-[-0.015em] text-[#1F3A27]"
+        className="font-fraunces text-[22px] @3xl:text-[28px] @5xl:text-[30px] leading-[1.15] tracking-[-0.015em] text-[#1F3A27]"
       >
         Como você está agora?
       </h2>
 
-      <p className="mt-2 text-[15px] leading-relaxed text-[#4A5E4D] max-w-[46ch]">
+      <p className="hidden @3xl:block mt-2 text-[15px] leading-relaxed text-[#4A5E4D] max-w-[46ch]">
         Toque em como se sente hoje. Suas respostas ficam salvas para você acompanhar seu próprio ritmo.
       </p>
 
-      <div className="mt-5 flex flex-wrap gap-2" role="group" aria-label="Escolha como você está">
+      <div className="mt-3.5 @3xl:mt-5 flex flex-wrap gap-2" role="group" aria-label="Escolha como você está">
         {MOOD_OPTIONS.map((mood) => {
           const isSelected = selected === mood.id;
           return (
@@ -118,20 +121,20 @@ export default function HomeCheckIn({
               type="button"
               aria-pressed={isSelected}
               onClick={() => choose(mood)}
-              className={`inline-flex items-center gap-2 rounded-md border px-4 py-3 text-[15px] font-medium cursor-pointer transition-colors ${focusRing} ${
+              className={`inline-flex items-center gap-1.5 rounded-full @3xl:rounded-md border px-3.5 py-2 @3xl:px-4 @3xl:py-3 text-[13.5px] @3xl:text-[15px] font-medium cursor-pointer transition-colors ${focusRing} ${
                 isSelected
                   ? 'bg-[#294D33] border-[#294D33] text-white'
-                  : 'bg-transparent border-[#D9CFCB] text-[#2B2829] hover:border-[#294D33] hover:text-[#294D33]'
+                  : 'bg-[#FCF7F9] @3xl:bg-transparent border-[#D9CFCB] text-[#2B2829] hover:border-[#294D33] hover:text-[#294D33]'
               }`}
             >
-              {isSelected && <Check size={16} strokeWidth={2} aria-hidden="true" />}
+              {isSelected && <Check size={15} strokeWidth={2} aria-hidden="true" />}
               {mood.label}
             </button>
           );
         })}
       </div>
 
-      <p className="mt-5 min-h-[28px] text-[15px] leading-relaxed text-[#4A5E4D]" aria-live="polite">
+      <p className="mt-3.5 @3xl:mt-5 text-[13.5px] @3xl:text-[15px] leading-relaxed text-[#4A5E4D]" aria-live="polite">
         {response()}
       </p>
     </section>

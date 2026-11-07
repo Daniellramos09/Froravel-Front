@@ -1,5 +1,5 @@
 // src/Screen/Dashboard/components/ArticleRecommendations.jsx
-// Curadoria editorial enxuta: 1 leitura em destaque + lista tipográfica discreta.
+// Curadoria editorial enxuta: 1 leitura em destaque no mobile + lista complementar no desktop.
 import { ArrowRight } from 'lucide-react';
 
 const ARTIGOS = [
@@ -35,22 +35,22 @@ export default function ArticleRecommendations({ onNavigateToLibrary }) {
 
   return (
     <section aria-labelledby="leituras-titulo">
-      <div className="flex flex-wrap items-baseline justify-between gap-4">
+      <div className="flex items-baseline justify-between gap-4">
         <h2
           id="leituras-titulo"
-          className="font-fraunces text-[26px] @3xl:text-[30px] leading-[1.12] tracking-[-0.015em] text-[#1F3A27]"
+          className="font-fraunces text-[22px] @3xl:text-[30px] leading-[1.12] tracking-[-0.015em] text-[#1F3A27]"
         >
-          Leituras para este momento
+          Para ler hoje
         </h2>
 
         <button
           type="button"
           onClick={onNavigateToLibrary}
-          className={`group inline-flex items-center gap-1.5 text-[15px] font-medium text-[#294D33] underline decoration-[#294D33]/30 underline-offset-4 hover:decoration-[#294D33] rounded-sm cursor-pointer ${focusRing}`}
+          className={`group inline-flex items-center gap-1.5 text-[14px] @3xl:text-[15px] font-medium text-[#294D33] underline decoration-[#294D33]/30 underline-offset-4 hover:decoration-[#294D33] rounded-sm cursor-pointer ${focusRing}`}
         >
-          <span>Biblioteca completa</span>
+          <span>Biblioteca</span>
           <ArrowRight
-            size={16}
+            size={15}
             strokeWidth={1.75}
             aria-hidden="true"
             className="transition-transform group-hover:translate-x-0.5"
@@ -58,17 +58,17 @@ export default function ArticleRecommendations({ onNavigateToLibrary }) {
         </button>
       </div>
 
-      {/* Mobile-first: empilhado verticalmente no celular; 2 colunas editoriais no desktop */}
-      <div className="mt-6 grid grid-cols-1 @3xl:grid-cols-[minmax(0,6.5fr)_minmax(0,5.5fr)] gap-8 @3xl:gap-12 items-start">
-        {/* Artigo principal com imagem, categoria, tempo, título e acesso */}
+      {/* No mobile: card horizontal compacto com apenas o destaque; no desktop: 2 colunas editoriais */}
+      <div className="mt-3.5 @3xl:mt-6 grid grid-cols-1 @3xl:grid-cols-[minmax(0,6.5fr)_minmax(0,5.5fr)] gap-6 @3xl:gap-12 items-start">
+        {/* Artigo principal */}
         <article className="group">
           <button
             type="button"
             onClick={onNavigateToLibrary}
             aria-label={`Ler artigo: ${destaque.titulo}`}
-            className={`block w-full text-left rounded-lg cursor-pointer ${focusRing}`}
+            className={`flex @3xl:block items-center gap-4 w-full text-left rounded-2xl @3xl:rounded-lg bg-white/85 @3xl:bg-transparent border border-[#E4DAD5]/70 @3xl:border-none p-3 @3xl:p-0 cursor-pointer ${focusRing}`}
           >
-            <div className="aspect-[16/10] w-full overflow-hidden rounded-lg bg-[#F1E6E1]">
+            <div className="w-24 h-24 @3xl:w-full @3xl:h-auto @3xl:aspect-[16/10] shrink-0 overflow-hidden rounded-xl @3xl:rounded-lg bg-[#F1E6E1]">
               <img
                 src={destaque.img}
                 alt={destaque.titulo}
@@ -80,29 +80,31 @@ export default function ArticleRecommendations({ onNavigateToLibrary }) {
               />
             </div>
 
-            <p className="mt-4 text-[13px] text-[#4A5E4D]">
-              {destaque.categoria}
-              <span aria-hidden="true" className="mx-2 opacity-50">·</span>
-              <span>{destaque.tempo}</span>
-            </p>
+            <div className="min-w-0 flex-1">
+              <p className="@3xl:mt-4 text-[12px] @3xl:text-[13px] text-[#4A5E4D]">
+                {destaque.categoria}
+                <span aria-hidden="true" className="mx-1.5 @3xl:mx-2 opacity-50">·</span>
+                <span>{destaque.tempo}</span>
+              </p>
 
-            <h3 className="mt-1.5 font-fraunces text-[22px] @3xl:text-[24px] leading-[1.2] tracking-[-0.01em] text-[#1F3A27] group-hover:text-[#294D33] transition-colors">
-              {destaque.titulo}
-            </h3>
+              <h3 className="mt-1 @3xl:mt-1.5 font-fraunces text-[16.5px] @3xl:text-[24px] leading-[1.22] tracking-[-0.01em] text-[#1F3A27] group-hover:text-[#294D33] transition-colors line-clamp-2 @3xl:line-clamp-none">
+                {destaque.titulo}
+              </h3>
 
-            <p className="mt-2 text-[15px] leading-relaxed text-[#4A5E4D] max-w-[54ch]">
-              {destaque.resumo}
-            </p>
+              <p className="hidden @3xl:block mt-2 text-[15px] leading-relaxed text-[#4A5E4D] max-w-[54ch]">
+                {destaque.resumo}
+              </p>
 
-            <span className="mt-3 inline-flex items-center gap-1.5 text-[14px] font-medium text-[#294D33] underline decoration-[#294D33]/30 underline-offset-4 group-hover:decoration-[#294D33]">
-              Ler artigo
-              <ArrowRight size={14} strokeWidth={1.75} aria-hidden="true" />
-            </span>
+              <span className="mt-2 @3xl:mt-3 inline-flex items-center gap-1 text-[13px] @3xl:text-[14px] font-medium text-[#294D33] underline decoration-[#294D33]/30 underline-offset-4 group-hover:decoration-[#294D33]">
+                Ler artigo
+                <ArrowRight size={13} strokeWidth={1.75} aria-hidden="true" />
+              </span>
+            </div>
           </button>
         </article>
 
-        {/* Demais artigos: lista tipográfica discreta, sem cards nem resumos longos */}
-        <div className="border-t border-[#E4DAD5] divide-y divide-[#E4DAD5]">
+        {/* Demais artigos: visíveis apenas em telas maiores para não sobrecarregar o mobile */}
+        <div className="hidden @3xl:block border-t border-[#E4DAD5] divide-y divide-[#E4DAD5]">
           {secundarios.map((artigo) => (
             <article key={artigo.id} className="py-5 first:pt-5 last:pb-2">
               <button

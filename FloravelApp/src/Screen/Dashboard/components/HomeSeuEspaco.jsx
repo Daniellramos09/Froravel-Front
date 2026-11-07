@@ -11,23 +11,27 @@ import EmotionalCalendarCard from './EmotionalCalendarCard';
 const ITEMS = [
   {
     id: 'microvitoria',
-    title: 'Microvitória do dia',
-    summary: 'Um passo possível hoje',
+    title: 'Microvitória',
+    desktopTitle: 'Microvitória do dia',
+    summary: 'Um passo hoje',
   },
   {
     id: 'recado',
-    title: 'Recado de outra mãe',
-    summary: 'Mural solidário entre mães',
+    title: 'Mural de mães',
+    desktopTitle: 'Recado de outra mãe',
+    summary: 'Troca solidária',
   },
   {
     id: 'capsula',
-    title: 'Cápsula do tempo',
-    summary: '1 carta · abre em 184 dias',
+    title: 'Cápsula',
+    desktopTitle: 'Cápsula do tempo',
+    summary: 'Abre em 184d',
   },
   {
     id: 'mapa',
     title: 'Mapa de humor',
-    summary: 'Semana 7 · 5 de 7 dias',
+    desktopTitle: 'Mapa de humor',
+    summary: '5 de 7 dias',
   },
 ];
 
@@ -52,22 +56,22 @@ export default function HomeSeuEspaco({
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <h2
           id="seu-espaco-titulo"
-          className="font-fraunces text-[28px] @5xl:text-[32px] leading-[1.12] tracking-[-0.015em] text-[#1F3A27]"
+          className="font-fraunces text-[22px] @3xl:text-[28px] @5xl:text-[32px] leading-[1.12] tracking-[-0.015em] text-[#1F3A27]"
         >
           Seu espaço
         </h2>
-        <p className="text-[14px] text-[#4A5E4D]">
+        <p className="hidden @xl:block text-[14px] text-[#4A5E4D]">
           Memórias, trocas entre mães e acompanhamento emocional quando você quiser abrir.
         </p>
       </div>
 
-      {/* Faixa compacta de 4 itens + área expansível */}
+      {/* Grade 2x2 compacta no mobile e 4 colunas no desktop */}
       <div
-        className="mt-6 rounded-xl border border-[#E4DAD5] bg-[#F1E6E1]/65 overflow-hidden"
+        className="mt-3.5 @3xl:mt-6 rounded-2xl @xl:rounded-xl border border-[#E4DAD5] bg-[#F1E6E1]/65 overflow-hidden"
         role="region"
         aria-label="Recursos do seu espaço"
       >
-        <div className="grid grid-cols-1 @xl:grid-cols-2 @4xl:grid-cols-4 gap-px bg-[#E4DAD5]">
+        <div className="grid grid-cols-2 @4xl:grid-cols-4 gap-px bg-[#E4DAD5]">
           {ITEMS.map((item) => {
             const isOpen = openId === item.id;
             return (
@@ -77,24 +81,25 @@ export default function HomeSeuEspaco({
                 aria-expanded={isOpen}
                 aria-controls={`painel-${item.id}`}
                 onClick={() => toggle(item.id)}
-                className={`group flex items-start justify-between gap-3 p-5 text-left transition-colors cursor-pointer ${focusRing} ${
+                className={`group flex items-start justify-between gap-2 p-3.5 @xl:p-5 text-left transition-colors cursor-pointer ${focusRing} ${
                   isOpen ? 'bg-[#E9DCD5]' : 'bg-[#F5EDE9] hover:bg-[#EFE3DD]'
                 }`}
               >
                 <span className="min-w-0">
-                  <span className="block font-fraunces text-[19px] leading-snug text-[#1F3A27]">
-                    {item.title}
+                  <span className="block font-fraunces text-[16px] @xl:text-[19px] leading-snug text-[#1F3A27]">
+                    <span className="@xl:hidden">{item.title}</span>
+                    <span className="hidden @xl:inline">{item.desktopTitle}</span>
                   </span>
-                  <span className="mt-1 block text-[13.5px] leading-snug text-[#4A5E4D]">
+                  <span className="mt-0.5 @xl:mt-1 block text-[12px] @xl:text-[13.5px] leading-snug text-[#4A5E4D]">
                     {item.summary}
                   </span>
                 </span>
 
                 <ChevronDown
-                  size={18}
+                  size={16}
                   strokeWidth={1.75}
                   aria-hidden="true"
-                  className={`mt-1 shrink-0 text-[#294D33] transition-transform duration-200 ${
+                  className={`mt-0.5 shrink-0 text-[#294D33] transition-transform duration-200 ${
                     isOpen ? 'rotate-180' : ''
                   }`}
                 />
@@ -107,7 +112,7 @@ export default function HomeSeuEspaco({
         <div
           id="painel-microvitoria"
           hidden={openId !== 'microvitoria'}
-          className="border-t border-[#E4DAD5] bg-[#FCF7F9] p-6 @xl:p-8"
+          className="border-t border-[#E4DAD5] bg-[#FCF7F9] p-4 @xl:p-8"
         >
           <MicroVitoriaCard onCelebrate={onCelebrateMicroVitoria} />
         </div>
@@ -115,7 +120,7 @@ export default function HomeSeuEspaco({
         <div
           id="painel-recado"
           hidden={openId !== 'recado'}
-          className="border-t border-[#E4DAD5] bg-[#FCF7F9] p-6 @xl:p-8"
+          className="border-t border-[#E4DAD5] bg-[#FCF7F9] p-4 @xl:p-8"
         >
           <MuralSolidarioCard onSendFlower={onSendFlowerMural} />
         </div>
@@ -123,7 +128,7 @@ export default function HomeSeuEspaco({
         <div
           id="painel-capsula"
           hidden={openId !== 'capsula'}
-          className="border-t border-[#E4DAD5] bg-[#FCF7F9] p-6 @xl:p-8"
+          className="border-t border-[#E4DAD5] bg-[#FCF7F9] p-4 @xl:p-8"
         >
           <TimeCapsuleCard
             onWriteLetter={onOpenCapsuleModal}
@@ -134,7 +139,7 @@ export default function HomeSeuEspaco({
         <div
           id="painel-mapa"
           hidden={openId !== 'mapa'}
-          className="border-t border-[#E4DAD5] bg-[#FCF7F9] p-6 @xl:p-8"
+          className="border-t border-[#E4DAD5] bg-[#FCF7F9] p-4 @xl:p-8"
         >
           <EmotionalCalendarCard
             onOpenHistory={onOpenHistoryModal}

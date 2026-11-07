@@ -61,7 +61,7 @@ export default function DashboardScreen({
   };
 
   return (
-    <div className="@container min-h-full w-full max-w-6xl mx-auto space-y-14 @3xl:space-y-16 font-dmsans text-[#2B2829] pb-16 animate-fadeIn">
+    <div className="@container min-h-full w-full max-w-6xl mx-auto space-y-8 @3xl:space-y-16 font-dmsans text-[#2B2829] pb-10 @3xl:pb-16 animate-fadeIn">
       {/* 1. HERO EDITORIAL (inspirado na linguagem Filko, adaptado ao Florável) */}
       <HomeHero
         userName={userName}
@@ -77,7 +77,7 @@ export default function DashboardScreen({
       />
 
       {/* 2. CHECK-IN EMOCIONAL + AGENDA (2 colunas assimétricas) */}
-      <div className="grid gap-10 @3xl:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] @3xl:gap-12 items-start">
+      <div className="grid gap-7 @3xl:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] @3xl:gap-12 items-start">
         <HomeCheckIn
           currentMood={currentMood}
           onSelectMood={(mood) => setCurrentMood(mood.id)}

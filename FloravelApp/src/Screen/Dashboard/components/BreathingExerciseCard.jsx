@@ -31,6 +31,7 @@ export default function BreathingExerciseCard({ startSignal = 0 }) {
 
   const completed = elapsed >= TOTAL_SECONDS;
   const started = elapsed > 0;
+  const isExpandedMobile = isActive || started;
 
   useEffect(() => {
     if (!isActive) return undefined;
@@ -92,56 +93,75 @@ export default function BreathingExerciseCard({ startSignal = 0 }) {
       ref={sectionRef}
       id="pausa-guiada"
       aria-labelledby="pausa-titulo"
-      className="scroll-mt-8 rounded-xl overflow-hidden bg-[#F5ECE3] grid @3xl:grid-cols-[minmax(0,1fr)_minmax(0,0.75fr)]"
+      className="scroll-mt-8 rounded-2xl @xl:rounded-xl overflow-hidden bg-[#F5ECE3] grid @3xl:grid-cols-[minmax(0,1fr)_minmax(0,0.75fr)]"
     >
-      <div className="p-7 @xl:p-10 @5xl:p-12 flex flex-col @xl:flex-row gap-8 @xl:gap-12 @xl:items-center">
-        {/* Círculo de respiração */}
-        <div className="relative w-40 h-40 shrink-0 self-center flex items-center justify-center" aria-hidden="true">
+      <div
+        className={`p-4 @xl:p-10 @5xl:p-12 flex ${
+          isExpandedMobile ? 'flex-col gap-6' : 'flex-row items-center justify-between gap-4'
+        } @xl:flex-row @xl:gap-12 @xl:items-center`}
+      >
+        {/* Círculo de respiração: compacto no mobile quando inativo, amplo quando em uso ou no desktop */}
+        <div
+          className={`relative shrink-0 flex items-center justify-center ${
+            isExpandedMobile ? 'w-36 h-36 self-center' : 'w-16 h-16'
+          } @xl:w-40 @xl:h-40`}
+          aria-hidden="true"
+        >
           <div className="absolute inset-0 rounded-full border border-[#294D33]/25" />
           <div
-            className={`w-28 h-28 rounded-full bg-[#294D33] text-[#FBF6F2] flex flex-col items-center justify-center transition-transform ${circleScale}`}
+            className={`${
+              isExpandedMobile ? 'w-24 h-24' : 'w-12 h-12'
+            } @xl:w-28 @xl:h-28 rounded-full bg-[#294D33] text-[#FBF6F2] flex flex-col items-center justify-center transition-transform ${circleScale}`}
           >
-            <span className="text-[15px] font-medium">
+            <span className="text-[12px] @xl:text-[15px] font-medium">
               {isActive ? currentPhase.name : completed ? 'Pronto' : '1 min'}
             </span>
-            {isActive && <span className="text-[13px] tabular-nums opacity-80">{phaseTimeLeft}s</span>}
+            {isActive && <span className="text-[11px] @xl:text-[13px] tabular-nums opacity-80">{phaseTimeLeft}s</span>}
           </div>
         </div>
 
         <div className="min-w-0 flex-1">
           <h2
             id="pausa-titulo"
-            className="font-fraunces text-[30px] @5xl:text-[34px] leading-[1.1] tracking-[-0.015em] text-[#1F3A27]"
+            className="font-fraunces text-[20px] @xl:text-[30px] @5xl:text-[34px] leading-[1.1] tracking-[-0.015em] text-[#1F3A27]"
           >
             Pausa guiada
           </h2>
 
           {/* Texto que muda com o estado, anunciado para leitores de tela */}
-          <p className="mt-3 text-[17px] leading-relaxed text-[#4A5E4D] max-w-[38ch]" aria-live="polite">
+          <p
+            className="mt-1 @xl:mt-3 text-[13.5px] @xl:text-[17px] leading-snug @xl:leading-relaxed text-[#4A5E4D] max-w-[38ch]"
+            aria-live="polite"
+          >
             {isActive
               ? `${currentPhase.instruction}.`
               : completed
                 ? 'Você fez uma pausa por você. Isso já conta.'
                 : started
                   ? 'Pausa interrompida. Continue quando puder.'
-                  : 'Um minuto para soltar os ombros e desacelerar.'}
+                  : (
+                    <>
+                      <span className="@xl:hidden">Respire e desacelere no seu ritmo.</span>
+                      <span className="hidden @xl:inline">Um minuto para soltar os ombros e desacelerar.</span>
+                    </>
+                  )}
           </p>
 
-          <div className="mt-6 flex flex-wrap items-center gap-3">
+          <div className={`${isExpandedMobile ? 'mt-4 flex' : 'hidden @xl:flex mt-6'} flex-wrap items-center gap-3`}>
             <button
               ref={startButtonRef}
               type="button"
               onClick={handleStartPause}
-              className={`inline-flex items-center gap-2 rounded-md bg-[#294D33] px-5 py-3 text-[15px] font-medium text-white hover:bg-[#1F3A27] cursor-pointer ${focusRing}`}
+              className={`inline-flex items-center gap-2 rounded-lg @xl:rounded-md bg-[#294D33] px-4 py-2.5 @xl:px-5 @xl:py-3 text-[14px] @xl:text-[15px] font-medium text-white hover:bg-[#1F3A27] cursor-pointer ${focusRing}`}
             >
               {isActive ? (
-                <><Pause size={17} strokeWidth={1.75} aria-hidden="true" /> Pausar</>
+                <><Pause size={16} strokeWidth={1.75} aria-hidden="true" /> Pausar</>
               ) : completed ? (
-                <><RotateCcw size={17} strokeWidth={1.75} aria-hidden="true" /> Repetir</>
+                <><RotateCcw size={16} strokeWidth={1.75} aria-hidden="true" /> Repetir</>
               ) : started ? (
-                <><Play size={17} strokeWidth={1.75} aria-hidden="true" /> Continuar</>
+                <><Play size={16} strokeWidth={1.75} aria-hidden="true" /> Continuar</>
               ) : (
-                <><Play size={17} strokeWidth={1.75} aria-hidden="true" /> Começar</>
+                <><Play size={16} strokeWidth={1.75} aria-hidden="true" /> Começar</>
               )}
             </button>
 
@@ -149,19 +169,31 @@ export default function BreathingExerciseCard({ startSignal = 0 }) {
               <button
                 type="button"
                 onClick={handleReset}
-                className={`rounded-md px-4 py-3 text-[15px] font-medium text-[#294D33] hover:bg-[#294D33]/10 cursor-pointer ${focusRing}`}
+                className={`rounded-md px-3.5 py-2.5 text-[14px] @xl:text-[15px] font-medium text-[#294D33] hover:bg-[#294D33]/10 cursor-pointer ${focusRing}`}
               >
                 Reiniciar
               </button>
             )}
 
             {started && !completed && (
-              <span className="text-[15px] tabular-nums text-[#4A5E4D]" aria-hidden="true">
+              <span className="text-[14px] @xl:text-[15px] tabular-nums text-[#4A5E4D]" aria-hidden="true">
                 {mm}:{ss}
               </span>
             )}
           </div>
         </div>
+
+        {/* Botão compacto lateral no mobile quando inativo */}
+        {!isExpandedMobile && (
+          <button
+            type="button"
+            onClick={handleStartPause}
+            className={`@xl:hidden shrink-0 inline-flex items-center gap-1.5 rounded-lg bg-[#294D33] px-3.5 py-2.5 text-[13.5px] font-medium text-white hover:bg-[#1F3A27] cursor-pointer ${focusRing}`}
+          >
+            <Play size={15} strokeWidth={1.75} aria-hidden="true" />
+            Começar
+          </button>
+        )}
       </div>
 
       {/* Ilustração: mãe respirando ao lado do bebê */}
