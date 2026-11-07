@@ -1,21 +1,15 @@
 // src/Screen/Services/SupportNetworkScreen.jsx
 import React, { useState, useMemo } from "react";
 import {
-  HeartHandshake,
-  Search,
   Video,
   ArrowLeft,
-  Calendar,
   Clock,
   CheckCircle,
   ChevronLeft,
   ChevronRight,
   Loader2,
-  Users,
   SearchX,
-  Sparkles,
-  ShieldCheck,
-  CheckCircle2,
+  GraduationCap,
 } from "lucide-react";
 
 import FilterToolbar from "./FilterToolbar";
@@ -23,7 +17,7 @@ import PsychologistCard from "./PsychologistCard";
 
 // =========================================================
 // MOCK DATA: 6 PROFISSIONAIS CERTIFICADAS
-// Preços acessíveis calibrados para mães de baixa renda (R$ 30 a R$ 120, foco <= R$ 80)
+// Preços acessíveis calibrados para mães acolhidas pela rede
 // =========================================================
 export const MOCK_PSYCHOLOGISTS = [
   {
@@ -32,6 +26,8 @@ export const MOCK_PSYCHOLOGISTS = [
     crp: "CRP 06/142980",
     spec: "Psicologia Perinatal",
     approach: "Psicanálise",
+    education: "Especialista em Psicologia Perinatal e Parentalidade · Instituto Gerar / USP",
+    sessionsCompleted: 48,
     desc: "Um espaço de escuta profunda para acolher você e as transformações da maternidade, respeitando o seu momento e os desafios do puerpério.",
     modality: "Online · 50 min",
     price: 0,
@@ -47,6 +43,8 @@ export const MOCK_PSYCHOLOGISTS = [
     crp: "CRP 06/158221",
     spec: "Acolhimento Luto",
     approach: "Fenomenológica-Existencial",
+    education: "Mestre em Psicologia Clínica e Acolhimento Perinatal · PUC-SP",
+    sessionsCompleted: 36,
     desc: "Acolhimento sensível e humanizado para atravessar perdas gestacionais e neonatais, encontrando amparo seguro e sem julgamentos.",
     modality: "Online · 50 min",
     price: 40,
@@ -62,6 +60,8 @@ export const MOCK_PSYCHOLOGISTS = [
     crp: "CRP 06/129330",
     spec: "Triagem",
     approach: "TCC (Cognitivo-Comportamental)",
+    education: "Especialista em Saúde Mental Materna e Triagem Clínica · UNIFESP",
+    sessionsCompleted: 42,
     desc: "Escuta inicial, triagem clínica e direcionamento especializado para sobrecarga mental, sintomas ansiosos e ambivalência no puerpério.",
     modality: "Online · 40 min",
     price: 0,
@@ -77,6 +77,8 @@ export const MOCK_PSYCHOLOGISTS = [
     crp: "CRP 06/163412",
     spec: "Psicologia Perinatal",
     approach: "TCC (Cognitivo-Comportamental)",
+    education: "Pós-graduada em Terapia Cognitivo-Comportamental no Pós-Parto · HC-FMUSP",
+    sessionsCompleted: 29,
     desc: "Foco prático em manejo de ansiedade pós-parto, rotinas de sono compartilhado e técnicas de acolhimento emocional para mães recentes.",
     modality: "Online · 50 min",
     price: 60,
@@ -92,6 +94,8 @@ export const MOCK_PSYCHOLOGISTS = [
     crp: "CRP 06/171095",
     spec: "Acolhimento Luto",
     approach: "Gestalt-terapia",
+    education: "Especialista em Gestalt-Terapia e Vínculos Maternos · Instituto Sedes Sapientiae",
+    sessionsCompleted: 34,
     desc: "Apoio centrado no aqui-e-agora da maternidade atípica, culpa materna e fortalecimento de vínculos afetivos na gestação e pós-parto.",
     modality: "Presencial (SP) ou Online",
     price: 50,
@@ -107,6 +111,8 @@ export const MOCK_PSYCHOLOGISTS = [
     crp: "CRP 06/189204",
     spec: "Psicologia Perinatal",
     approach: "Humanista",
+    education: "Especialista em Clínica Materno-Infantil e Psicologia Humanista · Mackenzie",
+    sessionsCompleted: 16,
     desc: "Acolhimento empático para mães solos, desafios na amamentação e fortalecimento da autoestima no retorno ao trabalho pós-licença.",
     modality: "Online · 50 min",
     price: 75,
@@ -124,9 +130,9 @@ export default function SupportNetworkScreen({
   profEmFoco: externalProfEmFoco,
   setProfEmFoco: externalSetProfEmFoco,
 }) {
-  // Controle de estado para permitir funcionamento isolado ou acoplado
   const [internalProfEmFoco, setInternalProfEmFoco] = useState(null);
-  const profEmFoco = externalProfEmFoco !== undefined ? externalProfEmFoco : internalProfEmFoco;
+  const profEmFoco =
+    externalProfEmFoco !== undefined ? externalProfEmFoco : internalProfEmFoco;
   const setProfEmFoco = externalSetProfEmFoco || setInternalProfEmFoco;
 
   // Estados de Filtro
@@ -142,10 +148,8 @@ export default function SupportNetworkScreen({
   const [isBooking, setIsBooking] = useState(false);
   const [isConfirmed, setIsConfirmed] = useState(false);
 
-  // Dias do mês de exemplo (31 dias)
   const diasOutubro = Array.from({ length: 31 }, (_, i) => i + 1);
 
-  // Lista de especialidades únicas para as pílulas
   const specialties = [
     "Todas",
     "Psicologia Perinatal",
@@ -153,7 +157,6 @@ export default function SupportNetworkScreen({
     "Triagem",
   ];
 
-  // Cálculo de Filtros Ativos para exibição na badge
   const activeFiltersCount = useMemo(() => {
     let count = 0;
     if (priceFilter !== "all") count++;
@@ -162,7 +165,6 @@ export default function SupportNetworkScreen({
     return count;
   }, [priceFilter, approachFilter, modalityFilter]);
 
-  // Limpeza de todos os filtros
   const handleResetFilters = () => {
     setSearchTerm("");
     setActiveSpecialty("Todas");
@@ -171,10 +173,8 @@ export default function SupportNetworkScreen({
     setModalityFilter("all");
   };
 
-  // Filtragem multi-critério
   const filteredProfessionals = useMemo(() => {
     return MOCK_PSYCHOLOGISTS.filter((prof) => {
-      // 1. Busca livre por nome, especialidade, bio ou tags
       const term = searchTerm.toLowerCase().trim();
       const matchesSearch =
         !term ||
@@ -183,11 +183,9 @@ export default function SupportNetworkScreen({
         prof.desc.toLowerCase().includes(term) ||
         (prof.tags && prof.tags.some((t) => t.toLowerCase().includes(term)));
 
-      // 2. Especialidade (Pílulas rápidas)
       const matchesSpecialty =
         activeSpecialty === "Todas" || prof.spec === activeSpecialty;
 
-      // 3. Preço Social
       let matchesPrice = true;
       if (priceFilter === "social") {
         matchesPrice = prof.isSocial || prof.price === 0;
@@ -199,12 +197,12 @@ export default function SupportNetworkScreen({
         matchesPrice = prof.price >= 80 && prof.price <= 120;
       }
 
-      // 4. Abordagem psicológica
       const matchesApproach =
         approachFilter === "Todas as Abordagens" ||
-        prof.approach.toLowerCase().includes(approachFilter.toLowerCase().split(" ")[0]);
+        prof.approach
+          .toLowerCase()
+          .includes(approachFilter.toLowerCase().split(" ")[0]);
 
-      // 5. Modalidade
       let matchesModality = true;
       if (modalityFilter === "online") {
         matchesModality = prof.modality.toLowerCase().includes("online");
@@ -220,9 +218,14 @@ export default function SupportNetworkScreen({
         matchesModality
       );
     });
-  }, [searchTerm, activeSpecialty, priceFilter, approachFilter, modalityFilter]);
+  }, [
+    searchTerm,
+    activeSpecialty,
+    priceFilter,
+    approachFilter,
+    modalityFilter,
+  ]);
 
-  // Ação de confirmar agendamento
   const handleConfirmarAgendamento = () => {
     if (!selectedTime || !profEmFoco) return;
 
@@ -259,142 +262,235 @@ export default function SupportNetworkScreen({
   };
 
   // =========================================================
-  // SE ESTIVER EM FOCO DE AGENDAMENTO COM UM PROFISSIONAL:
+  // PERFIL DA PSICÓLOGA E AGENDAMENTO (QUANDO SELECIONADA)
   // =========================================================
   if (profEmFoco) {
+    const isSocialPrice =
+      profEmFoco.price === 0 ||
+      profEmFoco.isSocial ||
+      String(profEmFoco.priceFormatted).toLowerCase().includes("gratuito");
+
+    const sessionsCount = profEmFoco.sessionsCompleted || 16;
+
     return (
-      <div className="animate-fadeIn font-dmsans max-w-5xl mx-auto pb-16">
+      <div className="animate-fadeIn font-dmsans max-w-[1040px] mx-auto pb-16 text-[#2B2829]">
         <button
           type="button"
           onClick={() => setProfEmFoco(null)}
-          className="inline-flex items-center gap-2 text-sm text-[#516B55] hover:text-[#294D33] font-bold transition mb-8 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#294D33] rounded-lg px-2 py-1"
+          className="inline-flex items-center gap-2 text-[14px] text-[#516B55] hover:text-[#1F3A27] font-medium transition mb-6 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#294D33] rounded-lg py-1"
         >
           <ArrowLeft size={16} />
-          <span>Voltar para a rede de apoio</span>
+          <span>Voltar para a lista de profissionais</span>
         </button>
 
-        <h1 
-          className="text-3xl md:text-4xl font-bold text-[#294D33] mb-2"
-          style={{ fontFamily: "'Fraunces', serif" }}
-        >
-          Um encontro para cuidar de você
-        </h1>
-        <p className="text-[#516B55] text-base sm:text-lg mb-10">
-          Escolha um dia e horário que se ajustem confortavelmente à sua rotina com o bebê.
-        </p>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+          {/* COLUNA ESQUERDA: PERFIL HUMANO DA PROFISSIONAL */}
+          <div className="lg:col-span-5 space-y-5">
+            <div className="bg-[#F5EDE9]/80 rounded-2xl border border-[#E4DAD5] p-6 sm:p-7">
+              {/* Foto + Nome + Especialidade */}
+              <div className="flex flex-col sm:flex-row lg:flex-col items-start sm:items-center lg:items-start gap-5 pb-6 border-b border-[#E4DAD5]">
+                {profEmFoco.photo ? (
+                  <img
+                    src={profEmFoco.photo}
+                    alt={profEmFoco.name}
+                    className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl object-cover border border-[#E4DAD5]"
+                  />
+                ) : (
+                  <div
+                    className="w-24 h-24 rounded-2xl bg-[#EBD9D3] text-[#1F3A27] flex items-center justify-center text-2xl font-medium"
+                    style={{ fontFamily: "'Fraunces', serif" }}
+                  >
+                    {profEmFoco.name.slice(0, 2).toUpperCase()}
+                  </div>
+                )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-          {/* Coluna Esquerda: Dados do Profissional */}
-          <div className="lg:col-span-2 space-y-6">
-            <div className="flex items-center gap-4">
-              {profEmFoco.photo ? (
-                <img
-                  src={profEmFoco.photo}
-                  alt={profEmFoco.name}
-                  className="w-20 h-20 rounded-full object-cover border-2 border-[#E8A9BB] shadow-sm"
-                />
-              ) : (
-                <div 
-                  className="w-20 h-20 rounded-full bg-[#FCE7F0] text-[#294D33] flex items-center justify-center text-2xl font-bold shadow-sm"
-                  style={{ fontFamily: "'Fraunces', serif" }}
-                >
-                  {profEmFoco.name.slice(0, 2).toUpperCase()}
-                </div>
-              )}
-              <div>
-                <h2 
-                  className="text-2xl font-bold text-[#294D33]"
-                  style={{ fontFamily: "'Fraunces', serif" }}
-                >
-                  {profEmFoco.name}
-                </h2>
-                <p className="text-xs text-stone-400 font-mono">{profEmFoco.crp || "CRP 06/142980"}</p>
-                <p className="text-xs font-bold text-[#E8A9BB] mt-0.5">{profEmFoco.spec}</p>
-              </div>
-            </div>
-
-            <p className="text-sm text-stone-600 leading-relaxed">
-              {profEmFoco.desc}
-            </p>
-
-            {/* Tags da profissional */}
-            {profEmFoco.tags && (
-              <div className="flex flex-wrap gap-1.5 pt-1">
-                {profEmFoco.tags.map((t) => (
-                  <span key={t} className="px-2.5 py-0.5 rounded-full text-xs bg-[#FCF7F9] text-[#294D33] border border-[#E8A9BB]/40 font-medium">
-                    {t}
+                <div>
+                  <span className="text-[12px] font-medium text-[#516B55]">
+                    {profEmFoco.spec} · {profEmFoco.crp || "CRP 06/142980"}
                   </span>
-                ))}
+                  <h1
+                    className="text-[26px] sm:text-[28px] font-normal text-[#1F3A27] leading-[1.15] tracking-[-0.02em] mt-1"
+                    style={{ fontFamily: "'Fraunces', serif" }}
+                  >
+                    {profEmFoco.name}
+                  </h1>
+                  <p className="text-[13px] text-[#6B6365] mt-1.5">
+                    Abordagem: <strong className="font-medium text-[#2B2829]">{profEmFoco.approach}</strong>
+                  </p>
+                </div>
               </div>
-            )}
 
-            <div className="p-4 rounded-2xl bg-[#FCF7F9] border border-[#F4C4D4]/40 space-y-2 text-xs text-[#516B55]">
-              <div className="flex items-center gap-2 font-bold text-[#294D33]">
-                <Video size={16} />
-                <span>Atendimento confidencial via vídeo · 50 minutos</span>
+              {/* Apresentação pessoal em linguagem humana */}
+              <div className="py-5 border-b border-[#E4DAD5]">
+                <h2 className="text-[12px] uppercase tracking-[0.06em] text-[#6B6365] font-medium mb-2">
+                  Sobre o atendimento
+                </h2>
+                <p className="text-[14px] sm:text-[15px] text-[#2B2829] leading-[1.6]">
+                  {profEmFoco.desc}
+                </p>
               </div>
-              <p>Ambiente seguro e criptografado de ponta a ponta.</p>
+
+              {/* Formação e Experiência */}
+              <div className="py-5 border-b border-[#E4DAD5] space-y-3">
+                <h2 className="text-[12px] uppercase tracking-[0.06em] text-[#6B6365] font-medium">
+                  Formação e foco clínico
+                </h2>
+                <div className="flex items-start gap-2.5 text-[13px] text-[#2B2829] leading-relaxed">
+                  <GraduationCap
+                    size={16}
+                    className="text-[#294D33] shrink-0 mt-0.5"
+                    aria-hidden="true"
+                  />
+                  <span>
+                    {profEmFoco.education ||
+                      "Especialista em Psicologia Perinatal e Saúde Mental Materna"}
+                  </span>
+                </div>
+
+                {profEmFoco.tags && profEmFoco.tags.length > 0 && (
+                  <p className="text-[13px] text-[#6B6365]">
+                    Temas de acompanhamento: {profEmFoco.tags.join(" · ")}
+                  </p>
+                )}
+              </div>
+
+              {/* Modalidade e Valor Social */}
+              <div className="pt-5 space-y-3">
+                <div className="flex items-center justify-between text-[13px]">
+                  <span className="text-[#6B6365] flex items-center gap-1.5">
+                    <Video size={15} className="text-[#294D33]" aria-hidden="true" />
+                    Modalidade
+                  </span>
+                  <span className="font-medium text-[#1F3A27]">
+                    {profEmFoco.modality || "Online · 50 min"}
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between text-[13px]">
+                  <span className="text-[#6B6365]">Valor da sessão</span>
+                  {isSocialPrice ? (
+                    <span className="px-2.5 py-0.5 rounded-md bg-[#E3EDE5] text-[#1F3A27] font-medium text-[12px]">
+                      Gratuito · Fundo Florável
+                    </span>
+                  ) : (
+                    <span className="font-medium text-[#1F3A27] tabular-nums">
+                      {profEmFoco.priceFormatted} · Valor social
+                    </span>
+                  )}
+                </div>
+
+                <p className="text-[12px] text-[#6B6365] leading-relaxed pt-1">
+                  {isSocialPrice
+                    ? "Sessão custeada integralmente pelo Fundo Solidário Florável para mães em acompanhamento."
+                    : "Valor social reduzido para mães cadastradas na rede de acolhimento Florável."}
+                </p>
+              </div>
             </div>
 
-            <div className="p-4 rounded-2xl bg-[#DEF7EC] border border-[#DEF7EC] text-xs text-[#03543F]">
-              <div className="flex items-center justify-between font-bold">
-                <span>Investimento da Sessão:</span>
-                <span className="text-sm">{profEmFoco.priceFormatted || "Valor Social"}</span>
+            {/* Indicador de Atendimentos Realizados (inspirado na referência) */}
+            <div className="bg-[#E3EDE5]/65 rounded-2xl border border-[#C5D9C9] px-6 py-5 flex items-center justify-between">
+              <div>
+                <span className="text-[12px] uppercase tracking-[0.06em] text-[#516B55] font-medium block">
+                  Acolhimentos na rede
+                </span>
+                <p
+                  className="text-[32px] font-normal text-[#1F3A27] leading-none mt-1.5 tabular-nums"
+                  style={{ fontFamily: "'Fraunces', serif" }}
+                >
+                  {sessionsCount}
+                </p>
+                <span className="text-[12px] text-[#516B55] mt-1 block">
+                  sessões realizadas com mães da Florável
+                </span>
               </div>
-              <p className="text-[11px] mt-1 text-emerald-800">
-                {profEmFoco.price === 0 || profEmFoco.isSocial
-                  ? "Atendimento 100% gratuito viabilizado pelo Fundo Solidário Florável."
-                  : "Valor social acessível viabilizado para mães acolhidas pela rede Florável."}
-              </p>
+
+              <div
+                className="w-12 h-12 rounded-full bg-[#294D33] text-[#FAF6F3] flex items-center justify-center shrink-0"
+                aria-hidden="true"
+              >
+                <CheckCircle size={22} />
+              </div>
             </div>
           </div>
 
-          {/* Coluna Direita: Seletor de Data e Horários */}
-          <div className="lg:col-span-3 bg-white border border-stone-100 rounded-3xl p-6 sm:p-8 shadow-sm relative overflow-hidden">
+          {/* COLUNA DIREITA: CALENDÁRIO E SELEÇÃO DE HORÁRIO */}
+          <div className="lg:col-span-7 bg-[#FAF6F3] border border-[#E4DAD5] rounded-2xl p-6 sm:p-8">
             {isConfirmed ? (
-              <div className="h-full flex flex-col items-center justify-center text-center py-16 animate-fadeIn">
-                <div className="w-20 h-20 rounded-full bg-[#DEF7EC] text-[#03543F] flex items-center justify-center mb-6 animate-bounce">
-                  <CheckCircle size={40} />
+              <div className="py-16 text-center space-y-4 animate-fadeIn">
+                <div className="w-16 h-16 rounded-full bg-[#E3EDE5] text-[#1F3A27] flex items-center justify-center mx-auto">
+                  <CheckCircle size={32} />
                 </div>
-                <h3 
-                  className="text-2xl font-bold text-[#294D33] mb-2"
+                <h3
+                  className="text-[24px] font-normal text-[#1F3A27]"
                   style={{ fontFamily: "'Fraunces', serif" }}
                 >
-                  Encontro agendado com sucesso!
+                  Encontro agendado com sucesso
                 </h3>
-                <p className="text-sm text-[#516B55]">
-                  Enviamos as instruções e o link da chamada para o seu e-mail. Redirecionando para sua agenda...
+                <p className="text-[14px] text-[#6B6365] max-w-md mx-auto leading-relaxed">
+                  Sua sessão com {profEmFoco.name} para o dia {selectedDay}/10 às{" "}
+                  {selectedTime} foi confirmada. Redirecionando para seus agendamentos...
                 </p>
               </div>
             ) : (
-              <div className={isBooking ? "opacity-50 pointer-events-none transition-opacity" : "transition-opacity"}>
-                <div className="flex items-center justify-between mb-6">
-                  <button type="button" className="p-1 text-stone-400 hover:text-stone-700" aria-label="Mês anterior">
-                    <ChevronLeft size={20} />
+              <div
+                className={
+                  isBooking
+                    ? "opacity-50 pointer-events-none transition-opacity"
+                    : "transition-opacity"
+                }
+              >
+                <div className="mb-6">
+                  <h2
+                    className="text-[22px] font-normal text-[#1F3A27] tracking-[-0.015em]"
+                    style={{ fontFamily: "'Fraunces', serif" }}
+                  >
+                    Escolha um dia e horário
+                  </h2>
+                  <p className="text-[13px] text-[#6B6365] mt-1">
+                    Se precisar remarcar por conta da rotina com o bebê, basta avisar até 2h antes.
+                  </p>
+                </div>
+
+                {/* Navegação do Mês */}
+                <div className="flex items-center justify-between py-3 px-4 rounded-xl bg-[#F5EDE9]/70 border border-[#E4DAD5] mb-5">
+                  <button
+                    type="button"
+                    className="p-1 text-[#6B6365] hover:text-[#1F3A27] cursor-pointer"
+                    aria-label="Mês anterior"
+                  >
+                    <ChevronLeft size={18} />
                   </button>
-                  <span className="font-bold text-stone-800 text-sm sm:text-base">Outubro de 2026</span>
-                  <button type="button" className="p-1 text-stone-400 hover:text-stone-700" aria-label="Próximo mês">
-                    <ChevronRight size={20} />
+                  <span className="font-medium text-[#1F3A27] text-[14px]">
+                    Outubro de 2026
+                  </span>
+                  <button
+                    type="button"
+                    className="p-1 text-[#6B6365] hover:text-[#1F3A27] cursor-pointer"
+                    aria-label="Próximo mês"
+                  >
+                    <ChevronRight size={18} />
                   </button>
                 </div>
 
-                <div className="grid grid-cols-7 gap-2 text-center text-[11px] font-bold text-[#516B55] uppercase mb-3">
+                {/* Cabeçalho dos dias da semana */}
+                <div className="grid grid-cols-7 gap-1.5 text-center text-[11px] font-medium text-[#6B6365] uppercase mb-2">
                   {["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"].map((d) => (
                     <div key={d}>{d}</div>
                   ))}
                 </div>
 
-                <div className="grid grid-cols-7 gap-y-2.5 gap-x-1.5 text-center mb-8">
+                {/* Grade de dias com áreas de toque confortáveis para mobile */}
+                <div className="grid grid-cols-7 gap-1.5 text-center mb-7">
                   <div className="col-span-4" />
                   {diasOutubro.map((dia) => (
                     <button
                       key={dia}
                       type="button"
                       onClick={() => setSelectedDay(dia)}
-                      className={`w-9 h-9 mx-auto rounded-full flex items-center justify-center text-xs font-semibold transition cursor-pointer ${
+                      className={`h-10 w-10 mx-auto rounded-lg flex items-center justify-center text-[13px] font-medium transition cursor-pointer tabular-nums ${
                         selectedDay === dia
-                          ? "bg-[#294D33] text-white shadow-md transform scale-105"
-                          : "text-stone-700 hover:bg-[#FCE7F0]"
+                          ? "bg-[#294D33] text-[#FAF6F3]"
+                          : "text-[#2B2829] hover:bg-[#F1E6E1]"
                       }`}
                     >
                       {dia}
@@ -402,50 +498,60 @@ export default function SupportNetworkScreen({
                   ))}
                 </div>
 
-                <div className="border-t border-stone-100 pt-6">
-                  <h4 className="font-bold text-[#294D33] text-xs uppercase tracking-wider mb-3">
-                    Horários disponíveis para o dia {selectedDay} de Outubro:
-                  </h4>
-                  <div className="flex flex-wrap gap-2.5 mb-6">
-                    {["09:00", "11:30", "14:30", "16:00", "18:30"].map((hora) => (
-                      <button
-                        key={hora}
-                        type="button"
-                        onClick={() => setSelectedTime(hora)}
-                        className={`flex items-center gap-1.5 px-4 py-2 rounded-full border text-xs font-bold transition cursor-pointer ${
-                          selectedTime === hora
-                            ? "border-[#294D33] bg-[#294D33] text-white shadow-sm"
-                            : "border-stone-200 text-stone-700 hover:border-[#E8A9BB] hover:bg-[#FCF7F9]"
-                        }`}
-                      >
-                        <Clock size={13} />
-                        <span>{hora}</span>
-                      </button>
-                    ))}
+                {/* Seleção de Horários */}
+                <div className="border-t border-[#E4DAD5] pt-6">
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-[13px] font-medium text-[#1F3A27]">
+                      Horários disponíveis · {selectedDay} de outubro
+                    </h3>
+                    <span className="text-[12px] text-[#6B6365]">
+                      Horário de Brasília
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-3 sm:grid-cols-5 gap-2.5 mb-7">
+                    {["09:00", "11:30", "14:30", "16:00", "18:30"].map(
+                      (hora) => (
+                        <button
+                          key={hora}
+                          type="button"
+                          onClick={() => setSelectedTime(hora)}
+                          className={`py-2.5 px-3 rounded-lg border text-[13px] font-medium transition cursor-pointer flex items-center justify-center gap-1.5 tabular-nums ${
+                            selectedTime === hora
+                              ? "border-[#294D33] bg-[#294D33] text-[#FAF6F3]"
+                              : "border-[#E4DAD5] bg-[#F5EDE9]/50 text-[#2B2829] hover:border-[#294D33]/40"
+                          }`}
+                        >
+                          <Clock size={13} aria-hidden="true" />
+                          <span>{hora}</span>
+                        </button>
+                      )
+                    )}
                   </div>
 
                   <button
                     type="button"
                     onClick={handleConfirmarAgendamento}
                     disabled={!selectedTime || isBooking}
-                    className={`w-full py-3.5 rounded-full text-sm font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-sm ${
+                    className={`w-full py-3.5 px-6 rounded-lg text-[14px] font-medium transition flex items-center justify-center gap-2 cursor-pointer ${
                       !selectedTime
-                        ? "bg-stone-200 text-stone-400 cursor-not-allowed"
+                        ? "bg-[#E4DAD5] text-[#6B6365] cursor-not-allowed"
                         : isBooking
-                        ? "bg-[#294D33]/70 text-white cursor-wait"
-                        : "bg-[#294D33] hover:bg-[#1e3c27] text-white hover:scale-[1.01] active:scale-95"
+                        ? "bg-[#294D33]/80 text-[#FAF6F3] cursor-wait"
+                        : "bg-[#294D33] hover:bg-[#1F3A27] text-[#FAF6F3]"
                     }`}
                   >
                     {isBooking ? (
                       <>
                         <Loader2 size={16} className="animate-spin" />
-                        <span>Confirmando agendamento seguro...</span>
+                        <span>Confirmando seu horário...</span>
                       </>
                     ) : (
-                      <>
-                        <span>Confirmar Agendamento</span>
-                        <CheckCircle size={16} />
-                      </>
+                      <span>
+                        {selectedTime
+                          ? `Confirmar agendamento · dia ${selectedDay} às ${selectedTime}`
+                          : "Selecione um horário para agendar"}
+                      </span>
                     )}
                   </button>
                 </div>
@@ -458,34 +564,27 @@ export default function SupportNetworkScreen({
   }
 
   // =========================================================
-  // VIEW PRINCIPAL: BARRA DE FERRAMENTAS + GRADE DE CARDS (GRID)
+  // VIEW PRINCIPAL: LISTAGEM SIMPLIFICADA E MOBILE-FIRST
   // =========================================================
   return (
-    <div className="animate-fadeIn font-dmsans pb-16 antialiased text-stone-800">
-      {/* ========================================================= */}
-      {/* CABEÇALHO ACOLHEDOR DA REDE DE APOIO                      */}
-      {/* ========================================================= */}
-      <header className="mb-8">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FCE7F0] text-[#294D33] text-xs font-bold uppercase tracking-wider mb-3 border border-[#E8A9BB]/40 shadow-2xs">
-          <HeartHandshake size={15} className="text-[#294D33]" aria-hidden="true" />
-          <span>Escuta que acolhe mães</span>
-        </div>
-
+    <div className="animate-fadeIn font-dmsans max-w-[1080px] mx-auto pb-16 antialiased text-[#2B2829]">
+      {/* Cabeçalho direto e humano (sem pílulas ou badges decorativos) */}
+      <header className="mb-7">
+        <p className="text-[13px] text-[#6B6365] mb-1.5">
+          Escuta psicológica especializada no puerpério
+        </p>
         <h1
-          className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#294D33] tracking-tight mb-2"
+          className="text-[28px] sm:text-[36px] font-normal text-[#1F3A27] tracking-[-0.02em] leading-[1.15] mb-2"
           style={{ fontFamily: "'Fraunces', serif" }}
         >
-          Sua rede de apoio
+          Rede de apoio profissional
         </h1>
-
-        <p className="text-stone-600 text-sm sm:text-base max-w-2xl leading-relaxed">
-          Encontre profissionais certificadas em saúde mental materna com valores sociais acessíveis e apoio do Fundo Florável. No seu tempo, com acolhimento e sem julgamentos.
+        <p className="text-[#6B6365] text-[14px] sm:text-[15px] max-w-[58ch] leading-relaxed">
+          Psicólogas certificadas com atendimento gratuito pelo Fundo Florável ou valores sociais acessíveis. Toque em uma profissional para conhecer sua abordagem e ver os horários.
         </p>
       </header>
 
-      {/* ========================================================= */}
-      {/* BARRA DE BUSCA E FILTROS AVANÇADOS (COMPONENT ISOLADO)    */}
-      {/* ========================================================= */}
+      {/* Busca e Filtros Simplificados */}
       <FilterToolbar
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
@@ -502,63 +601,59 @@ export default function SupportNetworkScreen({
         activeFiltersCount={activeFiltersCount}
       />
 
-      {/* ========================================================= */}
-      {/* BARRA DE RESULTADOS / CONTADOR                            */}
-      {/* ========================================================= */}
-      <div className="flex items-center justify-between mb-6 text-xs sm:text-sm text-[#516B55]">
-        <div>
-          Mostrando <strong className="text-[#294D33]">{filteredProfessionals.length}</strong>{" "}
-          profissional(is) com valores acessíveis
-        </div>
+      {/* Contador discreto */}
+      <div className="flex items-center justify-between mb-4 text-[13px] text-[#6B6365]">
+        <span>
+          {filteredProfessionals.length}{" "}
+          {filteredProfessionals.length === 1
+            ? "profissional disponível"
+            : "profissionais disponíveis"}
+        </span>
 
-        {(searchTerm || activeSpecialty !== "Todas" || activeFiltersCount > 0) && (
+        {(searchTerm ||
+          activeSpecialty !== "Todas" ||
+          activeFiltersCount > 0) && (
           <button
             type="button"
             onClick={handleResetFilters}
-            className="text-[#294D33] font-bold hover:underline flex items-center gap-1 cursor-pointer"
+            className="text-[#294D33] font-medium hover:underline cursor-pointer"
           >
-            <span>Limpar filtros aplicados</span>
+            Limpar filtros
           </button>
         )}
       </div>
 
-      {/* ========================================================= */}
-      {/* GRADE DE CARTÕES DOS PROFISSIONAIS (GRID RESPONSIVO)      */}
-      {/* ========================================================= */}
+      {/* Lista de Profissionais: 1 coluna no mobile, 2 colunas em telas amplas */}
       {filteredProfessionals.length === 0 ? (
-        /* EMPTY STATE ACOLHEDOR */
-        <div 
-          className="py-16 px-6 text-center max-w-md mx-auto bg-white rounded-3xl border border-stone-100 shadow-sm space-y-4"
+        <div
+          className="py-14 px-6 text-center max-w-md mx-auto bg-[#F5EDE9]/60 rounded-2xl border border-[#E4DAD5] space-y-3"
           role="region"
           aria-label="Nenhuma profissional encontrada"
         >
-          <div className="w-16 h-16 rounded-3xl bg-[#FCE7F0] text-[#294D33] mx-auto flex items-center justify-center shadow-xs">
-            <SearchX size={32} aria-hidden="true" />
+          <div className="w-12 h-12 rounded-xl bg-[#EBD9D3] text-[#1F3A27] mx-auto flex items-center justify-center">
+            <SearchX size={22} aria-hidden="true" />
           </div>
-          <div>
-            <h3 
-              className="text-xl font-bold text-[#294D33]"
-              style={{ fontFamily: "'Fraunces', serif" }}
-            >
-              Nenhuma profissional encontrada
-            </h3>
-            <p className="text-xs sm:text-sm text-stone-500 mt-1.5 leading-relaxed">
-              Tente ajustar seus termos de busca ou remover alguns filtros de preço e modalidade.
-            </p>
-          </div>
-          <div className="pt-2">
+          <h3
+            className="text-[20px] font-normal text-[#1F3A27]"
+            style={{ fontFamily: "'Fraunces', serif" }}
+          >
+            Nenhuma profissional encontrada
+          </h3>
+          <p className="text-[13px] text-[#6B6365] leading-relaxed">
+            Tente buscar por outro termo ou remover os filtros selecionados.
+          </p>
+          <div className="pt-1">
             <button
               type="button"
               onClick={handleResetFilters}
-              className="px-6 py-2.5 rounded-full bg-[#294D33] hover:bg-[#1e3c27] text-white text-xs font-bold transition shadow-sm cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#294D33]"
+              className="px-5 py-2.5 rounded-lg bg-[#294D33] hover:bg-[#1F3A27] text-[#FAF6F3] text-[13px] font-medium transition cursor-pointer"
             >
-              Limpar todos os filtros
+              Mostrar todas as profissionais
             </button>
           </div>
         </div>
       ) : (
-        /* GRID CARDS: 1 col no mobile, 2 no tablet, 3 no desktop */
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {filteredProfessionals.map((prof) => (
             <PsychologistCard
               key={prof.id}

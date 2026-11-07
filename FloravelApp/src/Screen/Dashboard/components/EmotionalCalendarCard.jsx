@@ -1,112 +1,88 @@
+// src/Screen/Dashboard/components/EmotionalCalendarCard.jsx
+// Mapa de humor semanal e acesso ao histórico e à triagem EPDS.
 import { useState } from 'react';
-import { Calendar, ChevronRight, Info, CheckCircle2 } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 const WEEK_DAYS = [
-  { day: 'Seg', date: '27', color: 'bg-[#294D33]', label: 'Serena' },
-  { day: 'Ter', date: '28', color: 'bg-amber-400', label: 'Cansaço' },
-  { day: 'Qua', date: '29', color: 'bg-[#E8A9BB]', label: 'Conexão' },
-  { day: 'Qui', date: '30', color: 'bg-[#294D33]', label: 'Descanso' },
-  { day: 'Sex', date: '31', color: 'bg-[#516B55]', label: 'Apoio' },
-  { day: 'Sáb', date: '01', color: 'bg-[#294D33]', label: 'Hoje', isToday: true },
-  { day: 'Dom', date: '02', color: 'bg-stone-300', label: 'Pendente' },
+  { day: 'Seg', date: '27', tone: 'bg-[#294D33]', label: 'Serena' },
+  { day: 'Ter', date: '28', tone: 'bg-[#C88A3B]', label: 'Cansaço' },
+  { day: 'Qua', date: '29', tone: 'bg-[#C97C93]', label: 'Conexão' },
+  { day: 'Qui', date: '30', tone: 'bg-[#294D33]', label: 'Descanso' },
+  { day: 'Sex', date: '31', tone: 'bg-[#516B55]', label: 'Apoio' },
+  { day: 'Sáb', date: '01', tone: 'bg-[#294D33]', label: 'Hoje', isToday: true },
+  { day: 'Dom', date: '02', tone: 'bg-[#D5CBC6]', label: 'Pendente' },
 ];
 
+const focusRing =
+  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#294D33] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FCF7F9]';
+
 export default function EmotionalCalendarCard({ onOpenHistory, onOpenScreening }) {
-  const [activeDay, setActiveDay] = useState(WEEK_DAYS[5]); // Hoje
+  const [activeDay, setActiveDay] = useState(WEEK_DAYS[5]);
 
   return (
-    <div className="bg-white rounded-3xl p-6 sm:p-7 border border-stone-100 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between h-full">
+    <div className="grid gap-6 @2xl:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] items-start">
       <div>
-        {/* HEADER */}
-        <div className="flex items-start justify-between mb-4">
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-2xl bg-[#EBF3ED] text-[#294D33] flex items-center justify-center shrink-0">
-              <Calendar size={20} />
-            </div>
-            <div>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-[#294D33] block">
-                Escala de Edimburgo (EPDS)
-              </span>
-              <h3 className="text-[20px] font-fraunces font-bold text-[#2B2829] leading-tight">
-                Seu Mapa de Humor
-              </h3>
-            </div>
-          </div>
-
-          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#EBF3ED] text-[#294D33]">
-            <CheckCircle2 size={12} />
-            Semana 7
-          </span>
+        <div className="flex items-baseline justify-between gap-4 text-[14px] text-[#4A5E4D]">
+          <span>Registros da semana 7</span>
+          <span className="tabular-nums font-medium text-[#1F3A27]">5 de 7 dias</span>
         </div>
 
-        <p className="text-[13px] text-stone-600 leading-relaxed mb-5">
-          Acompanhamento do seu ritmo emocional diário para identificar oscilações hormonais e sobrecargas no puerpério.
-        </p>
-
-        {/* DIAS DA SEMANA */}
-        <div className="bg-[#FCF7F9] rounded-2xl p-4 border border-stone-100 mb-5">
-          <div className="flex items-center justify-between text-[11px] font-bold text-stone-500 uppercase tracking-wider mb-3">
-            <span>Registros da semana</span>
-            <span className="text-[#294D33]">5 de 7 dias preenchidos</span>
-          </div>
-
-          <div className="grid grid-cols-7 gap-1 sm:gap-2">
-            {WEEK_DAYS.map((item, idx) => {
-              const isSelected = activeDay?.day === item.day;
-              return (
-                <button
-                  key={idx}
-                  type="button"
-                  onClick={() => setActiveDay(item)}
-                  className={`flex flex-col items-center py-2 px-1 rounded-xl transition-all cursor-pointer ${
-                    isSelected ? 'bg-white shadow-xs ring-1 ring-[#294D33]/40' : 'hover:bg-white/60'
-                  }`}
-                  title={`${item.day}: ${item.label}`}
-                >
-                  <span className="text-[11px] font-medium text-stone-500 mb-1.5">{item.day}</span>
-                  <div className="relative">
-                    <span className={`w-4 h-4 sm:w-5 sm:h-5 rounded-full inline-block ${item.color}`} />
-                    {item.isToday && (
-                      <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-[#E8A9BB] rounded-full ring-1 ring-white" />
-                    )}
-                  </div>
-                  <span className="text-[10px] text-stone-400 mt-1">{item.date}</span>
-                </button>
-              );
-            })}
-          </div>
-
-          {activeDay && (
-            <div className="mt-3 pt-2.5 border-t border-stone-200/60 flex items-center justify-between text-[12px]">
-              <span className="text-stone-700 font-medium">
-                {activeDay.day}: <strong>{activeDay.label}</strong>
-              </span>
-              <span className="text-[10px] text-stone-400">Toque para ver histórico</span>
-            </div>
-          )}
+        <div className="mt-3 grid grid-cols-7 gap-1.5" role="group" aria-label="Dias da semana">
+          {WEEK_DAYS.map((item) => {
+            const isSelected = activeDay?.day === item.day;
+            return (
+              <button
+                key={item.day}
+                type="button"
+                aria-pressed={isSelected}
+                onClick={() => setActiveDay(item)}
+                className={`flex flex-col items-center rounded-md py-2.5 px-1 border transition-colors cursor-pointer ${focusRing} ${
+                  isSelected
+                    ? 'bg-[#F1E6E1] border-[#294D33] text-[#1F3A27]'
+                    : 'border-transparent hover:bg-[#F1E6E1]/60 text-[#4A5E4D]'
+                }`}
+              >
+                <span className="text-[12px] font-medium">{item.day}</span>
+                <span className={`my-2 h-3.5 w-3.5 rounded-full ${item.tone}`} aria-hidden="true" />
+                <span className="text-[11px] tabular-nums">{item.date}</span>
+              </button>
+            );
+          })}
         </div>
 
-        {/* INDICADOR SUTIL (EPDS HÁ 14 DIAS) */}
-        <div 
-          onClick={onOpenScreening}
-          className="rounded-2xl p-3 bg-stone-50 border border-stone-100 mb-5 flex items-start gap-2.5 cursor-pointer hover:bg-stone-100/70 transition"
-        >
-          <Info size={15} className="text-[#294D33] shrink-0 mt-0.5" />
-          <p className="text-[12px] text-stone-600 leading-snug">
-            <strong>Última triagem (EPDS) há 14 dias:</strong> escore estável em 6/30 (baixo risco). Triagem quinzenal recomendada.
+        {activeDay && (
+          <p className="mt-3 text-[14px] text-[#4A5E4D]" aria-live="polite">
+            {activeDay.day}, dia {activeDay.date}:{' '}
+            <strong className="font-medium text-[#1F3A27]">{activeDay.label}</strong>
           </p>
-        </div>
+        )}
       </div>
 
-      {/* BOTÃO VAZADO */}
-      <button
-        type="button"
-        onClick={onOpenHistory}
-        className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-2xl border border-[#294D33] text-[#294D33] font-bold text-[14px] hover:bg-[#294D33] hover:text-white transition-all active:scale-[0.98] cursor-pointer group"
-      >
-        <span>Abrir Histórico</span>
-        <ChevronRight size={16} className="transition-transform group-hover:translate-x-1" />
-      </button>
+      <div className="rounded-lg bg-[#F1E6E1] p-5">
+        <p className="text-[14px] leading-relaxed text-[#2B2829]">
+          <strong className="font-medium text-[#1F3A27]">Última triagem EPDS há 14 dias:</strong>{' '}
+          escore 6/30 (baixo risco). Recomendamos repetir a cada quinzena.
+        </p>
+
+        <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2">
+          <button
+            type="button"
+            onClick={onOpenHistory}
+            className={`inline-flex items-center gap-2 rounded-md bg-[#294D33] px-4 py-2.5 text-[14px] font-medium text-white hover:bg-[#1F3A27] cursor-pointer ${focusRing}`}
+          >
+            Abrir histórico completo
+            <ArrowRight size={15} strokeWidth={1.75} aria-hidden="true" />
+          </button>
+
+          <button
+            type="button"
+            onClick={onOpenScreening}
+            className={`text-[14px] font-medium text-[#294D33] underline decoration-[#294D33]/30 underline-offset-4 hover:decoration-[#294D33] rounded-sm cursor-pointer ${focusRing}`}
+          >
+            Fazer triagem EPDS
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

@@ -78,7 +78,7 @@ export default function TimeCapsuleModal({ isOpen, onClose, onSaveCapsule }) {
         {isSealed ? (
           <div className="py-12 text-center space-y-4 animate-fadeIn">
             <div className="w-16 h-16 rounded-full bg-[#F4DDE5] text-[#294D33] mx-auto flex items-center justify-center">
-              <Lock size={28} className="text-[#9C5369] animate-bounce" />
+              <Lock size={28} className="text-[#9C5369]" />
             </div>
             <h4 className="text-[22px] font-fraunces font-bold text-[#294D33]">
               Carta guardada e lacrada! 💌

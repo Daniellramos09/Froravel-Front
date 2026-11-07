@@ -1,150 +1,128 @@
-import { useState } from 'react';
-import { ArrowRight, Clock, Bookmark, Sparkles } from 'lucide-react';
+// src/Screen/Dashboard/components/ArticleRecommendations.jsx
+// Curadoria editorial enxuta: 1 leitura em destaque + lista tipográfica discreta.
+import { ArrowRight } from 'lucide-react';
 
 const ARTIGOS = [
   {
     id: 1,
-    categoria: "Maternidade Real",
-    titulo: "Baby blues ou depressão pós-parto? Entenda a diferença e os sinais de alerta.",
-    resumo: "Compreenda a queda hormonal dos primeiros dias e saiba quando a tristeza puerperal pede um abraço profissional.",
-    tempo: "3 min de leitura",
-    tag: "Saúde Mental",
-    img: "/img/maternidadeSemFiltro.jpg",
-    fallback: "/img/maeexausta.jpg",
-    corBadge: "bg-[#FDF2F4] text-[#9C5369]"
+    categoria: 'Saúde emocional',
+    titulo: 'Baby blues ou depressão pós-parto? Entenda a diferença e os sinais de alerta',
+    resumo:
+      'Como diferenciar a oscilação hormonal dos primeiros dias de sinais que pedem apoio profissional.',
+    tempo: '3 min de leitura',
+    img: '/img/maternidadeSemFiltro.jpg',
+    fallback: '/img/maeexausta.jpg',
   },
   {
     id: 2,
-    categoria: "Autocuidado Possível",
-    titulo: "5 micropausas para encontrar calma no meio do caos diário com o recém-nascido.",
-    resumo: "Estratégias reais para recuperar o fôlego mesmo quando o tempo livre parece uma miragem impossível.",
-    tempo: "4 min de leitura",
-    tag: "Pausa Guiada",
-    img: "/img/maeDescansando.jpg",
-    fallback: "/img/maesono.jpg",
-    corBadge: "bg-[#EBF3ED] text-[#294D33]"
+    categoria: 'Autocuidado possível',
+    titulo: 'Cinco micropausas para encontrar fôlego na rotina com o recém-nascido',
+    tempo: '4 min de leitura',
   },
   {
     id: 3,
-    categoria: "Vínculo & Culpa",
-    titulo: "A culpa de não sentir o amor instantâneo e o peso de ter que dar conta de tudo.",
-    resumo: "Desmistificando o mito do parto mágico. O amor materno é uma construção diária, não uma obrigação imediata.",
-    tempo: "5 min de leitura",
-    tag: "Acolhimento",
-    img: "/img/variasMaes.jpg",
-    fallback: "/img/maeconversando.jpg",
-    corBadge: "bg-[#FCF7F9] text-[#7A4A58]"
-  }
+    categoria: 'Vínculo e culpa',
+    titulo: 'A culpa de não sentir amor imediato e o peso de tentar dar conta de tudo',
+    tempo: '5 min de leitura',
+  },
 ];
 
-export default function ArticleRecommendations({ onNavigateToLibrary }) {
-  const [bookmarked, setBookmarked] = useState({});
+const focusRing =
+  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#294D33] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FCF7F9]';
 
-  const toggleBookmark = (e, id) => {
-    e.stopPropagation();
-    setBookmarked((prev) => ({ ...prev, [id]: !prev[id] }));
-  };
+export default function ArticleRecommendations({ onNavigateToLibrary }) {
+  const [destaque, ...secundarios] = ARTIGOS;
 
   return (
-    <section className="space-y-6">
-      {/* HEADER DA SEÇÃO */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
-        <div>
-          <div className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-[#294D33] mb-1.5 bg-[#EBF3ED] px-3 py-1 rounded-full">
-            <Sparkles size={12} className="text-[#294D33]" />
-            Curadoria Especializada
-          </div>
-          <h3 className="text-[24px] sm:text-[28px] font-fraunces font-bold text-[#2B2829] tracking-tight">
-            Leituras que abraçam
-          </h3>
-          <p className="text-[14px] sm:text-[15px] text-stone-600">
-            Textos pensados para acolher a sua realidade, sem fórmulas mágicas e sem julgamentos.
-          </p>
-        </div>
+    <section aria-labelledby="leituras-titulo">
+      <div className="flex flex-wrap items-baseline justify-between gap-4">
+        <h2
+          id="leituras-titulo"
+          className="font-fraunces text-[26px] @3xl:text-[30px] leading-[1.12] tracking-[-0.015em] text-[#1F3A27]"
+        >
+          Leituras para este momento
+        </h2>
 
         <button
           type="button"
           onClick={onNavigateToLibrary}
-          className="inline-flex items-center gap-2 text-[14px] font-bold text-[#294D33] hover:text-[#1e3b26] transition group self-start sm:self-auto cursor-pointer"
+          className={`group inline-flex items-center gap-1.5 text-[15px] font-medium text-[#294D33] underline decoration-[#294D33]/30 underline-offset-4 hover:decoration-[#294D33] rounded-sm cursor-pointer ${focusRing}`}
         >
-          <span>Ver biblioteca completa</span>
-          <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+          <span>Biblioteca completa</span>
+          <ArrowRight
+            size={16}
+            strokeWidth={1.75}
+            aria-hidden="true"
+            className="transition-transform group-hover:translate-x-0.5"
+          />
         </button>
       </div>
 
-      {/* GRID DE 3 CARDS DE ARTIGOS */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {ARTIGOS.map((artigo) => {
-          const isSaved = bookmarked[artigo.id];
-          return (
-            <article
-              key={artigo.id}
-              onClick={onNavigateToLibrary}
-              className="bg-white rounded-3xl border border-stone-100 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col justify-between group cursor-pointer"
-            >
-              <div>
-                {/* CAPA COM FOTOGRAFIA NOVA E DIVERSA */}
-                <div className="h-48 w-full relative overflow-hidden bg-[#FBF4F6]">
-                  <img
-                    src={artigo.img}
-                    alt={artigo.titulo}
-                    className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
-                    onError={(e) => {
-                      if (artigo.fallback) {
-                        e.currentTarget.src = artigo.fallback;
-                      }
-                    }}
-                  />
-                  {/* Gradiente sutil inferior */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
+      {/* Mobile-first: empilhado verticalmente no celular; 2 colunas editoriais no desktop */}
+      <div className="mt-6 grid grid-cols-1 @3xl:grid-cols-[minmax(0,6.5fr)_minmax(0,5.5fr)] gap-8 @3xl:gap-12 items-start">
+        {/* Artigo principal com imagem, categoria, tempo, título e acesso */}
+        <article className="group">
+          <button
+            type="button"
+            onClick={onNavigateToLibrary}
+            aria-label={`Ler artigo: ${destaque.titulo}`}
+            className={`block w-full text-left rounded-lg cursor-pointer ${focusRing}`}
+          >
+            <div className="aspect-[16/10] w-full overflow-hidden rounded-lg bg-[#F1E6E1]">
+              <img
+                src={destaque.img}
+                alt={destaque.titulo}
+                loading="lazy"
+                className="h-full w-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-[1.02]"
+                onError={(e) => {
+                  if (destaque.fallback) e.currentTarget.src = destaque.fallback;
+                }}
+              />
+            </div>
 
-                  {/* Tag de categoria sobre a foto */}
-                  <div className="absolute top-4 left-4 z-10">
-                    <span className={`text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow-xs backdrop-blur-md ${artigo.corBadge}`}>
-                      {artigo.categoria}
-                    </span>
-                  </div>
+            <p className="mt-4 text-[13px] text-[#4A5E4D]">
+              {destaque.categoria}
+              <span aria-hidden="true" className="mx-2 opacity-50">·</span>
+              <span>{destaque.tempo}</span>
+            </p>
 
-                  {/* Botão de salvar leitura */}
-                  <button
-                    type="button"
-                    onClick={(e) => toggleBookmark(e, artigo.id)}
-                    aria-label="Salvar artigo"
-                    className={`absolute top-4 right-4 z-10 w-9 h-9 rounded-full backdrop-blur-md flex items-center justify-center transition-all ${
-                      isSaved
-                        ? 'bg-[#294D33] text-white'
-                        : 'bg-white/85 text-stone-600 hover:bg-white hover:text-[#294D33]'
-                    }`}
-                  >
-                    <Bookmark size={15} className={isSaved ? 'fill-current' : ''} />
-                  </button>
-                </div>
+            <h3 className="mt-1.5 font-fraunces text-[22px] @3xl:text-[24px] leading-[1.2] tracking-[-0.01em] text-[#1F3A27] group-hover:text-[#294D33] transition-colors">
+              {destaque.titulo}
+            </h3>
 
-                {/* CONTEÚDO EDITORIAL */}
-                <div className="p-6">
-                  <h4 className="text-[18px] font-fraunces font-bold text-[#2B2829] mb-2.5 leading-snug group-hover:text-[#294D33] transition-colors">
-                    {artigo.titulo}
-                  </h4>
-                  <p className="text-[13px] text-stone-500 line-clamp-2 leading-relaxed">
-                    {artigo.resumo}
-                  </p>
-                </div>
-              </div>
+            <p className="mt-2 text-[15px] leading-relaxed text-[#4A5E4D] max-w-[54ch]">
+              {destaque.resumo}
+            </p>
 
-              {/* RODAPÉ DO CARD */}
-              <div className="px-6 pb-6 pt-2 flex items-center justify-between border-t border-stone-100 text-[12px] text-stone-400 font-medium">
-                <span className="flex items-center gap-1.5">
-                  <Clock size={14} className="text-stone-400" />
-                  {artigo.tempo}
-                </span>
+            <span className="mt-3 inline-flex items-center gap-1.5 text-[14px] font-medium text-[#294D33] underline decoration-[#294D33]/30 underline-offset-4 group-hover:decoration-[#294D33]">
+              Ler artigo
+              <ArrowRight size={14} strokeWidth={1.75} aria-hidden="true" />
+            </span>
+          </button>
+        </article>
 
-                <span className="text-[#294D33] font-bold flex items-center gap-1 group-hover:underline">
-                  Ler agora <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
-                </span>
-              </div>
+        {/* Demais artigos: lista tipográfica discreta, sem cards nem resumos longos */}
+        <div className="border-t border-[#E4DAD5] divide-y divide-[#E4DAD5]">
+          {secundarios.map((artigo) => (
+            <article key={artigo.id} className="py-5 first:pt-5 last:pb-2">
+              <button
+                type="button"
+                onClick={onNavigateToLibrary}
+                className={`group block w-full text-left rounded-sm cursor-pointer ${focusRing}`}
+              >
+                <p className="text-[13px] text-[#4A5E4D]">
+                  {artigo.categoria}
+                  <span aria-hidden="true" className="mx-2 opacity-50">·</span>
+                  <span>{artigo.tempo}</span>
+                </p>
+
+                <h3 className="mt-1.5 font-fraunces text-[19px] @3xl:text-[20px] leading-[1.28] tracking-[-0.01em] text-[#1F3A27] group-hover:text-[#294D33] transition-colors">
+                  {artigo.titulo}
+                </h3>
+              </button>
             </article>
-          );
-        })}
+          ))}
+        </div>
       </div>
     </section>
   );

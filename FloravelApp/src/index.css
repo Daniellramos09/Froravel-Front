@@ -33,10 +33,18 @@
   --font-dmsans: "DM Sans", sans-serif;
 }
 
-/* 1. ROLAGEM SUAVE (SMOOTH SCROLL) GLOBAL */
+/* 1. ROLAGEM SUAVE (SMOOTH SCROLL) E SUPERFÍCIES DO NAVEGADOR */
 html, body {
   scroll-behavior: smooth;
   background-color: #FCF7F9;
+  caret-color: #294D33;
+  scrollbar-color: #D9CFCB #FCF7F9;
+  scrollbar-width: thin;
+}
+
+::selection {
+  background-color: #E6AEB7;
+  color: #1F3A27;
 }
 
 /* 2. EFEITO DE "MOLA" EM TODOS OS BOTÕES */
