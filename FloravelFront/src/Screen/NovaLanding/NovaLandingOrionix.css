@@ -1,0 +1,41 @@
+/* Scoped styles for the Orionix-inspired Florável Landing Page (/nova) */
+
+@keyframes orionix-marquee {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes orionix-step-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+    filter: blur(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0px);
+  }
+}
+
+.orionix-landing-root .orionix-marquee-track {
+  width: max-content;
+  animation: orionix-marquee 34s linear infinite;
+}
+
+.orionix-landing-root .orionix-step-fade {
+  animation: orionix-step-enter 0.48s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orionix-landing-root .orionix-marquee-track {
+    animation: none;
+  }
+  .orionix-landing-root .orionix-step-fade {
+    animation: none;
+  }
+}

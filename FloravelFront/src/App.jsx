@@ -8,6 +8,7 @@ import { AccessibilityProvider } from './Components/Accessibility/AccessibilityC
 
 // Landing (Início, Sobre, Recursos e Contato numa página só)
 import Landing from './Screen/Landing/Landing';
+import NovaLandingScreen from './Screen/NovaLanding/NovaLandingScreen';
 
 // Auth
 import Cadastro from './Screen/Auth/CadastroScreen';
@@ -21,6 +22,9 @@ function App() {
         <Routes>
           {/* Landing page com Header e Footer gerais */}
           <Route path="/" element={<Layout><Landing /></Layout>} />
+
+          {/* Nova Landing Page paralela inspirada no Orionix Framer */}
+          <Route path="/nova" element={<NovaLandingScreen />} />
 
           {/* Telas sem header/footer (apenas formulário centralizado) */}
           <Route path="/login" element={<Login />} />
