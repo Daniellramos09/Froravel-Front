@@ -40,15 +40,15 @@ export default function DepoimentosScreen() {
       <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-12 w-full">
         
         {/* Cabeçalho */}
-        <div className="sr-group text-center max-w-2xl mx-auto mb-16 sm:mb-20">
-          <h2 className="font-serif text-3xl sm:text-4xl lg:text-[3.25rem] font-normal text-[#294D33] leading-[1.12] tracking-[-0.015em]">
+        <div className="sr-group text-center max-w-2xl mx-auto mb-14 sm:mb-20">
+          <h2 className="font-serif text-[32px] sm:text-[44px] lg:text-[54px] font-normal text-[#294D33] leading-[1.08] tracking-[-0.025em]">
             Histórias de quem encontrou{" "}
             <span className="italic font-serif text-[#E8A9BB]">
               espaço para respirar.
             </span>
           </h2>
 
-          <p className="mt-4 text-base text-[#3A443E] leading-relaxed font-sans font-normal">
+          <p className="mt-4 text-[15px] sm:text-base text-[#3A443E] leading-relaxed font-sans font-normal">
             Relatos de mulheres que transformaram sua maternidade com escuta profissional e sem julgamentos.
           </p>
         </div>

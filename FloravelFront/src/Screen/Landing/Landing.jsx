@@ -4,10 +4,12 @@ import ScrollProgress from "../../Components/Effects/ScrollProgress";
 import useScrollReveal from "../../Components/Effects/useScrollReveal";
 import HeroSection from "../../Components/LandingPage/HeroSection";
 import Sobre from "./SobreScreen";
+import PilaresSection from "../../Components/LandingPage/PilaresSection";
 import JourneySection from "../../Components/LandingPage/JourneySection";
 import FeaturesBentoSection from "../../Components/LandingPage/FeaturesBentoSection";
 import ProfessionalsSection from "../../Components/LandingPage/ProfessionalsSection";
 import CorporateSection from "../../Components/LandingPage/CorporateSection";
+import MissaoVisaoValoresSection from "../../Components/LandingPage/MissaoVisaoValoresSection";
 import PartnershipSection from "../../Components/LandingPage/PartnershipSection";
 import Depoimentos from "./DepoimentosScreen";
 import Contato from "./ContatoScreen";
@@ -41,6 +43,11 @@ export default function Landing() {
         <Sobre />
       </section>
 
+      {/* 2.5 Nossos Pilares: Acolher, Perceber e Conectar (Orionix 3 Steps) */}
+      <section id="pilares">
+        <PilaresSection />
+      </section>
+
       {/* 3. A Jornada da Mãe (Visual, intuitiva, ilustrada com setas, mockups e folder cards) */}
       <section id="jornada">
         <JourneySection />
@@ -59,6 +66,11 @@ export default function Landing() {
       {/* 6. Florável Corporate (B2B - Mini Dashboard RH & Retenção de Talentos) */}
       <section id="corporate">
         <CorporateSection />
+      </section>
+
+      {/* 6.5 Missão, Visão e Valores (Orionix: Where ambitious brands build their digital future) */}
+      <section id="proposito">
+        <MissaoVisaoValoresSection />
       </section>
 
       {/* 7. Alianças ESG e Patrocínios Sociais (Bloco Imersivo Verde Escuro #294D33) */}

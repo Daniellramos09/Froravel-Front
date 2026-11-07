@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import "./NovaLandingOrionix.css";
+import SmoothScroll from "../../Components/Effects/SmoothScroll";
 import OrionixNavbar from "./components/OrionixNavbar";
 import OrionixHero from "./components/OrionixHero";
 import OrionixManifesto from "./components/OrionixManifesto";
@@ -39,61 +40,63 @@ export default function NovaLandingScreen() {
   }, [hash]);
 
   return (
-    <div className="orionix-landing-root min-h-screen bg-[#F9F8F6] text-[#1F3A27] font-sans selection:bg-[#F4DDE5] selection:text-[#1F3A27]">
-      {/* 01. Navegação Estilo Orionix */}
-      <OrionixNavbar onOpenTriagem={() => setTriagemOpen(true)} />
+    <SmoothScroll>
+      <div className="orionix-landing-root min-h-screen bg-[#F9F8F6] text-[#1F3A27] font-sans selection:bg-[#F4DDE5] selection:text-[#1F3A27]">
+        {/* 01. Navegação Estilo Orionix */}
+        <OrionixNavbar onOpenTriagem={() => setTriagemOpen(true)} />
 
-      <main>
-        {/* 01. Hero Editorial + Faixa Contínua (MÃE) */}
-        <OrionixHero onOpenTriagem={() => setTriagemOpen(true)} />
+        <main>
+          {/* 01. Hero Editorial + Faixa Contínua (MÃE) */}
+          <OrionixHero onOpenTriagem={() => setTriagemOpen(true)} />
 
-        {/* 02. Apresentação da Proposta & Protagonismo da Mãe */}
-        <OrionixManifesto />
+          {/* 02. Apresentação da Proposta & Protagonismo da Mãe */}
+          <OrionixManifesto />
 
-        {/* 03/04. SEÇÃO INTERATIVA PRINCIPAL — JORNADA DA MÃE (Sticky Scroll 01 -> 04) */}
-        <OrionixMotherJourney onOpenTriagem={() => setTriagemOpen(true)} />
+          {/* 03/04. SEÇÃO INTERATIVA PRINCIPAL — JORNADA DA MÃE (Sticky Scroll 01 -> 04) */}
+          <OrionixMotherJourney onOpenTriagem={() => setTriagemOpen(true)} />
 
-        {/* 05. Transformação & Pilares da Plataforma */}
-        <OrionixTransformationPillars onOpenTriagem={() => setTriagemOpen(true)} />
+          {/* 05. Transformação & Pilares da Plataforma */}
+          <OrionixTransformationPillars onOpenTriagem={() => setTriagemOpen(true)} />
 
-        {/* 06. Para Psicólogos — Rede de Acolhimento Perinatal */}
-        <OrionixPsychologists onOpenPartnerModal={() => setPartnerOpen(true)} />
+          {/* 06. Para Psicólogos — Rede de Acolhimento Perinatal */}
+          <OrionixPsychologists onOpenPartnerModal={() => setPartnerOpen(true)} />
 
-        {/* 07. Para Empresas e RH — Florável Corporativo */}
-        <OrionixCorporateSection
-          onOpenCorporateModal={() =>
-            setCorpEsgModal({ open: true, mode: "corporate" })
-          }
+          {/* 07. Para Empresas e RH — Florável Corporativo */}
+          <OrionixCorporateSection
+            onOpenCorporateModal={() =>
+              setCorpEsgModal({ open: true, mode: "corporate" })
+            }
+          />
+
+          {/* 08. Propósito, Impacto Social (ESG) & Relatos Reais */}
+          <OrionixPurposeAndVoices
+            onOpenEsgModal={() => setCorpEsgModal({ open: true, mode: "esg" })}
+          />
+
+          {/* 09. Perguntas Frequentes (FAQ) + CTA Final & Rodapé */}
+          <OrionixFaqAndFooter
+            onOpenTriagem={() => setTriagemOpen(true)}
+            onOpenCorporateModal={() =>
+              setCorpEsgModal({ open: true, mode: "corporate" })
+            }
+          />
+        </main>
+
+        {/* Modais Interativos do Ecossistema */}
+        <TriagemModal
+          isOpen={triagemOpen}
+          onClose={() => setTriagemOpen(false)}
         />
-
-        {/* 08. Propósito, Impacto Social (ESG) & Relatos Reais */}
-        <OrionixPurposeAndVoices
-          onOpenEsgModal={() => setCorpEsgModal({ open: true, mode: "esg" })}
+        <PartnerModal
+          isOpen={partnerOpen}
+          onClose={() => setPartnerOpen(false)}
         />
-
-        {/* 09. Perguntas Frequentes (FAQ) + CTA Final & Rodapé */}
-        <OrionixFaqAndFooter
-          onOpenTriagem={() => setTriagemOpen(true)}
-          onOpenCorporateModal={() =>
-            setCorpEsgModal({ open: true, mode: "corporate" })
-          }
+        <CorporateEsgModal
+          isOpen={corpEsgModal.open}
+          mode={corpEsgModal.mode}
+          onClose={() => setCorpEsgModal({ open: false, mode: "corporate" })}
         />
-      </main>
-
-      {/* Modais Interativos do Ecossistema */}
-      <TriagemModal
-        isOpen={triagemOpen}
-        onClose={() => setTriagemOpen(false)}
-      />
-      <PartnerModal
-        isOpen={partnerOpen}
-        onClose={() => setPartnerOpen(false)}
-      />
-      <CorporateEsgModal
-        isOpen={corpEsgModal.open}
-        mode={corpEsgModal.mode}
-        onClose={() => setCorpEsgModal({ open: false, mode: "corporate" })}
-      />
-    </div>
+      </div>
+    </SmoothScroll>
   );
 }

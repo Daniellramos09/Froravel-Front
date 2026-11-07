@@ -35,7 +35,7 @@ export default function Sobre() {
           {/* LADO ESQUERDO: Mensagem de Identidade & Acolhimento */}
           <div className="sr-group lg:col-span-6 flex flex-col items-start text-left space-y-6">
             
-            <h2 className="font-serif text-3xl sm:text-4xl lg:text-[3.25rem] font-normal text-[#294D33] leading-[1.12] tracking-[-0.015em]">
+            <h2 className="font-serif text-[32px] sm:text-[44px] lg:text-[54px] font-normal text-[#294D33] leading-[1.08] tracking-[-0.025em]">
               Antes de ser mãe,{" "}
               <span className="block mt-1 italic font-serif text-[#E8A9BB]">
                 você é você.
@@ -48,20 +48,20 @@ export default function Sobre() {
 
             {/* 3 Pílulas de Acolhimento Tátil (Menos texto, mais síntese visual) */}
             <div className="w-full space-y-3 pt-2">
-              <div className="liquid-glass flex items-center gap-3.5 p-3.5 rounded-2xl transition-transform duration-300 hover:translate-x-1">
-                <p className="text-xs sm:text-sm font-medium text-[#294D33] font-sans">
+              <div className="liquid-glass flex items-center gap-3.5 p-4 rounded-2xl transition-transform duration-300 hover:translate-x-1">
+                <p className="text-sm sm:text-base font-medium text-[#294D33] font-sans">
                   Acolhimento do cansaço, sem julgamento
                 </p>
               </div>
 
-              <div className="liquid-glass flex items-center gap-3.5 p-3.5 rounded-2xl transition-transform duration-300 hover:translate-x-1">
-                <p className="text-xs sm:text-sm font-medium text-[#294D33] font-sans">
+              <div className="liquid-glass flex items-center gap-3.5 p-4 rounded-2xl transition-transform duration-300 hover:translate-x-1">
+                <p className="text-sm sm:text-base font-medium text-[#294D33] font-sans">
                   Reconexão com a sua identidade
                 </p>
               </div>
 
-              <div className="liquid-glass flex items-center gap-3.5 p-3.5 rounded-2xl transition-transform duration-300 hover:translate-x-1">
-                <p className="text-xs sm:text-sm font-medium text-[#294D33] font-sans">
+              <div className="liquid-glass flex items-center gap-3.5 p-4 rounded-2xl transition-transform duration-300 hover:translate-x-1">
+                <p className="text-sm sm:text-base font-medium text-[#294D33] font-sans">
                   Ferramentas gratuitas validadas pela ciência
                 </p>
               </div>

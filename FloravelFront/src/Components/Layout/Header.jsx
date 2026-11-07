@@ -34,11 +34,12 @@ function WheelchairIcon({ size = 18, className = "" }) {
 
 const navLinks = [
   { label: "Espaço da Mãe", id: "inicio" },
+  { label: "Pilares", id: "pilares" },
   { label: "Jornada", id: "jornada" },
   { label: "Recursos", id: "recursos" },
   { label: "Psicólogos", id: "psicologos" },
   { label: "Corporate", id: "corporate" },
-  { label: "Impacto ESG", id: "esg" },
+  { label: "Propósito", id: "proposito" },
   { label: "Depoimentos", id: "depoimentos" },
 ];
 

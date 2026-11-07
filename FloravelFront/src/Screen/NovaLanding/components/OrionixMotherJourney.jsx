@@ -60,41 +60,63 @@ const MOBILE_STEP_ANGLE_DEG = 20;
 
 export default function OrionixMotherJourney() {
   const [activeStep, setActiveStep] = useState(0);
+  const [rotationDeg, setRotationDeg] = useState(0);
+  const [mobileRotationDeg, setMobileRotationDeg] = useState(0);
   const itemRefs = useRef([]);
 
   useEffect(() => {
     let rafId = null;
 
-    const updateActiveStep = () => {
+    const updateScrollProgress = () => {
+      const items = itemRefs.current.filter(Boolean);
+      if (items.length < 2) return;
+
       const viewportCenter = window.innerHeight * 0.5;
-      let closestIdx = 0;
-      let minDistance = Infinity;
+      const firstRect = items[0].getBoundingClientRect();
+      const lastRect = items[items.length - 1].getBoundingClientRect();
 
-      itemRefs.current.forEach((el, idx) => {
-        if (!el) return;
-        const rect = el.getBoundingClientRect();
-        const itemCenter = rect.top + rect.height * 0.5;
-        const distance = Math.abs(itemCenter - viewportCenter);
-        if (distance < minDistance) {
-          minDistance = distance;
-          closestIdx = idx;
-        }
-      });
+      const firstCenter = firstRect.top + firstRect.height * 0.5;
+      const lastCenter = lastRect.top + lastRect.height * 0.5;
+      const totalSpan = lastCenter - firstCenter;
 
-      setActiveStep((prev) => (prev !== closestIdx ? closestIdx : prev));
+      if (totalSpan > 0) {
+        const progress = (viewportCenter - firstCenter) / totalSpan;
+        const clamped = Math.max(0, Math.min(1, progress));
+
+        const maxAngle = (JOURNEY_STEPS.length - 1) * STEP_ANGLE_DEG;
+        const maxMobileAngle = (JOURNEY_STEPS.length - 1) * MOBILE_STEP_ANGLE_DEG;
+
+        setRotationDeg(-clamped * maxAngle);
+        setMobileRotationDeg(-clamped * maxMobileAngle);
+
+        let closestIdx = 0;
+        let minDistance = Infinity;
+
+        items.forEach((el, idx) => {
+          const rect = el.getBoundingClientRect();
+          const itemCenter = rect.top + rect.height * 0.5;
+          const distance = Math.abs(itemCenter - viewportCenter);
+          if (distance < minDistance) {
+            minDistance = distance;
+            closestIdx = idx;
+          }
+        });
+
+        setActiveStep((prev) => (prev !== closestIdx ? closestIdx : prev));
+      }
     };
 
     const onScroll = () => {
       if (rafId) return;
       rafId = window.requestAnimationFrame(() => {
-        updateActiveStep();
+        updateScrollProgress();
         rafId = null;
       });
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll, { passive: true });
-    updateActiveStep();
+    updateScrollProgress();
 
     return () => {
       window.removeEventListener("scroll", onScroll);
@@ -118,11 +140,11 @@ export default function OrionixMotherJourney() {
       className="relative bg-[#F9F8F6] border-t border-[#294D33]/8 overflow-x-clip"
     >
       {/* TÍTULO DIRETO E LIMPO ACIMA DO SCROLL */}
-      <div className="mx-auto max-w-[1560px] px-6 lg:px-12 pt-16 sm:pt-24 pb-2 text-left">
+      <div className="mx-auto max-w-[1560px] px-6 lg:px-12 pt-16 sm:pt-24 pb-4 text-left">
         <p className="text-xs sm:text-sm font-semibold uppercase tracking-[0.14em] text-[#6E9473] mb-2">
           Jornada da Mãe
         </p>
-        <h2 className="font-serif text-3xl sm:text-4xl lg:text-[3rem] font-normal text-[#1F3A27] leading-[1.12] tracking-[-0.02em]">
+        <h2 className="font-serif text-[32px] sm:text-[44px] lg:text-[56px] font-normal text-[#1F3A27] leading-[1.08] tracking-[-0.025em]">
           Como a Florável{" "}
           <span className="italic font-serif text-[#D98A9C]">
             caminha com você.
@@ -133,9 +155,9 @@ export default function OrionixMotherJourney() {
       {/* MOBILE / TABLET: ARCO SUPERIOR */}
       <div className="lg:hidden sticky top-16 z-20 bg-[#F9F8F6]/90 backdrop-blur-md border-b border-[#294D33]/8 h-20 flex items-start justify-center overflow-hidden">
         <div
-          className="relative w-[500px] h-[500px] rounded-full border border-[#294D33]/15 shrink-0 -mt-[446px] transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"
+          className="relative w-[500px] h-[500px] rounded-full border border-[#294D33]/15 shrink-0 -mt-[446px] transition-transform duration-100 ease-out"
           style={{
-            transform: `rotate(${-activeStep * MOBILE_STEP_ANGLE_DEG}deg)`,
+            transform: `rotate(${mobileRotationDeg}deg)`,
           }}
         >
           {JOURNEY_STEPS.map((st, idx) => {
@@ -183,9 +205,9 @@ export default function OrionixMotherJourney() {
           {/* 1. COLUNA ESQUERDA: PROGRESS WRAP (STICKY) */}
           <div className="hidden lg:flex lg:col-span-2 sticky top-0 h-screen items-center justify-end overflow-visible select-none">
             <div
-              className="relative w-[780px] h-[780px] rounded-full border border-[#294D33]/14 shrink-0 transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"
+              className="relative w-[780px] h-[780px] rounded-full border border-[#294D33]/14 shrink-0 transition-transform duration-100 ease-out"
               style={{
-                transform: `rotate(${-activeStep * STEP_ANGLE_DEG}deg)`,
+                transform: `rotate(${rotationDeg}deg)`,
               }}
             >
               {JOURNEY_STEPS.map((st, idx) => {
@@ -260,12 +282,12 @@ export default function OrionixMotherJourney() {
                     />
                   </div>
 
-                  <div className="space-y-2.5 lg:space-y-4">
-                    <h3 className="font-serif text-xl sm:text-2xl lg:text-[2.6rem] font-normal text-[#1F3A27] leading-[1.12] tracking-[-0.025em]">
+                  <div className="space-y-3 lg:space-y-4">
+                    <h3 className="font-serif text-[24px] sm:text-[30px] lg:text-[42px] font-normal text-[#1F3A27] leading-[1.12] tracking-[-0.02em]">
                       {st.title}
                     </h3>
 
-                    <p className="text-sm sm:text-base text-[#3A443E] leading-[1.5] font-sans">
+                    <p className="text-[15px] sm:text-base lg:text-[17px] text-[#3A443E] leading-[1.6] font-sans">
                       {st.description}
                     </p>
                   </div>

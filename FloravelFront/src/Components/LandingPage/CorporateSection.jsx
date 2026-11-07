@@ -209,68 +209,114 @@ export default function CorporateSection() {
         </div>
 
         {/* ========================================================
-            PLANOS CORPORATIVOS ESTRUTURADOS
+            PLANOS CORPORATIVOS ESTRUTURADOS (MODELO ORIONIX PRICING)
         ======================================================== */}
-        <div className="sr text-left mb-6">
-          <h3 className="font-serif text-2xl font-normal text-[#294D33]">
-            Planos Corporativos Estruturados
+        <div className="sr text-left mb-10 sm:mb-14">
+          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white border border-[#294D33]/10 shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_20px_-8px_rgba(0,0,0,0.06)] mb-4">
+            <span
+              className="w-2 h-2 rounded-full bg-[#E8A9BB]"
+              style={{ boxShadow: "0 0 8px rgba(232, 169, 187, 0.9)" }}
+            />
+            <span className="text-xs sm:text-sm font-semibold uppercase tracking-[0.14em] text-[#294D33]">
+              Planos Corporativos
+            </span>
+          </div>
+
+          <h3 className="font-serif text-[30px] sm:text-[40px] lg:text-[48px] font-normal text-[#294D33] leading-[1.1] tracking-[-0.02em]">
+            Escolha o plano que melhor{" "}
+            <span className="italic font-serif text-[#D98A9C] block sm:inline">
+              atende à sua empresa.
+            </span>
           </h3>
-          <p className="text-xs text-[#516B55] font-sans">
-            Implementação em menos de 48 horas, com comunicação interna pronta para o RH.
+          <p className="mt-3 text-sm sm:text-base text-[#516B55] font-sans max-w-xl">
+            Implementação em menos de 48 horas, com comunicação interna pronta para o RH e métricas anonimizadas.
           </p>
         </div>
 
-        <div className="sr-group grid grid-cols-1 md:grid-cols-3 gap-6">
-          {plans.map((p) => (
-            <div 
-              key={p.name}
-              className={`rounded-[2.5rem] p-8 flex flex-col justify-between text-left transition border ${
-                p.highlight
-                  ? "bg-[#F4DDE5]/50 border-[#294D33] shadow-lg shadow-[#294D33]/10"
-                  : "liquid-glass"
-              }`}
-            >
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <span className="liquid-chip text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full text-[#294D33]">
-                    {p.badge}
-                  </span>
-                  {p.highlight && (
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#294D33]">
-                      Mais Procurado
-                    </span>
-                  )}
-                </div>
+        <div className="sr-group grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
+          {plans.map((p) => {
+            const isDark = p.name === "Enterprise";
 
-                <h4 className="font-serif text-2xl font-normal text-[#294D33]">{p.name}</h4>
-                <p className="text-xs text-[#516B55] font-sans mt-0.5">{p.desc}</p>
-
-                <div className="my-5 pb-5 border-b border-[#E8A9BB]/30">
-                  <span className="font-serif text-3xl font-normal text-[#294D33]">{p.price}</span>
-                  <span className="text-xs text-[#516B55] ml-1">{p.period}</span>
-                </div>
-
-                <ul className="space-y-2.5 text-xs text-[#3A443E] font-sans mb-6">
-                  {p.features.map((f, i) => (
-                    <li key={i} className="flex items-center gap-2">
-                      <span>{f}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <button
-                onClick={() => setShowDemoModal(true)}
-                className={`w-full py-3.5 rounded-full text-xs font-semibold uppercase tracking-wider transition cursor-pointer ${
-                  p.highlight
-                    ? "bg-[#294D33] text-white hover:bg-[#1f3c27] shadow-sm"
-                    : "liquid-button text-[#294D33]"
+            return (
+              <div 
+                key={p.name}
+                className={`rounded-t-[28px] rounded-b-[48px] p-8 sm:p-10 flex flex-col justify-between text-left transition-all duration-300 ${
+                  isDark
+                    ? "bg-[#16281B] text-white shadow-[0px_0px_0px_1px_rgba(0,0,0,0.04),0px_1px_2px_0px_rgba(0,0,0,0.08),0px_4px_6px_0px_rgba(0,0,0,0.04),0px_40px_40px_-24px_rgba(0,0,0,0.2)]"
+                    : "bg-white text-[#294D33] shadow-[0px_0px_0px_1px_rgba(0,0,0,0.04),0px_1px_2px_0px_rgba(0,0,0,0.08),0px_4px_6px_0px_rgba(0,0,0,0.04),0px_40px_40px_-24px_rgba(0,0,0,0.08)]"
                 }`}
               >
-                Solicitar Proposta Comercial
-              </button>
-            </div>
-          ))}
+                <div>
+                  {/* Ícone Geométrico de 4 Pontos (Estilo Orionix) */}
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="grid grid-cols-2 gap-1 w-6 h-6">
+                      <span className={`w-2.5 h-2.5 rounded-full ${isDark ? "bg-[#E8A9BB]" : "bg-[#294D33]"}`} />
+                      <span className={`w-2.5 h-2.5 rounded-full ${isDark ? "bg-[#E8A9BB]/60" : "bg-[#294D33]/60"}`} />
+                      <span className={`w-2.5 h-2.5 rounded-full ${isDark ? "bg-[#E8A9BB]/60" : "bg-[#294D33]/60"}`} />
+                      <span className={`w-2.5 h-2.5 rounded-full ${isDark ? "bg-[#E8A9BB]" : "bg-[#294D33]"}`} />
+                    </div>
+
+                    <span
+                      className={`text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full ${
+                        isDark
+                          ? "bg-white/10 text-[#E8A9BB]"
+                          : p.highlight
+                          ? "bg-[#F4DDE5] text-[#294D33]"
+                          : "bg-stone-100 text-stone-600"
+                      }`}
+                    >
+                      {p.badge}
+                    </span>
+                  </div>
+
+                  <h4 className={`font-serif text-[26px] sm:text-[30px] font-normal ${isDark ? "text-white" : "text-[#1F3A27]"}`}>
+                    {p.name}
+                  </h4>
+                  <p className={`text-xs sm:text-sm font-sans mt-1 ${isDark ? "text-[#A4B3A8]" : "text-[#516B55]"}`}>
+                    {p.desc}
+                  </p>
+
+                  <div className={`my-6 pb-6 border-b ${isDark ? "border-white/10" : "border-[#E8A9BB]/30"}`}>
+                    <span className={`font-serif text-3xl sm:text-4xl font-normal ${isDark ? "text-white" : "text-[#294D33]"}`}>
+                      {p.price}
+                    </span>
+                    {p.period && (
+                      <span className={`text-xs sm:text-sm ml-1.5 ${isDark ? "text-[#A4B3A8]" : "text-[#516B55]"}`}>
+                        {p.period}
+                      </span>
+                    )}
+                  </div>
+
+                  <ul className="space-y-3.5 text-xs sm:text-sm font-sans mb-8">
+                    {p.features.map((f, i) => (
+                      <li key={i} className="flex items-start gap-2.5">
+                        <span className={`mt-0.5 text-xs ${isDark ? "text-[#E8A9BB]" : "text-[#294D33]"}`}>
+                          ✦
+                        </span>
+                        <span className={isDark ? "text-[#E4DDD5]" : "text-[#3A443E]"}>
+                          {f}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setShowDemoModal(true)}
+                  className={`w-full py-4 rounded-full text-xs font-semibold uppercase tracking-wider transition cursor-pointer shadow-sm ${
+                    isDark
+                      ? "bg-white text-[#16281B] hover:bg-[#F4DDE5]"
+                      : p.highlight
+                      ? "bg-[#294D33] text-white hover:bg-[#1f3c27]"
+                      : "bg-[#F4DDE5] text-[#294D33] hover:bg-[#E8A9BB]"
+                  }`}
+                >
+                  Solicitar Proposta Comercial
+                </button>
+              </div>
+            );
+          })}
         </div>
 
       </div>

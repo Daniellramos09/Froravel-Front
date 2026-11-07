@@ -34,15 +34,15 @@ export default function FeaturesBentoSection() {
       <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
         
         {/* CABEÇALHO DA SEÇÃO */}
-        <div className="sr-group max-w-3xl mb-16 sm:mb-20 text-left">
-          <h2 className="font-serif text-3xl sm:text-4xl lg:text-[3.25rem] font-normal text-[#294D33] leading-[1.12] tracking-[-0.015em]">
+        <div className="sr-group max-w-3xl mb-14 sm:mb-20 text-left">
+          <h2 className="font-serif text-[32px] sm:text-[44px] lg:text-[54px] font-normal text-[#294D33] leading-[1.08] tracking-[-0.025em]">
             Tudo o que você precisa,{" "}
             <span className="italic font-serif text-[#294D33] underline decoration-[#E8A9BB] decoration-wavy decoration-2">
               em um só lugar.
             </span>
           </h2>
 
-          <p className="mt-4 text-base sm:text-lg text-[#294D33]/90 leading-relaxed font-sans font-medium max-w-2xl">
+          <p className="mt-4 text-[15px] sm:text-lg text-[#294D33]/90 leading-relaxed font-sans font-medium max-w-2xl">
             Feito para a vida real de quem cuida, com mais tempo e espaço para respirar.
           </p>
         </div>
