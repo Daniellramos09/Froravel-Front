@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { APP_LINKS } from "../../utils/appLinks";
 import {
-  Building2,
   TrendingUp, 
   DollarSign, 
   AlertTriangle, 
@@ -122,13 +121,6 @@ export default function CorporateScreen() {
             CABEÇALHO DA SEÇÃO CORPORATE
         ======================================================== */}
         <div className="max-w-3xl mb-16 sm:mb-20">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#EBF3EE] border border-[#73937E]/20 mb-4">
-            <Building2 size={14} className="text-[#73937E]" />
-            <span className="text-xs uppercase tracking-[0.2em] font-semibold text-[#2F3A36]">
-              Florável Corporate (B2B)
-            </span>
-          </div>
-
           <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-medium text-[#27272A] leading-tight">
             Retenha talentos femininos.{" "}
             <span className="italic text-[#73937E] block sm:inline">

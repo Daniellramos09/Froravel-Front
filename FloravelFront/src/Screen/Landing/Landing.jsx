@@ -1,7 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import ScrollProgress from "../../Components/Effects/ScrollProgress";
-import BrandMarquee from "../../Components/Effects/BrandMarquee";
 import useScrollReveal from "../../Components/Effects/useScrollReveal";
 import HeroSection from "../../Components/LandingPage/HeroSection";
 import Sobre from "./SobreScreen";
@@ -36,8 +35,6 @@ export default function Landing() {
       <section id="inicio">
         <HeroSection />
       </section>
-
-      <BrandMarquee />
 
       {/* 2. Manifesto Emocional & Filosofia da Marca (Split-Screen de alto impacto visual) */}
       <section id="sobre">

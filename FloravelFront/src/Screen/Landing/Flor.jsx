@@ -20,9 +20,6 @@ const conteudo = (
       transform: "translateY(calc((1 - var(--t)) * 24px))",
     }}
   >
-    <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/80 border border-[#73937E]/20 text-[#73937E] text-xs font-bold uppercase tracking-wider mb-3">
-      Seu Momento
-    </div>
     <h2 className="font-display text-[clamp(2rem,3.6vw,3.2rem)] font-medium leading-tight text-[#27272A]">
       Cada sentimento seu <span className="italic text-[#73937E]">importa.</span>
     </h2>

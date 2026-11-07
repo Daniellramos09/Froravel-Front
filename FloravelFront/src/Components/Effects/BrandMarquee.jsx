@@ -1,5 +1,4 @@
 // Faixa contínua com as palavras da marca, entre o hero e o manifesto.
-import { Flower2 } from "lucide-react";
 
 const PALAVRAS = ["Acolhimento", "Escuta", "Cuidado", "Presença", "Respiro", "Sem julgamentos"];
 
@@ -12,7 +11,7 @@ function Sequencia() {
           <span className="font-serif italic text-2xl sm:text-3xl text-[#294D33] whitespace-nowrap">
             {palavra}
           </span>
-          <Flower2 size={20} strokeWidth={1.5} className="mx-7 sm:mx-10 text-[#A8435F] shrink-0" />
+          <span className="mx-7 sm:mx-10 text-[#A8435F]">&bull;</span>
         </span>
       ))}
     </div>

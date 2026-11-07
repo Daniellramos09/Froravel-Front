@@ -1,18 +1,5 @@
 import React, { useState } from "react";
-import { 
-  PercentCircle, 
-  HeartHandshake, 
-  Award, 
-  Flower2, 
-  CheckCircle2, 
-  ArrowRight, 
-  Star, 
-  Calendar, 
-  ShieldCheck,
-  X,
-  Sparkles,
-  ExternalLink
-} from "lucide-react";
+import { X } from "lucide-react";
 import { APP_LINKS } from "../../utils/appLinks";
 
 export default function ProfessionalsSection() {
@@ -22,28 +9,24 @@ export default function ProfessionalsSection() {
   // 4 Diferenciais em cards brancos #FCF7F9
   const pillars = [
     {
-      icon: PercentCircle,
       title: "R$ 29,90 Fixos",
       badge: "100% de Repasse",
-      desc: "Sem comissões abusivas por consulta. O valor integral das suas sessões particulares fica inteiramente com você."
+      desc: "Sem comissão por consulta: o valor das sessões particulares fica com você."
     },
     {
-      icon: HeartHandshake,
       title: "Vitrine Ética",
       badge: "Captação via Rodas",
-      desc: "Conduza Rodas de Conversa temáticas. Acolher em grupo gera confiança real e atrai novos pacientes naturalmente."
+      desc: "Conduza Rodas de Conversa temáticas e atraia novos pacientes naturalmente."
     },
     {
-      icon: Award,
       title: "Selos de Especialização",
       badge: "Badges de Autoridade",
-      desc: "Validação documental de certificados em saúde perinatal e parental, conferindo destaque prioritário na plataforma."
+      desc: "Certificados em saúde perinatal validados, com destaque prioritário na plataforma."
     },
     {
-      icon: Flower2,
       title: "Programa de Flores",
       badge: "Recompensas por Engajamento",
-      desc: "Pontuação por pontualidade, assiduidade e avaliações que se converte em isenção de mensalidade e benefícios reais."
+      desc: "Pontualidade, assiduidade e boas avaliações viram isenção de mensalidade e benefícios."
     }
   ];
 
@@ -108,13 +91,6 @@ export default function ProfessionalsSection() {
             CABEÇALHO EDITORIAL
         ======================================================== */}
         <div className="sr-group max-w-3xl mb-16 sm:mb-20 text-left">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 border border-[#516B55]/30 shadow-xs mb-4">
-            <span className="w-2 h-2 rounded-full bg-[#294D33]" />
-            <span className="text-[11px] uppercase tracking-[0.2em] font-semibold text-[#294D33] font-sans">
-              Para Psicólogos e Terapeutas &bull; B2B2C
-            </span>
-          </div>
-
           <h2 className="font-serif text-3xl sm:text-4xl lg:text-[3.25rem] font-normal text-[#294D33] leading-[1.12] tracking-[-0.015em]">
             Clínica com propósito.{" "}
             <span className="italic font-serif text-[#516B55]">
@@ -123,7 +99,7 @@ export default function ProfessionalsSection() {
           </h2>
 
           <p className="mt-4 text-base sm:text-lg text-[#3A443E] leading-relaxed font-sans font-normal max-w-2xl">
-            Uma plataforma desenhada especificamente para a psicologia perinatal. Honorários justos, repasse integral e vitrine qualificada de pacientes reais.
+            Feita para a psicologia perinatal: honorários justos, repasse integral e pacientes reais.
           </p>
         </div>
 
@@ -136,7 +112,6 @@ export default function ProfessionalsSection() {
           <div className="lg:col-span-7 space-y-6 text-left">
             <div className="sr-group grid grid-cols-1 sm:grid-cols-2 gap-5">
               {pillars.map((item) => {
-                const Icon = item.icon;
                 return (
                   <div
                     key={item.title}
@@ -144,10 +119,7 @@ export default function ProfessionalsSection() {
                   >
                     <div>
                       <div className="flex items-center justify-between mb-4">
-                        <div className="w-11 h-11 rounded-2xl bg-[#F4DDE5] text-[#294D33] flex items-center justify-center shadow-2xs">
-                          <Icon size={20} />
-                        </div>
-                        <span className="text-[10px] font-bold text-[#294D33] bg-white px-2.5 py-1 rounded-full border border-[#E8A9BB]/60 shadow-xs uppercase tracking-wider">
+                        <span className="liquid-chip text-[10px] font-bold text-[#294D33] px-2.5 py-1 rounded-full uppercase tracking-wider">
                           {item.badge}
                         </span>
                       </div>
@@ -162,7 +134,6 @@ export default function ProfessionalsSection() {
                     </div>
 
                     <div className="pt-4 mt-3 border-t border-[#E8A9BB]/30 flex items-center gap-1.5 text-[11px] font-semibold text-[#516B55]">
-                      <CheckCircle2 size={13} className="text-[#294D33]" />
                       <span>Transparência total</span>
                     </div>
                   </div>
@@ -177,7 +148,6 @@ export default function ProfessionalsSection() {
                 className="group inline-flex items-center justify-center gap-3 rounded-full bg-[#294D33] hover:bg-[#1f3c27] text-[#FCF7F9] px-8 py-4 text-sm font-semibold uppercase tracking-wider shadow-md shadow-[#294D33]/20 transition-all duration-300 hover:scale-[1.02] cursor-pointer"
               >
                 <span>Quero ser um profissional parceiro</span>
-                <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
               </button>
             </div>
           </div>
@@ -201,15 +171,13 @@ export default function ProfessionalsSection() {
                 
                 {/* SELO FLUTUANTE CRP ATIVO VERIFICADO */}
                 <div className="absolute top-3 left-3 backdrop-blur-md bg-white/95 px-3 py-1.5 rounded-full border border-[#294D33]/20 flex items-center gap-1.5 shadow-sm">
-                  <CheckCircle2 size={13} className="text-[#294D33]" />
                   <span className="text-[11px] font-bold text-[#294D33] font-nunito tracking-wide">
                     CRP Ativo &bull; 06/14829
                   </span>
                 </div>
 
                 {/* BADGE DO PROGRAMA DE FLORES */}
-                <div className="absolute top-3 right-3 backdrop-blur-md bg-white/95 px-2.5 py-1.5 rounded-full border border-[#E8A9BB] flex items-center gap-1 shadow-sm">
-                  <Flower2 size={13} className="text-[#E8A9BB]" />
+                <div className="liquid-glass absolute top-3 right-3 px-2.5 py-1.5 rounded-full flex items-center gap-1">
                   <span className="text-[11px] font-bold text-[#294D33]">4 Flores</span>
                 </div>
               </div>
@@ -226,14 +194,13 @@ export default function ProfessionalsSection() {
                     </p>
                   </div>
                   <div className="flex items-center gap-1 bg-[#F4DDE5] px-2.5 py-1 rounded-full border border-[#E8A9BB]/50">
-                    <Star size={12} className="fill-[#294D33] text-[#294D33]" />
                     <span className="text-xs font-bold text-[#294D33]">5.0</span>
                     <span className="text-[10px] text-[#516B55]">(48)</span>
                   </div>
                 </div>
 
                 <p className="text-xs text-[#3A443E] leading-relaxed font-sans">
-                  Atendimento especializado para depressão pós-parto, ansiedade na gestação, luto parental e retorno ao trabalho.
+                  Depressão pós-parto, ansiedade na gestação, luto parental e retorno ao trabalho.
                 </p>
 
                 {/* Selos de Especialização */}
@@ -241,10 +208,10 @@ export default function ProfessionalsSection() {
                   <span className="text-[10px] font-semibold px-2.5 py-1 rounded-lg bg-[#EBF1ED] text-[#294D33] border border-[#516B55]/20">
                     Saúde Perinatal (USP)
                   </span>
-                  <span className="text-[10px] font-semibold px-2.5 py-1 rounded-lg bg-[#FCF7F9] text-[#294D33] border border-[#E8A9BB]/50">
+                  <span className="liquid-chip text-[10px] font-semibold px-2.5 py-1 rounded-lg text-[#294D33]">
                     Triagem EPDS
                   </span>
-                  <span className="text-[10px] font-semibold px-2.5 py-1 rounded-lg bg-[#FCF7F9] text-[#294D33] border border-[#E8A9BB]/50">
+                  <span className="liquid-chip text-[10px] font-semibold px-2.5 py-1 rounded-lg text-[#294D33]">
                     Luto Materno
                   </span>
                 </div>
@@ -256,14 +223,12 @@ export default function ProfessionalsSection() {
                     className="w-full py-3.5 rounded-full bg-[#294D33] hover:bg-[#1f3c27] text-[#FCF7F9] text-xs font-semibold uppercase tracking-wider flex items-center justify-center gap-2 shadow-sm transition cursor-pointer"
                   >
                     <span>Acessar Portal do Terapeuta</span>
-                    <ExternalLink size={14} />
                   </a>
 
                   <button 
                     onClick={() => setShowModal(true)}
                     className="w-full py-2.5 rounded-full bg-white hover:bg-[#F4DDE5]/40 text-[#294D33] border border-[#516B55]/30 text-xs font-semibold uppercase tracking-wider flex items-center justify-center gap-2 transition cursor-pointer"
                   >
-                    <Calendar size={14} />
                     <span>Fazer novo credenciamento</span>
                   </button>
                 </div>
@@ -294,7 +259,7 @@ export default function ProfessionalsSection() {
                 <div className="flex-1 min-w-0">
                   <h5 className="text-xs font-bold text-[#294D33] truncate font-nunito">{sp.nome}</h5>
                   <p className="text-[10px] text-[#516B55] truncate font-sans">{sp.esp}</p>
-                  <p className="text-[10px] font-semibold text-[#294D33] mt-0.5">{sp.crp} &bull; ⭐ {sp.rating}</p>
+                  <p className="text-[10px] font-semibold text-[#294D33] mt-0.5">{sp.crp} &bull; Nota {sp.rating}</p>
                 </div>
               </div>
             ))}
@@ -396,9 +361,6 @@ export default function ProfessionalsSection() {
               </form>
             ) : (
               <div className="text-center py-6">
-                <div className="w-14 h-14 mx-auto rounded-full bg-[#F4DDE5] text-[#294D33] flex items-center justify-center mb-4">
-                  <CheckCircle2 size={30} />
-                </div>
                 <h3 className="font-serif text-2xl font-normal text-[#294D33] mb-2">
                   Candidatura recebida!
                 </h3>

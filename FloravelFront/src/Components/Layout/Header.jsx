@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { ArrowRight, Menu, X, Volume2, VolumeX, ChevronDown } from "lucide-react";
+import { Menu, X, Volume2, VolumeX, ChevronDown } from "lucide-react";
 import FloravelLogo from "../Common/FloravelLogo";
 import { useAccessibility } from "../Accessibility/AccessibilityContext";
 import AccessibilityModal from "../Accessibility/AccessibilityModal";
@@ -112,7 +112,7 @@ export default function Header() {
         className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
           scrolled 
             ? "bg-[#FCF7F9]/94 backdrop-blur-md shadow-xs border-b border-[#E8A9BB]/30 py-2.5 sm:py-3" 
-            : "bg-gradient-to-b from-[#FCF7F9]/95 via-[#FCF7F9]/85 to-transparent py-3 sm:py-4"
+            : "bg-transparent py-3 sm:py-4"
         }`}
       >
         <div className="mx-auto flex w-full max-w-[1440px] items-center justify-between px-3 sm:px-6 lg:px-8 gap-2 sm:gap-4">
@@ -132,7 +132,7 @@ export default function Header() {
           {/* ========================================================
               2. NAVEGAÇÃO CENTRAL EDITORIAL (PÍLULA COMPACTA E ELEGANTE)
           ======================================================== */}
-          <nav className="hidden xl:flex items-center gap-0.5 lg:gap-1 rounded-full bg-white/85 px-2.5 py-1.5 shadow-xs border border-[#E8A9BB]/40 backdrop-blur-md shrink-0">
+          <nav className="liquid-glass hidden xl:flex items-center gap-0.5 lg:gap-1 rounded-full px-2.5 py-1.5 shrink-0">
             {navLinks.map(({ label, id }) => {
               const isActive = pathname === "/" && active === id;
               return (
@@ -164,7 +164,7 @@ export default function Header() {
               className={`w-9 h-9 rounded-full border transition-all hidden md:flex items-center justify-center cursor-pointer relative shadow-2xs shrink-0 ${
                 isSpeaking 
                   ? "bg-[#294D33] text-white border-[#294D33] animate-pulse" 
-                  : "bg-white/90 hover:bg-[#F4DDE5] text-[#294D33] border-[#E8A9BB]/50"
+                  : "liquid-button text-[#294D33]"
               }`}
               title={isSpeaking ? "Parar leitura de voz" : "Ouvir audiodescrição da página (Leitor de Tela)"}
               aria-label={isSpeaking ? "Parar leitura de voz" : "Ouvir audiodescrição da página"}
@@ -179,7 +179,7 @@ export default function Header() {
             <button
               type="button"
               onClick={() => setIsAccessModalOpen(true)}
-              className="w-9 h-9 rounded-full bg-white/90 hover:bg-[#F4DDE5] text-[#294D33] border border-[#E8A9BB]/50 hidden md:flex items-center justify-center transition-all shadow-2xs cursor-pointer hover:scale-105 active:scale-95 relative shrink-0"
+              className="liquid-button w-9 h-9 rounded-full text-[#294D33] hidden md:flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95 relative shrink-0"
               title={`Acessibilidade: Tamanho de fonte (${fontScaleText}), daltonismo e leitor de tela`}
               aria-label="Abrir painel de acessibilidade"
             >
@@ -217,9 +217,6 @@ export default function Header() {
                     onClick={() => setPortalDropdownOpen(false)}
                     className="flex items-start gap-3 p-2.5 rounded-2xl hover:bg-[#FCF7F9] transition group"
                   >
-                    <div className="w-9 h-9 rounded-xl bg-[#FCE7F0] text-lg flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform">
-                      🌸
-                    </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
                         <p className="text-xs font-bold text-[#294D33] group-hover:text-[#1e3c27]">
@@ -241,9 +238,6 @@ export default function Header() {
                     onClick={() => setPortalDropdownOpen(false)}
                     className="flex items-start gap-3 p-2.5 rounded-2xl hover:bg-[#FCF7F9] transition group"
                   >
-                    <div className="w-9 h-9 rounded-xl bg-[#EBF3EE] text-lg flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform">
-                      🩺
-                    </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
                         <p className="text-xs font-bold text-[#294D33] group-hover:text-[#1e3c27]">
@@ -265,9 +259,6 @@ export default function Header() {
                     onClick={() => setPortalDropdownOpen(false)}
                     className="flex items-start gap-3 p-2.5 rounded-2xl hover:bg-[#FCF7F9] transition group"
                   >
-                    <div className="w-9 h-9 rounded-xl bg-[#FDF4E7] text-lg flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform">
-                      🏢
-                    </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
                         <p className="text-xs font-bold text-[#294D33] group-hover:text-[#1e3c27]">
@@ -289,7 +280,7 @@ export default function Header() {
             {/* LINK ENTRAR / LOGIN */}
             <Link 
               to="/login" 
-              className="inline-flex rounded-full border border-[#E8A9BB] bg-white/90 px-4 py-2 md:border-0 md:bg-transparent md:px-2 md:py-1.5 text-xs font-bold text-[#294D33] md:text-[#516B55] hover:text-[#294D33] transition-colors font-sans whitespace-nowrap"
+              className="liquid-button inline-flex rounded-full px-4 py-2 md:px-4 md:py-1.5 text-xs font-bold text-[#294D33] transition-colors font-sans whitespace-nowrap"
             >
               Entrar
             </Link>
@@ -301,7 +292,6 @@ export default function Header() {
               className="hidden md:inline-flex items-center gap-1.5 rounded-full bg-[#294D33] hover:bg-[#1f3c27] px-5 py-2 text-xs font-bold text-[#FCF7F9] shadow-sm transition-all duration-200 hover:scale-[1.03] active:scale-95 font-sans whitespace-nowrap cursor-pointer shrink-0"
             >
               <span>Autoavaliação</span>
-              <ArrowRight size={13} />
             </a>
 
             {/* BOTÃO MENU MOBILE (HAMBÚRGUER) */}
@@ -329,7 +319,7 @@ export default function Header() {
               <Link
                 to="/login"
                 onClick={() => setMobileMenuOpen(false)}
-                className="flex-1 text-center py-3 text-sm font-bold text-[#294D33] bg-white border border-[#E8A9BB] rounded-full"
+                className="liquid-button flex-1 text-center py-3 text-sm font-bold text-[#294D33] rounded-full"
               >
                 Entrar
               </Link>
@@ -343,9 +333,9 @@ export default function Header() {
             </div>
 
             {/* Barra de Acessibilidade no Mobile */}
-            <div className="bg-white rounded-2xl p-3 border border-[#E8A9BB]/40 flex flex-wrap items-center justify-between gap-2 shadow-2xs">
+            <div className="liquid-chip rounded-2xl p-3 flex flex-wrap items-center justify-between gap-2">
               <span className="text-xs font-bold text-[#294D33] flex items-center gap-1.5">
-                <WheelchairIcon size={16} /> Acessibilidade
+                Acessibilidade
               </span>
               <div className="flex items-center gap-2">
                 <button
@@ -393,7 +383,6 @@ export default function Header() {
                   className="py-2.5 px-3 text-sm font-semibold text-[#294D33] hover:bg-[#F4DDE5] rounded-xl transition flex items-center justify-between"
                 >
                   <span>{label}</span>
-                  <span className="text-stone-300 text-xs">→</span>
                 </a>
               ))}
             </nav>
@@ -409,8 +398,8 @@ export default function Header() {
                 onClick={() => setMobileMenuOpen(false)}
                 className="py-2.5 px-4 text-left text-xs font-bold text-[#294D33] bg-[#FCE7F0] rounded-xl flex items-center justify-between"
               >
-                <span>🌸 Espaço da Mãe</span>
-                <span className="text-[10px] text-emerald-800 font-semibold">Acessar →</span>
+                <span>Espaço da Mãe</span>
+                <span className="text-[10px] text-emerald-800 font-semibold">Acessar</span>
               </Link>
 
               <Link
@@ -418,8 +407,8 @@ export default function Header() {
                 onClick={() => setMobileMenuOpen(false)}
                 className="py-2.5 px-4 text-left text-xs font-bold text-[#294D33] bg-[#EBF3EE] rounded-xl flex items-center justify-between"
               >
-                <span>🩺 Portal do Terapeuta</span>
-                <span className="text-[10px] text-emerald-800 font-semibold">Acessar →</span>
+                <span>Portal do Terapeuta</span>
+                <span className="text-[10px] text-emerald-800 font-semibold">Acessar</span>
               </Link>
 
               <Link
@@ -427,8 +416,8 @@ export default function Header() {
                 onClick={() => setMobileMenuOpen(false)}
                 className="py-2.5 px-4 text-left text-xs font-bold text-[#294D33] bg-[#FDF4E7] rounded-xl flex items-center justify-between"
               >
-                <span>🏢 Dashboard RH Corporativo</span>
-                <span className="text-[10px] text-amber-800 font-semibold">Acessar →</span>
+                <span>Dashboard RH Corporativo</span>
+                <span className="text-[10px] text-amber-800 font-semibold">Acessar</span>
               </Link>
             </div>
 

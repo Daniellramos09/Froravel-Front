@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Send, PhoneCall, CheckCircle2, MessageCircle, Heart, Mail } from "lucide-react";
 
 export default function ContatoScreen() {
   const [sent, setSent] = useState(false);
@@ -24,13 +23,6 @@ export default function ContatoScreen() {
           
           {/* Coluna Esquerda: Texto e Apoio */}
           <div className="sr-group lg:col-span-5 space-y-6 text-left">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#F4DDE5] border border-[#E8A9BB]/50 shadow-xs">
-              <MessageCircle size={13} className="text-[#294D33]" />
-              <span className="text-[11px] uppercase tracking-[0.2em] font-semibold text-[#294D33] font-sans">
-                Canal Aberto &bull; Escuta Humanizada
-              </span>
-            </div>
-
             <h2 className="font-serif text-3xl sm:text-4xl lg:text-[3.25rem] font-normal text-[#294D33] leading-[1.12] tracking-[-0.015em]">
               Estamos aqui para te ouvir.{" "}
               <span className="italic font-serif text-[#E8A9BB] block">
@@ -39,14 +31,11 @@ export default function ContatoScreen() {
             </h2>
 
             <p className="text-base text-[#3A443E] leading-relaxed font-sans font-normal">
-              Escreva para a nossa equipe. Seja para tirar dúvidas sobre a plataforma, sugerir temas para as Rodas de Conversa ou propor parcerias institucionais.
+              Tire dúvidas, sugira temas para as Rodas de Conversa ou proponha parcerias.
             </p>
 
             {/* Aviso de Apoio Imediato CVV 188 */}
-            <div className="p-5 rounded-2xl bg-white border border-[#E8A9BB]/60 flex items-start gap-3.5 shadow-xs">
-              <div className="w-10 h-10 rounded-xl bg-[#F4DDE5] text-[#294D33] flex items-center justify-center flex-shrink-0 mt-0.5">
-                <PhoneCall size={20} />
-              </div>
+            <div className="liquid-glass p-5 rounded-2xl flex items-start gap-3.5">
               <div>
                 <p className="text-xs font-bold text-[#294D33] uppercase tracking-wider mb-1 font-nunito">
                   Precisa de apoio emocional urgente?
@@ -60,7 +49,7 @@ export default function ContatoScreen() {
 
           {/* Coluna Direita: Formulário de Contato com Estilo Refinado */}
           <div className="sr lg:col-span-7" style={{ "--sr-i": 1 }}>
-            <div className="rounded-[2.5rem] bg-white p-8 sm:p-11 border border-[#E8A9BB] shadow-lg shadow-[#294D33]/5 text-left">
+            <div className="liquid-glass rounded-[2.5rem] p-8 sm:p-11 text-left">
               {!sent ? (
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
@@ -110,14 +99,10 @@ export default function ContatoScreen() {
                     className="w-full py-4 rounded-full bg-[#294D33] hover:bg-[#1f3c27] text-[#FCF7F9] text-sm font-semibold shadow-md transition-all duration-300 hover:scale-[1.01] flex items-center justify-center gap-2 mt-2 cursor-pointer font-sans"
                   >
                     <span>Enviar mensagem com carinho</span>
-                    <Send size={16} />
                   </button>
                 </form>
               ) : (
                 <div className="py-12 text-center space-y-4">
-                  <div className="w-16 h-16 mx-auto rounded-full bg-[#F4DDE5] text-[#294D33] flex items-center justify-center">
-                    <CheckCircle2 size={32} />
-                  </div>
                   <h3 className="font-serif text-2xl font-normal text-[#294D33]">
                     Mensagem recebida com afeto!
                   </h3>

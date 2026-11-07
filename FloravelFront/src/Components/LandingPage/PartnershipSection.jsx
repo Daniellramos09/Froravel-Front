@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Award, GraduationCap, ArrowRight, CheckCircle2, Sparkles, Send, X, Heart } from "lucide-react";
+import { X } from "lucide-react";
 
 export default function PartnershipSection() {
   const [showModal, setShowModal] = useState(false);
@@ -19,13 +19,13 @@ export default function PartnershipSection() {
   };
 
   return (
-    <section id="esg" className="py-24 sm:py-32 bg-[#FCF7F9] overflow-hidden border-t border-[#E8A9BB]/30">
+    <section id="esg" className="py-12 sm:py-16 bg-[#FCF7F9] overflow-hidden border-t border-[#E8A9BB]/30">
       
       {/* ========================================================
           BLOCO DE TRANSIÇÃO COM FUNDO IMERSIVO EM VERDE ESCURO (#294D33)
           (Alternância de blocos contrastantes da Referência 3)
       ======================================================== */}
-      <div className="sr mx-4 md:mx-12 rounded-[3rem] bg-[#294D33] text-[#FCF7F9] py-16 px-6 sm:px-12 lg:px-16 shadow-2xl relative overflow-hidden">
+      <div className="mx-4 md:mx-12 rounded-[3rem] bg-[#294D33] text-[#FCF7F9] py-16 px-6 sm:px-12 lg:px-16 shadow-2xl relative overflow-hidden">
         
         {/* Flor livre sem moldura da pasta fotoFlores */}
         <img
@@ -47,12 +47,6 @@ export default function PartnershipSection() {
 
         <div className="relative z-10 max-w-6xl mx-auto text-left">
           
-          {/* Topo do Bloco */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-[#FCF7F9] text-xs font-semibold uppercase tracking-wider mb-6 font-sans">
-            <Sparkles size={14} className="text-[#E8A9BB]" />
-            <span>Alianças ESG & Responsabilidade Social</span>
-          </div>
-
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
             
             {/* Lado Esquerdo: Mensagem e Impacto */}
@@ -62,7 +56,7 @@ export default function PartnershipSection() {
               </h2>
 
               <p className="text-base sm:text-lg text-white/80 leading-relaxed font-sans font-normal">
-                Marcas conscientes financiam o <strong className="font-semibold text-white">Fundo de Acolhimento Florável</strong>, viabilizando consultas gratuitas com psicólogas perinatais para mães em vulnerabilidade socioeconômica.
+                Marcas conscientes financiam o <strong className="font-semibold text-white">Fundo de Acolhimento Florável</strong>: consultas gratuitas com psicólogas perinatais para mães em vulnerabilidade.
               </p>
 
               {/* Indicadores Visuais de Impacto */}
@@ -83,7 +77,6 @@ export default function PartnershipSection() {
                   className="group inline-flex items-center justify-center gap-3 rounded-full bg-[#E8A9BB] hover:bg-[#F4DDE5] text-[#294D33] px-8 py-4 text-base font-semibold shadow-lg transition-all duration-300 hover:scale-[1.02] cursor-pointer"
                 >
                   <span>Seja uma empresa parceira</span>
-                  <ArrowRight size={18} className="transition-transform duration-300 group-hover:translate-x-1" />
                 </button>
               </div>
             </div>
@@ -93,31 +86,25 @@ export default function PartnershipSection() {
               
               <div className="p-6 rounded-3xl bg-white/5 backdrop-blur-sm border border-white/15 hover:border-white/30 transition-all">
                 <div className="flex items-center gap-3 mb-2.5">
-                  <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-[#E8A9BB]">
-                    <Award size={22} />
-                  </div>
                   <div>
                     <h3 className="font-serif text-lg font-normal text-white">Fundo de Acolhimento Social</h3>
                     <p className="text-xs text-[#E8A9BB]">Acesso Universal</p>
                   </div>
                 </div>
                 <p className="text-xs text-white/75 leading-relaxed font-sans">
-                  Sua empresa custeia sessões individuais para mães que não podem pagar, com selo de governança e mensuração de impacto.
+                  Sua empresa custeia sessões para mães que não podem pagar, com selo de governança e impacto medido.
                 </p>
               </div>
 
               <div className="p-6 rounded-3xl bg-white/5 backdrop-blur-sm border border-white/15 hover:border-white/30 transition-all">
                 <div className="flex items-center gap-3 mb-2.5">
-                  <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-[#E8A9BB]">
-                    <GraduationCap size={22} />
-                  </div>
                   <div>
                     <h3 className="font-serif text-lg font-normal text-white">Bolsas em Saúde Perinatal</h3>
                     <p className="text-xs text-[#E8A9BB]">Formação e Capacitação</p>
                   </div>
                 </div>
                 <p className="text-xs text-white/75 leading-relaxed font-sans">
-                  Patrocínio direto de certificações para psicólogas de regiões periféricas atenderem voluntariamente suas comunidades.
+                  Certificações para psicólogas de regiões periféricas atenderem voluntariamente suas comunidades.
                 </p>
               </div>
 
@@ -200,9 +187,6 @@ export default function PartnershipSection() {
               </form>
             ) : (
               <div className="text-center py-6">
-                <div className="w-14 h-14 mx-auto rounded-full bg-[#F4DDE5] text-[#294D33] flex items-center justify-center mb-4">
-                  <CheckCircle2 size={30} />
-                </div>
                 <h3 className="font-serif text-2xl font-normal text-[#294D33] mb-2">
                   Contato registrado!
                 </h3>

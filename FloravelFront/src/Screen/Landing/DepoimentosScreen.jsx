@@ -1,5 +1,4 @@
 import React from "react";
-import { Star, Heart, Quote } from "lucide-react";
 
 export default function DepoimentosScreen() {
   const testimonials = [
@@ -30,7 +29,7 @@ export default function DepoimentosScreen() {
   ];
 
   return (
-    <section id="depoimentos" className="relative py-24 sm:py-32 bg-[#FCF7F9] overflow-hidden border-t border-[#E8A9BB]/30">
+    <section id="depoimentos" className="relative pt-12 sm:pt-16 pb-24 sm:pb-32 bg-[#FCF7F9] overflow-hidden border-t border-[#E8A9BB]/30">
       
       {/* Luz ambiente difusa */}
       <div 
@@ -42,13 +41,6 @@ export default function DepoimentosScreen() {
         
         {/* Cabeçalho */}
         <div className="sr-group text-center max-w-2xl mx-auto mb-16 sm:mb-20">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#F4DDE5] border border-[#E8A9BB]/50 shadow-xs mb-4">
-            <Heart size={13} className="fill-[#E8A9BB] text-[#294D33]" />
-            <span className="text-[11px] uppercase tracking-[0.2em] font-semibold text-[#294D33] font-sans">
-              Vozes Reais &bull; Acolhimento Comprovado
-            </span>
-          </div>
-
           <h2 className="font-serif text-3xl sm:text-4xl lg:text-[3.25rem] font-normal text-[#294D33] leading-[1.12] tracking-[-0.015em]">
             Histórias de quem encontrou{" "}
             <span className="italic font-serif text-[#E8A9BB]">
@@ -57,7 +49,7 @@ export default function DepoimentosScreen() {
           </h2>
 
           <p className="mt-4 text-base text-[#3A443E] leading-relaxed font-sans font-normal">
-            Relatos verdadeiros de mulheres que transformaram sua vivência na maternidade com escuta profissional e livre de julgamentos.
+            Relatos de mulheres que transformaram sua maternidade com escuta profissional e sem julgamentos.
           </p>
         </div>
 
@@ -69,22 +61,14 @@ export default function DepoimentosScreen() {
               className="pt-4 relative group"
             >
               {/* Folder Tab Mini */}
-              <div className="absolute top-0 left-6 z-10 px-3.5 py-1 rounded-t-xl bg-white border-t border-l border-r border-[#E8A9BB] text-[10px] font-bold text-[#294D33] uppercase tracking-wider font-nunito">
+              <div className="liquid-chip absolute top-0 left-6 z-10 px-3.5 py-1 rounded-t-xl text-[10px] font-bold text-[#294D33] uppercase tracking-wider font-nunito">
                 {item.badge}
               </div>
 
               {/* Corpo do Card */}
-              <div className="rounded-3xl rounded-tl-sm bg-white border border-[#E8A9BB] p-7 sm:p-8 shadow-xs hover:shadow-xl hover:shadow-[#E8A9BB]/20 transition-all duration-300 flex flex-col justify-between text-left h-full">
+              <div className="liquid-glass rounded-3xl rounded-tl-sm p-7 sm:p-8 transition-all duration-300 flex flex-col justify-between text-left h-full">
                 
                 <div>
-                  {/* Estrelas */}
-                  <div className="flex gap-1 mb-5">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} size={15} className="fill-[#294D33] text-[#294D33]" />
-                    ))}
-                  </div>
-
-                  <Quote size={28} className="text-[#E8A9BB]/40 mb-3" />
 
                   <p className="text-sm sm:text-[0.95rem] text-[#294D33] leading-relaxed font-sans italic mb-8">
                     &ldquo;{item.texto}&rdquo;

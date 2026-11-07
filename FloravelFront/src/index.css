@@ -136,6 +136,104 @@
 .drift-rev { animation: drift 18s ease-in-out infinite reverse; }
 .nudge     { transform-origin: top; animation: nudge 1.8s ease-in-out infinite; }
 
+/* ========================================================
+   LIQUID GLASS - botões e cartões claros da landing
+   .liquid-glass = com desfoque do fundo (botões e cartões)
+   .liquid-chip = versão leve, para etiquetas e caixas dentro de cartões
+   .liquid-button = botões foscos monocromáticos
+   Sem position aqui: os elementos absolutos continuam com o próprio posicionamento.
+======================================================== */
+.liquid-glass,
+.liquid-chip {
+  border-color: transparent;
+  background-origin: border-box;
+}
+.liquid-glass {
+  background-color: rgba(255, 255, 255, .34);
+  background-image:
+    radial-gradient(120% 70% at 12% 0%, rgba(255, 255, 255, .85), rgba(255, 255, 255, 0) 62%),
+    linear-gradient(145deg, rgba(255, 255, 255, .5) 0%, rgba(255, 255, 255, .12) 55%, rgba(255, 255, 255, .34) 100%);
+  -webkit-backdrop-filter: blur(16px) saturate(170%);
+  backdrop-filter: blur(16px) saturate(170%);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, .95),
+    inset 0 -1px 2px rgba(255, 255, 255, .45),
+    inset 0 0 14px rgba(255, 255, 255, .4),
+    0 10px 30px -8px rgba(41, 77, 51, .16),
+    0 2px 6px rgba(41, 77, 51, .06);
+  transition: box-shadow .3s ease, background-color .3s ease, transform .3s ease;
+}
+.liquid-glass:hover {
+  background-color: rgba(255, 255, 255, .55);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 1),
+    inset 0 -1px 2px rgba(255, 255, 255, .55),
+    inset 0 0 18px rgba(255, 255, 255, .55),
+    0 16px 38px -10px rgba(41, 77, 51, .22),
+    0 3px 8px rgba(41, 77, 51, .08);
+}
+.liquid-chip {
+  background-color: rgba(255, 255, 255, .5);
+  background-image: linear-gradient(160deg, rgba(255, 255, 255, .7), rgba(255, 255, 255, .2));
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, .9),
+    0 2px 8px -2px rgba(41, 77, 51, .1);
+}
+/* Botão fosco monocromático: tom único do verde da marca, um brilho no topo e sombra suave */
+.liquid-button {
+  border-color: transparent;
+  background-color: rgba(41, 77, 51, .07);
+  -webkit-backdrop-filter: blur(14px) saturate(120%);
+  backdrop-filter: blur(14px) saturate(120%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .75),
+    inset 0 0 0 1px rgba(255, 255, 255, .35),
+    0 1px 2px rgba(41, 77, 51, .08),
+    0 8px 20px -10px rgba(41, 77, 51, .22);
+  transition: background-color .25s ease, box-shadow .25s ease, transform .15s ease;
+}
+.liquid-button:hover {
+  background-color: rgba(41, 77, 51, .12);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .8),
+    inset 0 0 0 1px rgba(255, 255, 255, .4),
+    0 2px 4px rgba(41, 77, 51, .1),
+    0 12px 26px -10px rgba(41, 77, 51, .28);
+}
+.liquid-button:active {
+  transform: scale(.98);
+}
+.liquid-button:focus-visible {
+  outline: 2px solid #294D33;
+  outline-offset: 2px;
+}
+/* No cabeçalho o botão fica sobre a foto: fosco mais claro para manter o contraste */
+header .liquid-button {
+  background-color: rgba(255, 255, 255, .78);
+}
+header .liquid-button:hover {
+  background-color: rgba(255, 255, 255, .92);
+}
+
+/* Sem desfoque, mais transparência ou mais contraste: fundo sólido e contorno visível */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .liquid-glass, .liquid-button { background-color: rgba(255, 255, 255, .85); }
+}
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+  .liquid-glass, .liquid-chip, .liquid-button {
+    background: #fff;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    box-shadow: 0 0 0 1px rgba(41, 77, 51, .45);
+  }
+}
+.filter-high-contrast :is(.liquid-glass, .liquid-chip, .liquid-button) {
+  background: #fff;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  box-shadow: 0 0 0 1px rgba(41, 77, 51, .45);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .letter, .fade-up, .fade-down, .fade-left, .grow-x, .float, .drift, .drift-rev, .nudge {
     animation: none; opacity: 1; transform: none; filter: none;

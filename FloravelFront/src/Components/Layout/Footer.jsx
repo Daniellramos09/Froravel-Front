@@ -1,40 +1,20 @@
 import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import FloravelLogo from "../Common/FloravelLogo";
-import { ShieldCheck, Heart } from "lucide-react";
 import { APP_LINKS } from "../../utils/appLinks";
 
 const redes = [
   { 
     nome: "Instagram", 
-    href: "#", 
-    svg: (
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-      </svg>
-    ) 
+    href: "#"
   },
   { 
     nome: "LinkedIn", 
-    href: "#", 
-    svg: (
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z" />
-        <rect x="2" y="9" width="4" height="12" />
-        <circle cx="4" cy="4" r="2" />
-      </svg>
-    ) 
+    href: "#"
   },
   { 
     nome: "WhatsApp", 
-    href: "#", 
-    svg: (
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
-      </svg>
-    ) 
+    href: "#"
   },
 ];
 
@@ -50,9 +30,9 @@ const secoes = [
 ];
 
 const ferramentas = [
-  { label: "🌸 Espaço da Mãe", url: APP_LINKS.mae, isExternal: true },
-  { label: "🩺 Portal do Terapeuta", url: APP_LINKS.terapeuta, isExternal: true },
-  { label: "🏢 Dashboard RH Corporativo", url: APP_LINKS.rh, isExternal: true },
+  { label: "Espaço da Mãe", url: APP_LINKS.mae, isExternal: true },
+  { label: "Portal do Terapeuta", url: APP_LINKS.terapeuta, isExternal: true },
+  { label: "Dashboard RH Corporativo", url: APP_LINKS.rh, isExternal: true },
   { label: "Triagem Edimburgo", url: "/#jornada", isExternal: false },
   { label: "Diário Emocional", url: "/#recursos", isExternal: false },
   { label: "Rodas Comunitárias", url: "/#jornada", isExternal: false },
@@ -98,7 +78,6 @@ export default function Footer() {
               Maternidade real sem julgamentos. Um ecossistema de apoio emocional contínuo, triagem especializada e acolhimento clínico no seu próprio ritmo.
             </p>
             <div className="flex items-center gap-2 text-xs font-semibold text-[#294D33]">
-              <ShieldCheck size={16} />
               <span>Plataforma em estrita conformidade com a LGPD e ética CFP</span>
             </div>
             <div className="pt-2 flex items-center gap-3">
@@ -106,10 +85,9 @@ export default function Footer() {
                 <a 
                   key={r.nome}
                   href={r.href} 
-                  className="w-9 h-9 rounded-full bg-white border border-[#E8A9BB]/50 flex items-center justify-center text-[#516B55] hover:text-[#294D33] hover:border-[#294D33] transition shadow-xs"
-                  aria-label={r.nome}
+                  className="text-xs font-semibold text-[#516B55] hover:text-[#294D33] transition-colors"
                 >
-                  {r.svg}
+                  {r.nome}
                 </a>
               ))}
             </div>

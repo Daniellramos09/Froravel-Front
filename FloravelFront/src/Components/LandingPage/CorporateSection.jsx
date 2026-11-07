@@ -1,16 +1,6 @@
 import React, { useState } from "react";
 import { APP_LINKS } from "../../utils/appLinks";
-import {
-  Building2,
-  TrendingUp, 
-  CheckCircle, 
-  ShieldCheck, 
-  ExternalLink, 
-  ArrowRight,
-  X,
-  Sparkles,
-  Lock
-} from "lucide-react";
+import { X } from "lucide-react";
 
 export default function CorporateSection() {
   const [showDemoModal, setShowDemoModal] = useState(false);
@@ -21,19 +11,19 @@ export default function CorporateSection() {
     {
       kpi: "82% Retenção",
       title: "Preservação de Talentos",
-      desc: "Retenção superior no primeiro ano pós-parto, reduzindo o turnover de lideranças e profissionais qualificadas.",
+      desc: "Mais retenção no primeiro ano pós-parto e menos turnover de profissionais qualificadas.",
       badge: "ESG & Retenção"
     },
     {
       kpi: "4x de ROI",
       title: "Retorno Comprovado",
-      desc: "Cada US$ 1 investido em suporte emocional gera US$ 4 em produtividade e redução direta de absenteísmo (OMS).",
+      desc: "Cada US$ 1 em suporte emocional gera US$ 4 em produtividade e menos absenteísmo (OMS).",
       badge: "Produtividade"
     },
     {
       kpi: "100% Anônimo",
       title: "Conformidade LGPD",
-      desc: "Relatórios de risco exclusivamente agregados. Nenhum dado individual de colaboradora é jamais exposto.",
+      desc: "Relatórios apenas agregados. Nenhum dado individual é exposto.",
       badge: "Privacidade Total"
     }
   ];
@@ -84,7 +74,7 @@ export default function CorporateSection() {
   return (
     <section 
       id="corporate" 
-      className="py-24 sm:py-32 bg-[#FCF7F9] relative overflow-hidden border-t border-[#E8A9BB]/30"
+      className="pt-24 sm:pt-32 pb-12 sm:pb-16 bg-[#FCF7F9] relative overflow-hidden border-t border-[#E8A9BB]/30"
     >
       {/* ========================================================
           FOTOS DE FLORES LIVRES (SEM MOLDURA, SOLTAS NOS CANTOS)
@@ -113,13 +103,6 @@ export default function CorporateSection() {
         
         {/* CABEÇALHO */}
         <div className="sr-group max-w-3xl mb-16 sm:mb-20 text-left">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#F4DDE5] border border-[#E8A9BB]/50 shadow-xs mb-4">
-            <Building2 size={14} className="text-[#294D33]" />
-            <span className="text-[11px] uppercase tracking-[0.2em] font-semibold text-[#294D33] font-sans">
-              Florável Corporate &bull; B2B Sustentabilidade Parental
-            </span>
-          </div>
-
           <h2 className="font-serif text-3xl sm:text-4xl lg:text-[3.25rem] font-normal text-[#294D33] leading-[1.12] tracking-[-0.015em]">
             Apoie suas colaboradoras no retorno ao trabalho.{" "}
             <span className="italic font-serif text-[#E8A9BB] block sm:inline">
@@ -128,7 +111,7 @@ export default function CorporateSection() {
           </h2>
 
           <p className="mt-4 text-base sm:text-lg text-[#3A443E] leading-relaxed font-sans font-normal max-w-2xl">
-            Apoio estruturado à maternidade com indicadores agregados, redução comprovada de turnover pós-licença e proteção integral à privacidade das colaboradoras.
+            Apoio à maternidade com indicadores agregados, menos turnover pós-licença e privacidade total.
           </p>
         </div>
 
@@ -139,7 +122,7 @@ export default function CorporateSection() {
           {corporateMetrics.map((item) => (
             <div 
               key={item.kpi}
-              className="p-8 rounded-[2.5rem] bg-white border border-[#E8A9BB] shadow-sm hover:shadow-md transition-all duration-300 text-left flex flex-col justify-between"
+              className="liquid-glass p-8 rounded-[2.5rem] transition-all duration-300 text-left flex flex-col justify-between"
             >
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-[#F4DDE5] text-[#294D33] border border-[#E8A9BB]/40">
@@ -160,7 +143,6 @@ export default function CorporateSection() {
               </div>
 
               <div className="pt-4 mt-4 border-t border-[#E8A9BB]/30 flex items-center gap-1.5 text-[11px] font-semibold text-[#516B55]">
-                <ShieldCheck size={13} className="text-[#294D33]" />
                 <span>Impacto medido e certificado</span>
               </div>
             </div>
@@ -170,7 +152,7 @@ export default function CorporateSection() {
         {/* ========================================================
             REPRESENTAÇÃO VISUAL DO DASHBOARD DE RH CORPORATIVO
         ======================================================== */}
-        <div className="sr rounded-[2.5rem] bg-white border border-[#E8A9BB] p-7 sm:p-10 shadow-lg shadow-[#294D33]/5 mb-16 text-left">
+        <div className="liquid-glass sr rounded-[2.5rem] p-7 sm:p-10 mb-16 text-left">
           
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#E8A9BB]/30">
             <div>
@@ -181,7 +163,7 @@ export default function CorporateSection() {
                 </h3>
               </div>
               <p className="text-xs text-[#516B55] mt-0.5 font-sans">
-                Indicadores agregados &bull; Dados 100% anonimizados em conformidade rigorosa com a LGPD
+                Indicadores agregados &bull; Dados 100% anonimizados (LGPD)
               </p>
             </div>
 
@@ -191,34 +173,33 @@ export default function CorporateSection() {
                 className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full bg-[#F4DDE5] text-[#294D33] text-xs font-semibold hover:bg-[#E8A9BB]/60 transition"
               >
                 <span>Ver demonstração interativa</span>
-                <ExternalLink size={13} />
               </a>
             </div>
           </div>
 
           {/* Mini Painel de Métricas do RH */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-6">
-            <div className="bg-[#FCF7F9] p-5 rounded-2xl border border-[#E8A9BB]/50">
+            <div className="liquid-chip p-5 rounded-2xl">
               <p className="text-[11px] font-semibold text-[#516B55] uppercase tracking-wider">Adesão ao Programa</p>
               <p className="text-2xl font-serif text-[#294D33] mt-1 font-normal">94,2%</p>
               <p className="text-[10px] text-[#294D33] mt-1 flex items-center gap-1 font-semibold">
-                <TrendingUp size={11} /> +12% vs. último trimestre
+                +12% vs. último trimestre
               </p>
             </div>
 
-            <div className="bg-[#FCF7F9] p-5 rounded-2xl border border-[#E8A9BB]/50">
+            <div className="liquid-chip p-5 rounded-2xl">
               <p className="text-[11px] font-semibold text-[#516B55] uppercase tracking-wider">Índice de Sobrecarga</p>
               <p className="text-2xl font-serif text-[#294D33] mt-1 font-normal">Sob Controle</p>
               <p className="text-[10px] text-[#516B55] mt-1">78% relatam alívio semanal</p>
             </div>
 
-            <div className="bg-[#FCF7F9] p-5 rounded-2xl border border-[#E8A9BB]/50">
+            <div className="liquid-chip p-5 rounded-2xl">
               <p className="text-[11px] font-semibold text-[#516B55] uppercase tracking-wider">Retorno ao Trabalho</p>
               <p className="text-2xl font-serif text-[#294D33] mt-1 font-normal">86,5%</p>
               <p className="text-[10px] text-[#294D33] mt-1">Sem interrupção de carreira</p>
             </div>
 
-            <div className="bg-[#FCF7F9] p-5 rounded-2xl border border-[#E8A9BB]/50">
+            <div className="liquid-chip p-5 rounded-2xl">
               <p className="text-[11px] font-semibold text-[#516B55] uppercase tracking-wider">Privacidade</p>
               <p className="text-2xl font-serif text-[#294D33] mt-1 font-normal">LGPD Blindada</p>
               <p className="text-[10px] text-[#516B55] mt-1">Nenhum dado pessoal exposto</p>
@@ -235,7 +216,7 @@ export default function CorporateSection() {
             Planos Corporativos Estruturados
           </h3>
           <p className="text-xs text-[#516B55] font-sans">
-            Implementação ágil em menos de 48 horas com material de comunicação interna pronto para o RH.
+            Implementação em menos de 48 horas, com comunicação interna pronta para o RH.
           </p>
         </div>
 
@@ -246,17 +227,17 @@ export default function CorporateSection() {
               className={`rounded-[2.5rem] p-8 flex flex-col justify-between text-left transition border ${
                 p.highlight
                   ? "bg-[#F4DDE5]/50 border-[#294D33] shadow-lg shadow-[#294D33]/10"
-                  : "bg-white border-[#E8A9BB] shadow-sm hover:shadow-md"
+                  : "liquid-glass"
               }`}
             >
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-white text-[#294D33] border border-[#E8A9BB]/50">
+                  <span className="liquid-chip text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full text-[#294D33]">
                     {p.badge}
                   </span>
                   {p.highlight && (
                     <span className="text-[10px] font-bold uppercase tracking-wider text-[#294D33]">
-                      ★ Mais Procurado
+                      Mais Procurado
                     </span>
                   )}
                 </div>
@@ -272,7 +253,6 @@ export default function CorporateSection() {
                 <ul className="space-y-2.5 text-xs text-[#3A443E] font-sans mb-6">
                   {p.features.map((f, i) => (
                     <li key={i} className="flex items-center gap-2">
-                      <CheckCircle size={14} className="text-[#294D33] flex-shrink-0" />
                       <span>{f}</span>
                     </li>
                   ))}
@@ -284,7 +264,7 @@ export default function CorporateSection() {
                 className={`w-full py-3.5 rounded-full text-xs font-semibold uppercase tracking-wider transition cursor-pointer ${
                   p.highlight
                     ? "bg-[#294D33] text-white hover:bg-[#1f3c27] shadow-sm"
-                    : "bg-[#FCF7F9] text-[#294D33] border border-[#E8A9BB] hover:bg-[#F4DDE5]"
+                    : "liquid-button text-[#294D33]"
                 }`}
               >
                 Solicitar Proposta Comercial
@@ -377,9 +357,6 @@ export default function CorporateSection() {
               </form>
             ) : (
               <div className="text-center py-6">
-                <div className="w-14 h-14 mx-auto rounded-full bg-[#F4DDE5] text-[#294D33] flex items-center justify-center mb-4">
-                  <CheckCircle size={30} />
-                </div>
                 <h3 className="font-serif text-2xl font-normal text-[#294D33] mb-2">
                   Solicitação enviada com sucesso!
                 </h3>

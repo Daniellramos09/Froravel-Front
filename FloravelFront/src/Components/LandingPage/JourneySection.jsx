@@ -107,13 +107,6 @@ export default function JourneySection() {
         
         {/* CABEÇALHO CONCISO */}
         <div className="sr-group max-w-2xl mb-12 sm:mb-16 text-left">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F4DDE5] border border-[#E8A9BB]/50 shadow-xs mb-3">
-            <span className="w-2 h-2 rounded-full bg-[#294D33]" />
-            <span className="text-[11px] uppercase tracking-[0.2em] font-semibold text-[#294D33] font-sans">
-              A Jornada da Mãe &bull; Linha do Tempo
-            </span>
-          </div>
-
           <h2 className="font-serif text-3xl sm:text-4xl lg:text-[3rem] font-normal text-[#294D33] leading-[1.15] tracking-[-0.015em]">
             Como a Florável{" "}
             <span className="italic font-serif text-[#E8A9BB]">
@@ -122,7 +115,7 @@ export default function JourneySection() {
           </h2>
 
           <p className="mt-3 text-base text-[#3A443E] leading-relaxed font-sans max-w-xl">
-            Uma esteira simples e no seu tempo. Um passo por vez, sem pressa nem cobrança.
+            Um passo por vez, sem pressa nem cobrança.
           </p>
         </div>
 
@@ -153,7 +146,7 @@ export default function JourneySection() {
                       ? "bg-white border-[#294D33] shadow-lg shadow-[#294D33]/10 ring-1 ring-[#294D33]/25"
                       : isSelected
                       ? "bg-white border-[#294D33] shadow-md shadow-[#294D33]/5"
-                      : "bg-white/80 hover:bg-white border-[#E8A9BB]/60 hover:border-[#294D33]/50 shadow-xs"
+                      : "liquid-glass"
                   }`}
                 >
                   {/* Topo do Card: Ícone do Nó + Tag */}
@@ -175,7 +168,7 @@ export default function JourneySection() {
                         className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border ${
                           isApex
                             ? "bg-[#294D33] text-white border-[#294D33]"
-                            : "bg-[#FCF7F9] text-[#294D33] border-[#E8A9BB]/60"
+                            : "liquid-chip text-[#294D33]"
                         }`}
                       >
                         {step.tag}
@@ -223,7 +216,7 @@ export default function JourneySection() {
         {/* ========================================================
             CARD COMPACTO DE PRÉVIA VISUAL DA ETAPA ATIVA
         ======================================================== */}
-        <div className="sr rounded-[2rem] bg-white border border-[#E8A9BB]/80 p-5 sm:p-7 shadow-sm text-left relative overflow-hidden">
+        <div className="liquid-glass sr rounded-[2rem] p-5 sm:p-7 text-left relative overflow-hidden">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
             
             {/* Foto Real Reduzida e Polida */}

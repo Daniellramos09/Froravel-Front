@@ -74,14 +74,6 @@ export default function HomeScreen({ onOpenQuiz }) {
           ======================================================== */}
           <div className="lg:col-span-7 flex flex-col items-start text-left z-20">
             
-            {/* Tag / Badge de Cuidado e Acolhimento */}
-            <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-[#EBF3EE] border border-[#73937E]/20 mb-6 shadow-xs">
-              <span className="w-2 h-2 rounded-full bg-[#73937E] animate-pulse" />
-              <span className="text-xs uppercase tracking-[0.2em] font-semibold text-[#2F3A36]">
-                O Espaço da Mãe &bull; Acolhimento Seguro
-              </span>
-            </div>
-
             {/* Título Principal Conforme Especificação */}
             <h1 className="font-display text-[2.75rem] sm:text-[3.5rem] lg:text-[4.25rem] font-medium leading-[1.08] text-[#27272A] tracking-tight">
               Maternidade real sem julgamentos.{" "}
