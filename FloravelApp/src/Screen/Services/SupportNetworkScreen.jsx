@@ -35,7 +35,7 @@ export const MOCK_PSYCHOLOGISTS = [
     isSocial: true,
     verified: true,
     tags: ["Psicologia Perinatal", "Primeira Infância", "Puerpério Seguro"],
-    photo: "/img/1.jpg",
+    photo: "/img/fotopsicologo/psicologa1.jpg",
   },
   {
     id: 2,
@@ -52,7 +52,7 @@ export const MOCK_PSYCHOLOGISTS = [
     isSocial: false,
     verified: true,
     tags: ["Acolhimento Luto", "Perda Gestacional", "Apoio Sensível"],
-    photo: "/img/2.jpg",
+    photo: "/img/fotopsicologo/psicologa2.jpg",
   },
   {
     id: 3,
@@ -69,7 +69,7 @@ export const MOCK_PSYCHOLOGISTS = [
     isSocial: true,
     verified: true,
     tags: ["Triagem", "Triagem Rápida", "Sobrecarga Mental"],
-    photo: "/img/3.jpg",
+    photo: "/img/fotopsicologo/psicologos7.jpg",
   },
   {
     id: 4,
@@ -86,7 +86,7 @@ export const MOCK_PSYCHOLOGISTS = [
     isSocial: false,
     verified: true,
     tags: ["Psicologia Perinatal", "Ansiedade Pós-Parto", "Sono do Bebê"],
-    photo: "/img/4.jpg",
+    photo: "/img/fotopsicologo/psicologia4.jpg",
   },
   {
     id: 5,
@@ -103,7 +103,7 @@ export const MOCK_PSYCHOLOGISTS = [
     isSocial: false,
     verified: true,
     tags: ["Acolhimento Luto", "Maternidade Atípica", "Presencial & Online"],
-    photo: "/img/5.jpg",
+    photo: "/img/fotopsicologo/psicologia1.jpg",
   },
   {
     id: 6,
@@ -120,7 +120,7 @@ export const MOCK_PSYCHOLOGISTS = [
     isSocial: false,
     verified: true,
     tags: ["Psicologia Perinatal", "Retorno ao Trabalho", "Maternidade Solo"],
-    photo: "/img/6.jpg",
+    photo: "/img/fotopsicologo/download8.jpg",
   },
 ];
 
