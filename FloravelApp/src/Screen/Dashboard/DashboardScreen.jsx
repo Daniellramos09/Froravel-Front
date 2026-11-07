@@ -17,6 +17,8 @@ export default function DashboardScreen({
   setActiveTab,
   userName = 'Mariana',
   agendamentos = [],
+  flowersCount: externalFlowersCount,
+  setFlowersCount: externalSetFlowersCount,
 }) {
   // Estados para abertura dos modais
   const [isDiaryModalOpen, setIsDiaryModalOpen] = useState(false);
@@ -25,7 +27,11 @@ export default function DashboardScreen({
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
 
   // Estados de flores solidárias, humor e acionamento da pausa guiada
-  const [flowersCount, setFlowersCount] = useState(12);
+  const [internalFlowersCount, setInternalFlowersCount] = useState(12);
+  const flowersCount =
+    externalFlowersCount !== undefined ? externalFlowersCount : internalFlowersCount;
+  const setFlowersCount = externalSetFlowersCount || setInternalFlowersCount;
+
   const [currentMood, setCurrentMood] = useState(null);
   const [pauseSignal, setPauseSignal] = useState(0);
 

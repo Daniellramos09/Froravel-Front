@@ -24,6 +24,8 @@ import {
   useAccessibility,
 } from './Components/Accessibility/AccessibilityContext';
 import AccessibilityQuickBar from './Components/Accessibility/AccessibilityQuickBar';
+import FlowerCounterBadge from './Components/Gamification/FlowerCounterBadge';
+import InviteModal from './Screen/Dashboard/components/InviteModal';
 
 // ITEM DE NAVEGAÇÃO COM FEEDBACK TÁTIL E HOVER VISÍVEL
 const NavItem = ({ icon, label, active, onClick, badge }) => (
@@ -142,9 +144,11 @@ function AppContent() {
   const [hasUnread, setHasUnread] = useState(true);
   const notifRef = useRef(null);
 
-  // 3. ESTADOS GLOBAIS DE CONSULTAS
+  // 3. ESTADOS GLOBAIS DE CONSULTAS E GAMIFICAÇÃO
   const [agendamentosGlobais, setAgendamentosGlobais] = useState([]);
   const [profEmFoco, setProfEmFoco] = useState(null);
+  const [flowersCount, setFlowersCount] = useState(12);
+  const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
 
   // 4. CONTEXTO DE ACESSIBILIDADE
   const {
@@ -383,6 +387,13 @@ function AppContent() {
           <div className="flex items-center gap-1.5 sm:gap-4 flex-shrink-0">
             <InstallAppButton className="p-2.5 sm:px-4 bg-[#294D33] text-white hover:bg-[#1f3c27]" />
 
+            {/* CONTADOR DE FLORES SOLIDÁRIAS COM HOVER E BARRA DE PROGRESSO */}
+            <FlowerCounterBadge
+              flowersCount={flowersCount}
+              targetFlowers={15}
+              onOpenInvite={() => setIsInviteModalOpen(true)}
+            />
+
             {/* BARRA RÁPIDA DE ACESSIBILIDADE NO TOPO */}
             <div className="hidden md:block">
               <AccessibilityQuickBar
@@ -440,6 +451,8 @@ function AppContent() {
               setActiveTab={handleTabChange}
               userName="Mariana"
               agendamentos={agendamentosGlobais}
+              flowersCount={flowersCount}
+              setFlowersCount={setFlowersCount}
             />
           )}
           {activeTab === 'quiz' && <CheckInScreen setActiveTab={handleTabChange} />}
@@ -499,6 +512,13 @@ function AppContent() {
             );
           })}
         </nav>
+
+        {/* MODAL GLOBAL DE CONVITE / RESGATE DE FLORES */}
+        <InviteModal
+          isOpen={isInviteModalOpen}
+          onClose={() => setIsInviteModalOpen(false)}
+          userName="Mariana"
+        />
 
       </main>
     </div>
