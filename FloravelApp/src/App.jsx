@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import {
   Home, ClipboardList, HeartHandshake, MessageSquare, Calendar, Bell,
-  LogOut, ArrowRight, ChevronLeft, BookOpen, Eye, Menu, X
+  LogOut, ArrowRight, ChevronLeft, BookOpen, Eye, Menu, X, Users
 } from 'lucide-react';
 import InstallAppButton from './Components/Pwa/InstallAppButton';
 
@@ -13,6 +13,7 @@ import CheckInScreen from './Screen/Dashboard/CheckInScreen';
 import AgendamentoScreen from './Screen/Services/AgendamentoScreen';
 import RedeApoioScreen from './Screen/Services/ApoioScreen';
 import ComunidadeScreen from './Screen/Community/ComunidadeScreen';
+import FeedScreen from './Screen/Community/FeedScreen';
 import PerfilScreen from './Screen/Profile/PerfilScreen';
 import BibliotecaScreen from './Screen/Community/BibliotecaScreen';
 import AjudaScreen from './Screen/Services/AjudaScreen';
@@ -205,6 +206,8 @@ function AppContent() {
         return 'Rede de Apoio';
       case 'groups':
         return 'Rodas de Conversa';
+      case 'feed':
+        return 'Comunidade';
       case 'booking':
         return 'Meus Agendamentos';
       case 'library':
@@ -264,6 +267,7 @@ function AppContent() {
           <NavItem icon={<ClipboardList size={20} />} label="Diário & Triagem" active={activeTab === 'quiz'} onClick={() => handleTabChange('quiz')} />
           <NavItem icon={<HeartHandshake size={20} />} label="Rede de Apoio" active={activeTab === 'network'} onClick={() => handleTabChange('network')} />
           <NavItem icon={<MessageSquare size={20} />} label="Rodas de Conversa" active={activeTab === 'groups'} onClick={() => handleTabChange('groups')} />
+          <NavItem icon={<Users size={20} />} label="Comunidade" active={activeTab === 'feed'} onClick={() => handleTabChange('feed')} />
           <NavItem icon={<Calendar size={20} />} label="Meus Agendamentos" active={activeTab === 'booking'} onClick={() => handleTabChange('booking')} />
           <NavItem icon={<BookOpen size={20} />} label="Biblioteca & Conteúdos" active={activeTab === 'library'} onClick={() => handleTabChange('library')} />
           
@@ -475,6 +479,13 @@ function AppContent() {
           )}
           {activeTab === 'quiz' && <CheckInScreen setActiveTab={handleTabChange} />}
           {activeTab === 'groups' && <ComunidadeScreen />}
+          {activeTab === 'feed' && (
+            <FeedScreen
+              currentUser={{ id: 'mariana-silva', name: 'Mariana Silva', initials: 'MS', role: 'mae', detail: 'Puerpério · semana 7' }}
+              allowAnonymous
+              showCrisisNote
+            />
+          )}
           {activeTab === 'help' && <AjudaScreen />}
           {activeTab === 'perfil' && <PerfilScreen />}
           {activeTab === 'library' && <BibliotecaScreen />}

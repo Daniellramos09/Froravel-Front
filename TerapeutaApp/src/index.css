@@ -1,1 +1,138 @@
+/* Importa o Tailwind CSS v4 */
 @import "tailwindcss";
+
+/* Define o seu Design System Oficial Florável */
+@theme {
+  /* Cores da Marca (Tokens Oficiais) */
+  --color-primary: #294D33; /* Verde Escuro Autoridade/CTAs */
+  --color-secondary: #E8A9BB; /* Rosa Antigo Destaques */
+  --color-apoio: #516B55;
+  --color-superficie: #F4DDE5; /* Rosa Claro Acolhimento */
+  --color-fundo: #FCF7F9; /* Branco Rosado Canvas Principal */
+
+  --color-verde-escuro: #294D33;
+  --color-rosa-claro: #F4DDE5;
+  --color-rosa-antigo: #E8A9BB;
+  --color-verde-salvia: #EBF3ED;
+
+  /* Tons Neutros Acolhedores */
+  --color-gray1: #2B2829;
+  --color-gray2: #4F4F4F;
+  --color-gray3: #756F72;
+  --color-gray4: #A8A2A5;
+  --color-gray5: #EFE9EB;
+
+  /* Cores de Estado */
+  --color-info: #2F80ED;
+  --color-success: #27AE60;
+  --color-warning: #E2B93B;
+  --color-error: #EB5757;
+
+  /* Tipografia */
+  --font-fraunces: "Fraunces", serif;
+  --font-dmsans: "DM Sans", sans-serif;
+}
+
+/* 1. ROLAGEM SUAVE (SMOOTH SCROLL) E SUPERFÍCIES DO NAVEGADOR */
+html, body {
+  scroll-behavior: smooth;
+  background-color: #FCF7F9;
+  caret-color: #294D33;
+  scrollbar-color: #D9CFCB #FCF7F9;
+  scrollbar-width: thin;
+}
+
+::selection {
+  background-color: #E6AEB7;
+  color: #1F3A27;
+}
+
+/* 2. EFEITO DE "MOLA" EM TODOS OS BOTÕES */
+button {
+  transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+button:active {
+  transform: scale(0.97);
+}
+
+/* 3. ANIMAÇÕES DE ENTRADA SUAVE */
+.animate-fadeIn {
+  animation: slideUpFade 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideUpFade {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-scaleUp {
+  animation: scaleUpModal 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes scaleUpModal {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* 4. REGRAS GLOBAIS DE ACESSIBILIDADE */
+.font-scale-normal {
+  font-size: 16px;
+}
+.font-scale-large {
+  font-size: 18px;
+}
+.font-scale-extra {
+  font-size: 20px;
+}
+.font-scale-huge {
+  font-size: 22px;
+}
+
+.spacing-expanded * {
+  line-height: 1.8 !important;
+  letter-spacing: 0.035em !important;
+  word-spacing: 0.08em !important;
+}
+
+.reduce-motion * {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
+}
+
+/* Filtros de Daltonismo */
+.filter-deuteranopia {
+  filter: contrast(1.15) hue-rotate(-15deg) saturate(1.1);
+}
+
+.filter-protanopia {
+  filter: contrast(1.2) hue-rotate(18deg) saturate(1.2);
+}
+
+.filter-tritanopia {
+  filter: contrast(1.2) hue-rotate(180deg) saturate(0.9);
+}
+
+.filter-high-contrast {
+  filter: contrast(1.4) brightness(0.95);
+}
+
+.filter-high-contrast * {
+  text-shadow: 0 0 1px rgba(0, 0, 0, 0.15);
+}
+
+.filter-monochrome {
+  filter: grayscale(100%) contrast(1.2);
+}

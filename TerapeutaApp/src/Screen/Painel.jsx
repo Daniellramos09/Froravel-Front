@@ -31,53 +31,53 @@ export default function Painel() {
   return (
     <div className="w-full">
       {/* Cabeçalho */}
-      <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <header className="rounded-2xl bg-[#F1E6E1] p-5 sm:p-8 lg:p-10 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-xs font-bold tracking-[0.2em] text-[#7a4a4e] uppercase">
+          <p className="text-[13.5px] md:text-[15px] text-[#4A5E4D] first-letter:uppercase">
             {dataHoje}
           </p>
-          <h1 className="mt-2 text-4xl font-extrabold text-[#4a2327]">
+          <h1 className="mt-2 font-fraunces text-[30px] md:text-[38px] leading-[1.12] tracking-[-0.015em] text-[#1F3A27]">
             {getSaudacao()}, Dra. Helena Souza
           </h1>
-          <p className="mt-2 text-gray-500">Veja o que pede sua atenção hoje.</p>
+          <p className="mt-2 text-[15px] text-[#4A5E4D]">Veja o que pede sua atenção hoje.</p>
         </div>
 
-        <button className="inline-flex items-center gap-2 rounded-full bg-[#9b4f55] px-6 py-3 text-sm font-semibold text-white shadow-md hover:bg-[#873f46] transition-colors">
+        <button className="inline-flex items-center gap-2 rounded-full bg-[#294D33] px-6 py-3 text-[14px] font-bold text-white shadow-sm hover:bg-[#1F3A27] transition-colors cursor-pointer">
           <Plus className="w-4 h-4" />
           Nova sessão
         </button>
       </header>
 
       {/* Cards */}
-      <section className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <section className="mt-6 sm:mt-10 grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {stats.map(({ icon: Icon, value, label, extra }) => (
           <div
             key={label}
-            className="rounded-3xl bg-white border border-[#f0e4e4] p-5 shadow-sm"
+            className="rounded-3xl bg-white border border-[#EFE9EB] p-5 shadow-sm"
           >
-            <div className="w-10 h-10 rounded-full bg-[#f3d5da] flex items-center justify-center">
-              <Icon className="w-5 h-5 text-[#9b4f55]" />
+            <div className="w-10 h-10 rounded-full bg-[#F4DDE5] flex items-center justify-center">
+              <Icon className="w-5 h-5 text-[#294D33]" />
             </div>
-            <p className="mt-4 text-3xl font-extrabold text-[#4a2327]">{value}</p>
-            <p className="text-sm text-gray-600">{label}</p>
-            {extra && <p className="text-xs text-gray-500 mt-1">{extra}</p>}
+            <p className="mt-4 font-fraunces text-[32px] leading-none text-[#1F3A27]">{value}</p>
+            <p className="text-sm text-[#4A5E4D]">{label}</p>
+            {extra && <p className="text-xs text-stone-500 mt-1">{extra}</p>}
           </div>
         ))}
       </section>
 
       {/* Próximos atendimentos */}
-      <section className="mt-8 rounded-3xl bg-white border border-[#f0e4e4] shadow-sm overflow-hidden">
+      <section className="mt-8 rounded-3xl bg-white border border-[#EFE9EB] shadow-sm overflow-hidden">
         <div className="flex items-center justify-between px-6 py-5">
           <div>
-            <h2 className="text-lg font-bold text-[#4a2327]">Próximos atendimentos</h2>
-            <p className="text-xs text-gray-500">Dados fictícios de demonstração</p>
+            <h2 className="font-fraunces text-[22px] md:text-[26px] leading-[1.15] tracking-[-0.015em] text-[#1F3A27]">Próximos atendimentos</h2>
+            <p className="text-xs text-stone-500">Dados fictícios de demonstração</p>
           </div>
-          <button className="rounded-full bg-[#f3d5da] px-4 py-1.5 text-xs font-semibold text-[#9b4f55] hover:bg-[#ecc4cb]">
+          <button className="rounded-full bg-[#F4DDE5] px-4 py-1.5 text-xs font-semibold text-[#294D33] hover:bg-[#E8A9BB]/50">
             Ver agenda
           </button>
         </div>
 
-        <ul className="divide-y divide-[#f0e4e4] border-t border-[#f0e4e4]">
+        <ul className="divide-y divide-[#EFE9EB] border-t border-[#EFE9EB]">
           {appointments.map((a) => (
             <li
               key={a.titulo}
@@ -85,12 +85,12 @@ export default function Painel() {
             >
               <div className="flex items-center gap-6">
                 <div className="w-24">
-                  <p className="text-lg font-bold text-[#4a2327]">{a.hora}</p>
-                  <p className="text-xs text-gray-500">{a.dia}</p>
+                  <p className="text-lg font-bold text-[#2B2829]">{a.hora}</p>
+                  <p className="text-xs text-stone-500">{a.dia}</p>
                 </div>
                 <div>
-                  <p className="font-bold text-[#4a2327]">{a.titulo}</p>
-                  <p className="flex items-center gap-1 text-xs text-gray-500">
+                  <p className="font-bold text-[#2B2829]">{a.titulo}</p>
+                  <p className="flex items-center gap-1 text-xs text-stone-500">
                     {a.grupo ? <Users className="w-3.5 h-3.5" /> : <User className="w-3.5 h-3.5" />}
                     {a.tipo} · {a.info}
                   </p>
@@ -98,14 +98,14 @@ export default function Painel() {
               </div>
 
               <div className="flex items-center gap-3">
-                <span className="rounded-full bg-[#f3e9e4] px-3 py-1 text-xs font-medium text-[#7a5a4e]">
+                <span className="rounded-full bg-[#F1E6E1] px-3 py-1 text-xs font-medium text-[#4A5E4D]">
                   Agendada
                 </span>
-                <button className="inline-flex items-center gap-1.5 rounded-full bg-[#e1e8d5] px-3 py-1.5 text-xs font-semibold text-[#4f6340]">
+                <button className="inline-flex items-center gap-1.5 rounded-full bg-[#EBF3ED] px-3 py-1.5 text-xs font-semibold text-[#294D33]">
                   <Video className="w-3.5 h-3.5" />
                   Sala
                 </button>
-                <button className="inline-flex items-center gap-1 text-xs font-medium text-[#4a2327] hover:text-[#9b4f55]">
+                <button className="inline-flex items-center gap-1 text-xs font-medium text-[#2B2829] hover:text-[#294D33]">
                   Detalhes <ChevronRight className="w-4 h-4" />
                 </button>
               </div>

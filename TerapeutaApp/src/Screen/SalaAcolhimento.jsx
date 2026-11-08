@@ -34,37 +34,37 @@ export default function SalaAcolhimento() {
     <div className="w-full">
       {/* Cabeçalho */}
       <header>
-        <p className="text-xs font-bold tracking-[0.2em] text-[#7a4a4e] uppercase">
+        <p className="text-[13.5px] md:text-[15px] text-[#4A5E4D] first-letter:uppercase">
           Sala de acolhimento
         </p>
-        <h1 className="mt-2 text-4xl font-extrabold text-[#4a2327]">{sessao.titulo}</h1>
-        <p className="mt-2 text-gray-500">
+        <h1 className="mt-2 font-fraunces text-[30px] md:text-[38px] leading-[1.12] tracking-[-0.015em] text-[#1F3A27]">{sessao.titulo}</h1>
+        <p className="mt-2 text-[15px] text-[#4A5E4D]">
           {formatarData(sessao.data)} · {sessao.inicio}–{sessao.fim}
         </p>
       </header>
 
       {/* Card */}
-      <section className="mt-8 rounded-3xl border border-[#f0e4e4] bg-white p-6 shadow-sm">
+      <section className="mt-8 rounded-3xl border border-[#EFE9EB] bg-white p-6 shadow-sm">
         {/* Selos */}
         <div className="flex items-center gap-2">
-          <span className="inline-flex items-center gap-1.5 text-xs text-gray-600">
+          <span className="inline-flex items-center gap-1.5 text-xs text-[#4A5E4D]">
             {ehGrupo ? <Users className="h-3.5 w-3.5" /> : <User className="h-3.5 w-3.5" />}
             {ehGrupo ? `Grupo · ${total}/${sessao.vagas}` : 'Individual'}
           </span>
-          <span className="rounded-full bg-[#f3e9e9] px-3 py-0.5 text-xs font-medium text-[#7a5a4e]">
+          <span className="rounded-full bg-[#F1E6E1] px-3 py-0.5 text-xs font-medium text-[#4A5E4D]">
             {sessao.status}
           </span>
         </div>
 
-        <p className="mt-4 text-[#4a2327]">{sessao.titulo}</p>
+        <p className="mt-4 text-[#2B2829]">{sessao.titulo}</p>
 
         {/* Participantes */}
         {ehGrupo && (
           <div className="mt-6">
-            <h2 className="text-sm font-bold text-[#4a2327]">
+            <h2 className="font-fraunces text-[18px] text-[#1F3A27]">
               Participantes · {total}/{sessao.vagas} ({restantes} {restantes === 1 ? 'vaga' : 'vagas'})
             </h2>
-            <ul className="mt-3 space-y-1 text-sm text-gray-600">
+            <ul className="mt-3 space-y-1 text-sm text-[#4A5E4D]">
               {sessao.participantes.map((nome) => (
                 <li key={nome}>{nome}</li>
               ))}
@@ -73,7 +73,7 @@ export default function SalaAcolhimento() {
         )}
 
         {/* Aviso */}
-        <div className="mt-6 rounded-full bg-[#e1e8d5] px-5 py-3 text-sm text-[#3b4a2f]">
+        <div className="mt-6 rounded-full bg-[#EBF3ED] px-5 py-3 text-sm text-[#294D33]">
           Chegue alguns minutos antes, acolha com calma e lembre as participantes sobre o sigilo do
           encontro.
         </div>
@@ -84,7 +84,7 @@ export default function SalaAcolhimento() {
             href={sessao.linkSala}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-full bg-[#9b4f55] px-5 py-2.5 text-sm font-semibold text-white shadow-md transition-colors hover:bg-[#873f46]"
+            className="inline-flex items-center gap-2 rounded-full bg-[#294D33] px-5 py-2.5 text-sm font-bold text-white shadow-sm transition-colors hover:bg-[#1F3A27]"
           >
             <ExternalLink className="h-4 w-4" />
             Entrar na sala
@@ -92,7 +92,7 @@ export default function SalaAcolhimento() {
 
           <Link
             to="/agenda"
-            className="rounded-full border border-[#e6d6d6] bg-white px-5 py-2.5 text-sm font-medium text-[#4a2327] transition-colors hover:bg-[#faf3f3]"
+            className="rounded-full border border-[#E4DAD5] bg-white px-5 py-2.5 text-sm font-medium text-[#2B2829] transition-colors hover:bg-[#FCF7F9]"
           >
             Voltar à agenda
           </Link>
