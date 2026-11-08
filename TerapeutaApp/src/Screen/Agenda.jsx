@@ -29,8 +29,8 @@ const fromKey = (key) => {
 function SessaoChip({ sessao, compacta = false }) {
   const estilo =
     sessao.tipo === 'grupo'
-      ? 'bg-[#e1e8d5] text-[#3b4a2f] hover:bg-[#d6dfc7]'
-      : 'bg-[#f3d5da] text-[#4a2327] hover:bg-[#ecc4cb]';
+      ? 'bg-[#EBF3ED] text-[#294D33] hover:bg-[#DCE9DF]'
+      : 'bg-[#F4DDE5] text-[#2B2829] hover:bg-[#E8A9BB]/50';
 
   if (compacta) {
     return (
@@ -99,16 +99,16 @@ export default function Agenda() {
       {/* Cabeçalho */}
       <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-xs font-bold tracking-[0.2em] text-[#7a4a4e] uppercase">
+          <p className="text-[13.5px] md:text-[15px] text-[#4A5E4D] first-letter:uppercase">
             Gestão de agenda
           </p>
-          <h1 className="mt-2 text-4xl font-extrabold text-[#4a2327]">Agenda e sessões</h1>
-          <p className="mt-2 text-gray-500">
+          <h1 className="mt-2 font-fraunces text-[30px] md:text-[38px] leading-[1.12] tracking-[-0.015em] text-[#1F3A27]">Agenda e sessões</h1>
+          <p className="mt-2 text-[15px] text-[#4A5E4D]">
             Organize seus encontros individuais e rodas de conversa.
           </p>
         </div>
 
-        <button className="inline-flex items-center gap-2 rounded-full bg-[#9b4f55] px-6 py-3 text-sm font-semibold text-white shadow-md hover:bg-[#873f46] transition-colors">
+        <button className="inline-flex items-center gap-2 rounded-full bg-[#294D33] px-6 py-3 text-[14px] font-bold text-white shadow-sm hover:bg-[#1F3A27] transition-colors cursor-pointer">
           <Plus className="w-4 h-4" />
           Nova sessão
         </button>
@@ -117,15 +117,15 @@ export default function Agenda() {
       {/* Barra de controles */}
       <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
         {/* Abas */}
-        <div className="inline-flex rounded-full bg-[#f3e9e9] p-1">
+        <div className="inline-flex rounded-full bg-[#F1E6E1] p-1">
           {abas.map((aba) => (
             <button
               key={aba.id}
               onClick={() => setVisao(aba.id)}
               className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
                 visao === aba.id
-                  ? 'bg-white text-[#4a2327] shadow-sm'
-                  : 'text-gray-500 hover:text-[#4a2327]'
+                  ? 'bg-white text-[#2B2829] shadow-sm'
+                  : 'text-stone-500 hover:text-[#2B2829]'
               }`}
             >
               {aba.nome}
@@ -138,19 +138,19 @@ export default function Agenda() {
           {visao !== 'proximos' && (
             <button
               onClick={() => navegar(-1)}
-              className="text-gray-500 hover:text-[#9b4f55]"
+              className="text-stone-500 hover:text-[#294D33]"
               aria-label="Anterior"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
           )}
 
-          <span className="min-w-[8rem] text-center font-bold text-[#4a2327]">{rotulo}</span>
+          <span className="min-w-[8rem] text-center font-bold text-[#2B2829]">{rotulo}</span>
 
           {visao !== 'proximos' && (
             <button
               onClick={() => navegar(1)}
-              className="text-gray-500 hover:text-[#9b4f55]"
+              className="text-stone-500 hover:text-[#294D33]"
               aria-label="Próximo"
             >
               <ChevronRight className="w-5 h-5" />
@@ -159,7 +159,7 @@ export default function Agenda() {
 
           <button
             onClick={() => setCursor(new Date())}
-            className="rounded-full border border-[#e6d6d6] bg-white px-4 py-1.5 text-xs font-semibold text-[#4a2327] hover:bg-[#faf3f3]"
+            className="rounded-full border border-[#E4DAD5] bg-white px-4 py-1.5 text-xs font-semibold text-[#2B2829] hover:bg-[#FCF7F9]"
           >
             Hoje
           </button>
@@ -168,7 +168,7 @@ export default function Agenda() {
 
       {/* ---------- SEMANA ---------- */}
       {visao === 'semana' && (
-        <section className="mt-6 overflow-x-auto rounded-3xl border border-[#f0e4e4] bg-white shadow-sm">
+        <section className="mt-6 overflow-x-auto rounded-3xl border border-[#EFE9EB] bg-white shadow-sm">
           <div className="grid min-w-[900px] grid-cols-7 gap-3 p-4">
             {diasSemana.map((dia) => {
               const key = toKey(dia);
@@ -178,13 +178,13 @@ export default function Agenda() {
                   <div className="mb-3 flex items-center justify-between">
                     <span
                       className={`text-[11px] font-bold uppercase tracking-wide ${
-                        ehHoje ? 'text-[#9b4f55]' : 'text-[#4a2327]'
+                        ehHoje ? 'text-[#294D33]' : 'text-[#2B2829]'
                       }`}
                     >
                       {DIAS[dia.getDay()]} {dia.getDate()}
                     </span>
                     <button
-                      className="text-gray-400 hover:text-[#9b4f55]"
+                      className="text-stone-400 hover:text-[#294D33]"
                       aria-label={`Adicionar sessão em ${key}`}
                     >
                       <Plus className="w-4 h-4" />
@@ -205,13 +205,13 @@ export default function Agenda() {
 
       {/* ---------- MÊS ---------- */}
       {visao === 'mes' && (
-        <section className="mt-6 overflow-x-auto rounded-3xl border border-[#f0e4e4] bg-white shadow-sm">
+        <section className="mt-6 overflow-x-auto rounded-3xl border border-[#EFE9EB] bg-white shadow-sm">
           <div className="min-w-[700px] p-4">
             <div className="mb-2 grid grid-cols-7 gap-2">
               {DIAS.map((d) => (
                 <span
                   key={d}
-                  className="text-center text-[11px] font-bold uppercase text-[#4a2327]"
+                  className="text-center text-[11px] font-bold uppercase text-[#2B2829]"
                 >
                   {d.slice(0, 3)}
                 </span>
@@ -227,12 +227,12 @@ export default function Agenda() {
                   <div
                     key={key}
                     className={`min-h-[5.5rem] rounded-2xl border p-2 ${
-                      ehHoje ? 'border-[#9b4f55]' : 'border-[#f0e4e4]'
-                    } ${doMes ? 'bg-white' : 'bg-[#faf6f6] opacity-60'}`}
+                      ehHoje ? 'border-[#294D33]' : 'border-[#EFE9EB]'
+                    } ${doMes ? 'bg-white' : 'bg-[#FCF7F9] opacity-60'}`}
                   >
                     <p
                       className={`mb-1 text-xs font-bold ${
-                        ehHoje ? 'text-[#9b4f55]' : 'text-[#4a2327]'
+                        ehHoje ? 'text-[#294D33]' : 'text-[#2B2829]'
                       }`}
                     >
                       {dia.getDate()}
@@ -252,34 +252,34 @@ export default function Agenda() {
 
       {/* ---------- PRÓXIMOS ---------- */}
       {visao === 'proximos' && (
-        <section className="mt-6 overflow-hidden rounded-3xl border border-[#f0e4e4] bg-white shadow-sm">
+        <section className="mt-6 overflow-hidden rounded-3xl border border-[#EFE9EB] bg-white shadow-sm">
           {proximas.length === 0 ? (
-            <p className="p-8 text-center text-sm text-gray-500">
+            <p className="p-8 text-center text-sm text-stone-500">
               Nenhuma sessão agendada por enquanto.
             </p>
           ) : (
-            <ul className="divide-y divide-[#f0e4e4]">
+            <ul className="divide-y divide-[#EFE9EB]">
               {proximas.map((s) => {
                 const d = fromKey(s.data);
                 return (
                   <li key={s.id} className="flex items-center gap-6 px-6 py-4">
                     <div className="w-24">
-                      <p className="text-lg font-bold text-[#4a2327]">{s.hora}</p>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-lg font-bold text-[#2B2829]">{s.hora}</p>
+                      <p className="text-xs text-stone-500">
                         {DIAS[d.getDay()]} {d.getDate()}/{String(d.getMonth() + 1).padStart(2, '0')}
                       </p>
                     </div>
                     <div className="flex-1">
-                      <p className="font-bold text-[#4a2327]">{s.titulo}</p>
-                      <p className="text-xs text-gray-500">
+                      <p className="font-bold text-[#2B2829]">{s.titulo}</p>
+                      <p className="text-xs text-stone-500">
                         {s.tipo === 'grupo' ? 'Roda de conversa' : 'Atendimento individual'}
                       </p>
                     </div>
                     <span
                       className={`rounded-full px-3 py-1 text-xs font-semibold ${
                         s.tipo === 'grupo'
-                          ? 'bg-[#e1e8d5] text-[#4f6340]'
-                          : 'bg-[#f3d5da] text-[#9b4f55]'
+                          ? 'bg-[#EBF3ED] text-[#294D33]'
+                          : 'bg-[#F4DDE5] text-[#294D33]'
                       }`}
                     >
                       {s.tipo === 'grupo' ? 'Grupo' : 'Individual'}

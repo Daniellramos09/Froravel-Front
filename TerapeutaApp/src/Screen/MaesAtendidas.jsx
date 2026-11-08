@@ -50,22 +50,22 @@ export default function MaesAtendidas() {
     <div className="w-full">
       {/* Cabeçalho */}
       <header>
-        <p className="text-xs font-bold tracking-[0.2em] text-[#7a4a4e] uppercase">
+        <p className="text-[13.5px] md:text-[15px] text-[#4A5E4D] first-letter:uppercase">
           Escuta que acolhe
         </p>
-        <h1 className="mt-2 text-4xl font-extrabold text-[#4a2327]">Mães atendidas</h1>
-        <p className="mt-2 text-gray-500">Dados fictícios de demonstração.</p>
+        <h1 className="mt-2 font-fraunces text-[30px] md:text-[38px] leading-[1.12] tracking-[-0.015em] text-[#1F3A27]">Mães atendidas</h1>
+        <p className="mt-2 text-[15px] text-[#4A5E4D]">Dados fictícios de demonstração.</p>
       </header>
 
       {/* Busca */}
       <div className="relative mt-8">
-        <Search className="pointer-events-none absolute left-5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
+        <Search className="pointer-events-none absolute left-5 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-500" />
         <input
           type="text"
           value={busca}
           onChange={(e) => setBusca(e.target.value)}
           placeholder="Buscar por nome"
-          className="w-full rounded-full border border-[#e6d6d6] bg-transparent py-3.5 pl-12 pr-5 text-sm text-[#4a2327] placeholder-gray-500 outline-none transition focus:border-[#9b4f55] focus:ring-2 focus:ring-[#f3d5da]"
+          className="w-full rounded-full border border-[#E4DAD5] bg-transparent py-3.5 pl-12 pr-5 text-sm text-[#2B2829] placeholder-stone-400 outline-none transition focus:border-[#294D33] focus:ring-2 focus:ring-[#F4DDE5]"
         />
       </div>
 
@@ -78,18 +78,18 @@ export default function MaesAtendidas() {
             <li key={m.id}>
               <button
                 type="button"
-                className="flex w-full items-center gap-5 rounded-3xl border border-[#f0e4e4] bg-white px-6 py-5 text-left shadow-sm transition hover:border-[#e6cdd0] hover:shadow-md"
+                className="flex w-full items-center gap-5 rounded-3xl border border-[#EFE9EB] bg-white px-6 py-5 text-left shadow-sm transition hover:border-[#E8A9BB]/60 hover:shadow-md"
               >
-                <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-[#f3d5da] text-sm font-bold text-[#9b4f55]">
+                <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-[#F4DDE5] text-sm font-bold text-[#294D33]">
                   {iniciais(m.nome)}
                 </div>
 
                 <div className="min-w-0">
-                  <p className="font-bold text-[#4a2327]">{m.nome}</p>
-                  <p className="text-sm text-gray-600">
+                  <p className="font-bold text-[#2B2829]">{m.nome}</p>
+                  <p className="text-sm text-[#4A5E4D]">
                     Próximo: {formatarDia(proxima)} · {formatarHora(proxima)} · {m.grupos} grupo(s)
                   </p>
-                  <p className="mt-0.5 text-xs text-gray-500">
+                  <p className="mt-0.5 text-xs text-stone-500">
                     {m.epds
                       ? `EPDS (demonstrativa) em ${formatarDia(dataLocal(m.epds.data))}: ${m.epds.pontos} pontos — rastreio, não diagnóstico.`
                       : 'Sem EPDS registrada.'}
@@ -101,7 +101,7 @@ export default function MaesAtendidas() {
         })}
 
         {filtradas.length === 0 && (
-          <li className="rounded-3xl border border-dashed border-[#e6d6d6] p-8 text-center text-sm text-gray-500">
+          <li className="rounded-3xl border border-dashed border-[#E4DAD5] p-8 text-center text-sm text-stone-500">
             Nenhuma mãe encontrada para "{busca}".
           </li>
         )}
