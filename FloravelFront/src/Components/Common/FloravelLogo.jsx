@@ -10,7 +10,6 @@ export default function FloravelLogo({ className = "", textClassName = "", iconS
         className="h-9 sm:h-10 w-auto object-contain transition-transform duration-300 hover:scale-105 drop-shadow-2xs"
         onError={(e) => {
           e.currentTarget.onerror = null;
-          e.currentTarget.src = "/img/fotoFlores/flor5-removebg-preview.png";
         }}
       />
 

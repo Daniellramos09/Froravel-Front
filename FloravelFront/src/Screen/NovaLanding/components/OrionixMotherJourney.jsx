@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 const JOURNEY_STEPS = [
   {
     number: "01",
+    stepLabel: "Acolher",
     title: "Você também merece ser cuidada.",
     description:
       "Um espaço seguro e livre de julgamentos para soltar o peso da rotina e validar o que você sente desde o primeiro acesso.",
@@ -16,6 +17,7 @@ const JOURNEY_STEPS = [
   },
   {
     number: "02",
+    stepLabel: "Perceber",
     title: "Entender o que você sente é o primeiro passo.",
     description:
       "Reconheça suas emoções no seu próprio ritmo com o diário confidencial e a autoavaliação acolhedora.",
@@ -29,6 +31,7 @@ const JOURNEY_STEPS = [
   },
   {
     number: "03",
+    stepLabel: "Conectar",
     title: "Você não precisa passar por isso sozinha.",
     description:
       "Caminhe ao lado de outras mães em rodas semanais gratuitas e encontre psicólogas perinatais a valor social.",
@@ -42,6 +45,7 @@ const JOURNEY_STEPS = [
   },
   {
     number: "04",
+    stepLabel: "Florescer",
     title: "Florescer além da maternidade.",
     description:
       "Fortaleça sua identidade, autonomia e bem-estar contínuo para muito além do cuidar materno.",
@@ -152,48 +156,29 @@ export default function OrionixMotherJourney() {
         </h2>
       </div>
 
-      {/* MOBILE / TABLET: ARCO SUPERIOR */}
-      <div className="lg:hidden sticky top-16 z-20 bg-[#F9F8F6]/90 backdrop-blur-md border-b border-[#294D33]/8 h-20 flex items-start justify-center overflow-hidden">
-        <div
-          className="relative w-[500px] h-[500px] rounded-full border border-[#294D33]/15 shrink-0 -mt-[446px] transition-transform duration-100 ease-out"
-          style={{
-            transform: `rotate(${mobileRotationDeg}deg)`,
-          }}
-        >
+      {/* MOBILE / TABLET: SELETOR DE ETAPAS (TABS LIMPAS SEM ARCO STICKY) */}
+      <div className="lg:hidden mx-auto max-w-[1560px] px-6 pb-2">
+        <div className="flex items-center gap-2 overflow-x-auto pb-3 pt-1 no-scrollbar">
           {JOURNEY_STEPS.map((st, idx) => {
             const isAct = idx === activeStep;
-            const angle = idx * MOBILE_STEP_ANGLE_DEG;
             return (
-              <div
+              <button
                 key={st.number}
-                style={{ transform: `rotate(${angle}deg)` }}
-                className="absolute inset-y-0 left-1/2 -ml-[18px] w-[36px] pointer-events-none"
+                type="button"
+                onClick={() => scrollToStep(idx)}
+                className={`shrink-0 flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium transition-all duration-300 cursor-pointer ${
+                  isAct
+                    ? "bg-[#1F3A27] text-white shadow-xs"
+                    : "bg-white text-[#1F3A27]/80 border border-[#1F3A27]/12 hover:border-[#1F3A27]/30"
+                }`}
               >
-                <button
-                  type="button"
-                  onClick={() => scrollToStep(idx)}
-                  aria-label={`Ir para passo ${st.number}`}
-                  className="pointer-events-auto absolute bottom-[-9px] left-1/2 -translate-x-1/2 w-[18px] h-[18px] rounded-full flex items-center justify-center transition-opacity duration-500 cursor-pointer"
-                  style={{
-                    border: "1px solid rgba(217, 138, 156, 0.45)",
-                    opacity: isAct ? 1 : 0,
-                  }}
-                >
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#D98A9C] shadow-[0_0_6px_rgba(217,138,156,0.75)]" />
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => scrollToStep(idx)}
-                  className={`pointer-events-auto absolute -bottom-9 left-1/2 -translate-x-1/2 font-serif transition-colors duration-500 cursor-pointer ${
-                    isAct
-                      ? "text-lg font-medium text-[#1F3A27]"
-                      : "text-sm text-[#A4A4A4]"
+                <span
+                  className={`w-1.5 h-1.5 rounded-full transition-colors ${
+                    isAct ? "bg-[#D98A9C]" : "bg-[#1F3A27]/30"
                   }`}
-                >
-                  {st.number}
-                </button>
-              </div>
+                />
+                <span>{st.number}. {st.stepLabel}</span>
+              </button>
             );
           })}
         </div>
@@ -264,16 +249,28 @@ export default function OrionixMotherJourney() {
                   key={st.number}
                   ref={(el) => (itemRefs.current[idx] = el)}
                   onClick={() => scrollToStep(idx)}
-                  className={`w-full max-w-[460px] py-6 sm:py-10 lg:py-20 transition-all duration-500 cursor-pointer text-left ${
+                  className={`w-full max-w-[460px] py-8 sm:py-12 lg:py-20 transition-all duration-500 cursor-pointer text-left border-b border-[#294D33]/8 lg:border-b-0 last:border-b-0 ${
                     isAct
                       ? "opacity-100 blur-none"
-                      : "opacity-45 lg:opacity-40 lg:blur-[4px] hover:opacity-65"
+                      : "opacity-100 lg:opacity-40 lg:blur-[4px] hover:opacity-100 lg:hover:opacity-65"
                   }`}
                 >
-                  <div className="lg:hidden mb-4 aspect-[16/10] w-full rounded-[20px] overflow-hidden shadow-xs">
+                  {/* Badge da Etapa no Mobile */}
+                  <div className="lg:hidden flex items-center gap-2 mb-3">
+                    <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#1F3A27] text-white font-serif text-xs font-semibold">
+                      {st.number}
+                    </span>
+                    <span className="text-xs font-semibold tracking-wider uppercase text-[#6E9473]">
+                      Passo {st.number} · {st.stepLabel}
+                    </span>
+                  </div>
+
+                  {/* Foto editorial no mobile */}
+                  <div className="lg:hidden mb-4 aspect-[16/10] w-full rounded-2xl overflow-hidden shadow-xs border border-[#294D33]/8 bg-[#F4DDE5]/20">
                     <img
                       src={st.image}
                       alt={st.title}
+                      loading="lazy"
                       className="w-full h-full object-cover object-center"
                       onError={(e) => {
                         e.currentTarget.onerror = null;
@@ -283,20 +280,20 @@ export default function OrionixMotherJourney() {
                   </div>
 
                   <div className="space-y-3 lg:space-y-4">
-                    <h3 className="font-serif text-[24px] sm:text-[30px] lg:text-[42px] font-normal text-[#1F3A27] leading-[1.12] tracking-[-0.02em]">
+                    <h3 className="font-serif text-[24px] sm:text-[30px] lg:text-[42px] font-normal text-[#1F3A27] leading-[1.14] tracking-[-0.02em]">
                       {st.title}
                     </h3>
 
-                    <p className="text-[15px] sm:text-base lg:text-[17px] text-[#3A443E] leading-[1.6] font-sans">
+                    <p className="text-[15px] sm:text-base lg:text-[17px] text-[#3A443E] leading-[1.6] font-sans font-normal">
                       {st.description}
                     </p>
                   </div>
 
-                  <div className="hidden sm:flex flex-wrap gap-2 mt-5 lg:mt-7">
+                  <div className="flex flex-wrap gap-2 mt-4 lg:mt-7">
                     {st.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="px-3.5 py-2 rounded-full bg-white text-xs font-medium text-[#1F3A27] shadow-[0_0_0_1px_rgba(0,0,0,0.04),0_1px_2px_0_rgba(0,0,0,0.08),0_4px_6px_0_rgba(0,0,0,0.04),0_24px_40px_-16px_rgba(0,0,0,0.08)]"
+                        className="px-3 py-1.5 rounded-full bg-white text-xs font-medium text-[#1F3A27] border border-[#294D33]/8 shadow-[0_0_0_1px_rgba(0,0,0,0.02),0_1px_2px_0_rgba(0,0,0,0.06)]"
                       >
                         {tag}
                       </span>

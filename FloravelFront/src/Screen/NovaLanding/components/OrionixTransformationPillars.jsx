@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Sparkles } from "lucide-react";
 import { APP_LINKS } from "../../../utils/appLinks";
 
 const TRANSFORMATION_STEPS = [
@@ -196,13 +196,8 @@ export default function OrionixTransformationPillars({ onOpenTriagem }) {
               </h2>
             </div>
 
-            <div className="flex items-center gap-3 bg-white px-4 py-2.5 rounded-full border border-[#294D33]/10 shadow-2xs">
-              <img
-                src="/img/fotoFlores/flor5-removebg-preview.png"
-                alt=""
-                aria-hidden="true"
-                className="w-6 h-6 object-contain"
-              />
+            <div className="flex items-center gap-2.5 bg-white px-4 py-2.5 rounded-full border border-[#294D33]/10 shadow-2xs">
+              <Sparkles className="w-4 h-4 text-[#D98A9C]" />
               <span className="text-xs font-medium text-[#294D33]">
                 Programa de Flores Solidárias integrado ao seu autocuidado
               </span>

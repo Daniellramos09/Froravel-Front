@@ -26,15 +26,6 @@ export default function PartnershipSection() {
           (Alternância de blocos contrastantes da Referência 3)
       ======================================================== */}
       <div className="mx-4 md:mx-12 rounded-[3rem] bg-[#294D33] text-[#FCF7F9] py-16 px-6 sm:px-12 lg:px-16 shadow-2xl relative overflow-hidden">
-        
-        {/* Flor livre sem moldura da pasta fotoFlores */}
-        <img
-          src="/img/fotoFlores/flor1-removebg-preview.png"
-          alt=""
-          aria-hidden="true"
-          className="flor-sway-c pointer-events-none absolute -bottom-10 -right-10 w-44 sm:w-60 opacity-30 select-none drop-shadow-md -rotate-45"
-        />
-        
         {/* Luz ambiente interna suave */}
         <div 
           aria-hidden="true" 

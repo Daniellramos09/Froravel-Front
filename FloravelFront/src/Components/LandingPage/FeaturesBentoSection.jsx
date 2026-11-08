@@ -8,23 +8,6 @@ export default function FeaturesBentoSection() {
       /* Fundo com rosa mais presente e marcante (#F3C2D0) para Color Blocking de alto impacto */
       className="py-24 sm:py-32 bg-[#F3C2D0] relative overflow-hidden border-t border-[#E8A9BB]/40 shadow-inner"
     >
-      {/* ========================================================
-          FOTOS DE FLORES LIVRES (SEM MOLDURAS, SOLTAS NAS BORDAS)
-      ======================================================== */}
-      <img
-        src="/img/fotoFlores/flor2-removebg-preview.png"
-        alt=""
-        aria-hidden="true"
-        className="flor-sway-c pointer-events-none absolute top-400 -right-0 sm:-right-40 w-48 sm:w-64 lg:w-80 opacity-85 select-none drop-shadow-sm -rotate-10 z-0"
-      />
-
-      <img
-        src="/img/fotoFlores/flor3-removebg-preview.png"
-        alt=""
-        aria-hidden="true"
-        className="flor-sway pointer-events-none absolute bottom-0 -left-2 w-44 sm:w-60 opacity-80 select-none drop-shadow-xs -rotate-12 z-0"
-      />
-
       {/* Luz ambiente suave para profundidade */}
       <div 
         aria-hidden="true" 

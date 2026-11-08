@@ -76,23 +76,6 @@ export default function CorporateSection() {
       id="corporate" 
       className="pt-24 sm:pt-32 pb-12 sm:pb-16 bg-[#FCF7F9] relative overflow-hidden border-t border-[#E8A9BB]/30"
     >
-      {/* ========================================================
-          FOTOS DE FLORES LIVRES (SEM MOLDURA, SOLTAS NOS CANTOS)
-      ======================================================== */}
-      <img
-        src="/img/fotoFlores/flor6-removebg-preview.png"
-        alt=""
-        aria-hidden="true"
-        className="flor-sway pointer-events-none absolute top-25 right-10 w-44 sm:w-60 opacity-75 select-none drop-shadow-sm -rotate-70 z-0 -scale-x-125 scale-125"
-      />
-
-      <img
-        src="/img/fotoFlores/florong-removebg-preview.png"
-        alt=""
-        aria-hidden="true"
-        className="flor-sway-b pointer-events-none absolute -bottom-10 -right-7 w-44 sm:w-64 opacity-70 select-none drop-shadow-xs rotate-12 z-0 scale-90"
-      />
-
       {/* Luz ambiente de fundo */}
       <div 
         aria-hidden="true" 
