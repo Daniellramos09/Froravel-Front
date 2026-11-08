@@ -13,6 +13,7 @@ const TITULOS = {
   '/agenda': 'Agenda e sessões',
   '/maes': 'Mães atendidas',
   '/sala': 'Sala de acolhimento',
+  '/comunidade': 'Comunidade',
 };
 
 const NOTIFICACOES = [
