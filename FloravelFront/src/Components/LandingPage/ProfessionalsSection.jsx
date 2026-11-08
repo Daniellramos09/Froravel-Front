@@ -62,23 +62,6 @@ export default function ProfessionalsSection() {
       id="psicologos" 
       className="relative py-24 sm:py-32 bg-[#EBF1ED] overflow-hidden border-t border-[#516B55]/20"
     >
-      {/* ========================================================
-          FOTOS DE FLORES LIVRES (SEM MOLDURA, SOLTAS NA SEÇÃO VERDE SÁLVIA)
-      ======================================================== */}
-      <img
-        src="/img/fotoFlores/flor4-removebg-preview.png"
-        alt=""
-        aria-hidden="true"
-        className="flor-sway-b pointer-events-none absolute -top-12 -right-8 sm:-right-4 w-44 sm:w-60 lg:w-72 opacity-85 select-none drop-shadow-sm rotate-12 z-0"
-      />
-
-      <img
-        src="/img/fotoFlores/flor5-removebg-preview.png"
-        alt=""
-        aria-hidden="true"
-        className="flor-sway-c pointer-events-none absolute -bottom-5 -left-5 w-44 sm:w-60 opacity-60 select-none drop-shadow-xs -rotate-12 z-0 scale-70"
-      />
-
       {/* Luz ambiente de transição */}
       <div 
         aria-hidden="true" 
