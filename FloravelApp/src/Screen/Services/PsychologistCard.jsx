@@ -1,15 +1,16 @@
 // src/Screen/Services/PsychologistCard.jsx
 import React, { useState } from "react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Video, Award, Clock } from "lucide-react";
 
 /**
- * PsychologistCard — Listagem compacta e mobile-first da Rede de Apoio
+ * PsychologistCard — Card Padronizado com a Tipografia de Rodas de Conversa
  *
- * Prioriza:
- * 1. Fotografia real + Nome completo (Fraunces)
- * 2. Especialidade principal + Abordagem terapêutica
- * 3. Destaque claro para Atendimento Gratuito (Fundo Florável) ou Valor Social
- * 4. Modalidade e ação direta para abrir o perfil e agendar
+ * Características:
+ * - Fundo branco com cantos arredondados (rounded-3xl) e borda sutil (border-gray5)
+ * - Título em Fraunces Bold text-[22px] sm:text-[24px] de alta visibilidade e contraste
+ * - Kicker em caixa alta text-[12px] font-bold uppercase tracking-wider
+ * - Corpo em text-[15px] text-gray3 com entrelinha relaxada
+ * - Retrato da psicóloga em moldura vertical com cantos suaves
  */
 export default function PsychologistCard({ professional, onSelectAgenda }) {
   const [imgError, setImgError] = useState(false);
@@ -44,80 +45,78 @@ export default function PsychologistCard({ professional, onSelectAgenda }) {
       role="button"
       tabIndex={0}
       aria-labelledby={`prof-name-${professional.id}`}
-      className="group bg-[#F5EDE9]/75 hover:bg-[#F1E6E1] rounded-xl border border-[#E4DAD5] p-4 sm:p-5 flex items-center gap-4 sm:gap-5 transition-colors duration-200 cursor-pointer text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#294D33]"
+      className="bg-white rounded-3xl border border-gray5 p-6 sm:p-7 hover:shadow-md transition duration-300 group flex flex-col sm:flex-row items-start sm:items-center gap-5 sm:gap-6 cursor-pointer text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
     >
       {/* Retrato da Profissional */}
-      <div className="relative shrink-0">
+      <div className="relative shrink-0 w-24 h-32 sm:w-28 sm:h-36 rounded-2xl overflow-hidden bg-superficie border border-gray5 shadow-xs">
         {professional.photo && !imgError ? (
           <img
             src={professional.photo}
-            alt={`Retrato de ${professional.name}`}
+            alt={`Foto de ${professional.name}`}
             onError={() => setImgError(true)}
-            className="w-20 h-24 sm:w-24 sm:h-28 rounded-lg object-cover border border-[#E4DAD5]"
+            className="w-full h-full object-cover object-top transition duration-500 group-hover:scale-105"
           />
         ) : (
           <div
-            className="w-20 h-24 sm:w-24 sm:h-28 rounded-lg bg-[#EBD9D3] text-[#1F3A27] flex items-center justify-center border border-[#E4DAD5]"
+            className="w-full h-full flex items-center justify-center text-primary font-fraunces font-bold text-2xl"
             aria-hidden="true"
           >
-            <span
-              className="text-[20px] font-medium"
-              style={{ fontFamily: "'Fraunces', serif" }}
-            >
-              {initials}
-            </span>
+            {initials}
           </div>
         )}
       </div>
 
-      {/* Informações Essenciais */}
-      <div className="flex-1 min-w-0 flex flex-col justify-between">
+      {/* Conteúdo com Hierarquia Tipográfica Padronizada */}
+      <div className="flex-1 min-w-0 flex flex-col justify-between w-full">
         <div>
-          <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
-            <span className="text-[12px] font-medium text-[#516B55]">
+          {/* Kicker idêntico a Rodas de Conversa */}
+          <div className="flex items-center justify-between gap-2 mb-2">
+            <span className="text-[12px] font-bold uppercase tracking-wider text-secondary">
               {professional.spec}
             </span>
-            <span className="text-[11px] text-[#6B6365] tabular-nums">
+            <span className="text-[12px] text-gray4 font-mono font-medium">
               {professional.crp || "CRP 06/142980"}
             </span>
           </div>
 
+          {/* Nome da Profissional: Fraunces Bold 22px-24px (igual a Rodas de Conversa) */}
           <h3
             id={`prof-name-${professional.id}`}
-            className="text-[19px] sm:text-[21px] font-normal text-[#1F3A27] leading-[1.2] tracking-[-0.015em] group-hover:text-[#294D33] transition-colors"
-            style={{ fontFamily: "'Fraunces', serif" }}
+            className="text-[22px] sm:text-[24px] font-fraunces font-bold text-gray1 mb-2 leading-tight group-hover:text-primary transition-colors"
           >
             {professional.name}
           </h3>
 
+          {/* Abordagem e descrição */}
           {professional.approach && (
-            <p className="text-[13px] text-[#6B6365] mt-1 truncate">
-              Abordagem: {professional.approach}
+            <p className="text-[14px] sm:text-[15px] text-gray3 leading-relaxed mb-3">
+              <strong className="text-gray2 font-semibold">Abordagem:</strong> {professional.approach}
+              {professional.modality && ` · ${professional.modality}`}
             </p>
           )}
         </div>
 
-        {/* Rodapé compacto: Valor / Gratuito + Ação */}
-        <div className="mt-3.5 pt-3 border-t border-[#E4DAD5]/80 flex flex-wrap items-center justify-between gap-2">
-          <div className="flex flex-wrap items-center gap-2">
+        {/* Rodapé com Destaque para Valor Social / Gratuito e CTA */}
+        <div className="mt-2 pt-3 border-t border-gray5 flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
             {isSocialPrice ? (
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-md bg-[#E3EDE5] text-[#1F3A27] text-[12px] font-medium">
+              <span className="inline-flex items-center px-3 py-1 rounded-full bg-superficie text-primary font-bold text-[12px] border border-secondary/20 shadow-2xs">
                 Gratuito · Fundo Florável
               </span>
             ) : (
-              <span className="text-[13px] font-medium text-[#1F3A27] tabular-nums">
+              <span className="text-[15px] font-bold font-fraunces text-gray1">
                 {professional.priceFormatted || `R$ ${professional.price},00`}
-                <span className="text-[12px] font-normal text-[#6B6365]">
+                <span className="text-[12px] font-normal text-gray3 font-dmsans">
                   {" "}
-                  / sessão · Valor social
+                  / sessão social
                 </span>
               </span>
             )}
           </div>
 
-          <span className="inline-flex items-center gap-1 text-[13px] font-medium text-[#294D33] group-hover:translate-x-0.5 transition-transform">
-            <span>Ver perfil</span>
-            <ArrowRight size={14} aria-hidden="true" />
+          <span className="inline-flex items-center gap-1.5 text-[14px] font-bold text-primary group-hover:text-apoio group-hover:translate-x-1 transition-all">
+            <span>Ver perfil e horários</span>
+            <ArrowRight size={16} aria-hidden="true" />
           </span>
         </div>
       </div>

@@ -17,8 +17,16 @@ export default function PerfilScreen() {
         
         {/* Secção da Foto de Perfil */}
         <div className="flex flex-col md:flex-row items-center md:items-start gap-6 mb-10 pb-10 border-b border-gray5 text-center md:text-left">
-          <div className="w-28 h-28 rounded-full bg-superficie text-primary flex items-center justify-center font-fraunces font-bold text-[40px] shadow-sm">
-            MS
+          <div className="relative w-28 h-28 rounded-full overflow-hidden shadow-md border-2 border-primary/20 shrink-0 bg-[#F4DDE5]">
+            <img
+              src="/img/fotomae/fotomae.jpg"
+              alt="Mariana Silva"
+              className="w-full h-full object-cover object-top"
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = "/img/fotomae/fotomae1.jpg";
+              }}
+            />
           </div>
           <div className="mt-2">
             <h2 className="text-[28px] font-fraunces font-bold text-gray1">Mariana Silva</h2>

@@ -87,17 +87,21 @@ button:active {
 }
 
 /* 4. REGRAS GLOBAIS DE ACESSIBILIDADE */
+html {
+  transition: font-size 0.25s ease-out;
+}
+
 .font-scale-normal {
   font-size: 16px;
 }
 .font-scale-large {
-  font-size: 18px;
+  font-size: 18.5px;
 }
 .font-scale-extra {
-  font-size: 20px;
+  font-size: 21px;
 }
 .font-scale-huge {
-  font-size: 22px;
+  font-size: 23.5px;
 }
 
 .spacing-expanded * {

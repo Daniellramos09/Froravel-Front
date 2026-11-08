@@ -16,18 +16,18 @@ const focusRing =
 
 function Module({ title, shortTitle, detail, img, bg, ink, sub, onClick, label }) {
   return (
-    <li>
+    <li className="h-full flex flex-col">
       <button
         type="button"
         onClick={onClick}
         aria-label={label}
         style={{ backgroundColor: bg }}
-        className={`group relative flex flex-col justify-between w-full h-[142px] @2xl:h-[365px] rounded-xl @2xl:rounded-lg overflow-hidden text-left cursor-pointer ${focusRing}`}
+        className={`group relative flex flex-col justify-between w-full h-full min-h-[142px] @2xl:min-h-[375px] @3xl:min-h-[390px] rounded-xl @2xl:rounded-2xl overflow-hidden text-left cursor-pointer transition-all duration-300 hover:shadow-md ${focusRing}`}
       >
-        <span className="relative z-10 flex flex-col justify-start p-3 @2xl:p-5 @2xl:pb-2">
+        <span className="relative z-10 flex flex-col justify-start p-3 @2xl:p-4 @3xl:p-5 @2xl:pb-1">
           <span className="flex items-start justify-between gap-1 @2xl:gap-2">
             <span
-              className="font-fraunces text-[15px] @2xl:text-[21px] @5xl:text-[23px] leading-[1.12] tracking-[-0.015em]"
+              className="font-fraunces text-[15px] @2xl:text-[18px] @3xl:text-[20px] @5xl:text-[22px] leading-[1.15] tracking-[-0.015em]"
               style={{ color: ink }}
             >
               <span className="@2xl:hidden">{shortTitle || title}</span>
@@ -42,18 +42,18 @@ function Module({ title, shortTitle, detail, img, bg, ink, sub, onClick, label }
             />
           </span>
           <span
-            className="hidden @2xl:block mt-1.5 text-[13.5px] leading-[1.35] max-w-[26ch]"
+            className="hidden @2xl:block mt-1.5 text-[12.5px] @3xl:text-[13px] leading-[1.3] max-w-[28ch]"
             style={{ color: sub }}
           >
             {detail}
           </span>
         </span>
 
-        <span className="relative flex items-end justify-center w-full h-[88px] @2xl:h-[225px] shrink-0 mt-auto pt-1 px-1.5 overflow-hidden">
+        <span className="relative flex-1 min-h-[85px] @2xl:min-h-[155px] max-h-[225px] w-full flex items-end justify-center px-1.5 pb-2 overflow-hidden mt-auto">
           <img
             src={img}
             alt=""
-            className="w-full max-h-full object-contain object-bottom transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+            className="max-h-full max-w-full w-auto object-contain object-bottom transition-transform duration-500 ease-out group-hover:scale-[1.03]"
           />
         </span>
       </button>
@@ -138,7 +138,7 @@ export default function HomeHero({
 
       {/* Módulos ilustrados: 3 colunas compactas lado a lado no mobile, cards altos no desktop */}
       <ul
-        className="grid grid-cols-3 @2xl:grid-cols-[1.08fr_1fr_0.94fr] gap-2.5 @2xl:gap-3.5"
+        className="grid grid-cols-3 gap-2.5 @2xl:gap-3.5 items-stretch"
         aria-label="Para onde ir"
       >
         <Module

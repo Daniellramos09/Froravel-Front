@@ -24,6 +24,7 @@ import {
   useAccessibility,
 } from './Components/Accessibility/AccessibilityContext';
 import AccessibilityQuickBar from './Components/Accessibility/AccessibilityQuickBar';
+import LiveCaptionBar from './Components/Accessibility/LiveCaptionBar';
 import FlowerCounterBadge from './Components/Gamification/FlowerCounterBadge';
 import InviteModal from './Screen/Dashboard/components/InviteModal';
 
@@ -301,8 +302,16 @@ function AppContent() {
           className="flex items-center gap-3 p-1.5 -ml-1 rounded-2xl hover:bg-[#F4DDE5]/40 transition-all duration-200 cursor-pointer group flex-1 mr-2" 
           onClick={() => handleTabChange('perfil')}
         >
-          <div className="w-11 h-11 rounded-full bg-[#F4DDE5] text-[#294D33] flex items-center justify-center font-bold text-[15px] border border-[#E8A9BB]/40 shadow-2xs">
-            MS
+          <div className="relative w-11 h-11 rounded-full overflow-hidden border-2 border-[#E8A9BB]/40 shadow-2xs shrink-0 bg-[#F4DDE5]">
+            <img
+              src="/img/fotomae/fotomae.jpg"
+              alt="Mariana Silva"
+              className="w-full h-full object-cover object-top"
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = "/img/fotomae/fotomae1.jpg";
+              }}
+            />
           </div>
           <div className="min-w-0">
             <p className="text-[15px] font-bold text-[#2B2829] group-hover:text-[#294D33] transition leading-tight truncate">
@@ -433,13 +442,21 @@ function AppContent() {
               )}
             </div>
 
-            {/* AVATAR */}
+            {/* AVATAR COM FOTO DA PERSONA */}
             <div 
-              className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#F4DDE5] text-[#294D33] flex items-center justify-center font-bold text-[13px] sm:text-[14px] cursor-pointer hover:ring-2 hover:ring-[#294D33]/30 transition-all" 
+              className="w-9 h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden border border-[#E8A9BB]/50 shadow-2xs cursor-pointer hover:ring-2 hover:ring-[#294D33]/30 transition-all shrink-0 bg-[#F4DDE5]" 
               onClick={() => handleTabChange('perfil')}
-              title="Meu Perfil"
+              title="Meu Perfil · Mariana Silva"
             >
-              MS
+              <img
+                src="/img/fotomae/fotomae.jpg"
+                alt="Mariana Silva"
+                className="w-full h-full object-cover object-top"
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = "/img/fotomae/fotomae1.jpg";
+                }}
+              />
             </div>
           </div>
         </header>
@@ -453,6 +470,7 @@ function AppContent() {
               agendamentos={agendamentosGlobais}
               flowersCount={flowersCount}
               setFlowersCount={setFlowersCount}
+              onOpenInvite={() => setIsInviteModalOpen(true)}
             />
           )}
           {activeTab === 'quiz' && <CheckInScreen setActiveTab={handleTabChange} />}
@@ -518,7 +536,12 @@ function AppContent() {
           isOpen={isInviteModalOpen}
           onClose={() => setIsInviteModalOpen(false)}
           userName="Mariana"
+          flowersCount={flowersCount}
+          onInviteSuccess={(bonus) => setFlowersCount((prev) => prev + bonus)}
         />
+
+        {/* BARRA DE LEGENDA E NARRAÇÃO EM TEMPO REAL */}
+        <LiveCaptionBar />
 
       </main>
     </div>

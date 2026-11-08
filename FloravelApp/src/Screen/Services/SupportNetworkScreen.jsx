@@ -10,6 +10,7 @@ import {
   Loader2,
   SearchX,
   GraduationCap,
+  HeartHandshake,
 } from "lucide-react";
 
 import FilterToolbar from "./FilterToolbar";
@@ -568,19 +569,16 @@ export default function SupportNetworkScreen({
   // =========================================================
   return (
     <div className="animate-fadeIn font-dmsans max-w-[1080px] mx-auto pb-16 antialiased text-[#2B2829]">
-      {/* Cabeçalho direto e humano (sem pílulas ou badges decorativos) */}
-      <header className="mb-7">
-        <p className="text-[13px] text-[#6B6365] mb-1.5">
-          Escuta psicológica especializada no puerpério
+      {/* Cabeçalho Padronizado com a Tipografia de Rodas de Conversa */}
+      <header className="mb-10">
+        <p className="text-apoio text-[14px] font-bold uppercase tracking-wider mb-2 flex items-center gap-2">
+          <HeartHandshake size={16} /> ESCUTA ÉTICA E ESPECIALIZADA
         </p>
-        <h1
-          className="text-[28px] sm:text-[36px] font-normal text-[#1F3A27] tracking-[-0.02em] leading-[1.15] mb-2"
-          style={{ fontFamily: "'Fraunces', serif" }}
-        >
+        <h1 className="text-[32px] md:text-[40px] font-fraunces font-bold text-primary mb-2">
           Rede de apoio profissional
         </h1>
-        <p className="text-[#6B6365] text-[14px] sm:text-[15px] max-w-[58ch] leading-relaxed">
-          Psicólogas certificadas com atendimento gratuito pelo Fundo Florável ou valores sociais acessíveis. Toque em uma profissional para conhecer sua abordagem e ver os horários.
+        <p className="text-gray2 text-[18px]">
+          Psicólogas certificadas com atendimento gratuito pelo Fundo Florável ou valores sociais acessíveis. Toque em uma profissional para ver sua abordagem e agendar.
         </p>
       </header>
 

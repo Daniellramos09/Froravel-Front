@@ -19,12 +19,16 @@ export default function DashboardScreen({
   agendamentos = [],
   flowersCount: externalFlowersCount,
   setFlowersCount: externalSetFlowersCount,
+  onOpenInvite: externalOnOpenInvite,
 }) {
   // Estados para abertura dos modais
   const [isDiaryModalOpen, setIsDiaryModalOpen] = useState(false);
   const [isCapsuleModalOpen, setIsCapsuleModalOpen] = useState(false);
-  const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
+  const [internalInviteOpen, setInternalInviteOpen] = useState(false);
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
+
+  const handleOpenInvite = externalOnOpenInvite || (() => setInternalInviteOpen(true));
+  const isInviteModalOpen = externalOnOpenInvite ? false : internalInviteOpen;
 
   // Estados de flores solidárias, humor e acionamento da pausa guiada
   const [internalFlowersCount, setInternalFlowersCount] = useState(12);
@@ -70,7 +74,7 @@ export default function DashboardScreen({
         targetFlowers={15}
         onStartPause={handleTriggerPause}
         onOpenDiary={() => setIsDiaryModalOpen(true)}
-        onOpenInvite={() => setIsInviteModalOpen(true)}
+        onOpenInvite={handleOpenInvite}
         onGoNetwork={() => navigate('network')}
         onGoGroups={() => navigate('groups')}
         onGoLibrary={() => navigate('library')}
@@ -130,6 +134,7 @@ export default function DashboardScreen({
         onClose={() => setIsInviteModalOpen(false)}
         userName={userName}
         flowersCount={flowersCount}
+        onInviteSuccess={(bonus) => setFlowersCount((prev) => prev + bonus)}
       />
 
       <HistoryModal
