@@ -1,187 +1,113 @@
 -- ==============================================================================
 -- MÓDULO FLORÁVEL CORPORATE (PAINEL DE RECURSOS HUMANOS / B2B)
--- Compatível com MySQL 8.0+
--- Regra de Boas Práticas: Sem ENUMs no banco (validação gerenciada no backend)
--- Mantém 100% intactas as tabelas existentes (usuarios, maes, psicologos, etc.)
+-- Integração 100% compatível com o dump oficial: `floraveldb` (MySQL 8.0+)
+--
+-- Padrões respeitados do seu dump:
+-- 1. UUID nativo: `char(36) NOT NULL DEFAULT (uuid())`
+-- 2. Collation: `utf8mb4_0900_ai_ci` e `ENGINE=InnoDB`
+-- 3. Sem ENUM no banco (validações no backend)
+-- 4. Sem duplicidade de dados (utiliza `usuarios` para login dos gestores)
+-- 5. Nenhuma das 9 tabelas existentes do dump é alterada ou quebrada.
 -- ==============================================================================
 
 -- ------------------------------------------------------------------------------
 -- 1. TABELA DE EMPRESAS CLIENTES (B2B)
--- Armazena os dados cadastrais e fiscais da pessoa jurídica contratante
+-- Armazena os dados essenciais da pessoa jurídica contratante
 -- ------------------------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS empresas (
-    id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
-    razao_social VARCHAR(200) NOT NULL,
-    nome_fantasia VARCHAR(150) NOT NULL,
-    cnpj VARCHAR(18) UNIQUE NOT NULL,            -- Formato: 00.000.000/0000-00
-    email_corporativo VARCHAR(150) NOT NULL,     -- E-mail institucional de RH / Benefícios
-    telefone VARCHAR(30),
-    endereco VARCHAR(255),
-    cidade VARCHAR(100),
-    estado VARCHAR(50),
-    setor_atuacao VARCHAR(100),                  -- Ex: "Tecnologia", "Financeiro", "Saúde"
-    status VARCHAR(50) DEFAULT 'ATIVA',          -- 'ATIVA', 'SUSPENSA', 'CANCELADA'
-    data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    data_atualizacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    
-    INDEX idx_empresas_cnpj (cnpj),
-    INDEX idx_empresas_status (status)
-) ENGINE=InnoDB;
+DROP TABLE IF EXISTS `empresas`;
+CREATE TABLE `empresas` (
+  `id` char(36) NOT NULL DEFAULT (uuid()),
+  `nome` varchar(150) NOT NULL,
+  `cnpj` varchar(18) NOT NULL,
+  `status` varchar(30) DEFAULT 'ATIVA',
+  `data_cadastro` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `cnpj` (`cnpj`),
+  KEY `idx_empresas_status` (`status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ------------------------------------------------------------------------------
--- 2. TABELA DE GESTORES DE RH (QUEM TEM ACESSO AO PAINEL CORPORATE)
--- Profissionais da empresa com login e permissões no painel
--- Vincula-se à tabela 'usuarios' já existente
+-- 2. GESTORES DE RH (QUEM TEM ACESSO AO PAINEL CORPORATE)
+-- Vincula-se diretamente à tabela `usuarios` já existente no seu dump
+-- O tipo_perfil no `usuarios` para eles será 'GESTOR_RH'
 -- ------------------------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS gestores_rh (
-    id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
-    empresa_id CHAR(36) NOT NULL,
-    usuario_id CHAR(36) NOT NULL UNIQUE,         -- ID na tabela usuarios
-    cargo VARCHAR(100),                          -- Ex: "Gerente de D&I", "BP de RH"
-    nivel_permissao VARCHAR(50) DEFAULT 'ANALISTA_RH', -- 'ADMIN_MASTER', 'ANALISTA_RH', 'AUDITOR_D_I'
-    status VARCHAR(50) DEFAULT 'ATIVO',          -- 'ATIVO', 'INATIVO'
-    data_vinculo TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    
-    CONSTRAINT fk_gestor_empresa FOREIGN KEY (empresa_id) 
-        REFERENCES empresas(id) ON DELETE CASCADE,
-    CONSTRAINT fk_gestor_usuario FOREIGN KEY (usuario_id) 
-        REFERENCES usuarios(id) ON DELETE CASCADE,
-    INDEX idx_gestores_empresa (empresa_id)
-) ENGINE=InnoDB;
+DROP TABLE IF EXISTS `gestores_rh`;
+CREATE TABLE `gestores_rh` (
+  `id` char(36) NOT NULL DEFAULT (uuid()),
+  `empresa_id` char(36) NOT NULL,
+  `usuario_id` char(36) NOT NULL,
+  `cargo` varchar(100) DEFAULT NULL,
+  `nivel_permissao` varchar(50) DEFAULT 'ANALISTA_RH',
+  `data_vinculo` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `usuario_id` (`usuario_id`),
+  KEY `fk_gestor_empresa` (`empresa_id`),
+  CONSTRAINT `fk_gestor_empresa` FOREIGN KEY (`empresa_id`) REFERENCES `empresas` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_gestor_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ------------------------------------------------------------------------------
--- 3. PLANOS CORPORATIVOS
--- Catálogo de planos de assinatura empresarial oferecidos pela Florável
+-- 3. LICENÇAS E CONVITES DE COLABORADORAS
+-- Gerenciadas pelo RH na tela de Licenças (LicensesScreen)
+-- BLINDAGEM LGPD: O RH enxerga apenas nome, e-mail, departamento e status.
+-- NENHUM dado de consulta, triagem ou saúde mental fica exposto ao RH.
+-- O campo `mae_id` conecta de forma transparente à tabela `maes` quando ela ativa.
 -- ------------------------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS planos_corporativos (
-    id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
-    nome VARCHAR(100) NOT NULL,                  -- Ex: "Starter 20", "Mid-Market 50", "Enterprise 100+"
-    quantidade_licencas INT NOT NULL,            -- Limite de licenças incluídas
-    valor_mensal DECIMAL(10, 2) NOT NULL,        -- Valor fixo mensal do plano
-    descricao TEXT,
-    status VARCHAR(50) DEFAULT 'ATIVO',          -- 'ATIVO', 'DESCONTINUADO'
-    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB;
+DROP TABLE IF EXISTS `licencas_colaboradoras`;
+CREATE TABLE `licencas_colaboradoras` (
+  `id` char(36) NOT NULL DEFAULT (uuid()),
+  `empresa_id` char(36) NOT NULL,
+  `nome_colaboradora` varchar(150) NOT NULL,
+  `email_corporativo` varchar(150) NOT NULL,
+  `departamento` varchar(100) NOT NULL,
+  `status` varchar(30) DEFAULT 'PENDENTE',
+  `token_convite` varchar(100) DEFAULT NULL,
+  `data_convite` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `data_ativacao` timestamp NULL DEFAULT NULL,
+  `mae_id` char(36) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_empresa_email` (`empresa_id`, `email_corporativo`),
+  UNIQUE KEY `token_convite` (`token_convite`),
+  KEY `fk_licenca_mae` (`mae_id`),
+  KEY `idx_licenca_busca` (`empresa_id`, `status`),
+  CONSTRAINT `fk_licenca_empresa` FOREIGN KEY (`empresa_id`) REFERENCES `empresas` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_licenca_mae` FOREIGN KEY (`mae_id`) REFERENCES `maes` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ------------------------------------------------------------------------------
--- 4. ASSINATURAS DA EMPRESA (CONTRATO E PAGAMENTO REVOLVENTE)
--- Registra o plano contratado, quantidade de licenças e dados seguros de pagamento
+-- 4. HISTÓRICO DE FATURAMENTO DA EMPRESA (TELA BILLING)
+-- Controla mensalidades, faturas e comprovantes de pagamento do plano B2B
 -- ------------------------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS assinaturas_empresa (
-    id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
-    empresa_id CHAR(36) NOT NULL UNIQUE,
-    plano_id CHAR(36) NOT NULL,
-    quantidade_licencas_contratadas INT NOT NULL DEFAULT 50,
-    valor_mensal_recorrente DECIMAL(10, 2) NOT NULL,
-    data_inicio DATE NOT NULL,
-    data_proxima_renovacao DATE NOT NULL,
-    status VARCHAR(50) DEFAULT 'ATIVA',          -- 'ATIVA', 'INADIMPLENTE', 'CANCELADA'
-    
-    -- Dados seguros do cartão (apenas os 4 últimos dígitos para exibição visual)
-    cartao_ultimos_digitos VARCHAR(4) DEFAULT '4092',
-    cartao_bandeira VARCHAR(30) DEFAULT 'MASTERCARD',
-    cartao_titular VARCHAR(150),
-    cartao_validade VARCHAR(10),                 -- Ex: "09/2029"
-    gateway_subscription_id VARCHAR(100),        -- Identificador da assinatura no Gateway (Stripe/Asaas)
-    data_atualizacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    
-    CONSTRAINT fk_assinatura_empresa FOREIGN KEY (empresa_id) 
-        REFERENCES empresas(id) ON DELETE CASCADE,
-    CONSTRAINT fk_assinatura_plano FOREIGN KEY (plano_id) 
-        REFERENCES planos_corporativos(id)
-) ENGINE=InnoDB;
+DROP TABLE IF EXISTS `faturas_empresa`;
+CREATE TABLE `faturas_empresa` (
+  `id` char(36) NOT NULL DEFAULT (uuid()),
+  `empresa_id` char(36) NOT NULL,
+  `mes_referencia` varchar(30) NOT NULL,
+  `valor` decimal(10,2) NOT NULL,
+  `status` varchar(30) DEFAULT 'PENDENTE',
+  `data_vencimento` date NOT NULL,
+  `data_pagamento` date DEFAULT NULL,
+  `numero_nfe` varchar(50) DEFAULT NULL,
+  `url_pdf_nfe` varchar(500) DEFAULT NULL,
+  `data_criacao` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `fk_fatura_empresa` (`empresa_id`),
+  KEY `idx_faturas_status` (`empresa_id`, `status`),
+  CONSTRAINT `fk_fatura_empresa` FOREIGN KEY (`empresa_id`) REFERENCES `empresas` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ------------------------------------------------------------------------------
--- 5. HISTÓRICO DE FATURAS E NOTAS FISCAIS (BILLING CORPORATIVO)
--- Registra as cobranças mensais, comprovantes e status de pagamento
+-- 5. PREFERÊNCIAS E CONFIGURAÇÕES DA EMPRESA (TELA CONFIGURAÇÕES)
 -- ------------------------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS faturas_empresa (
-    id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
-    empresa_id CHAR(36) NOT NULL,
-    mes_referencia VARCHAR(30) NOT NULL,         -- Ex: "Outubro / 2026"
-    valor DECIMAL(10, 2) NOT NULL,
-    data_vencimento DATE NOT NULL,
-    data_pagamento DATE NULL,
-    status VARCHAR(50) DEFAULT 'PENDENTE',       -- 'PAGO', 'FALHA_COBRANCA', 'PENDENTE', 'CANCELADO'
-    numero_nfe VARCHAR(50),                      -- Ex: "NF-e #89211"
-    url_pdf_nfe VARCHAR(500),
-    mensagem_erro TEXT NULL,                     -- Detalhe caso a cobrança falhe (ex: limite excedido)
-    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    
-    CONSTRAINT fk_fatura_empresa FOREIGN KEY (empresa_id) 
-        REFERENCES empresas(id) ON DELETE CASCADE,
-    INDEX idx_faturas_empresa_data (empresa_id, data_vencimento),
-    INDEX idx_faturas_status (status)
-) ENGINE=InnoDB;
-
--- ------------------------------------------------------------------------------
--- 6. GESTÃO DE LICENÇAS E CONVITES (COLABORADORAS DA EMPRESA)
--- Registra as colaboradoras convidadas pelo RH para usufruírem do benefício
--- BLINDAGEM LGPD: O RH enxerga apenas nome, e-mail, departamento e status do convite.
--- NENHUM dado de saúde, diário ou prontuário é associado nesta tabela.
--- ------------------------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS licencas_colaboradoras (
-    id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
-    empresa_id CHAR(36) NOT NULL,
-    nome_colaboradora VARCHAR(150) NOT NULL,
-    email_corporativo VARCHAR(150) NOT NULL,
-    departamento VARCHAR(100) NOT NULL,          -- Ex: "Engenharia", "Design", "Operações"
-    cargo VARCHAR(100),
-    token_convite VARCHAR(100) UNIQUE NOT NULL,  -- Token seguro enviado por e-mail para ativação
-    status VARCHAR(50) DEFAULT 'PENDENTE',       -- 'PENDENTE', 'ATIVA', 'REVOGADA', 'EXPIRADA'
-    data_convite TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    data_ativacao TIMESTAMP NULL,
-    mae_id CHAR(36) NULL,                        -- Preenchido quando a mãe conclui cadastro na tabela 'maes'
-    
-    CONSTRAINT fk_licenca_empresa FOREIGN KEY (empresa_id) 
-        REFERENCES empresas(id) ON DELETE CASCADE,
-    CONSTRAINT fk_licenca_mae FOREIGN KEY (mae_id) 
-        REFERENCES maes(id) ON DELETE SET NULL,
-    UNIQUE(empresa_id, email_corporativo),
-    INDEX idx_licencas_busca (empresa_id, status, departamento)
-) ENGINE=InnoDB;
-
--- ------------------------------------------------------------------------------
--- 7. CONFIGURAÇÕES E ALERTAS DE RH DA EMPRESA
--- Preferências salvas na tela de Configurações (SettingsScreen)
--- ------------------------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS configuracoes_empresa (
-    empresa_id CHAR(36) PRIMARY KEY,
-    email_resumo_mensal BOOLEAN DEFAULT TRUE,
-    alerta_sobrecarga_clinica BOOLEAN DEFAULT TRUE,
-    alerta_limite_licencas BOOLEAN DEFAULT TRUE,
-    limiar_alerta_licencas_percentual INT DEFAULT 90,
-    autenticacao_2fa_obrigatoria BOOLEAN DEFAULT TRUE,
-    data_atualizacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    
-    CONSTRAINT fk_config_empresa FOREIGN KEY (empresa_id) 
-        REFERENCES empresas(id) ON DELETE CASCADE
-) ENGINE=InnoDB;
-
--- ------------------------------------------------------------------------------
--- 8. MÉTRICAS AGREGADAS E ANÔNIMAS DE SAÚDE (SNAPSHOTS HISTÓRICOS PARA GRÁFICOS)
--- Armazena os dados agregados mensais exibidos no Dashboard e nos Relatórios de Saúde
--- Garante por design que o RH só consome dados consolidados (sem expor indivíduos)
--- ------------------------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS metricas_saude_mensal_empresa (
-    id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
-    empresa_id CHAR(36) NOT NULL,
-    mes_ano VARCHAR(7) NOT NULL,                 -- Formato "AAAA-MM" (ex: "2026-10")
-    departamento VARCHAR(100) DEFAULT 'GERAL',   -- 'GERAL' para toda a empresa ou nome do setor
-    total_colaboradoras_ativas INT NOT NULL,
-    media_pontuacao_edimburgo DECIMAL(4, 2),     -- Média agregada EPDS
-    percentual_baixo_risco DECIMAL(5, 2),        -- % faixa saudável
-    percentual_risco_moderado DECIMAL(5, 2),     -- % atenção moderada
-    percentual_alerta_clinico DECIMAL(5, 2),     -- % suporte prioritário
-    taxa_engajamento DECIMAL(5, 2),              -- % de colaboradoras ativas no mês
-    sessoes_realizadas INT DEFAULT 0,            -- Total de consultas psicológicas corporativas
-    indice_esgotamento DECIMAL(5, 2),            -- Pontuação calculada do gráfico temporal
-    indice_recuperacao DECIMAL(5, 2),            -- Pontuação de bem-estar calculada
-    desafio_principal VARCHAR(150),              -- Ex: "Conciliação Trabalho-Família"
-    data_consolidacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    
-    CONSTRAINT fk_metricas_empresa FOREIGN KEY (empresa_id) 
-        REFERENCES empresas(id) ON DELETE CASCADE,
-    UNIQUE(empresa_id, mes_ano, departamento),
-    INDEX idx_metricas_empresa_periodo (empresa_id, mes_ano)
-) ENGINE=InnoDB;
+DROP TABLE IF EXISTS `configuracoes_empresa`;
+CREATE TABLE `configuracoes_empresa` (
+  `empresa_id` char(36) NOT NULL,
+  `email_resumo_mensal` tinyint(1) DEFAULT '1',
+  `alerta_sobrecarga_clinica` tinyint(1) DEFAULT '1',
+  `alerta_limite_licencas` tinyint(1) DEFAULT '1',
+  `limiar_alerta_licencas_percentual` int DEFAULT '90',
+  `autenticacao_2fa_obrigatoria` tinyint(1) DEFAULT '1',
+  `data_atualizacao` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`empresa_id`),
+  CONSTRAINT `fk_config_empresa` FOREIGN KEY (`empresa_id`) REFERENCES `empresas` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

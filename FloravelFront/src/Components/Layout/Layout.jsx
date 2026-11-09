@@ -3,6 +3,7 @@ import Header from './Header';
 import Footer from './Footer';
 import SmoothScroll from '../Effects/SmoothScroll';
 import { useAccessibility } from '../Accessibility/AccessibilityContext';
+import FloatingAccessibilityButton from '../Accessibility/FloatingAccessibilityButton';
 
 export default function Layout({ children }) {
   const { getFilterStyle, fontScale, reducedMotion, readingGuide } = useAccessibility();
@@ -34,6 +35,9 @@ export default function Layout({ children }) {
           {children}
         </main>
         <Footer />
+
+        {/* Botão Flutuante Circular Grande no Canto Inferior Direito */}
+        <FloatingAccessibilityButton />
       </div>
     </SmoothScroll>
   );

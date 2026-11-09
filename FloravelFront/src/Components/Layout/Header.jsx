@@ -3,34 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu, X, Volume2, VolumeX, ChevronDown } from "lucide-react";
 import FloravelLogo from "../Common/FloravelLogo";
 import { useAccessibility } from "../Accessibility/AccessibilityContext";
-import AccessibilityModal from "../Accessibility/AccessibilityModal";
 
-// Ícone Universal de Acessibilidade / Pessoa na Cadeira de Rodas
-function WheelchairIcon({ size = 18, className = "" }) {
-  return (
-    <svg 
-      width={size} 
-      height={size} 
-      viewBox="0 0 24 24" 
-      fill="none" 
-      stroke="currentColor" 
-      strokeWidth="2.2" 
-      strokeLinecap="round" 
-      strokeLinejoin="round" 
-      className={className}
-      aria-hidden="true"
-    >
-      {/* Cabeça */}
-      <circle cx="12" cy="4" r="2" />
-      {/* Tronco e Pernas */}
-      <path d="M12 6v7a2 2 0 0 0 2 2h3" />
-      {/* Braço */}
-      <path d="M8 11.5h5" />
-      {/* Roda da Cadeira */}
-      <path d="M17 15a4.5 4.5 0 1 1-8.5-2" />
-    </svg>
-  );
-}
 
 const navLinks = [
   { label: "Espaço da Mãe", id: "inicio" },
@@ -49,7 +22,6 @@ export default function Header() {
   const [active, setActive] = useState("inicio");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [isAccessModalOpen, setIsAccessModalOpen] = useState(false);
   const [portalDropdownOpen, setPortalDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -70,6 +42,7 @@ export default function Header() {
     fontScaleText,
     increaseFontSize,
     decreaseFontSize,
+    openAccessibilityModal,
   } = useAccessibility();
 
   useEffect(() => {
@@ -158,39 +131,7 @@ export default function Header() {
           ======================================================== */}
           <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
             
-            {/* ATALHO RÁPIDO: LEITOR DE TELA / VOZ (Web Speech API) */}
-            <button
-              type="button"
-              onClick={readPageOverview}
-              className={`w-9 h-9 rounded-full border transition-all hidden md:flex items-center justify-center cursor-pointer relative shadow-2xs shrink-0 ${
-                isSpeaking 
-                  ? "bg-[#294D33] text-white border-[#294D33] animate-pulse" 
-                  : "liquid-button text-[#294D33]"
-              }`}
-              title={isSpeaking ? "Parar leitura de voz" : "Ouvir audiodescrição da página (Leitor de Tela)"}
-              aria-label={isSpeaking ? "Parar leitura de voz" : "Ouvir audiodescrição da página"}
-            >
-              {isSpeaking ? <VolumeX size={16} /> : <Volume2 size={16} />}
-              {isSpeaking && (
-                <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-rose-500 rounded-full animate-ping" />
-              )}
-            </button>
-
-            {/* BOTÃO COMPACTO DE ACESSIBILIDADE (ÍCONE DE CADEIRA DE RODAS / ACESSO UNIVERSAL) */}
-            <button
-              type="button"
-              onClick={() => setIsAccessModalOpen(true)}
-              className="liquid-button w-9 h-9 rounded-full text-[#294D33] hidden md:flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95 relative shrink-0"
-              title={`Acessibilidade: Tamanho de fonte (${fontScaleText}), daltonismo e leitor de tela`}
-              aria-label="Abrir painel de acessibilidade"
-            >
-              <WheelchairIcon size={17} className="text-[#294D33]" />
-              {fontScaleIndex !== 1 && (
-                <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-[#294D33] rounded-full border border-white" />
-              )}
-            </button>
-
-            {/* MENU DROPDOWN DE CONEXÃO DIRETA COM OS 3 PORTAIS */}
+{/* MENU DROPDOWN DE CONEXÃO DIRETA COM OS 3 PORTAIS */}
             <div className="relative" ref={dropdownRef}>
               <button
                 type="button"
@@ -366,7 +307,7 @@ export default function Header() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => setIsAccessModalOpen(true)}
+                  onClick={() => { setMobileMenuOpen(false); openAccessibilityModal(); }}
                   className="text-xs font-bold px-3 py-1 bg-[#F4DDE5] text-[#294D33] rounded-lg border border-[#E8A9BB]/40 ml-1"
                 >
                   Opções
@@ -426,11 +367,7 @@ export default function Header() {
         )}
       </header>
 
-      {/* Modal Completo de Acessibilidade */}
-      <AccessibilityModal 
-        isOpen={isAccessModalOpen} 
-        onClose={() => setIsAccessModalOpen(false)} 
-      />
+
     </>
   );
 }

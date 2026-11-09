@@ -76,6 +76,11 @@ export function AccessibilityProvider({ children }) {
   const [currentSpokenText, setCurrentSpokenText] = useState("");
   const synthRef = useRef(null);
 
+  // 5. ESTADO GLOBAL DO MODAL DE ACESSIBILIDADE
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const openAccessibilityModal = () => setIsModalOpen(true);
+  const closeAccessibilityModal = () => setIsModalOpen(false);
+
   useEffect(() => {
     if (typeof window !== "undefined" && "speechSynthesis" in window) {
       synthRef.current = window.speechSynthesis;
@@ -244,6 +249,10 @@ export function AccessibilityProvider({ children }) {
         readSelectedText,
         resetAllAccessibility,
         getFilterStyle,
+        isModalOpen,
+        setIsModalOpen,
+        openAccessibilityModal,
+        closeAccessibilityModal,
       }}
     >
       {children}
