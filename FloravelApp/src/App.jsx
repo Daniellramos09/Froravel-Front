@@ -284,7 +284,7 @@ function AppContent() {
         {/* CARD DE ACOLHIMENTO RÁPIDO */}
         <div
           className="mt-6 bg-[#F4DDE5] p-5 rounded-3xl mx-1 cursor-pointer transition-all duration-300 border border-[#E8A9BB]/30 hover:border-[#E8A9BB]/70 hover:shadow-md group"
-          onClick={() => handleTabChange('help')}
+          onClick={() => handleTabChange('network')}
         >
           <div className="w-10 h-10 rounded-2xl bg-white/80 text-[#294D33] flex items-center justify-center mb-3 shadow-2xs">
             <HeartHandshake className="text-[#294D33]" size={20} />
@@ -293,7 +293,14 @@ function AppContent() {
           <p className="text-[13px] text-stone-700 mb-3.5 leading-relaxed font-medium">
             Estamos aqui para acolher você a qualquer hora.
           </p>
-          <button className="text-[#294D33] text-[14px] font-bold flex items-center gap-1.5 group-hover:gap-2.5 transition-all cursor-pointer">
+          <button 
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleTabChange('network');
+            }}
+            className="text-[#294D33] text-[14px] font-bold flex items-center gap-1.5 group-hover:gap-2.5 transition-all cursor-pointer"
+          >
             <span>Preciso de ajuda</span>
             <ArrowRight size={15} className="transition-transform duration-300 group-hover:translate-x-1.5" />
           </button>
@@ -486,7 +493,6 @@ function AppContent() {
               showCrisisNote
             />
           )}
-          {activeTab === 'help' && <AjudaScreen />}
           {activeTab === 'perfil' && <PerfilScreen />}
           {activeTab === 'library' && <BibliotecaScreen />}
 
@@ -501,7 +507,7 @@ function AppContent() {
               cancelarAgendamento={(id) => setAgendamentosGlobais(prev => prev.filter(a => a.id !== id))}
             />
           )}
-          {activeTab === 'network' && (
+          {(activeTab === 'network' || activeTab === 'help') && (
             <RedeApoioScreen
               setActiveTab={handleTabChange}
               adicionarAgendamento={(novo) => setAgendamentosGlobais(prev => [...prev, novo])}

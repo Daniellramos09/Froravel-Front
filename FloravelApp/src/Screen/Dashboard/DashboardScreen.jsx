@@ -88,7 +88,7 @@ export default function DashboardScreen({
           onOpenDiary={() => setIsDiaryModalOpen(true)}
           onStartPause={handleTriggerPause}
           onGoNetwork={() => navigate('network')}
-          onGoHelp={() => navigate('help')}
+          onGoHelp={() => navigate('network')}
           onGoQuiz={() => navigate('quiz')}
         />
 
