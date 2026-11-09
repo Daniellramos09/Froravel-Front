@@ -16,7 +16,7 @@ import ComunidadeScreen from './Screen/Community/ComunidadeScreen';
 import FeedScreen from './Screen/Community/FeedScreen';
 import PerfilScreen from './Screen/Profile/PerfilScreen';
 import BibliotecaScreen from './Screen/Community/BibliotecaScreen';
-import AjudaScreen from './Screen/Services/AjudaScreen';
+
 import AcessibilidadeScreen from './Screen/Accessibility/AcessibilidadeScreen';
 
 // CONTEXTO E BARRA DE ACESSIBILIDADE

@@ -131,7 +131,7 @@ export default function DashboardScreen({
 
       <InviteModal
         isOpen={isInviteModalOpen}
-        onClose={() => setIsInviteModalOpen(false)}
+        onClose={() => setInternalInviteOpen(false)}
         userName={userName}
         flowersCount={flowersCount}
         onInviteSuccess={(bonus) => setFlowersCount((prev) => prev + bonus)}
