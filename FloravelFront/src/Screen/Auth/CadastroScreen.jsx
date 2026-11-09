@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { ArrowLeft, ExternalLink, ShieldCheck, Check } from 'lucide-react';
 import { APP_LINKS, navigateToApp } from '../../utils/appLinks';
 
@@ -41,13 +42,13 @@ export default function CadastroScreen() {
       <div className="w-full max-w-lg bg-white rounded-3xl shadow-sm border border-stone-200/70 p-6 sm:p-10">
         
         {/* Voltar à Landing Page */}
-        <a
-          href="/"
+        <Link
+          to="/"
           className="inline-flex items-center gap-1.5 text-xs font-bold text-[#56725a] hover:text-[#2f4a36] hover:underline mb-6 transition cursor-pointer"
         >
           <ArrowLeft size={14} />
           <span>Voltar para a página inicial</span>
-        </a>
+        </Link>
 
         {/* Título e Subtítulo */}
         <div className="text-center mb-6">
@@ -171,9 +172,9 @@ export default function CadastroScreen() {
         <div className="mt-6 pt-5 border-t border-stone-100 text-center">
           <p className="text-xs text-stone-500">
             Já possui uma conta?{' '}
-            <a href="/login" className="font-bold text-[#56725a] hover:underline">
+            <Link to="/login" className="font-bold text-[#56725a] hover:underline">
               Fazer Login
-            </a>
+            </Link>
           </p>
         </div>
 
