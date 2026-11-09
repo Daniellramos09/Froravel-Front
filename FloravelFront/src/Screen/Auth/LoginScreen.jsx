@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import { APP_LINKS, navigateToApp } from '../../utils/appLinks';
-import { ArrowLeft, ExternalLink } from 'lucide-react';
+import { ArrowLeft, ExternalLink, X, CheckCircle } from 'lucide-react';
 
 const LOGIN_IMAGE = '/login-bg.png';
 const LOGO = '/img/fotoheader/logo.png';
@@ -24,6 +24,9 @@ export default function LoginScreen() {
   const [mostrarSenha, setMostrarSenha] = useState(false);
   const [erro, setErro] = useState('');
   const [carregando, setCarregando] = useState(false);
+  const [showForgotModal, setShowForgotModal] = useState(false);
+  const [forgotSent, setForgotSent] = useState(false);
+  const [forgotEmail, setForgotEmail] = useState('');
 
   useEffect(() => {
     const handlePageShow = (e) => {
@@ -57,72 +60,78 @@ export default function LoginScreen() {
     navigateToApp(papel);
   };
 
-  const inputClass =
-    'w-full px-4 py-2.5 text-sm rounded-xl bg-[#f1f0ed] border border-[#d9d6cf] text-gray-800 ' +
-    'placeholder:text-gray-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#56725a]/60 ' +
-    'focus:border-transparent transition-all';
+  const handleForgotSubmit = (e) => {
+    e.preventDefault();
+    setForgotSent(true);
+  };
 
-  const papelLabel = papel === 'mae' ? 'Mãe' : papel === 'terapeuta' ? 'Terapeuta' : 'Gestão RH';
+  const inputClass =
+    'w-full px-3.5 py-2.5 rounded-xl border border-stone-200 bg-[#f1f0ed] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#56725a]/60 text-sm text-gray-800 transition';
+
+  const papelLabel = PAPEIS.find((p) => p.id === papel)?.label || 'Entrar';
 
   return (
-    <div className="min-h-screen w-full flex bg-[#faf8f4]">
-      <div className="w-full lg:w-1/2 min-h-screen flex items-center justify-center px-6 py-10">
-        <div className="w-full max-w-md">
-          {/* Link para voltar à Landing Page */}
-          <a
-            href="/"
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#56725a] hover:text-[#2f4a36] hover:underline mb-6 transition cursor-pointer"
+    <div className="min-h-screen flex bg-[#faf8f4] antialiased">
+      {/* Coluna Esquerda: Formulário */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center px-6 py-10 sm:px-12">
+        <div className="w-full max-w-sm">
+          {/* Voltar para Home */}
+          <Link
+            to="/"
+            className="inline-flex items-center gap-1.5 text-xs text-stone-500 hover:text-stone-800 transition mb-6 cursor-pointer"
           >
             <ArrowLeft size={14} />
             <span>Voltar para a página inicial</span>
-          </a>
+          </Link>
 
           {/* Logo e Título */}
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <img src={LOGO} alt="Florável" className="h-12 w-12 object-contain drop-shadow-sm" />
-            <h1 className="font-serif text-3xl font-bold text-[#1f2a22] tracking-tight">Entrar</h1>
+          <div className="flex flex-col items-center mb-6">
+            <Link to="/" className="mb-3 transition-transform hover:scale-105">
+              <img src={LOGO} alt="Florável" className="h-14 w-auto object-contain" />
+            </Link>
+            <h1 className="text-xl font-bold text-[#1f2a22] font-serif">Acesse seu espaço</h1>
+            <p className="text-xs text-gray-600 mt-1 text-center">
+              Acolhimento, respeito e privacidade em cada etapa.
+            </p>
           </div>
 
-          {/* Seletor de Perfis (3 Abas) */}
-          <div
-            role="tablist"
-            aria-label="Tipo de perfil de acesso"
-            className="grid grid-cols-3 p-1 mb-3 rounded-2xl bg-[#ece8df] text-xs font-semibold"
-          >
-            {PAPEIS.map(({ id, label }) => {
-              const isSelected = papel === id;
-              return (
-                <button
-                  key={id}
-                  type="button"
-                  role="tab"
-                  aria-selected={isSelected}
-                  onClick={() => {
-                    setPapel(id);
-                    setCarregando(false);
-                    setErro('');
-                  }}
-                  className={`py-2 px-1 rounded-xl transition-all duration-200 cursor-pointer text-center truncate ${
-                    isSelected
-                      ? 'bg-[#56725a] text-white shadow-xs font-bold'
-                      : 'text-gray-600 hover:text-[#1f2a22]'
-                  }`}
-                >
-                  {label}
-                </button>
-              );
-            })}
+          {/* Seletor de Perfil (Mãe / Terapeuta / RH) */}
+          <div className="mb-5">
+            <p className="text-[11px] font-bold uppercase tracking-wider text-stone-500 mb-2">
+              Escolha seu perfil:
+            </p>
+            <div className="grid grid-cols-3 gap-1.5 p-1 bg-[#edeae4] rounded-2xl">
+              {PAPEIS.map((p) => {
+                const ativo = papel === p.id;
+                return (
+                  <button
+                    key={p.id}
+                    type="button"
+                    onClick={() => {
+                      setPapel(p.id);
+                      setErro('');
+                    }}
+                    className={`py-2 px-2 text-xs font-bold rounded-xl transition-all cursor-pointer ${
+                      ativo
+                        ? 'bg-white text-[#294D33] shadow-xs'
+                        : 'text-stone-600 hover:text-stone-900'
+                    }`}
+                  >
+                    {p.label}
+                  </button>
+                );
+              })}
+            </div>
+            <p className="text-[11px] text-stone-500 mt-2 px-1">
+              {PAPEIS.find((p) => p.id === papel)?.desc}
+            </p>
           </div>
-
-          <p className="text-xs text-gray-500 text-center mb-5 min-h-[32px] flex items-center justify-center">
-            {PAPEIS.find((p) => p.id === papel)?.desc}
-          </p>
 
           {/* Formulário de Login */}
           <form onSubmit={handleSubmit} className="space-y-3.5">
             <div>
               <label htmlFor="email" className="block text-xs font-medium text-gray-700 mb-1">
-                E-mail corporativo ou pessoal
+                E-mail
               </label>
               <input
                 id="email"
@@ -160,9 +169,16 @@ export default function LoginScreen() {
                 </button>
               </div>
               <div className="text-right mt-1.5">
-                <a href="#esqueci-senha" className="text-xs font-medium text-[#1f2a22] hover:underline">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setForgotEmail(email);
+                    setShowForgotModal(true);
+                  }}
+                  className="text-xs font-medium text-[#294D33] hover:underline cursor-pointer"
+                >
                   Esqueceu a senha?
-                </a>
+                </button>
               </div>
             </div>
 
@@ -216,9 +232,9 @@ export default function LoginScreen() {
 
           <p className="text-xs text-center text-gray-600 mt-5">
             Não possui uma conta?{' '}
-            <a href="/cadastro" className="font-semibold text-[#2f4a36] hover:underline">
+            <Link to="/cadastro" className="font-semibold text-[#2f4a36] hover:underline">
               Criar Conta
-            </a>
+            </Link>
           </p>
 
           <div className="flex items-center gap-3 my-4">
@@ -249,6 +265,71 @@ export default function LoginScreen() {
         <div className="absolute inset-0 bg-gradient-to-r from-[#faf8f4]/30 via-transparent to-transparent" />
         <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/25 to-transparent" />
       </div>
+
+      {/* Modal de Recuperação de Senha */}
+      {showForgotModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#294D33]/40 backdrop-blur-xs">
+          <div className="relative w-full max-w-md bg-[#FCF7F9] rounded-[2rem] p-6 sm:p-8 shadow-2xl border border-[#E8A9BB]/60 text-left">
+            <button
+              onClick={() => { setShowForgotModal(false); setForgotSent(false); }}
+              className="absolute top-5 right-5 text-[#516B55] hover:text-[#294D33] hover:bg-[#F4DDE5] p-2 rounded-full transition cursor-pointer"
+            >
+              <X size={20} />
+            </button>
+
+            {!forgotSent ? (
+              <form onSubmit={handleForgotSubmit} className="space-y-4">
+                <span className="text-xs font-semibold uppercase tracking-wider text-[#294D33]">
+                  Recuperação de Acesso
+                </span>
+                <h3 className="font-serif text-2xl font-normal text-[#294D33]">
+                  Esqueceu sua senha?
+                </h3>
+                <p className="text-xs text-[#3A443E] leading-relaxed">
+                  Informe o seu e-mail cadastrado. Nós enviaremos um link seguro para redefinição imediata da sua senha.
+                </p>
+
+                <div>
+                  <label className="block text-xs font-semibold text-[#294D33] mb-1">Seu E-mail</label>
+                  <input
+                    required
+                    type="email"
+                    placeholder="seuemail@exemplo.com"
+                    value={forgotEmail}
+                    onChange={(e) => setForgotEmail(e.target.value)}
+                    className="w-full px-4 py-3 rounded-2xl border border-[#E8A9BB]/60 bg-white text-sm focus:border-[#294D33] focus:outline-none"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full py-3.5 rounded-full bg-[#294D33] text-white text-sm font-semibold hover:bg-[#1f3c27] shadow-md transition mt-2 cursor-pointer"
+                >
+                  Enviar Link de Recuperação
+                </button>
+              </form>
+            ) : (
+              <div className="text-center py-6 space-y-3">
+                <div className="w-12 h-12 rounded-full bg-[#EBF3ED] text-[#294D33] flex items-center justify-center mx-auto">
+                  <CheckCircle size={24} />
+                </div>
+                <h3 className="font-serif text-2xl font-normal text-[#294D33]">
+                  Instruções enviadas!
+                </h3>
+                <p className="text-xs text-[#3A443E] leading-relaxed font-sans">
+                  Se o e-mail informado estiver cadastrado, você receberá um link com as instruções para criar uma nova senha em instantes.
+                </p>
+                <button
+                  onClick={() => { setShowForgotModal(false); setForgotSent(false); }}
+                  className="py-2.5 px-6 rounded-full bg-[#294D33] text-white text-xs font-semibold hover:bg-[#1f3c27] transition cursor-pointer mt-2"
+                >
+                  Entendido
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
