@@ -1,12 +1,12 @@
 import React, { useState, useRef } from 'react';
-import { User, Mail, Calendar, Baby, CheckCircle, Camera, Trash2 } from 'lucide-react';
+import { User, Mail, Calendar, Baby, CheckCircle, Camera, Trash2, Sparkles, ShieldAlert } from 'lucide-react';
 
-export default function PerfilScreen() {
+export default function PerfilScreen({ onRedoOnboarding, onOpenDenuncia }) {
   const [nome, setNome] = useState('Mariana Silva');
   const [email, setEmail] = useState('mariana.silva@email.com');
   const [nascimento, setNascimento] = useState('1999-05-14');
   const [fase, setFase] = useState('Bebê de 2 meses');
-  const [avatar, setAvatar] = useState('/img/fotomae/fotomae.jpg');
+  const [avatar, setAvatar] = useState('/img/fotomae/6.jpg');
   const [isSaved, setIsSaved] = useState(false);
   const [saveMessage, setSaveMessage] = useState('');
 
@@ -39,7 +39,6 @@ export default function PerfilScreen() {
 
   return (
     <div className="animate-fadeIn font-dmsans max-w-4xl h-full pb-16">
-      {/* Cabeçalho */}
       <div className="mb-10">
         <p className="text-secondary text-[14px] font-bold uppercase tracking-wider mb-2 flex items-center gap-2">
           <User size={16} /> O SEU ESPAÇO
@@ -49,8 +48,6 @@ export default function PerfilScreen() {
       </div>
 
       <div className="bg-white p-8 md:p-10 rounded-3xl border border-gray5 shadow-sm relative">
-        
-        {/* Banner de feedback quando salvo */}
         {isSaved && (
           <div className="mb-6 p-4 rounded-2xl bg-[#EBF3ED] border border-[#294D33]/30 text-[#294D33] flex items-center gap-3 animate-fadeIn">
             <CheckCircle size={20} className="shrink-0 text-[#294D33]" />
@@ -58,24 +55,18 @@ export default function PerfilScreen() {
           </div>
         )}
 
-        {/* Secção da Foto de Perfil */}
         <div className="flex flex-col md:flex-row items-center md:items-start gap-6 mb-10 pb-10 border-b border-gray5 text-center md:text-left">
           <div className="relative w-28 h-28 rounded-full overflow-hidden shadow-md border-2 border-primary/20 shrink-0 bg-[#F4DDE5]">
             <img
               src={avatar}
               alt={nome}
               className="w-full h-full object-cover object-top"
-              onError={(e) => {
-                e.currentTarget.onerror = null;
-                e.currentTarget.src = "/img/fotomae/fotomae1.jpg";
-              }}
             />
           </div>
           <div className="mt-2">
             <h2 className="text-[28px] font-fraunces font-bold text-gray1">{nome}</h2>
             <p className="text-[16px] text-gray3 mb-4">Mãe • {fase}</p>
 
-            {/* Input de arquivo invisível */}
             <input 
               type="file" 
               ref={fileInputRef} 
@@ -105,10 +96,8 @@ export default function PerfilScreen() {
           </div>
         </div>
 
-        {/* Formulário de Dados */}
         <form onSubmit={handleSubmit} className="space-y-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            
             <div>
               <label className="block text-[13px] font-bold text-gray3 uppercase mb-2 flex items-center gap-2">
                 <User size={14}/> Nome Completo
@@ -162,19 +151,40 @@ export default function PerfilScreen() {
                 <option>Tentante</option>
               </select>
             </div>
-
           </div>
           
-          <div className="pt-6 border-t border-gray5 flex justify-end">
+          <div className="pt-6 border-t border-gray5 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex flex-wrap items-center gap-4 text-xs">
+              {onRedoOnboarding && (
+                <button
+                  type="button"
+                  onClick={onRedoOnboarding}
+                  className="text-[#294D33] font-bold hover:underline flex items-center gap-1.5 cursor-pointer"
+                >
+                  <Sparkles size={14} />
+                  <span>Refazer questionário de primeiro acesso</span>
+                </button>
+              )}
+              {onOpenDenuncia && (
+                <button
+                  type="button"
+                  onClick={onOpenDenuncia}
+                  className="text-red-600 font-bold hover:underline flex items-center gap-1.5 cursor-pointer"
+                >
+                  <ShieldAlert size={14} />
+                  <span>Reportar / Denunciar conta</span>
+                </button>
+              )}
+            </div>
+
             <button 
               type="submit" 
-              className="bg-primary hover:bg-apoio text-fundo px-10 py-4 rounded-full text-[16px] font-bold transition shadow-sm w-full md:w-auto cursor-pointer"
+              className="bg-primary hover:bg-apoio text-fundo px-10 py-4 rounded-full text-[16px] font-bold transition shadow-sm w-full sm:w-auto cursor-pointer"
             >
               Salvar Alterações
             </button>
           </div>
         </form>
-
       </div>
     </div>
   );

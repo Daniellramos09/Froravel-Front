@@ -1,32 +1,49 @@
 import React, { useState } from "react";
-import { X } from "lucide-react";
+import { X, Check, ArrowRight, ShieldCheck, Star, Calendar, HeartHandshake, Percent, Sparkles } from "lucide-react";
 import { APP_LINKS } from "../../utils/appLinks";
 
 export default function ProfessionalsSection() {
   const [showModal, setShowModal] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [formData, setFormData] = useState({
+    nome: "",
+    crp: "",
+    whatsapp: "",
+    email: "",
+    foco: "Psicologia Perinatal e Pós-Parto",
+    faixaPreco: "R$ 40 a R$ 80 (com vagas sociais)",
+    aceitaSocial: true,
+  });
 
-  // 4 Diferenciais em cards brancos #FCF7F9
+  // 4 Pilares atualizados com os preços e modelo da Florável:
+  // - Apenas 5% retido pela plataforma (95% repassado ao psicólogo)
+  // - Consultas de R$ 40 a R$ 200 (valores flexíveis)
+  // - Vagas sociais prioritárias a R$ 40 para mães sem condições
+  // - Captação humanizada via Rodas de Conversa
   const pillars = [
     {
-      title: "R$ 29,90 Fixos",
-      badge: "100% de Repasse",
-      desc: "Sem comissão por consulta: o valor das sessões particulares fica com você."
+      title: "Apenas 5% de Taxa",
+      badge: "95% de Repasse Líquido",
+      desc: "Sem mensalidades fixas pesadas: a Florável retém apenas 5% para manutenção e infraestrutura, repassando 95% diretamente a você.",
+      highlight: "Repasse de 95%"
     },
     {
-      title: "Vitrine Ética",
-      badge: "Captação via Rodas",
-      desc: "Conduza Rodas de Conversa temáticas e atraia novos pacientes naturalmente."
+      title: "Sessões de R$ 40 a R$ 200",
+      badge: "Honorários Flexíveis",
+      desc: "Defina o valor da sua consulta com autonomia, entre R$ 40 e R$ 200 por atendimento, respeitando seu momento profissional.",
+      highlight: "Flexibilidade Total"
     },
     {
-      title: "Selos de Especialização",
-      badge: "Badges de Autoridade",
-      desc: "Certificados em saúde perinatal validados, com destaque prioritário na plataforma."
+      title: "Clínica Social a R$ 40",
+      badge: "Prioridade Humanizada",
+      desc: "Prioridade para psicólogos que oferecem vagas a R$ 40, permitindo que mães sem condições financeiras tenham escuta especializada.",
+      highlight: "Impacto Direto"
     },
     {
-      title: "Programa de Flores",
-      badge: "Recompensas por Engajamento",
-      desc: "Pontualidade, assiduidade e boas avaliações viram isenção de mensalidade e benefícios."
+      title: "Vitrine Ética & Rodas",
+      badge: "Conversão Natural",
+      desc: "Conduza Rodas de Conversa temáticas gratuitas na plataforma e atraia novas pacientes particulares com base em confiança real.",
+      highlight: "Sem Comercialismo"
     }
   ];
 
@@ -37,7 +54,9 @@ export default function ProfessionalsSection() {
       esp: "Depressão Pós-Parto & Ansiedade",
       foto: "/img/fotopsicologo/psicologa1.jpg",
       rating: "5.0",
-      avaliacoes: "48"
+      avaliacoes: "48",
+      faixa: "R$ 40 a R$ 90",
+      socialBadge: "Vagas Sociais a R$ 40"
     },
     {
       nome: "Dra. Beatriz Albuquerque",
@@ -45,7 +64,9 @@ export default function ProfessionalsSection() {
       esp: "Luto Parental & Tentantes",
       foto: "/img/fotopsicologo/psicologa2.jpg",
       rating: "5.0",
-      avaliacoes: "36"
+      avaliacoes: "36",
+      faixa: "R$ 60 a R$ 140",
+      socialBadge: "Vagas Sociais Ativas"
     },
     {
       nome: "Dra. Camila Nogueira",
@@ -53,7 +74,9 @@ export default function ProfessionalsSection() {
       esp: "Transição de Carreira & Puerpério",
       foto: "/img/fotopsicologo/psicologia4.jpg",
       rating: "4.9",
-      avaliacoes: "42"
+      avaliacoes: "42",
+      faixa: "R$ 50 a R$ 120",
+      socialBadge: "Vagas Sociais a R$ 40"
     }
   ];
 
@@ -71,9 +94,16 @@ export default function ProfessionalsSection() {
       <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-12 w-full">
         
         {/* ========================================================
-            CABEÇALHO EDITORIAL
+            CABEÇALHO EDITORIAL COM O NOVO MODELO DE PRECIFICAÇÃO
         ======================================================== */}
         <div className="sr-group max-w-3xl mb-16 sm:mb-20 text-left">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 border border-[#516B55]/30 shadow-xs mb-4">
+            <span className="w-2 h-2 rounded-full bg-[#294D33]" />
+            <span className="text-[11px] uppercase tracking-[0.2em] font-semibold text-[#294D33] font-sans">
+              Para Psicólogos e Terapeutas &bull; Modelo Justo & Social
+            </span>
+          </div>
+
           <h2 className="font-serif text-3xl sm:text-4xl lg:text-[3.25rem] font-normal text-[#294D33] leading-[1.12] tracking-[-0.015em]">
             Clínica com propósito.{" "}
             <span className="italic font-serif text-[#516B55]">
@@ -82,12 +112,12 @@ export default function ProfessionalsSection() {
           </h2>
 
           <p className="mt-4 text-base sm:text-lg text-[#3A443E] leading-relaxed font-sans font-normal max-w-2xl">
-            Feita para a psicologia perinatal: honorários justos, repasse integral e pacientes reais.
+            Feita para a psicologia perinatal: honorários flexíveis de <strong className="text-[#294D33]">R$ 40 a R$ 200</strong>, apenas <strong className="text-[#294D33]">5% de taxa da plataforma</strong> e vagas sociais prioritárias a <strong className="text-[#294D33]">R$ 40</strong> para mães sem condições financeiras.
           </p>
         </div>
 
         {/* ========================================================
-            SPLIT LAYOUT: COLUNA ESQUERDA (4 CARDS BRANCOS) + DIREITA (MOCKUP FLUTUANTE)
+            SPLIT LAYOUT: COLUNA ESQUERDA (4 CARDS) + DIREITA (MOCKUP FLUTUANTE)
         ======================================================== */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center mb-16">
           
@@ -105,6 +135,9 @@ export default function ProfessionalsSection() {
                         <span className="liquid-chip text-[10px] font-bold text-[#294D33] px-2.5 py-1 rounded-full uppercase tracking-wider">
                           {item.badge}
                         </span>
+                        <span className="text-[10px] font-semibold text-[#516B55] bg-white/70 px-2 py-0.5 rounded-md border border-[#516B55]/15">
+                          {item.highlight}
+                        </span>
                       </div>
 
                       <h3 className="font-serif text-xl font-normal text-[#294D33] mb-1.5">
@@ -116,8 +149,9 @@ export default function ProfessionalsSection() {
                       </p>
                     </div>
 
-                    <div className="pt-4 mt-3 border-t border-[#E8A9BB]/30 flex items-center gap-1.5 text-[11px] font-semibold text-[#516B55]">
+                    <div className="pt-4 mt-3 border-t border-[#E8A9BB]/30 flex items-center justify-between text-[11px] font-semibold text-[#516B55]">
                       <span>Transparência total</span>
+                      <span className="text-[#294D33]">95% para você</span>
                     </div>
                   </div>
                 );
@@ -131,6 +165,7 @@ export default function ProfessionalsSection() {
                 className="group inline-flex items-center justify-center gap-3 rounded-full bg-[#294D33] hover:bg-[#1f3c27] text-[#FCF7F9] px-8 py-4 text-sm font-semibold uppercase tracking-wider shadow-md shadow-[#294D33]/20 transition-all duration-300 hover:scale-[1.02] cursor-pointer"
               >
                 <span>Quero ser um profissional parceiro</span>
+                <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
               </button>
             </div>
           </div>
@@ -159,9 +194,9 @@ export default function ProfessionalsSection() {
                   </span>
                 </div>
 
-                {/* BADGE DO PROGRAMA DE FLORES */}
+                {/* BADGE DE PREÇO / CLÍNICA SOCIAL */}
                 <div className="liquid-glass absolute top-3 right-3 px-2.5 py-1.5 rounded-full flex items-center gap-1">
-                  <span className="text-[11px] font-bold text-[#294D33]">4 Flores</span>
+                  <span className="text-[10px] font-bold text-[#294D33]">Social: R$ 40</span>
                 </div>
               </div>
 
@@ -177,13 +212,22 @@ export default function ProfessionalsSection() {
                     </p>
                   </div>
                   <div className="flex items-center gap-1 bg-[#F4DDE5] px-2.5 py-1 rounded-full border border-[#E8A9BB]/50">
+                    <Star size={12} className="fill-[#294D33] text-[#294D33]" />
                     <span className="text-xs font-bold text-[#294D33]">5.0</span>
                     <span className="text-[10px] text-[#516B55]">(48)</span>
                   </div>
                 </div>
 
+                {/* Faixa de Atendimento & Repasse Transparente */}
+                <div className="p-2.5 rounded-2xl bg-[#FCF7F9] border border-[#E8A9BB]/40 flex items-center justify-between text-xs font-semibold text-[#294D33]">
+                  <span>Consulta: R$ 40 a R$ 90</span>
+                  <span className="text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
+                    95% de repasse
+                  </span>
+                </div>
+
                 <p className="text-xs text-[#3A443E] leading-relaxed font-sans">
-                  Depressão pós-parto, ansiedade na gestação, luto parental e retorno ao trabalho.
+                  Atendimento especializado para depressão pós-parto, ansiedade na gestação, luto parental e retorno ao trabalho.
                 </p>
 
                 {/* Selos de Especialização */}
@@ -194,8 +238,8 @@ export default function ProfessionalsSection() {
                   <span className="liquid-chip text-[10px] font-semibold px-2.5 py-1 rounded-lg text-[#294D33]">
                     Triagem EPDS
                   </span>
-                  <span className="liquid-chip text-[10px] font-semibold px-2.5 py-1 rounded-lg text-[#294D33]">
-                    Luto Materno
+                  <span className="text-[10px] font-semibold px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200">
+                    Vagas Sociais (R$ 40)
                   </span>
                 </div>
 
@@ -225,9 +269,15 @@ export default function ProfessionalsSection() {
 
         {/* VITRINE VISUAL DE PSICÓLOGAS DA REDE */}
         <div className="sr pt-8 border-t border-[#516B55]/25 text-left">
-          <p className="text-xs uppercase tracking-wider font-semibold text-[#294D33] mb-5 font-sans">
-            Rede Ativa de Psicólogas Perinatais Credenciadas
-          </p>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-5">
+            <p className="text-xs uppercase tracking-wider font-semibold text-[#294D33] font-sans">
+              Rede Ativa de Psicólogas Perinatais Credenciadas
+            </p>
+            <span className="text-xs text-[#516B55] font-sans">
+              Atendimentos de R$ 40 a R$ 200 &bull; Preferência para mães sem condições a R$ 40
+            </span>
+          </div>
+
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
             {specialists.map((sp) => (
               <div 
@@ -240,9 +290,17 @@ export default function ProfessionalsSection() {
                   className="w-12 h-12 rounded-full object-cover border border-[#E8A9BB]" 
                 />
                 <div className="flex-1 min-w-0">
-                  <h5 className="text-xs font-bold text-[#294D33] truncate font-nunito">{sp.nome}</h5>
+                  <div className="flex items-center justify-between">
+                    <h5 className="text-xs font-bold text-[#294D33] truncate font-nunito">{sp.nome}</h5>
+                    <span className="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-1.5 py-0.5 rounded">
+                      {sp.faixa}
+                    </span>
+                  </div>
                   <p className="text-[10px] text-[#516B55] truncate font-sans">{sp.esp}</p>
-                  <p className="text-[10px] font-semibold text-[#294D33] mt-0.5">{sp.crp} &bull; Nota {sp.rating}</p>
+                  <div className="flex items-center justify-between mt-1 text-[10px] text-[#294D33]">
+                    <span>{sp.crp} &bull; ⭐ {sp.rating}</span>
+                    <span className="text-[#516B55] font-semibold">{sp.socialBadge}</span>
+                  </div>
                 </div>
               </div>
             ))}
@@ -252,14 +310,15 @@ export default function ProfessionalsSection() {
       </div>
 
       {/* ========================================================
-          MODAL DE CADASTRO DE PROFISSIONAL PARCEIRO
+          MODAL DE CADASTRO DE PROFISSIONAL PARCEIRO COM PREÇOS ATUALIZADOS
       ======================================================== */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#294D33]/40 backdrop-blur-xs">
-          <div className="relative w-full max-w-lg bg-[#FCF7F9] rounded-[2rem] p-6 sm:p-8 shadow-2xl border border-[#E8A9BB]/60 overflow-hidden">
+          <div className="relative w-full max-w-lg bg-[#FCF7F9] rounded-[2rem] p-6 sm:p-8 shadow-2xl border border-[#E8A9BB]/60 overflow-hidden max-h-[90vh] overflow-y-auto">
             <button
               onClick={() => { setShowModal(false); setSubmitted(false); }}
-              className="absolute top-5 right-5 text-[#516B55] hover:text-[#294D33] hover:bg-[#F4DDE5] p-2 rounded-full transition"
+              className="absolute top-5 right-5 text-[#516B55] hover:text-[#294D33] hover:bg-[#F4DDE5] p-2 rounded-full transition cursor-pointer"
+              aria-label="Fechar modal"
             >
               <X size={20} />
             </button>
@@ -270,17 +329,17 @@ export default function ProfessionalsSection() {
                   e.preventDefault();
                   setSubmitted(true);
                 }}
-                className="space-y-4 text-left"
+                className="space-y-4 text-left font-sans"
               >
                 <div>
                   <span className="text-xs font-semibold uppercase tracking-wider text-[#294D33]">
-                    Credenciamento Clínico
+                    Credenciamento Clínico &bull; Apenas 5% de taxa
                   </span>
                   <h3 className="font-serif text-2xl font-normal text-[#294D33] mt-1">
                     Candidatura de Psicólogo Parceiro
                   </h3>
                   <p className="text-xs text-[#3A443E] mt-1 font-sans">
-                    Atenda com repasse integral e faça parte da rede de escuta materna Florável.
+                    Atenda com <strong className="font-semibold text-[#294D33]">95% de repasse líquido</strong> (Florável retém apenas 5%). Você define seus honorários entre <strong className="font-semibold text-[#294D33]">R$ 40 e R$ 200</strong> por sessão.
                   </p>
                 </div>
 
@@ -289,6 +348,8 @@ export default function ProfessionalsSection() {
                   <input
                     required
                     type="text"
+                    value={formData.nome}
+                    onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
                     placeholder="Dra. Seu Nome"
                     className="w-full px-4 py-3 rounded-2xl border border-[#E8A9BB]/60 bg-white text-sm focus:border-[#294D33] focus:outline-none"
                   />
@@ -300,6 +361,8 @@ export default function ProfessionalsSection() {
                     <input
                       required
                       type="text"
+                      value={formData.crp}
+                      onChange={(e) => setFormData({ ...formData, crp: e.target.value })}
                       placeholder="06/000000"
                       className="w-full px-4 py-3 rounded-2xl border border-[#E8A9BB]/60 bg-white text-sm focus:border-[#294D33] focus:outline-none"
                     />
@@ -309,6 +372,8 @@ export default function ProfessionalsSection() {
                     <input
                       required
                       type="tel"
+                      value={formData.whatsapp}
+                      onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
                       placeholder="(11) 99999-9999"
                       className="w-full px-4 py-3 rounded-2xl border border-[#E8A9BB]/60 bg-white text-sm focus:border-[#294D33] focus:outline-none"
                     />
@@ -320,14 +385,48 @@ export default function ProfessionalsSection() {
                   <input
                     required
                     type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     placeholder="psi@exemplo.com"
                     className="w-full px-4 py-3 rounded-2xl border border-[#E8A9BB]/60 bg-white text-sm focus:border-[#294D33] focus:outline-none"
                   />
                 </div>
 
                 <div>
+                  <label className="block text-xs font-semibold text-[#294D33] mb-1">Faixa de Honorários Desejada (por sessão)</label>
+                  <select 
+                    value={formData.faixaPreco}
+                    onChange={(e) => setFormData({ ...formData, faixaPreco: e.target.value })}
+                    className="w-full px-4 py-3 rounded-2xl border border-[#E8A9BB]/60 bg-white text-sm focus:border-[#294D33] focus:outline-none"
+                  >
+                    <option value="R$ 40 (Clínica Social Exclusiva)">R$ 40 (Clínica Social Exclusiva - 95% repasse = R$ 38)</option>
+                    <option value="R$ 40 a R$ 80 (com vagas sociais)">R$ 40 a R$ 80 (com vagas sociais ativas)</option>
+                    <option value="R$ 80 a R$ 130">R$ 80 a R$ 130 (com vagas sociais ativas)</option>
+                    <option value="R$ 130 a R$ 200">R$ 130 a R$ 200 (consultas particulares)</option>
+                  </select>
+                </div>
+
+                {/* Checkbox de Adesão à Clínica Social */}
+                <div className="p-3.5 rounded-2xl bg-white border border-[#E8A9BB]/60 flex items-start gap-3">
+                  <input
+                    type="checkbox"
+                    id="aceitaSocial"
+                    checked={formData.aceitaSocial}
+                    onChange={(e) => setFormData({ ...formData, aceitaSocial: e.target.checked })}
+                    className="mt-1 w-4 h-4 rounded text-[#294D33] focus:ring-[#294D33] cursor-pointer"
+                  />
+                  <label htmlFor="aceitaSocial" className="text-xs text-[#3A443E] cursor-pointer">
+                    <strong className="text-[#294D33] font-semibold">Quero disponibilizar vagas sociais a R$ 40:</strong> Tenho interesse em receber preferência no encaminhamento de mães em vulnerabilidade que não têm condições de pagar o valor integral.
+                  </label>
+                </div>
+
+                <div>
                   <label className="block text-xs font-semibold text-[#294D33] mb-1">Foco de Atuação</label>
-                  <select className="w-full px-4 py-3 rounded-2xl border border-[#E8A9BB]/60 bg-white text-sm focus:border-[#294D33] focus:outline-none">
+                  <select 
+                    value={formData.foco}
+                    onChange={(e) => setFormData({ ...formData, foco: e.target.value })}
+                    className="w-full px-4 py-3 rounded-2xl border border-[#E8A9BB]/60 bg-white text-sm focus:border-[#294D33] focus:outline-none"
+                  >
                     <option>Psicologia Perinatal e Pós-Parto</option>
                     <option>Depressão Pós-Parto e Ansiedade Gestacional</option>
                     <option>Luto Parental e Tentantes</option>
@@ -343,12 +442,15 @@ export default function ProfessionalsSection() {
                 </button>
               </form>
             ) : (
-              <div className="text-center py-6">
+              <div className="text-center py-6 font-sans">
+                <div className="w-12 h-12 rounded-full bg-emerald-100 text-emerald-800 mx-auto flex items-center justify-center mb-4">
+                  <Check size={24} />
+                </div>
                 <h3 className="font-serif text-2xl font-normal text-[#294D33] mb-2">
                   Candidatura recebida!
                 </h3>
                 <p className="text-sm text-[#3A443E] leading-relaxed mb-6 font-sans">
-                  Nossa equipe de curadoria clínica entrará em contato em até 48 horas úteis via WhatsApp para validar seu CRP e apresentar o painel de atendimento.
+                  Nossa equipe de curadoria clínica entrará em contato em até 48 horas úteis via WhatsApp para validar seu CRP e apresentar o painel de atendimento (com repasse de 95% e configuração das suas vagas de R$ 40 a R$ 200).
                 </p>
                 <button
                   onClick={() => { setShowModal(false); setSubmitted(false); }}

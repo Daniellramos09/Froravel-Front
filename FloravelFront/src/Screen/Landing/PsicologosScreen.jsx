@@ -17,10 +17,10 @@ const beneficiosPsicologos = [
   {
     icon: PercentCircle,
     title: "Modelo de Repasse Integral",
-    badge: "R$ 29,90 / mês fixo",
+    badge: "Apenas 5% de taxa",
     description:
-      "Mensalidade fixa de R$ 29,90, sem comissões abusivas sobre o valor das suas consultas particulares. O valor da sua sessão fica integralmente com você.",
-    details: "Zero taxas sobre seus honorários clínicos."
+      "Taxa ética de apenas 5% para a plataforma: você define honorários entre R$ 40 e R$ 200 e fica com 95% do valor da consulta (com preferência de R$ 40 para mães sem condições).",
+    details: "95% de repasse líquido diretamente para você."
   },
   {
     icon: HeartHandshake,

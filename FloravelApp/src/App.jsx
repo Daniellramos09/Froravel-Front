@@ -3,7 +3,8 @@ import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import {
   Home, ClipboardList, HeartHandshake, MessageSquare, Calendar, Bell,
-  LogOut, ArrowRight, ChevronLeft, BookOpen, Eye, Menu, X, Users
+  LogOut, ArrowRight, ChevronLeft, BookOpen, Eye, Menu, X, Users,
+  Star
 } from 'lucide-react';
 import InstallAppButton from './Components/Pwa/InstallAppButton';
 
@@ -16,7 +17,7 @@ import ComunidadeScreen from './Screen/Community/ComunidadeScreen';
 import FeedScreen from './Screen/Community/FeedScreen';
 import PerfilScreen from './Screen/Profile/PerfilScreen';
 import BibliotecaScreen from './Screen/Community/BibliotecaScreen';
-
+import FeedbacksScreen from './Screen/Feedback/FeedbacksScreen';
 import AcessibilidadeScreen from './Screen/Accessibility/AcessibilidadeScreen';
 
 // CONTEXTO E BARRA DE ACESSIBILIDADE
@@ -28,19 +29,20 @@ import AccessibilityQuickBar from './Components/Accessibility/AccessibilityQuick
 import LiveCaptionBar from './Components/Accessibility/LiveCaptionBar';
 import FlowerCounterBadge from './Components/Gamification/FlowerCounterBadge';
 import InviteModal from './Screen/Dashboard/components/InviteModal';
+import OnboardingQuizModal from './Components/Onboarding/OnboardingQuizModal';
+import DenunciaModal from './Components/Safety/DenunciaModal';
 
 // ITEM DE NAVEGAÇÃO COM FEEDBACK TÁTIL E HOVER VISÍVEL
 const NavItem = ({ icon, label, active, onClick, badge }) => (
   <button
     type="button"
     onClick={onClick}
-    className={`group relative w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-[15px] font-medium transition-all duration-200 font-dmsans cursor-pointer select-none active:scale-[0.98] ${
+    className={`group relative w-full flex items-center justify-between px-4 py-3 rounded-2xl text-[15px] font-medium transition-all duration-200 font-dmsans cursor-pointer select-none active:scale-[0.98] ${
       active
         ? 'bg-[#F4DDE5] text-[#294D33] font-bold shadow-xs border border-[#E8A9BB]/40'
         : 'text-stone-700 hover:bg-[#F4DDE5]/45 hover:text-[#294D33]'
     }`}
   >
-    {/* Barra vertical de destaque no hover e ativo */}
     <span
       className={`absolute left-0 top-2.5 bottom-2.5 w-1.5 rounded-r-full transition-all duration-300 ${
         active
@@ -49,23 +51,23 @@ const NavItem = ({ icon, label, active, onClick, badge }) => (
       }`}
     />
 
-    <div className="flex items-center gap-3.5">
+    <div className="flex items-center gap-3.5 min-w-0">
       <span
-        className={`transition-all duration-200 ${
+        className={`shrink-0 transition-all duration-200 ${
           active
             ? 'text-[#294D33] scale-105'
-            : 'text-stone-500 group-hover:text-[#294D33] group-hover:scale-110'
+            : 'text-stone-500 group-hover:text-[#294D33]'
         }`}
       >
         {icon}
       </span>
-      <span className="transition-transform duration-200 group-hover:translate-x-1">
+      <span className="truncate">
         {label}
       </span>
     </div>
 
     {badge && (
-      <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-[#294D33] text-white shadow-2xs group-hover:scale-105 transition-transform">
+      <span className="shrink-0 text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-[#294D33] text-white shadow-2xs">
         {badge}
       </span>
     )}
@@ -151,8 +153,23 @@ function AppContent() {
   const [profEmFoco, setProfEmFoco] = useState(null);
   const [flowersCount, setFlowersCount] = useState(12);
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
+  const [isGlobalDenunciaOpen, setIsGlobalDenunciaOpen] = useState(false);
 
-  // 4. CONTEXTO DE ACESSIBILIDADE
+  // 4. ESTADO DO QUESTIONÁRIO DE PRIMEIRO ACESSO (ANTES DO DASHBOARD)
+  const [userProfile, setUserProfile] = useState(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('onboarding') === 'true') {
+        return null;
+      }
+      return JSON.parse(localStorage.getItem('floravel_onboarding_profile')) || null;
+    } catch {
+      return null;
+    }
+  });
+  const [isOnboardingOpen, setIsOnboardingOpen] = useState(() => !userProfile);
+
+  // 5. CONTEXTO DE ACESSIBILIDADE
   const {
     getFilterStyle,
     getFontSizeClass,
@@ -160,7 +177,6 @@ function AppContent() {
     expandedSpacing,
   } = useAccessibility();
 
-  // Fecha notificações ao clicar fora
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (notifRef.current && !notifRef.current.contains(event.target)) setIsNotifOpen(false);
@@ -216,6 +232,8 @@ function AppContent() {
         return 'Central de Ajuda';
       case 'perfil':
         return 'Meu Perfil';
+      case 'feedbacks':
+        return 'Feedbacks & Avaliações';
       case 'accessibility':
         return 'Acessibilidade & Inclusão';
       default:
@@ -223,9 +241,23 @@ function AppContent() {
     }
   };
 
+  // SE FOR O PRIMEIRO ACESSO (OU REFAZENDO QUESTIONÁRIO), EXIBE A TELA DE PERGUNTAS ANTES DO DASHBOARD
+  if (!userProfile || isOnboardingOpen) {
+    return (
+      <OnboardingQuizModal
+        isOpen={true}
+        onClose={() => setIsOnboardingOpen(false)}
+        onProfileSaved={(newProfile) => {
+          setUserProfile(newProfile);
+          setIsOnboardingOpen(false);
+        }}
+      />
+    );
+  }
+
   const sidebarContent = (
     <>
-      <div className="overflow-y-auto pr-1">
+      <div className="overflow-y-auto overflow-x-hidden pr-1">
         {/* LOGOTIPO */}
         <div className="flex items-center justify-between px-4 mb-4">
           <div 
@@ -255,42 +287,35 @@ function AppContent() {
         {/* Atalho de Navegação para o Portal Principal */}
         <a
           href={import.meta.env.VITE_LANDING_URL || 'http://localhost:5173'}
-          className="flex items-center justify-between px-3.5 py-2 mx-2 mb-5 rounded-xl text-xs font-semibold text-[#516B55] bg-[#FCF7F9] hover:bg-[#F4DDE5]/60 border border-[#E8A9BB]/40 transition"
+          className="flex items-center justify-between px-3.5 py-2 mx-2 mb-4 rounded-xl text-xs font-semibold text-[#516B55] bg-[#FCF7F9] hover:bg-[#F4DDE5]/60 border border-[#E8A9BB]/40 transition"
           title="Voltar para a Landing Page principal"
         >
           <span>← Portal Principal</span>
           <span className="text-[10px] text-stone-400">Início</span>
         </a>
 
-        <nav className="space-y-1.5">
+        <nav className="space-y-1">
           <NavItem icon={<Home size={20} />} label="Início" active={activeTab === 'home'} onClick={() => handleTabChange('home')} />
           <NavItem icon={<ClipboardList size={20} />} label="Diário & Triagem" active={activeTab === 'quiz'} onClick={() => handleTabChange('quiz')} />
           <NavItem icon={<HeartHandshake size={20} />} label="Rede de Apoio" active={activeTab === 'network'} onClick={() => handleTabChange('network')} />
           <NavItem icon={<MessageSquare size={20} />} label="Rodas de Conversa" active={activeTab === 'groups'} onClick={() => handleTabChange('groups')} />
           <NavItem icon={<Users size={20} />} label="Comunidade" active={activeTab === 'feed'} onClick={() => handleTabChange('feed')} />
           <NavItem icon={<Calendar size={20} />} label="Meus Agendamentos" active={activeTab === 'booking'} onClick={() => handleTabChange('booking')} />
+          <NavItem icon={<Star size={20} />} label="Feedbacks" active={activeTab === 'feedbacks'} onClick={() => handleTabChange('feedbacks')} />
           <NavItem icon={<BookOpen size={20} />} label="Biblioteca & Conteúdos" active={activeTab === 'library'} onClick={() => handleTabChange('library')} />
-          
-          {/* ITEM: ACESSIBILIDADE */}
-          <NavItem
-            icon={<Eye size={20} />}
-            label="Acessibilidade"
-            active={activeTab === 'accessibility'}
-            onClick={() => handleTabChange('accessibility')}
-            badge="Novo"
-          />
+          <NavItem icon={<Eye size={20} />} label="Acessibilidade" active={activeTab === 'accessibility'} onClick={() => handleTabChange('accessibility')} />
         </nav>
 
         {/* CARD DE ACOLHIMENTO RÁPIDO */}
         <div
-          className="mt-6 bg-[#F4DDE5] p-5 rounded-3xl mx-1 cursor-pointer transition-all duration-300 border border-[#E8A9BB]/30 hover:border-[#E8A9BB]/70 hover:shadow-md group"
+          className="mt-5 bg-[#F4DDE5] p-4 rounded-3xl mx-1 cursor-pointer transition-all duration-300 border border-[#E8A9BB]/30 hover:border-[#E8A9BB]/70 hover:shadow-md group"
           onClick={() => handleTabChange('network')}
         >
-          <div className="w-10 h-10 rounded-2xl bg-white/80 text-[#294D33] flex items-center justify-center mb-3 shadow-2xs">
-            <HeartHandshake className="text-[#294D33]" size={20} />
+          <div className="w-9 h-9 rounded-2xl bg-white/80 text-[#294D33] flex items-center justify-center mb-2.5 shadow-2xs">
+            <HeartHandshake className="text-[#294D33]" size={18} />
           </div>
-          <p className="text-[15px] font-bold text-[#2B2829] mb-1">Você não está sozinha.</p>
-          <p className="text-[13px] text-stone-700 mb-3.5 leading-relaxed font-medium">
+          <p className="text-[14px] font-bold text-[#2B2829] mb-1">Você não está sozinha.</p>
+          <p className="text-[12px] text-stone-700 mb-3 leading-relaxed font-medium">
             Estamos aqui para acolher você a qualquer hora.
           </p>
           <button 
@@ -299,44 +324,40 @@ function AppContent() {
               e.stopPropagation();
               handleTabChange('network');
             }}
-            className="text-[#294D33] text-[14px] font-bold flex items-center gap-1.5 group-hover:gap-2.5 transition-all cursor-pointer"
+            className="text-[#294D33] text-[13px] font-bold flex items-center gap-1.5 group-hover:gap-2.5 transition-all cursor-pointer"
           >
             <span>Preciso de ajuda</span>
-            <ArrowRight size={15} className="transition-transform duration-300 group-hover:translate-x-1.5" />
+            <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-1" />
           </button>
         </div>
       </div>
 
-      {/* RODAPÉ DO PERFIL */}
-      <div className="flex items-center justify-between px-2 pt-4 border-t border-stone-100">
+      {/* RODAPÉ DO PERFIL (LIMPO E SIMPLES) */}
+      <div className="flex items-center justify-between px-2 pt-4 border-t border-stone-100 shrink-0">
         <div 
-          className="flex items-center gap-3 p-1.5 -ml-1 rounded-2xl hover:bg-[#F4DDE5]/40 transition-all duration-200 cursor-pointer group flex-1 mr-2" 
+          className="flex items-center gap-3 p-1.5 -ml-1 rounded-2xl hover:bg-[#F4DDE5]/40 transition-all duration-200 cursor-pointer group flex-1 mr-2 min-w-0" 
           onClick={() => handleTabChange('perfil')}
         >
-          <div className="relative w-11 h-11 rounded-full overflow-hidden border-2 border-[#E8A9BB]/40 shadow-2xs shrink-0 bg-[#F4DDE5]">
+          <div className="relative w-10 h-10 rounded-full overflow-hidden border-2 border-[#E8A9BB]/40 shadow-2xs shrink-0 bg-[#F4DDE5]">
             <img
-              src="/img/fotomae/fotomae.jpg"
+              src="/img/fotomae/6.jpg"
               alt="Mariana Silva"
               className="w-full h-full object-cover object-top"
-              onError={(e) => {
-                e.currentTarget.onerror = null;
-                e.currentTarget.src = "/img/fotomae/fotomae1.jpg";
-              }}
             />
           </div>
           <div className="min-w-0">
-            <p className="text-[15px] font-bold text-[#2B2829] group-hover:text-[#294D33] transition leading-tight truncate">
+            <p className="text-[14px] font-bold text-[#2B2829] group-hover:text-[#294D33] transition leading-tight truncate">
               Mariana Silva
             </p>
-            <p className="text-[12px] text-stone-500 font-medium">Puerpério • Semana 7</p>
+            <p className="text-[11px] text-stone-500 font-medium truncate">Puerpério • Semana 7</p>
           </div>
         </div>
         <button 
           onClick={() => setIsLogoutModalOpen(true)} 
-          className="p-2.5 text-stone-400 hover:text-red-600 hover:bg-red-50 transition-all duration-200 rounded-xl cursor-pointer shrink-0"
+          className="p-2 text-stone-400 hover:text-red-600 hover:bg-red-50 transition-all duration-200 rounded-xl cursor-pointer shrink-0"
           title="Sair da conta"
         >
-          <LogOut size={20} />
+          <LogOut size={19} />
         </button>
       </div>
     </>
@@ -355,7 +376,7 @@ function AppContent() {
       />
 
       {/* SIDEBAR DESKTOP */}
-      <aside className="hidden lg:flex w-76 bg-white border-r border-stone-100 shadow-sm flex-col justify-between py-6 px-4 z-30 flex-shrink-0">
+      <aside className="hidden lg:flex w-72 bg-white border-r border-stone-100 shadow-sm flex-col justify-between py-5 px-4 z-30 flex-shrink-0 overflow-x-hidden">
         {sidebarContent}
       </aside>
 
@@ -370,7 +391,7 @@ function AppContent() {
             className="fixed inset-0 bg-black/40 backdrop-blur-xs animate-fadeIn"
             onClick={() => setIsMenuOpen(false)}
           />
-          <aside className="relative w-76 max-w-[85vw] bg-white h-full flex flex-col justify-between py-6 px-4 z-10 shadow-xl">
+          <aside className="relative w-72 max-w-[85vw] bg-white h-full flex flex-col justify-between py-5 px-4 z-10 shadow-xl overflow-x-hidden">
             {sidebarContent}
           </aside>
         </div>
@@ -407,14 +428,12 @@ function AppContent() {
           <div className="flex items-center gap-1.5 sm:gap-4 flex-shrink-0">
             <InstallAppButton className="p-2.5 sm:px-4 bg-[#294D33] text-white hover:bg-[#1f3c27]" />
 
-            {/* CONTADOR DE FLORES SOLIDÁRIAS COM HOVER E BARRA DE PROGRESSO */}
             <FlowerCounterBadge
               flowersCount={flowersCount}
               targetFlowers={15}
               onOpenInvite={() => setIsInviteModalOpen(true)}
             />
 
-            {/* BARRA RÁPIDA DE ACESSIBILIDADE NO TOPO */}
             <div className="hidden md:block">
               <AccessibilityQuickBar
                 activeTab={activeTab}
@@ -460,13 +479,9 @@ function AppContent() {
               title="Meu Perfil · Mariana Silva"
             >
               <img
-                src="/img/fotomae/fotomae.jpg"
+                src="/img/fotomae/6.jpg"
                 alt="Mariana Silva"
                 className="w-full h-full object-cover object-top"
-                onError={(e) => {
-                  e.currentTarget.onerror = null;
-                  e.currentTarget.src = "/img/fotomae/fotomae1.jpg";
-                }}
               />
             </div>
           </div>
@@ -482,6 +497,8 @@ function AppContent() {
               flowersCount={flowersCount}
               setFlowersCount={setFlowersCount}
               onOpenInvite={() => setIsInviteModalOpen(true)}
+              userProfile={userProfile}
+              onOpenOnboarding={() => setIsOnboardingOpen(true)}
             />
           )}
           {activeTab === 'quiz' && <CheckInScreen setActiveTab={handleTabChange} />}
@@ -493,13 +510,16 @@ function AppContent() {
               showCrisisNote
             />
           )}
-          {activeTab === 'perfil' && <PerfilScreen />}
+          {activeTab === 'perfil' && (
+            <PerfilScreen 
+              onRedoOnboarding={() => setIsOnboardingOpen(true)} 
+              onOpenDenuncia={() => setIsGlobalDenunciaOpen(true)} 
+            />
+          )}
+          {activeTab === 'feedbacks' && <FeedbacksScreen />}
           {activeTab === 'library' && <BibliotecaScreen />}
-
-          {/* SEÇÃO DE ACESSIBILIDADE */}
           {activeTab === 'accessibility' && <AcessibilidadeScreen />}
 
-          {/* AS DUAS TELAS QUE COMPARTILHAM MEMÓRIA GLOBAL */}
           {activeTab === 'booking' && (
             <AgendamentoScreen
               setActiveTab={handleTabChange}
@@ -517,7 +537,7 @@ function AppContent() {
           )}
         </div>
 
-        {/* BARRA DE NAVEGAÇÃO INFERIOR PARA MOBILE (ACESSO COM UMA MÃO) */}
+        {/* BARRA DE NAVEGAÇÃO INFERIOR PARA MOBILE */}
         <nav
           className="lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-white/95 backdrop-blur-md border-t border-[#E4DAD5] px-2 py-1.5 flex items-center justify-around"
           aria-label="Navegação principal mobile"
@@ -548,7 +568,6 @@ function AppContent() {
           })}
         </nav>
 
-        {/* MODAL GLOBAL DE CONVITE / RESGATE DE FLORES */}
         <InviteModal
           isOpen={isInviteModalOpen}
           onClose={() => setIsInviteModalOpen(false)}
@@ -557,8 +576,13 @@ function AppContent() {
           onInviteSuccess={(bonus) => setFlowersCount((prev) => prev + bonus)}
         />
 
-        {/* BARRA DE LEGENDA E NARRAÇÃO EM TEMPO REAL */}
         <LiveCaptionBar />
+
+        <DenunciaModal
+          isOpen={isGlobalDenunciaOpen}
+          onClose={() => setIsGlobalDenunciaOpen(false)}
+          context="Plataforma Geral"
+        />
 
       </main>
     </div>

@@ -1,5 +1,6 @@
 // src/Screen/Dashboard/DashboardScreen.jsx
 import { useState } from 'react';
+import { Sparkles, ArrowRight } from 'lucide-react';
 import HomeHero from './components/HomeHero';
 import HomeCheckIn from './components/HomeCheckIn';
 import HomeAgenda from './components/HomeAgenda';
@@ -20,6 +21,8 @@ export default function DashboardScreen({
   flowersCount: externalFlowersCount,
   setFlowersCount: externalSetFlowersCount,
   onOpenInvite: externalOnOpenInvite,
+  userProfile = null,
+  onOpenOnboarding = null,
 }) {
   // Estados para abertura dos modais
   const [isDiaryModalOpen, setIsDiaryModalOpen] = useState(false);

@@ -1,30 +1,6 @@
--- MySQL dump 10.13  Distrib 8.0.19, for Win64 (x86_64)
--- Host: localhost    Database: floraveldb
--- Versão com Suporte B2C + B2B Corporate Integrados
--- ------------------------------------------------------
--- Server version	8.0.46
+SET FOREIGN_KEY_CHECKS = 0;
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8mb4 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
--- ==============================================================================
--- 1. TABELAS ORIGINAIS DO SISTEMA (FLORAVEL B2C - INTACTAS)
--- ==============================================================================
-
---
--- Table structure for table `usuarios`
---
 DROP TABLE IF EXISTS `usuarios`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `usuarios` (
   `id` char(36) NOT NULL DEFAULT (uuid()),
   `nome` varchar(150) NOT NULL,
@@ -39,14 +15,8 @@ CREATE TABLE `usuarios` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `maes`
---
 DROP TABLE IF EXISTS `maes`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `maes` (
   `id` char(36) NOT NULL DEFAULT (uuid()),
   `usuario_id` char(36) NOT NULL,
@@ -55,14 +25,8 @@ CREATE TABLE `maes` (
   UNIQUE KEY `usuario_id` (`usuario_id`),
   CONSTRAINT `fk_mae_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `psicologos`
---
 DROP TABLE IF EXISTS `psicologos`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `psicologos` (
   `id` char(36) NOT NULL DEFAULT (uuid()),
   `usuario_id` char(36) NOT NULL,
@@ -75,14 +39,8 @@ CREATE TABLE `psicologos` (
   UNIQUE KEY `crp` (`crp`),
   CONSTRAINT `fk_psicologo_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `triagem_edimburgo`
---
 DROP TABLE IF EXISTS `triagem_edimburgo`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `triagem_edimburgo` (
   `id` char(36) NOT NULL DEFAULT (uuid()),
   `mae_id` char(36) NOT NULL,
@@ -93,14 +51,8 @@ CREATE TABLE `triagem_edimburgo` (
   KEY `fk_triagem_mae` (`mae_id`),
   CONSTRAINT `fk_triagem_mae` FOREIGN KEY (`mae_id`) REFERENCES `maes` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `respostas_edimburgo`
---
 DROP TABLE IF EXISTS `respostas_edimburgo`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `respostas_edimburgo` (
   `id` char(36) NOT NULL DEFAULT (uuid()),
   `triagem_id` char(36) NOT NULL,
@@ -112,14 +64,8 @@ CREATE TABLE `respostas_edimburgo` (
   CONSTRAINT `respostas_edimburgo_chk_1` CHECK ((`numero_questao` between 1 and 10)),
   CONSTRAINT `respostas_edimburgo_chk_2` CHECK ((`valor_resposta` between 0 and 3))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `agendamentos`
---
 DROP TABLE IF EXISTS `agendamentos`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `agendamentos` (
   `id` char(36) NOT NULL DEFAULT (uuid()),
   `mae_id` char(36) NOT NULL,
@@ -135,14 +81,8 @@ CREATE TABLE `agendamentos` (
   CONSTRAINT `fk_agendamento_mae` FOREIGN KEY (`mae_id`) REFERENCES `maes` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fk_agendamento_psicologo` FOREIGN KEY (`psicologo_id`) REFERENCES `psicologos` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `rodas_de_conversa`
---
 DROP TABLE IF EXISTS `rodas_de_conversa`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rodas_de_conversa` (
   `id` char(36) NOT NULL DEFAULT (uuid()),
   `psicologo_id` char(36) NOT NULL,
@@ -156,14 +96,8 @@ CREATE TABLE `rodas_de_conversa` (
   KEY `fk_roda_psicologo` (`psicologo_id`),
   CONSTRAINT `fk_roda_psicologo` FOREIGN KEY (`psicologo_id`) REFERENCES `psicologos` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `participantes_roda`
---
 DROP TABLE IF EXISTS `participantes_roda`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `participantes_roda` (
   `id` char(36) NOT NULL DEFAULT (uuid()),
   `roda_id` char(36) NOT NULL,
@@ -176,14 +110,8 @@ CREATE TABLE `participantes_roda` (
   CONSTRAINT `fk_participante_mae` FOREIGN KEY (`mae_id`) REFERENCES `maes` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fk_participante_roda` FOREIGN KEY (`roda_id`) REFERENCES `rodas_de_conversa` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `disponibilidade_psicologo`
---
 DROP TABLE IF EXISTS `disponibilidade_psicologo`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `disponibilidade_psicologo` (
   `id` char(36) NOT NULL DEFAULT (uuid()),
   `psicologo_id` char(36) NOT NULL,
@@ -195,127 +123,177 @@ CREATE TABLE `disponibilidade_psicologo` (
   KEY `fk_disponibilidade_psicologo` (`psicologo_id`),
   CONSTRAINT `fk_disponibilidade_psicologo` FOREIGN KEY (`psicologo_id`) REFERENCES `psicologos` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
-
--- ==============================================================================
--- 2. MÓDULO CORPORATE (RH / B2B) - ADICIONADO SEM ALTERAR AS TABELAS ACIMA
--- ==============================================================================
-
---
--- Table structure for table `empresas`
---
 DROP TABLE IF EXISTS `empresas`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `empresas` (
   `id` char(36) NOT NULL DEFAULT (uuid()),
   `nome` varchar(150) NOT NULL,
   `cnpj` varchar(18) NOT NULL,
-  `status` varchar(30) DEFAULT 'ATIVA',
+  `status` varchar(30) NOT NULL DEFAULT 'ATIVA',
   `data_cadastro` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `cnpj` (`cnpj`),
+  UNIQUE KEY `uk_empresas_cnpj` (`cnpj`),
   KEY `idx_empresas_status` (`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `gestores_rh`
---
 DROP TABLE IF EXISTS `gestores_rh`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `gestores_rh` (
   `id` char(36) NOT NULL DEFAULT (uuid()),
   `empresa_id` char(36) NOT NULL,
   `usuario_id` char(36) NOT NULL,
   `cargo` varchar(100) DEFAULT NULL,
-  `nivel_permissao` varchar(50) DEFAULT 'ANALISTA_RH',
   `data_vinculo` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `usuario_id` (`usuario_id`),
-  KEY `fk_gestor_empresa` (`empresa_id`),
-  CONSTRAINT `fk_gestor_empresa` FOREIGN KEY (`empresa_id`) REFERENCES `empresas` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_gestor_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
+  UNIQUE KEY `uk_gestores_usuario` (`usuario_id`),
+  KEY `fk_gestores_empresa` (`empresa_id`),
+  CONSTRAINT `fk_gestores_empresa` FOREIGN KEY (`empresa_id`) REFERENCES `empresas` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_gestores_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `licencas_colaboradoras`
---
 DROP TABLE IF EXISTS `licencas_colaboradoras`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `licencas_colaboradoras` (
   `id` char(36) NOT NULL DEFAULT (uuid()),
   `empresa_id` char(36) NOT NULL,
   `nome_colaboradora` varchar(150) NOT NULL,
   `email_corporativo` varchar(150) NOT NULL,
   `departamento` varchar(100) NOT NULL,
-  `status` varchar(30) DEFAULT 'PENDENTE',
+  `status` varchar(30) NOT NULL DEFAULT 'PENDENTE',
   `token_convite` varchar(100) DEFAULT NULL,
   `data_convite` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `data_ativacao` timestamp NULL DEFAULT NULL,
   `mae_id` char(36) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_empresa_email` (`empresa_id`,`email_corporativo`),
-  UNIQUE KEY `token_convite` (`token_convite`),
-  KEY `fk_licenca_mae` (`mae_id`),
-  KEY `idx_licenca_busca` (`empresa_id`,`status`),
-  CONSTRAINT `fk_licenca_empresa` FOREIGN KEY (`empresa_id`) REFERENCES `empresas` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_licenca_mae` FOREIGN KEY (`mae_id`) REFERENCES `maes` (`id`) ON DELETE SET NULL
+  UNIQUE KEY `uk_licencas_token` (`token_convite`),
+  KEY `fk_licencas_mae` (`mae_id`),
+  KEY `idx_licencas_busca` (`empresa_id`,`status`),
+  CONSTRAINT `fk_licencas_empresa` FOREIGN KEY (`empresa_id`) REFERENCES `empresas` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_licencas_mae` FOREIGN KEY (`mae_id`) REFERENCES `maes` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `faturas_empresa`
---
 DROP TABLE IF EXISTS `faturas_empresa`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `faturas_empresa` (
   `id` char(36) NOT NULL DEFAULT (uuid()),
   `empresa_id` char(36) NOT NULL,
   `mes_referencia` varchar(30) NOT NULL,
   `valor` decimal(10,2) NOT NULL,
-  `status` varchar(30) DEFAULT 'PENDENTE',
+  `status` varchar(30) NOT NULL DEFAULT 'PENDENTE',
   `data_vencimento` date NOT NULL,
   `data_pagamento` date DEFAULT NULL,
   `numero_nfe` varchar(50) DEFAULT NULL,
   `url_pdf_nfe` varchar(500) DEFAULT NULL,
   `data_criacao` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  KEY `fk_fatura_empresa` (`empresa_id`),
-  KEY `idx_faturas_status` (`empresa_id`,`status`),
-  CONSTRAINT `fk_fatura_empresa` FOREIGN KEY (`empresa_id`) REFERENCES `empresas` (`id`) ON DELETE CASCADE
+  KEY `fk_faturas_empresa` (`empresa_id`),
+  KEY `idx_faturas_busca` (`empresa_id`,`status`),
+  CONSTRAINT `fk_faturas_empresa` FOREIGN KEY (`empresa_id`) REFERENCES `empresas` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `configuracoes_empresa`
---
 DROP TABLE IF EXISTS `configuracoes_empresa`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `configuracoes_empresa` (
   `empresa_id` char(36) NOT NULL,
-  `email_resumo_mensal` tinyint(1) DEFAULT '1',
-  `alerta_sobrecarga_clinica` tinyint(1) DEFAULT '1',
-  `alerta_limite_licencas` tinyint(1) DEFAULT '1',
-  `limiar_alerta_licencas_percentual` int DEFAULT '90',
-  `autenticacao_2fa_obrigatoria` tinyint(1) DEFAULT '1',
+  `email_resumo_mensal` tinyint(1) NOT NULL DEFAULT '1',
+  `alerta_sobrecarga_clinica` tinyint(1) NOT NULL DEFAULT '1',
+  `alerta_limite_licencas` tinyint(1) NOT NULL DEFAULT '1',
+  `limiar_alerta_licencas_percentual` int NOT NULL DEFAULT '90',
+  `autenticacao_2fa_obrigatoria` tinyint(1) NOT NULL DEFAULT '1',
   `data_atualizacao` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`empresa_id`),
   CONSTRAINT `fk_config_empresa` FOREIGN KEY (`empresa_id`) REFERENCES `empresas` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+DROP TABLE IF EXISTS `onboarding_mae`;
+CREATE TABLE `onboarding_mae` (
+  `id` char(36) NOT NULL DEFAULT (uuid()),
+  `mae_id` char(36) NOT NULL,
+  `fase_maternidade` varchar(50) NOT NULL,
+  `principal_desafio` varchar(50) NOT NULL,
+  `faixa_renda` varchar(50) NOT NULL,
+  `disposto_pagar_psicologia` varchar(50) NOT NULL,
+  `expectativa_principal` varchar(50) NOT NULL,
+  `data_resposta` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `fk_onboarding_mae` (`mae_id`),
+  CONSTRAINT `fk_onboarding_mae` FOREIGN KEY (`mae_id`) REFERENCES `maes` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+DROP TABLE IF EXISTS `salas_reuniao`;
+CREATE TABLE `salas_reuniao` (
+  `id` char(36) NOT NULL DEFAULT (uuid()),
+  `titulo` varchar(200) NOT NULL,
+  `tipo` varchar(50) NOT NULL,
+  `psicologo_id` char(36) NOT NULL,
+  `referencia_id` char(36) DEFAULT NULL,
+  `status` varchar(30) NOT NULL DEFAULT 'AGENDADA',
+  `link_sala` varchar(500) DEFAULT NULL,
+  `data_inicio` datetime NOT NULL,
+  `data_fim` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_sala_psicologo` (`psicologo_id`),
+  KEY `idx_salas_status` (`status`),
+  CONSTRAINT `fk_sala_psicologo` FOREIGN KEY (`psicologo_id`) REFERENCES `psicologos` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+DROP TABLE IF EXISTS `feedbacks_reuniao`;
+CREATE TABLE `feedbacks_reuniao` (
+  `id` char(36) NOT NULL DEFAULT (uuid()),
+  `sala_id` char(36) NOT NULL,
+  `usuario_id` char(36) NOT NULL,
+  `expectativa_pre` text DEFAULT NULL,
+  `nota_satisfacao` int NOT NULL,
+  `atendeu_expectativa` varchar(30) NOT NULL DEFAULT 'sim',
+  `o_que_achou_texto` text NOT NULL,
+  `permitir_divulgacao_anonima` tinyint(1) NOT NULL DEFAULT '1',
+  `data_feedback` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `fk_feedback_sala` (`sala_id`),
+  KEY `fk_feedback_usuario` (`usuario_id`),
+  CONSTRAINT `fk_feedback_sala` FOREIGN KEY (`sala_id`) REFERENCES `salas_reuniao` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_feedback_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+DROP TABLE IF EXISTS `feedbacks_plataforma`;
+CREATE TABLE `feedbacks_plataforma` (
+  `id` char(36) NOT NULL DEFAULT (uuid()),
+  `usuario_id` char(36) NOT NULL,
+  `categoria` varchar(50) NOT NULL,
+  `nota` int NOT NULL,
+  `mensagem` text NOT NULL,
+  `data_envio` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `fk_feedback_plat_usuario` (`usuario_id`),
+  CONSTRAINT `fk_feedback_plat_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+DROP TABLE IF EXISTS `denuncias`;
+CREATE TABLE `denuncias` (
+  `id` char(36) NOT NULL DEFAULT (uuid()),
+  `denunciante_usuario_id` char(36) NOT NULL,
+  `denunciado_usuario_id` char(36) DEFAULT NULL,
+  `sala_id` char(36) DEFAULT NULL,
+  `motivo` varchar(50) NOT NULL,
+  `o_que_fez` text NOT NULL,
+  `o_que_sentiu` text NOT NULL,
+  `bloquear_usuario` tinyint(1) NOT NULL DEFAULT '1',
+  `status` varchar(30) NOT NULL DEFAULT 'PENDENTE',
+  `data_denuncia` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `fk_denuncia_denunciante` (`denunciante_usuario_id`),
+  KEY `idx_denuncias_status` (`status`),
+  CONSTRAINT `fk_denuncia_denunciante` FOREIGN KEY (`denunciante_usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+DROP TABLE IF EXISTS `planos_monetizacao`;
+CREATE TABLE `planos_monetizacao` (
+  `id` char(36) NOT NULL DEFAULT (uuid()),
+  `nome` varchar(100) NOT NULL,
+  `valor_mensal` decimal(10,2) DEFAULT '80.00',
+  `taxa_fixa_consulta` decimal(10,2) DEFAULT '15.00',
+  `taxa_percentual_consulta` decimal(5,2) DEFAULT '5.00',
+  `status` varchar(30) NOT NULL DEFAULT 'ATIVO',
+  `data_criacao` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+SET FOREIGN_KEY_CHECKS = 1;
+

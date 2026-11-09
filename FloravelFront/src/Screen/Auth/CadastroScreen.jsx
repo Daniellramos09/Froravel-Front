@@ -33,7 +33,11 @@ export default function CadastroScreen() {
     e.preventDefault();
     setCarregando(true);
     setTimeout(() => {
-      navigateToApp(tipoConta);
+      if (tipoConta === 'mae') {
+        window.location.href = `${APP_LINKS.mae}?onboarding=true`;
+      } else {
+        navigateToApp(tipoConta);
+      }
     }, 600);
   };
 

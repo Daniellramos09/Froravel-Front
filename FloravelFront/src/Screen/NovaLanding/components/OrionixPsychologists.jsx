@@ -5,10 +5,10 @@ import { APP_LINKS } from "../../../utils/appLinks";
 const PARTNER_PILLARS = [
   {
     index: "01",
-    badge: "100% de Repasse",
-    title: "Mensalidade fixa de R$ 29,90",
+    badge: "95% de Repasse",
+    title: "Apenas 5% de taxa da plataforma",
     description:
-      "Sem comissão sobre suas sessões: o valor integral de cada consulta particular ou social permanece com a profissional.",
+      "Honorários flexíveis de R$ 40 a R$ 200: a Florável retém apenas 5% para a plataforma e repassa 95% à profissional, com preferência de R$ 40 para mães sem condições.",
   },
   {
     index: "02",

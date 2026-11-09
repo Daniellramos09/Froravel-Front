@@ -27,7 +27,7 @@ const FAQ_ITEMS = [
     order: "4",
     question: "Sou psicóloga perinatal. Como funciona o credenciamento e o repasse?",
     answer:
-      "Psicólogas com CRP ativo e atuação em saúde materna pagam apenas uma assinatura fixa de R$ 29,90/mês e recebem 100% do valor das consultas realizadas, sem taxas de intermediação. Além disso, podem mediar Rodas de Conversa e acumular Flores que isentam a mensalidade.",
+      "Psicólogas com CRP ativo e atuação em saúde materna definem seus honorários entre R$ 40 e R$ 200 por consulta e recebem 95% do valor da sessão (a Florável retém apenas 5% de taxa). Há prioridade de encaminhamento para quem disponibiliza vagas sociais a R$ 40 para mães sem condições financeiras.",
   },
   {
     order: "5",

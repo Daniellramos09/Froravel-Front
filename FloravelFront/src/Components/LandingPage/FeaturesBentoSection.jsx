@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { Check, Sparkles, HeartHandshake, ShieldCheck, ArrowRight, Heart } from "lucide-react";
 
 export default function FeaturesBentoSection() {
   return (
@@ -68,7 +69,6 @@ export default function FeaturesBentoSection() {
           {/* LADO DIREITO: Manifesto Textual em Card Branco Editorial */}
           <div className="lg:col-span-6 rounded-[2.5rem] bg-white/95 p-8 sm:p-10 border border-white shadow-lg shadow-[#294D33]/8 flex flex-col items-start text-left space-y-5">
             
-
             <h3 className="font-serif text-3xl sm:text-4xl font-normal text-[#294D33] leading-[1.18] tracking-[-0.015em]">
               Um lugar para respirar no seu tempo.
             </h3>
@@ -78,15 +78,24 @@ export default function FeaturesBentoSection() {
             </p>
 
             {/* Diferenciais em lista minimalista */}
-            <div className="w-full space-y-2 pt-1">
+            <div className="w-full space-y-2 pt-1 font-sans">
               <div className="flex items-center gap-2.5 text-xs sm:text-sm text-[#294D33] font-medium">
-                <span>Sem notificações invasivas</span>
+                <div className="w-4 h-4 rounded-full bg-[#294D33] text-white flex items-center justify-center shrink-0">
+                  <Check size={11} strokeWidth={3} />
+                </div>
+                <span>Sem notificações invasivas ou cobrança de rotina</span>
               </div>
               <div className="flex items-center gap-2.5 text-xs sm:text-sm text-[#294D33] font-medium">
-                <span>Criptografia de ponta a ponta</span>
+                <div className="w-4 h-4 rounded-full bg-[#294D33] text-white flex items-center justify-center shrink-0">
+                  <Check size={11} strokeWidth={3} />
+                </div>
+                <span>Criptografia de ponta a ponta que protege seus desabafos</span>
               </div>
               <div className="flex items-center gap-2.5 text-xs sm:text-sm text-[#294D33] font-medium">
-                <span>Mapa visual dos seus momentos de leveza</span>
+                <div className="w-4 h-4 rounded-full bg-[#294D33] text-white flex items-center justify-center shrink-0">
+                  <Check size={11} strokeWidth={3} />
+                </div>
+                <span>Mapa visual suave dos seus momentos de alívio e leveza</span>
               </div>
             </div>
 
@@ -96,6 +105,7 @@ export default function FeaturesBentoSection() {
                 className="inline-flex items-center justify-center gap-2 py-3.5 px-7 rounded-full bg-[#294D33] hover:bg-[#1f3c27] text-[#FCF7F9] text-xs font-semibold uppercase tracking-wider shadow-md transition-all duration-300 hover:scale-[1.02]"
               >
                 <span>Começar meu registro gratuito</span>
+                <ArrowRight size={14} />
               </Link>
             </div>
 
@@ -187,7 +197,7 @@ export default function FeaturesBentoSection() {
         {/* ========================================================
             3. CARDS COMPLEMENTARES EDITORIAIS (RODAS & TRIAGEM EPDS)
         ======================================================== */}
-        <div className="sr-group grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
+        <div className="sr-group grid grid-cols-1 md:grid-cols-2 gap-8 text-left mb-20">
           
           {/* Card Rodas de Conversa */}
           <div className="p-8 rounded-[2.5rem] bg-white border border-white shadow-lg shadow-[#294D33]/6 flex flex-col justify-between">
@@ -219,7 +229,8 @@ export default function FeaturesBentoSection() {
             <div className="pt-6 border-t border-[#E8A9BB]/30 flex items-center justify-between">
               <span className="text-xs text-[#516B55]">Acesso aberto a todas</span>
               <Link to="/cadastro" className="text-xs font-bold uppercase tracking-wider text-[#294D33] hover:underline flex items-center gap-1">
-                Participar da roda              </Link>
+                Participar da roda <ArrowRight size={13} />
+              </Link>
             </div>
           </div>
 
@@ -254,8 +265,182 @@ export default function FeaturesBentoSection() {
             <div className="pt-6 border-t border-[#E8A9BB]/30 flex items-center justify-between">
               <span className="text-xs text-[#516B55]">Sem diagnósticos frios</span>
               <Link to="/cadastro" className="text-xs font-bold uppercase tracking-wider text-[#294D33] hover:underline flex items-center gap-1">
-                Fazer triagem gratuita              </Link>
+                Fazer triagem gratuita <ArrowRight size={13} />
+              </Link>
             </div>
+          </div>
+
+        </div>
+
+        {/* ========================================================
+            4. MODELO CIRCULAR SOLIDÁRIO: PLANO FREE VS FLORÁVEL PLUS (R$ 80)
+        ======================================================== */}
+        <div className="sr-group text-left pt-6 border-t border-white/40">
+          
+          <div className="max-w-2xl mb-12">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 border border-[#294D33]/20 shadow-xs mb-3">
+              <HeartHandshake size={14} className="text-[#294D33]" />
+              <span className="text-[11px] uppercase tracking-[0.2em] font-semibold text-[#294D33] font-sans">
+                Sustentabilidade Circular &bull; Cuidado Solidário
+              </span>
+            </div>
+
+            <h3 className="font-serif text-3xl sm:text-4xl lg:text-[2.65rem] font-normal text-[#294D33] leading-tight">
+              Acesso livre para todas.{" "}
+              <span className="italic block sm:inline">Apoio solidário para quem tem condições.</span>
+            </h3>
+
+            <p className="mt-3 text-sm sm:text-base text-[#294D33]/90 font-sans leading-relaxed">
+              Acreditamos que o cuidado emocional materno é um direito, não um privilégio. Por isso, mantemos uma base <strong className="font-bold text-[#294D33]">100% gratuita</strong>, sustentada por mães que têm condições de investir no plano <strong className="font-bold text-[#294D33]">Florável Plus por R$ 80/mês</strong>.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+            
+            {/* PLANO 1: FLORÁVEL ESSENCIAL (FREE - R$ 0) */}
+            <div className="rounded-[2.5rem] bg-white/95 p-8 sm:p-10 border-2 border-white shadow-xl shadow-[#294D33]/8 flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <span className="liquid-chip text-[11px] font-bold uppercase tracking-wider text-[#294D33] px-3 py-1 rounded-full">
+                    Acesso Livre &bull; Para Sempre
+                  </span>
+                  <span className="text-xs font-semibold text-[#516B55]">Sem pegadinhas</span>
+                </div>
+
+                <div className="mb-4">
+                  <span className="font-serif text-4xl sm:text-5xl font-normal text-[#294D33]">R$ 0</span>
+                  <span className="text-xs text-[#516B55] ml-2 font-medium">/ para sempre</span>
+                </div>
+
+                <h4 className="font-serif text-2xl font-normal text-[#294D33] mb-2">
+                  Florável Essencial
+                </h4>
+
+                <p className="text-xs sm:text-sm text-[#3A443E] leading-relaxed font-sans mb-6">
+                  Estrutura completa e acolhedora para que nenhuma mãe enfrente o puerpério ou a sobrecarga materna desamparada.
+                </p>
+
+                <ul className="space-y-3 text-xs sm:text-sm text-[#294D33] font-sans border-t border-[#E8A9BB]/30 pt-6">
+                  <li className="flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full bg-[#EBF1ED] text-[#294D33] flex items-center justify-center shrink-0 mt-0.5">
+                      <Check size={12} strokeWidth={3} />
+                    </div>
+                    <span><strong>Triagem EPDS ilimitada</strong> validada pela OMS com resultado instantâneo</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full bg-[#EBF1ED] text-[#294D33] flex items-center justify-center shrink-0 mt-0.5">
+                      <Check size={12} strokeWidth={3} />
+                    </div>
+                    <span><strong>Diário Emocional diário</strong> confidencial e protegido por criptografia</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full bg-[#EBF1ED] text-[#294D33] flex items-center justify-center shrink-0 mt-0.5">
+                      <Check size={12} strokeWidth={3} />
+                    </div>
+                    <span><strong>Rodas de Conversa semanais</strong> gratuitas mediadas por psicólogas</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full bg-[#EBF1ED] text-[#294D33] flex items-center justify-center shrink-0 mt-0.5">
+                      <Check size={12} strokeWidth={3} />
+                    </div>
+                    <span><strong>Acesso à Clínica Social</strong> com psicólogas a partir de R$ 40 por sessão</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div className="pt-8">
+                <Link
+                  to="/cadastro"
+                  className="w-full py-4 rounded-full bg-[#FCF7F9] hover:bg-[#F4DDE5] text-[#294D33] border border-[#294D33]/30 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition cursor-pointer"
+                >
+                  <span>Criar Conta Gratuita</span>
+                  <ArrowRight size={14} />
+                </Link>
+              </div>
+            </div>
+
+            {/* PLANO 2: FLORÁVEL PLUS (R$ 80/MÊS - MODELO MANTENEDORA SOLIDÁRIA) */}
+            <div className="rounded-[2.5rem] bg-white p-8 sm:p-10 border-2 border-[#294D33] shadow-2xl shadow-[#294D33]/20 flex flex-col justify-between relative overflow-hidden">
+              
+              {/* Badge de Destaque Superior */}
+              <div className="absolute top-0 right-0 bg-[#294D33] text-[#FCF7F9] px-5 py-1.5 rounded-bl-2xl text-[10px] font-bold uppercase tracking-widest flex items-center gap-1 shadow-sm">
+                <Sparkles size={11} className="text-[#E8A9BB]" />
+                <span>Modelo Solidário</span>
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-[11px] font-bold uppercase tracking-wider bg-[#F4DDE5] text-[#294D33] px-3.5 py-1 rounded-full border border-[#E8A9BB]/60">
+                    Mãe Mantenedora
+                  </span>
+                </div>
+
+                <div className="mb-4">
+                  <span className="font-serif text-4xl sm:text-5xl font-normal text-[#294D33]">R$ 80</span>
+                  <span className="text-xs text-[#516B55] ml-2 font-medium">/ mês</span>
+                </div>
+
+                <h4 className="font-serif text-2xl font-normal text-[#294D33] mb-2">
+                  Florável Plus
+                </h4>
+
+                <p className="text-xs sm:text-sm text-[#3A443E] leading-relaxed font-sans mb-4">
+                  Para mães que têm condições financeiras e escolhem viver a experiência completa enquanto sustentam o acolhimento de mães sem renda.
+                </p>
+
+                {/* Banner de Impacto Social Direto */}
+                <div className="p-3.5 rounded-2xl bg-[#EBF1ED] border border-[#516B55]/30 mb-6 flex items-start gap-2.5">
+                  <Heart className="w-4 h-4 text-rose-600 shrink-0 mt-0.5 fill-rose-600" />
+                  <p className="text-xs text-[#294D33] font-medium leading-relaxed font-sans">
+                    <strong className="font-bold">Impacto Direto:</strong> 1 assinatura Plus financia a infraestrutura técnica que acolhe gratuitamente 3 mães em vulnerabilidade social.
+                  </p>
+                </div>
+
+                <ul className="space-y-3 text-xs sm:text-sm text-[#294D33] font-sans border-t border-[#E8A9BB]/30 pt-4">
+                  <li className="flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full bg-[#294D33] text-white flex items-center justify-center shrink-0 mt-0.5">
+                      <Check size={12} strokeWidth={3} />
+                    </div>
+                    <span><strong>Tudo do plano Essencial</strong> incluso e liberado</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full bg-[#294D33] text-white flex items-center justify-center shrink-0 mt-0.5">
+                      <Check size={12} strokeWidth={3} />
+                    </div>
+                    <span><strong>Diário sem limites:</strong> gravação de áudio e histórico emocional avançado</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full bg-[#294D33] text-white flex items-center justify-center shrink-0 mt-0.5">
+                      <Check size={12} strokeWidth={3} />
+                    </div>
+                    <span><strong>Cápsulas do Tempo Ilimitadas:</strong> cartas, fotos e áudios para 1, 2 e 5 anos</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full bg-[#294D33] text-white flex items-center justify-center shrink-0 mt-0.5">
+                      <Check size={12} strokeWidth={3} />
+                    </div>
+                    <span><strong>Agendamento prioritário</strong> na rede de psicólogas credenciadas</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full bg-[#294D33] text-white flex items-center justify-center shrink-0 mt-0.5">
+                      <Check size={12} strokeWidth={3} />
+                    </div>
+                    <span><strong>Selo de Mãe Apoiadora / Mantenedora Solidária</strong> no perfil</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div className="pt-8">
+                <Link
+                  to="/cadastro?plano=plus"
+                  className="w-full py-4 rounded-full bg-[#294D33] hover:bg-[#1f3c27] text-white text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-[#294D33]/20 transition-all duration-300 hover:scale-[1.02] cursor-pointer"
+                >
+                  <span>Assinar Florável Plus (R$ 80/mês)</span>
+                  <ArrowRight size={14} />
+                </Link>
+              </div>
+            </div>
+
           </div>
 
         </div>
