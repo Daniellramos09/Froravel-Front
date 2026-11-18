@@ -6,14 +6,11 @@ import {
   Plus,
   Trash2,
   CheckCircle2,
-  Star,
-  Users,
-  HeartHandshake,
-  ShieldCheck,
-  Sparkles,
   Save,
+  Sparkles,
 } from 'lucide-react';
 import { usePsiAccessibility } from '../Components/Accessibility/PsiAccessibilityContext';
+import FloravelMedalBadge from '../Components/Badges/FloravelMedalBadge';
 
 const FOTOS_SUGERIDAS = [
   '/img/fotopsicologo/psicologa1.jpg',
@@ -77,64 +74,83 @@ export default function PerfilConfiguracoes() {
     showToast('Perfil clínico e configurações salvos com sucesso!');
   };
 
-  // Sistema de Medalhas & Reconhecimento Clínico da Psicóloga
+  // Sistema de Patentes & Medalhas de Impacto Materno (Cores Florável + Formato Roseta)
   const medalhas = [
     {
       id: 'guardia-puerperio',
-      titulo: 'Guardiã do Puerpério',
+      titulo: 'Patente Guardiã do Puerpério',
       criterio: 'Atender 10 mães na plataforma',
       progressoAtual: psiProfile.maesAtendidasCount || 12,
       meta: 10,
       conquistada: (psiProfile.maesAtendidasCount || 12) >= 10,
-      icone: Users,
-      cor: 'bg-[#EBF3ED] text-[#294D33] border-[#294D33]/25',
-      selo: '🏅 Nível Ouro',
+      variant: 'guardia',
+      tier: 'ouro_floravel',
+      cor: 'bg-[#FCF7F9] text-[#1F3A27] border-[#294D33]/25',
+      selo: 'Patente Ouro Botânico',
     },
     {
       id: 'escuta-5-estrelas',
-      titulo: 'Escuta Cinco Estrelas',
-      criterio: 'Receber 50 estrelas nas avaliações das mães',
+      titulo: 'Patente Escuta 5 Estrelas',
+      criterio: 'Receber 50 estrelas positivas das mães',
       progressoAtual: psiProfile.estrelasRecebidasCount || 58,
       meta: 50,
       conquistada: (psiProfile.estrelasRecebidasCount || 58) >= 50,
-      icone: Star,
-      cor: 'bg-amber-50 text-amber-900 border-amber-300/70',
-      selo: '⭐ Excelência Clínica',
+      variant: 'estrelas',
+      tier: 'rosa_floravel',
+      cor: 'bg-[#FCF7F9] text-[#1F3A27] border-[#E8A9BB]',
+      selo: 'Excelência Rosa Pétala',
     },
     {
       id: 'mestre-rodas',
-      titulo: 'Facilitadora de Rodas',
+      titulo: 'Patente Facilitadora de Rodas',
       criterio: 'Conduzir 15 Rodas de Conversa em grupo',
       progressoAtual: psiProfile.rodasConduzidasCount || 18,
       meta: 15,
       conquistada: (psiProfile.rodasConduzidasCount || 18) >= 15,
-      icone: Sparkles,
-      cor: 'bg-[#FCF7F9] text-[#1F3A27] border-[#E8A9BB]',
-      selo: '🌸 Impacto Comunitário',
+      variant: 'rodas',
+      tier: 'esmeralda',
+      cor: 'bg-[#EBF3ED]/60 text-[#1F3A27] border-[#294D33]/20',
+      selo: 'Impacto Esmeralda',
     },
     {
       id: 'anjo-fundo-solidario',
-      titulo: 'Anjo do Fundo Solidário',
+      titulo: 'Patente Anjo Fundo Solidário',
       criterio: 'Realizar 25 atendimentos sociais/gratuitos',
       progressoAtual: psiProfile.atendimentosSociaisCount || 21,
       meta: 25,
       conquistada: (psiProfile.atendimentosSociaisCount || 21) >= 25,
-      icone: HeartHandshake,
+      variant: 'anjo',
+      tier: 'prata_salvia',
       cor: 'bg-stone-50 text-stone-700 border-stone-200',
-      selo: '💚 Em Progresso (84%)',
+      selo: 'Prata Sálvia (84%)',
     },
     {
       id: 'sigilo-etico-cfp',
-      titulo: 'Guardiã do Sigilo Ético (CFP)',
+      titulo: 'Selo Guardiã do Sigilo (CFP)',
       criterio: '100% conformidade Zero Prontuário & LGPD',
       progressoAtual: 1,
       meta: 1,
       conquistada: true,
-      icone: ShieldCheck,
-      cor: 'bg-[#EBF3ED] text-[#1F3A27] border-[#294D33]/30',
-      selo: '🛡️ Verificada CFP',
+      variant: 'sigilo',
+      tier: 'ouro_floravel',
+      cor: 'bg-[#EBF3ED]/50 text-[#1F3A27] border-[#294D33]/30',
+      selo: 'Verificada CFP',
+    },
+    {
+      id: 'estrela-nascente',
+      titulo: 'Patente Estrela Nascente',
+      criterio: 'Primeiros 5 acolhimentos (Impulso Inicial)',
+      progressoAtual: 5,
+      meta: 5,
+      conquistada: true,
+      variant: 'nascente',
+      tier: 'bronze_terra',
+      cor: 'bg-[#FAF6F3] text-[#1F3A27] border-[#E4DAD5]',
+      selo: 'Semente Acolhedora',
     },
   ];
+
+  const totalConquistadas = medalhas.filter((m) => m.conquistada).length;
 
   return (
     <div className="w-full space-y-8 pb-12">
@@ -145,67 +161,76 @@ export default function PerfilConfiguracoes() {
         </div>
       )}
 
-      {/* Cabeçalho */}
-      <header>
+      {/* Cabeçalho — Consistente com Visão Geral */}
+      <header className="rounded-2xl bg-[#F1E6E1] p-5 sm:p-8 lg:p-10">
         <p className="text-[13.5px] md:text-[15px] text-[#4A5E4D]">
-          Identidade Clínica & Reconhecimento
+          Identidade Clínica & Patentes Florável
         </p>
         <h1 className="mt-2 font-fraunces text-[30px] md:text-[38px] leading-[1.12] tracking-[-0.015em] text-[#1F3A27]">
-          Perfil & Configurações
+          Perfil & Medalhas
         </h1>
         <p className="mt-2 text-[15px] text-[#4A5E4D]">
-          Monte seu perfil público para a Rede de Apoio, atualize seu CRP, graduações e acompanhe suas medalhas de impacto materno.
+          Suas patentes de impacto materno e estrelas positivas ampliam sua visibilidade na Rede de Apoio, mantendo espaço justo para novas profissionais.
         </p>
       </header>
 
       {/* =================================================================== */}
-      {/* 1. GALERIA DE MEDALHAS E RECONHECIMENTO DE IMPACTO MATERNO          */}
+      {/* 1. GALERIA DE PATENTES E MEDALHAS DE IMPACTO MATERNO                */}
       {/* =================================================================== */}
       <section className="rounded-3xl border border-[#EFE9EB] bg-white p-6 sm:p-8 shadow-sm">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
           <div>
             <span className="text-xs font-bold uppercase tracking-wider text-[#294D33] flex items-center gap-1.5">
-              <Award className="w-4 h-4" /> Reconhecimento Ético Florável
+              <Award className="w-4 h-4" /> Patentes Oficiais Florável
             </span>
             <h2 className="font-fraunces text-2xl font-bold text-[#1F3A27] mt-1">
-              Suas Medalhas de Acolhimento
+              Conquistas & Rosetas de Acolhimento
             </h2>
             <p className="text-xs text-stone-500 mt-0.5">
-              Medalhas exibidas no seu perfil público quando as mães buscam apoio na plataforma.
+              Quanto mais patentes e avaliações 5 estrelas você conquista, mais destaque ganha — sempre equilibrado com o impulso às recém-chegadas.
             </p>
           </div>
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#F4DDE5] text-[#294D33] text-xs font-bold self-start">
-            <Award className="w-4 h-4" />
-            <span>4 de 5 Medalhas Conquistadas</span>
+            <Sparkles className="w-4 h-4" />
+            <span>{totalConquistadas} de {medalhas.length} Patentes Ativas</span>
           </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {medalhas.map((m) => {
-            const Icon = m.icone;
             const pct = Math.min(Math.round((m.progressoAtual / m.meta) * 100), 100);
             return (
               <div
                 key={m.id}
-                className={`rounded-2xl border p-5 flex flex-col justify-between transition ${m.cor}`}
+                className={`rounded-3xl border p-5 flex flex-col justify-between transition hover:shadow-md ${m.cor}`}
               >
-                <div>
-                  <div className="flex items-center justify-between gap-2 mb-3">
-                    <div className="w-10 h-10 rounded-xl bg-white/90 flex items-center justify-center shadow-2xs">
-                      <Icon className="w-5 h-5 text-[#294D33]" />
-                    </div>
-                    <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-white/90 text-[#1F3A27]">
+                <div className="flex items-start gap-4">
+                  <div className="shrink-0">
+                    <FloravelMedalBadge
+                      variant={m.variant}
+                      tier={m.tier}
+                      unlocked={m.conquistada}
+                      size={66}
+                      title={m.titulo}
+                    />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <span className="inline-block text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-white border border-stone-200/70 text-[#294D33] mb-1.5">
                       {m.selo}
                     </span>
+                    <h3 className="font-fraunces text-base sm:text-lg font-bold text-[#1F3A27] leading-snug">
+                      {m.titulo}
+                    </h3>
+                    <p className="text-xs text-stone-600 mt-1 leading-relaxed">{m.criterio}</p>
                   </div>
-                  <h3 className="font-fraunces text-lg font-bold">{m.titulo}</h3>
-                  <p className="text-xs opacity-85 mt-1">{m.criterio}</p>
                 </div>
 
                 <div className="mt-4 pt-3 border-t border-black/5">
                   <div className="flex items-center justify-between text-[11px] font-bold mb-1.5">
-                    <span>{m.conquistada ? '✓ Conquistada' : 'Em andamento'}</span>
-                    <span>
+                    <span className={m.conquistada ? 'text-[#294D33]' : 'text-stone-500'}>
+                      {m.conquistada ? '✓ Patente Conquistada' : 'Em progresso'}
+                    </span>
+                    <span className="tabular-nums">
                       {m.progressoAtual} / {m.meta}
                     </span>
                   </div>

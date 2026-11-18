@@ -7,6 +7,49 @@ import {
 } from 'lucide-react';
 import DenunciaModal from '../Safety/DenunciaModal';
 
+// Gerenciador singleton de câmera: evita pedir permissão 2x (transição lobby -> chamada ou StrictMode)
+const camManager = {
+  stream: null,
+  pending: null,
+  refCount: 0,
+  stopTimer: null,
+  async acquire() {
+    this.refCount += 1;
+    if (this.stopTimer) {
+      clearTimeout(this.stopTimer);
+      this.stopTimer = null;
+    }
+    if (this.stream && this.stream.active) return this.stream;
+    if (this.pending) return this.pending;
+    if (!navigator.mediaDevices?.getUserMedia) return null;
+
+    this.pending = navigator.mediaDevices
+      .getUserMedia({ video: true, audio: false })
+      .then((s) => {
+        this.stream = s;
+        this.pending = null;
+        return s;
+      })
+      .catch(() => {
+        this.pending = null;
+        return null;
+      });
+    return this.pending;
+  },
+  release() {
+    this.refCount = Math.max(0, this.refCount - 1);
+    if (this.refCount === 0 && !this.stopTimer) {
+      this.stopTimer = setTimeout(() => {
+        if (this.refCount === 0 && this.stream) {
+          this.stream.getTracks().forEach((t) => t.stop());
+          this.stream = null;
+        }
+        this.stopTimer = null;
+      }, 200);
+    }
+  },
+};
+
 // Componente que renderiza o stream real da Webcam (com espelhamento natural estilo Google Meet)
 function LiveWebcamTile({ stream, fallbackImg, alt }) {
   const videoRef = useRef(null);
@@ -80,36 +123,31 @@ export default function MeetingRoomModal({
   const [disjuntorInfo, setDisjuntorInfo] = useState(null);
   const [localStream, setLocalStream] = useState(null);
 
-  // Captura real da Webcam do navegador quando o modal está aberto e a câmera está ligada
-  useEffect(() => {
-    let activeStream = null;
-    let cancelled = false;
+  // Captura única e contínua da Webcam (sem pedir permissão novamente entre lobby e sala)
+  const shouldCaptureCamera = isOpen && isCameraOn && stage !== 'post_call';
 
-    if (isOpen && isCameraOn && stage !== 'post_call' && navigator.mediaDevices?.getUserMedia) {
-      navigator.mediaDevices
-        .getUserMedia({ video: true, audio: false })
-        .then((stream) => {
-          if (cancelled) {
-            stream.getTracks().forEach((t) => t.stop());
-            return;
-          }
-          activeStream = stream;
+  useEffect(() => {
+    let cancelled = false;
+    let acquired = false;
+
+    if (shouldCaptureCamera) {
+      acquired = true;
+      camManager.acquire().then((stream) => {
+        if (!cancelled) {
           setLocalStream(stream);
-        })
-        .catch(() => {
-          setLocalStream(null);
-        });
+        }
+      });
     } else {
       setLocalStream(null);
     }
 
     return () => {
       cancelled = true;
-      if (activeStream) {
-        activeStream.getTracks().forEach((t) => t.stop());
+      if (acquired) {
+        camManager.release();
       }
     };
-  }, [isOpen, isCameraOn, stage]);
+  }, [shouldCaptureCamera]);
 
   // Sincronização em tempo real entre Abas (BroadcastChannel + Spring Boot /api/sala-ao-vivo)
   useEffect(() => {

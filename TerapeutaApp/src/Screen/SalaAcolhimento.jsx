@@ -58,6 +58,49 @@ function playSoftArrivalChime() {
   } catch (_) {}
 }
 
+// Gerenciador singleton de câmera: evita pedir permissão 2x em StrictMode ou trocas de tela
+const psiCamManager = {
+  stream: null,
+  pending: null,
+  refCount: 0,
+  stopTimer: null,
+  async acquire() {
+    this.refCount += 1;
+    if (this.stopTimer) {
+      clearTimeout(this.stopTimer);
+      this.stopTimer = null;
+    }
+    if (this.stream && this.stream.active) return this.stream;
+    if (this.pending) return this.pending;
+    if (!navigator.mediaDevices?.getUserMedia) return null;
+
+    this.pending = navigator.mediaDevices
+      .getUserMedia({ video: true, audio: false })
+      .then((s) => {
+        this.stream = s;
+        this.pending = null;
+        return s;
+      })
+      .catch(() => {
+        this.pending = null;
+        return null;
+      });
+    return this.pending;
+  },
+  release() {
+    this.refCount = Math.max(0, this.refCount - 1);
+    if (this.refCount === 0 && !this.stopTimer) {
+      this.stopTimer = setTimeout(() => {
+        if (this.refCount === 0 && this.stream) {
+          this.stream.getTracks().forEach((t) => t.stop());
+          this.stream = null;
+        }
+        this.stopTimer = null;
+      }, 200);
+    }
+  },
+};
+
 function LiveWebcamPreview({ stream }) {
   const videoRef = useRef(null);
 
@@ -141,33 +184,26 @@ export default function SalaAcolhimento() {
     setTimeout(() => setEntradaBanner(''), 4200);
   };
 
-  // Captura real da Webcam na tela da Psicóloga (Lobby e Chamada Ao Vivo)
+  // Captura única da Webcam na tela da Psicóloga (Lobby e Chamada Ao Vivo sem pedir permissão 2x)
   useEffect(() => {
-    let activeStream = null;
     let cancelled = false;
+    let acquired = false;
 
-    if (camLigada && navigator.mediaDevices?.getUserMedia) {
-      navigator.mediaDevices
-        .getUserMedia({ video: true, audio: false })
-        .then((stream) => {
-          if (cancelled) {
-            stream.getTracks().forEach((t) => t.stop());
-            return;
-          }
-          activeStream = stream;
+    if (camLigada) {
+      acquired = true;
+      psiCamManager.acquire().then((stream) => {
+        if (!cancelled) {
           setLocalStream(stream);
-        })
-        .catch(() => {
-          setLocalStream(null);
-        });
+        }
+      });
     } else {
       setLocalStream(null);
     }
 
     return () => {
       cancelled = true;
-      if (activeStream) {
-        activeStream.getTracks().forEach((t) => t.stop());
+      if (acquired) {
+        psiCamManager.release();
       }
     };
   }, [camLigada]);

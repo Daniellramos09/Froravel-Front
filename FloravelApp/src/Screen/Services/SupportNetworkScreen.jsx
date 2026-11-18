@@ -17,10 +17,10 @@ import {
 
 import FilterToolbar from "./FilterToolbar";
 import PsychologistCard from "./PsychologistCard";
+import FloravelMedalBadge from "../../Components/Badges/FloravelMedalBadge";
 
 // =========================================================
-// MOCK DATA: 6 PROFISSIONAIS CERTIFICADAS
-// Preços acessíveis calibrados para mães acolhidas pela rede
+// MOCK DATA: 6 PROFISSIONAIS CERTIFICADAS COM PATENTES FLORÁVEL
 // =========================================================
 export const MOCK_PSYCHOLOGISTS = [
   {
@@ -31,6 +31,13 @@ export const MOCK_PSYCHOLOGISTS = [
     approach: "Psicanálise",
     education: "Especialista em Psicologia Perinatal e Parentalidade · Instituto Gerar / USP",
     sessionsCompleted: 48,
+    rating: 4.9,
+    positiveStarsCount: 58,
+    patenteNivel: 4,
+    patenteNome: "Guardiã do Puerpério",
+    patenteVariant: "guardia",
+    patenteTier: "ouro_floravel",
+    isNewcomer: false,
     desc: "Um espaço de escuta profunda para acolher você e as transformações da maternidade, respeitando o seu momento e os desafios do puerpério.",
     modality: "Online · 50 min",
     price: 0,
@@ -48,6 +55,13 @@ export const MOCK_PSYCHOLOGISTS = [
     approach: "Fenomenológica-Existencial",
     education: "Mestre em Psicologia Clínica e Acolhimento Perinatal · PUC-SP",
     sessionsCompleted: 36,
+    rating: 4.9,
+    positiveStarsCount: 44,
+    patenteNivel: 3,
+    patenteNome: "Escuta 5 Estrelas",
+    patenteVariant: "estrelas",
+    patenteTier: "rosa_floravel",
+    isNewcomer: false,
     desc: "Acolhimento sensível e humanizado para atravessar perdas gestacionais e neonatais, encontrando amparo seguro e sem julgamentos.",
     modality: "Online · 50 min",
     price: 40,
@@ -65,6 +79,13 @@ export const MOCK_PSYCHOLOGISTS = [
     approach: "TCC (Cognitivo-Comportamental)",
     education: "Especialista em Saúde Mental Materna e Triagem Clínica · UNIFESP",
     sessionsCompleted: 42,
+    rating: 4.8,
+    positiveStarsCount: 51,
+    patenteNivel: 4,
+    patenteNome: "Facilitador de Rodas",
+    patenteVariant: "rodas",
+    patenteTier: "esmeralda",
+    isNewcomer: false,
     desc: "Escuta inicial, triagem clínica e direcionamento especializado para sobrecarga mental, sintomas ansiosos e ambivalência no puerpério.",
     modality: "Online · 40 min",
     price: 0,
@@ -81,7 +102,14 @@ export const MOCK_PSYCHOLOGISTS = [
     spec: "Psicologia Perinatal",
     approach: "TCC (Cognitivo-Comportamental)",
     education: "Pós-graduada em Terapia Cognitivo-Comportamental no Pós-Parto · HC-FMUSP",
-    sessionsCompleted: 29,
+    sessionsCompleted: 14,
+    rating: 5.0,
+    positiveStarsCount: 14,
+    patenteNivel: 2,
+    patenteNome: "Estrela Nascente",
+    patenteVariant: "nascente",
+    patenteTier: "bronze_terra",
+    isNewcomer: true,
     desc: "Foco prático em manejo de ansiedade pós-parto, rotinas de sono compartilhado e técnicas de acolhimento emocional para mães recentes.",
     modality: "Online · 50 min",
     price: 60,
@@ -99,6 +127,13 @@ export const MOCK_PSYCHOLOGISTS = [
     approach: "Gestalt-terapia",
     education: "Especialista em Gestalt-Terapia e Vínculos Maternos · Instituto Sedes Sapientiae",
     sessionsCompleted: 34,
+    rating: 4.8,
+    positiveStarsCount: 39,
+    patenteNivel: 3,
+    patenteNome: "Anjo Fundo Solidário",
+    patenteVariant: "anjo",
+    patenteTier: "prata_salvia",
+    isNewcomer: false,
     desc: "Apoio centrado no aqui-e-agora da maternidade atípica, culpa materna e fortalecimento de vínculos afetivos na gestação e pós-parto.",
     modality: "Presencial (SP) ou Online",
     price: 50,
@@ -115,11 +150,18 @@ export const MOCK_PSYCHOLOGISTS = [
     spec: "Psicologia Perinatal",
     approach: "Humanista",
     education: "Especialista em Clínica Materno-Infantil e Psicologia Humanista · Mackenzie",
-    sessionsCompleted: 16,
+    sessionsCompleted: 8,
+    rating: 5.0,
+    positiveStarsCount: 8,
+    patenteNivel: 2,
+    patenteNome: "Estrela Nascente",
+    patenteVariant: "nascente",
+    patenteTier: "bronze_terra",
+    isNewcomer: true,
     desc: "Acolhimento empático para mães solos, desafios na amamentação e fortalecimento da autoestima no retorno ao trabalho pós-licença.",
     modality: "Online · 50 min",
-    price: 75,
-    priceFormatted: "R$ 75,00",
+    price: 45,
+    priceFormatted: "R$ 45,00",
     isSocial: false,
     verified: true,
     tags: ["Psicologia Perinatal", "Retorno ao Trabalho", "Maternidade Solo"],
@@ -138,12 +180,13 @@ export default function SupportNetworkScreen({
     externalProfEmFoco !== undefined ? externalProfEmFoco : internalProfEmFoco;
   const setProfEmFoco = externalSetProfEmFoco || setInternalProfEmFoco;
 
-  // Estados de Filtro
+  // Estados de Filtro e Ordenação Justa (Mérito por Patente/Estrelas + Impulso Recém-Chegadas)
   const [searchTerm, setSearchTerm] = useState("");
   const [activeSpecialty, setActiveSpecialty] = useState("Todas");
   const [priceFilter, setPriceFilter] = useState("all");
   const [approachFilter, setApproachFilter] = useState("Todas as Abordagens");
   const [modalityFilter, setModalityFilter] = useState("all");
+  const [sortMode, setSortMode] = useState("equilibrio"); // 'equilibrio' | 'patentes' | 'novas' | 'social'
 
   // Estados de Agendamento
   const [selectedDay, setSelectedDay] = useState(15);
@@ -174,10 +217,11 @@ export default function SupportNetworkScreen({
     setPriceFilter("all");
     setApproachFilter("Todas as Abordagens");
     setModalityFilter("all");
+    setSortMode("equilibrio");
   };
 
   const filteredProfessionals = useMemo(() => {
-    return MOCK_PSYCHOLOGISTS.filter((prof) => {
+    const filtrados = MOCK_PSYCHOLOGISTS.filter((prof) => {
       const term = searchTerm.toLowerCase().trim();
       const matchesSearch =
         !term ||
@@ -221,12 +265,50 @@ export default function SupportNetworkScreen({
         matchesModality
       );
     });
+
+    const scoreMerito = (p) =>
+      (p.patenteNivel || 1) * 100 + (p.positiveStarsCount || 0) * 2 + (p.rating || 4.8) * 10;
+
+    if (sortMode === "patentes") {
+      return [...filtrados].sort((a, b) => scoreMerito(b) - scoreMerito(a));
+    }
+
+    if (sortMode === "novas") {
+      return [...filtrados].sort((a, b) => {
+        if (a.isNewcomer !== b.isNewcomer) return a.isNewcomer ? -1 : 1;
+        return (a.sessionsCompleted || 0) - (b.sessionsCompleted || 0);
+      });
+    }
+
+    if (sortMode === "social") {
+      return [...filtrados].sort((a, b) => (a.price || 0) - (b.price || 0));
+    }
+
+    // Modo padrão 'equilibrio': Destaca líderes de Patente + Estrelas, mas intercala recém-chegadas
+    // nos primeiros lugares para que novas psicólogas consigam seus primeiros atendimentos.
+    const veteranas = filtrados
+      .filter((p) => !p.isNewcomer)
+      .sort((a, b) => scoreMerito(b) - scoreMerito(a));
+    const novas = filtrados
+      .filter((p) => p.isNewcomer)
+      .sort((a, b) => (b.rating || 5) - (a.rating || 5));
+
+    const resultado = [];
+    let vIdx = 0;
+    let nIdx = 0;
+    while (vIdx < veteranas.length || nIdx < novas.length) {
+      if (vIdx < veteranas.length) resultado.push(veteranas[vIdx++]);
+      if (nIdx < novas.length) resultado.push(novas[nIdx++]); // 2ª posição e posições pares recebem recém-chegada
+      if (vIdx < veteranas.length) resultado.push(veteranas[vIdx++]);
+    }
+    return resultado;
   }, [
     searchTerm,
     activeSpecialty,
     priceFilter,
     approachFilter,
     modalityFilter,
+    sortMode,
   ]);
 
   const handleConfirmarAgendamento = () => {
@@ -372,7 +454,21 @@ export default function SupportNetworkScreen({
                   >
                     {profEmFoco.name}
                   </h1>
-                  <p className="text-[13px] text-[#6B6365] mt-1.5">
+                  <div className="mt-2.5 flex flex-wrap items-center gap-2.5">
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-900 text-[12px] font-bold whitespace-nowrap">
+                      <Star size={12} className="fill-amber-400 text-amber-500" />
+                      {Number(profEmFoco.rating || 4.9).toFixed(1)} · {profEmFoco.positiveStarsCount || sessionsCount} estrelas
+                    </span>
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-[#E4DAD5] text-[11.5px] font-bold text-[#1F3A27]">
+                      <FloravelMedalBadge
+                        variant={profEmFoco.patenteVariant || "guardia"}
+                        tier={profEmFoco.patenteTier || "ouro_floravel"}
+                        size={22}
+                      />
+                      <span>{profEmFoco.patenteNome || "Patente Florável"}</span>
+                    </div>
+                  </div>
+                  <p className="text-[13px] text-[#6B6365] mt-2">
                     Abordagem: <strong className="font-medium text-[#2B2829]">{profEmFoco.approach}</strong>
                   </p>
                 </div>
@@ -730,26 +826,46 @@ export default function SupportNetworkScreen({
         activeFiltersCount={activeFiltersCount}
       />
 
-      {/* Contador discreto */}
-      <div className="flex items-center justify-between mb-4 text-[13px] text-[#6B6365]">
-        <span>
-          {filteredProfessionals.length}{" "}
-          {filteredProfessionals.length === 1
-            ? "profissional disponível"
-            : "profissionais disponíveis"}
-        </span>
+      {/* Contador discreto + Seletor de Ordenação Justa */}
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-5 text-[13px] text-[#6B6365]">
+        <div className="flex items-center gap-3">
+          <span className="font-medium">
+            {filteredProfessionals.length}{" "}
+            {filteredProfessionals.length === 1
+              ? "profissional disponível"
+              : "profissionais disponíveis"}
+          </span>
 
-        {(searchTerm ||
-          activeSpecialty !== "Todas" ||
-          activeFiltersCount > 0) && (
-          <button
-            type="button"
-            onClick={handleResetFilters}
-            className="text-[#294D33] font-medium hover:underline cursor-pointer"
+          {(searchTerm ||
+            activeSpecialty !== "Todas" ||
+            activeFiltersCount > 0 ||
+            sortMode !== "equilibrio") && (
+            <button
+              type="button"
+              onClick={handleResetFilters}
+              className="text-[#294D33] font-medium hover:underline cursor-pointer"
+            >
+              Limpar filtros
+            </button>
+          )}
+        </div>
+
+        <div className="flex items-center gap-2">
+          <label htmlFor="sortMode" className="text-[12px] font-medium text-[#6B6365]">
+            Ordenar:
+          </label>
+          <select
+            id="sortMode"
+            value={sortMode}
+            onChange={(e) => setSortMode(e.target.value)}
+            className="rounded-full border border-[#E4DAD5] bg-white px-3.5 py-1.5 text-[12px] font-bold text-[#1F3A27] outline-none focus:border-[#294D33] cursor-pointer"
           >
-            Limpar filtros
-          </button>
-        )}
+            <option value="equilibrio">Recomendadas (Patentes + Recém-chegadas)</option>
+            <option value="patentes">Maior Patente & Estrelas</option>
+            <option value="novas">Novas na Florável (Oportunidade)</option>
+            <option value="social">Gratuitas & Menor Valor</option>
+          </select>
+        </div>
       </div>
 
       {/* Lista de Profissionais: 1 coluna no mobile, 2 colunas em telas amplas */}
