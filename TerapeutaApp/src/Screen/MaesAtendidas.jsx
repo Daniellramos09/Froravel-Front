@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
-import { Search, X, Calendar, ShieldCheck, CheckCircle2, ChevronRight, Activity, Users } from 'lucide-react';
+import { Search, X, Calendar, ShieldCheck, ShieldAlert, CheckCircle2, ChevronRight, Activity, Users, Lock } from 'lucide-react';
 
 /* ---------- Dados iniciais (Sem Prontuário Eletrônico — Diretriz Zero Prontuário) ---------- */
 const maesIniciais = [
@@ -14,7 +14,22 @@ const maesIniciais = [
     tempo: 'Na comunidade há 6 semanas',
     rodasParticipadas: ['Puerpério Real & Exaustão', 'Rede de Apoio e Limites Familiares'],
     preferenciaAcolhimento: 'Prefere encontros em grupo no período noturno',
-    triagemCompartilhada: { data: '2026-10-09', nivel: 'Acolhimento Moderado Prioritário' }
+    triagemCompartilhada: { data: '2026-10-09', nivel: 'Acolhimento Moderado Prioritário' },
+    menorDeIdade: false,
+    statusSalvaguarda: 'Identidade Verificada (Gov)',
+  },
+  {
+    id: 6,
+    nome: 'Camila Ramos',
+    bebe: 'Bebê Lucas (2 meses)',
+    proxima: '2026-10-25T16:00',
+    grupos: 1,
+    tempo: 'Na comunidade há 2 semanas',
+    rodasParticipadas: ['Jovens Mães & Rede Escolar'],
+    preferenciaAcolhimento: 'Acolhimento sigiloso ECA Art. 17',
+    triagemCompartilhada: { data: '2026-10-14', nivel: 'Acolhimento Sensível Jovem Mãe' },
+    menorDeIdade: true,
+    statusSalvaguarda: 'Menor (16a) · Responsável Autorizado (ECA)',
   },
   {
     id: 2,
@@ -91,16 +106,36 @@ const normalizar = (t) =>
 /* ---------- Tela ---------- */
 export default function MaesAtendidas() {
   const navigate = useNavigate();
-  const [maes] = useState(maesIniciais);
+  const [maes, setMaes] = useState(maesIniciais);
   const [busca, setBusca] = useState('');
   const [selectedMae, setSelectedMae] = useState(null);
+  const [toastMsg, setToastMsg] = useState('');
 
   const filtradas = maes.filter((m) => normalizar(m.nome).includes(normalizar(busca)));
 
+  const handleSinalizarMenor = (mae) => {
+    const atualizado = {
+      ...mae,
+      menorDeIdade: true,
+      statusSalvaguarda: 'Aguardando Consentimento Responsável (ECA)',
+    };
+    setMaes((prev) => prev.map((item) => (item.id === mae.id ? atualizado : item)));
+    setSelectedMae(atualizado);
+    setToastMsg(`Salvaguarda ECA ativada para ${mae.nome}: link de consentimento enviado ao responsável.`);
+    setTimeout(() => setToastMsg(''), 4000);
+  };
+
   return (
     <div className="w-full relative">
-      {/* Cabeçalho */}
-      <header>
+      {toastMsg && (
+        <div className="fixed top-6 right-6 z-[10000] flex items-center gap-2 rounded-2xl bg-[#294D33] px-5 py-3 text-xs font-semibold text-white shadow-xl animate-fadeIn">
+          <CheckCircle2 className="w-4 h-4 text-[#E8A9BB]" />
+          <span>{toastMsg}</span>
+        </div>
+      )}
+
+      {/* Cabeçalho — Estilo Editorial Consistente com Visão Geral */}
+      <header className="rounded-2xl bg-[#F1E6E1] p-5 sm:p-8 lg:p-10">
         <p className="text-[13.5px] md:text-[15px] text-[#4A5E4D] first-letter:uppercase">
           Escuta que acolhe
         </p>
@@ -150,7 +185,14 @@ export default function MaesAtendidas() {
                   </div>
 
                   <div className="min-w-0">
-                    <p className="font-bold text-[#2B2829] text-base">{m.nome}</p>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <p className="font-bold text-[#2B2829] text-base">{m.nome}</p>
+                      {m.menorDeIdade && (
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-50 border border-amber-200 text-[10px] font-bold text-amber-900">
+                          <Lock className="w-3 h-3" /> {m.statusSalvaguarda || 'ECA Art. 17'}
+                        </span>
+                      )}
+                    </div>
                     <p className="text-xs text-stone-500">{m.bebe} · {m.tempo}</p>
                     <p className="text-sm text-[#4A5E4D] mt-1">
                       Próximo encontro: {formatarDia(proxima)} · {formatarHora(proxima)} · {m.grupos} roda(s)
@@ -186,7 +228,7 @@ export default function MaesAtendidas() {
           onClick={() => setSelectedMae(null)}
         >
           <div
-            className="bg-white rounded-3xl p-6 sm:p-7 max-w-xl w-full shadow-2xl border border-[#E4DAD5]"
+            className="bg-white rounded-3xl p-6 sm:p-7 max-w-xl w-full shadow-2xl border border-[#E4DAD5] max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header do Resumo */}
@@ -254,29 +296,52 @@ export default function MaesAtendidas() {
               </div>
             </div>
 
-            {/* Nota de Compliance */}
-            <div className="mt-6 p-4 rounded-2xl bg-stone-50 border border-stone-200/80 text-xs text-stone-600 leading-relaxed">
-              <strong className="text-stone-800 block mb-1">Proteção de Sigilo Clínico (Zero Prontuário):</strong>
-              Para segurança jurídica da profissional e intimidade da mãe, anotações clínicas individuais não são salvas na plataforma Florável.
+            {/* Nota de Compliance & Salvaguarda ECA */}
+            <div className="mt-5 p-4 rounded-2xl bg-stone-50 border border-stone-200/80 text-xs text-stone-600 leading-relaxed space-y-2">
+              <div>
+                <strong className="text-stone-800 block mb-0.5">Proteção de Sigilo Clínico (Zero Prontuário):</strong>
+                Para segurança jurídica da profissional e intimidade da mãe, anotações clínicas individuais não são salvas na plataforma Florável.
+              </div>
+              {selectedMae.statusSalvaguarda && (
+                <div className="pt-2 border-t border-stone-200 flex items-center justify-between gap-2">
+                  <span className="font-bold text-[#1F3A27]">Status Civil / ECA:</span>
+                  <span className="px-2.5 py-0.5 rounded-full bg-white border border-stone-200 text-[11px] font-semibold text-[#294D33]">
+                    {selectedMae.statusSalvaguarda}
+                  </span>
+                </div>
+              )}
             </div>
 
             {/* Rodapé de Ações */}
-            <div className="mt-6 pt-4 border-t border-stone-100 flex flex-col sm:flex-row gap-3">
+            <div className="mt-6 pt-4 border-t border-stone-100 flex flex-wrap gap-2.5">
               <button
                 onClick={() => {
                   setSelectedMae(null);
                   navigate('/agenda');
                 }}
-                className="flex-1 inline-flex items-center justify-center gap-2 rounded-full bg-[#F4DDE5] px-5 py-2.5 text-xs font-bold text-[#294D33] hover:bg-[#E8A9BB]/50 transition cursor-pointer"
+                className="flex-1 inline-flex items-center justify-center gap-2 rounded-full bg-[#F4DDE5] px-4 py-2.5 text-xs font-bold text-[#294D33] hover:bg-[#E8A9BB]/50 transition cursor-pointer"
               >
                 <Calendar className="w-4 h-4" />
-                Ver Encontros na Agenda
+                Ver na Agenda
               </button>
+
+              {!selectedMae.menorDeIdade && (
+                <button
+                  type="button"
+                  onClick={() => handleSinalizarMenor(selectedMae)}
+                  className="inline-flex items-center justify-center gap-1.5 rounded-full bg-amber-50 border border-amber-300 px-4 py-2.5 text-xs font-bold text-amber-900 hover:bg-amber-100 transition cursor-pointer"
+                  title="Caso perceba em atendimento que a mãe é adolescente e informou data incorreta"
+                >
+                  <ShieldAlert className="w-4 h-4" />
+                  Sinalizar Menor (ECA)
+                </button>
+              )}
+
               <button
                 onClick={() => setSelectedMae(null)}
                 className="px-5 py-2.5 rounded-full border border-stone-200 text-stone-600 text-xs font-semibold hover:bg-stone-50 transition cursor-pointer"
               >
-                Fechar Resumo
+                Fechar
               </button>
             </div>
           </div>

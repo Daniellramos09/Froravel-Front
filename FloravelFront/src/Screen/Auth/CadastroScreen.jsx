@@ -11,6 +11,27 @@ const TIPOS_CONTA = [
   { id: 'rh', label: 'Empresa / RH', desc: 'Solução B2B para apoio às colaboradoras e conformidade ESG.' },
 ];
 
+function formatarCpf(valor) {
+  const digits = String(valor || '').replace(/\D/g, '').slice(0, 11);
+  return digits
+    .replace(/(\d{3})(\d)/, '$1.$2')
+    .replace(/(\d{3})(\d)/, '$1.$2')
+    .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+}
+
+function validarCpfModulo11Local(cpf) {
+  const d = String(cpf || '').replace(/\D/g, '');
+  if (d.length !== 11 || /^(\d)\1{10}$/.test(d)) return false;
+  let soma = 0;
+  for (let i = 0; i < 9; i++) soma += Number(d[i]) * (10 - i);
+  const dig1 = ((soma * 10) % 11) % 10;
+  if (dig1 !== Number(d[9])) return false;
+  soma = 0;
+  for (let i = 0; i < 10; i++) soma += Number(d[i]) * (11 - i);
+  const dig2 = ((soma * 10) % 11) % 10;
+  return dig2 === Number(d[10]);
+}
+
 function calcularIdade(dataNascimentoStr) {
   if (!dataNascimentoStr) return null;
   const hoje = new Date();
@@ -29,6 +50,7 @@ export default function CadastroScreen() {
   const [formData, setFormData] = useState({
     nome: '',
     email: '',
+    cpf: '',
     senha: '',
     dataNascimento: '',
     termoAceito: true,
@@ -41,25 +63,133 @@ export default function CadastroScreen() {
   });
   const [carregando, setCarregando] = useState(false);
   const [erroValidacao, setErroValidacao] = useState('');
+  const [govResult, setGovResult] = useState(null);
+  const [validandoGov, setValidandoGov] = useState(false);
   const [mostrarAjudaVulnerabilidade, setMostrarAjudaVulnerabilidade] = useState(false);
 
   const idade = useMemo(() => calcularIdade(formData.dataNascimento), [formData.dataNascimento]);
   const isMenorIdade = tipoConta === 'mae' && idade !== null && idade >= 13 && idade < 18;
   const isIdadeAbaixoMinimo = tipoConta === 'mae' && idade !== null && idade < 13;
   const isIdadeAcimaMaximo = tipoConta === 'mae' && idade !== null && idade > 80;
+  const bloqueadoEspacoSeguro = tipoConta === 'mae' && govResult?.bloqueadoEspacoSeguro === true;
+
+  const simularFallbackGovernoLocal = (cpfLimpo, dataInformada) => {
+    const hoje = new Date();
+    const pad = (n) => String(n).padStart(2, '0');
+    if (cpfLimpo === '14582931065') {
+      const anoReal = hoje.getFullYear() - 15;
+      const dataReal = `${anoReal}-${pad(hoje.getMonth() + 1)}-${pad(hoje.getDate())}`;
+      const divergente = Boolean(dataInformada && dataInformada !== dataReal);
+      return {
+        cpfValido: true,
+        aprovadoParaCadastroMae: true,
+        menorDeIdade: true,
+        requerResponsavelLegal: true,
+        bloqueadoEspacoSeguro: false,
+        divergenciaCadastral: divergente,
+        mensagemClinicaEtica: divergente
+          ? 'Divergência identificada via Receita/Gov: a data de nascimento foi corrigida para 15 anos. Conforme o ECA (Art. 17) e LGPD (Art. 14), o consentimento do responsável legal é obrigatório (sem acesso às conversas íntimas).'
+          : 'Mãe adolescente (15 anos) identificada via CPF: exige responsável legal com garantia de sigilo ECA Art. 17.',
+        dadosCidadao: { dataNascimentoOficial: dataReal, sexoRegistrado: 'F', idadeOficial: 15 },
+      };
+    }
+    if (cpfLimpo === '52998224725') {
+      return {
+        cpfValido: true,
+        aprovadoParaCadastroMae: false,
+        bloqueadoEspacoSeguro: true,
+        mensagemClinicaEtica:
+          'As Rodas de Conversa e a Comunidade Florável constituem um ambiente clínico protegido e exclusivo para mulheres no ciclo gravídico-puerperal, garantindo intimidade durante o pós-parto e amamentação.',
+        dadosCidadao: { dataNascimentoOficial: '1992-03-15', sexoRegistrado: 'M', idadeOficial: 34 },
+      };
+    }
+    if (!validarCpfModulo11Local(cpfLimpo)) {
+      return {
+        cpfValido: false,
+        aprovadoParaCadastroMae: false,
+        mensagemClinicaEtica: 'O CPF informado possui dígitos verificadores inválidos.',
+      };
+    }
+    return {
+      cpfValido: true,
+      aprovadoParaCadastroMae: true,
+      menorDeIdade: false,
+      bloqueadoEspacoSeguro: false,
+      mensagemClinicaEtica: 'Identidade civil e elegibilidade ao Espaço Seguro Florável confirmadas.',
+      dadosCidadao: { dataNascimentoOficial: dataInformada || '1996-05-20', sexoRegistrado: 'F' },
+    };
+  };
+
+  const consultarApiGoverno = async (cpfBruto, dataAtual) => {
+    const cpfLimpo = String(cpfBruto || '').replace(/\D/g, '');
+    if (cpfLimpo.length !== 11) {
+      setGovResult(null);
+      return;
+    }
+
+    setValidandoGov(true);
+    setErroValidacao('');
+    let resultado = null;
+
+    try {
+      const apiBase = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+      const res = await fetch(`${apiBase}/api/governo/validar-identidade`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          cpf: cpfLimpo,
+          dataNascimentoInformada: dataAtual || null,
+          nomeInformado: formData.nome || null,
+        }),
+      });
+      if (res.ok) {
+        resultado = await res.json();
+      }
+    } catch (_) {
+      // Fallback resiliente para demonstração sem back-end local ligado
+    }
+
+    if (!resultado) {
+      resultado = simularFallbackGovernoLocal(cpfLimpo, dataAtual);
+    }
+
+    setGovResult(resultado);
+    if (resultado?.dadosCidadao?.dataNascimentoOficial && resultado.cpfValido && !resultado.bloqueadoEspacoSeguro) {
+      setFormData((prev) => ({
+        ...prev,
+        dataNascimento: resultado.dadosCidadao.dataNascimentoOficial,
+      }));
+    }
+    setValidandoGov(false);
+  };
 
   const handleChange = (e) => {
-    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    const { name, type, checked, value } = e.target;
+    let finalValue = type === 'checkbox' ? checked : value;
+    if (name === 'cpf') {
+      finalValue = formatarCpf(value);
+      const apenasDigitos = finalValue.replace(/\D/g, '');
+      if (apenasDigitos.length === 11) {
+        consultarApiGoverno(finalValue, formData.dataNascimento);
+      } else {
+        setGovResult(null);
+      }
+    }
     setErroValidacao('');
-    setFormData({
-      ...formData,
-      [e.target.name]: value,
-    });
+    setFormData((prev) => ({
+      ...prev,
+      [name]: finalValue,
+    }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setErroValidacao('');
+
+    if (bloqueadoEspacoSeguro) {
+      setErroValidacao(govResult.mensagemClinicaEtica);
+      return;
+    }
 
     if (tipoConta === 'mae' && formData.dataNascimento) {
       if (isIdadeAbaixoMinimo) {
@@ -84,6 +214,7 @@ export default function CadastroScreen() {
       const payload = {
         nome: formData.nome.trim(),
         email: formData.email.trim(),
+        cpf: formData.cpf ? formData.cpf.replace(/\D/g, '') : null,
         senha: formData.senha,
         dataNascimento: formData.dataNascimento || null,
         responsavel: isMenorIdade
@@ -215,18 +346,105 @@ export default function CadastroScreen() {
           </div>
 
           {tipoConta === 'mae' && (
-            <div>
-              <label htmlFor="dataNascimento" className="block text-xs font-semibold text-gray-700 mb-1">
-                Data de nascimento (limites: 13 a 80 anos)
-              </label>
-              <input
-                id="dataNascimento"
-                name="dataNascimento"
-                type="date"
-                value={formData.dataNascimento}
-                onChange={handleChange}
-                className="w-full px-4 py-2.5 rounded-xl border border-stone-200 bg-[#f1f0ed] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#56725a]/60 text-sm text-gray-800 transition"
-              />
+            <div className="space-y-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label htmlFor="cpf" className="block text-xs font-semibold text-gray-700 mb-1">
+                    CPF (Verificação Receita / Gov.br)
+                  </label>
+                  <input
+                    id="cpf"
+                    name="cpf"
+                    type="text"
+                    placeholder="000.000.000-00"
+                    value={formData.cpf}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2.5 rounded-xl border border-stone-200 bg-[#f1f0ed] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#56725a]/60 text-sm text-gray-800 transition tabular-nums"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="dataNascimento" className="block text-xs font-semibold text-gray-700 mb-1">
+                    Data de nascimento (13 a 80 anos)
+                  </label>
+                  <input
+                    id="dataNascimento"
+                    name="dataNascimento"
+                    type="date"
+                    value={formData.dataNascimento}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2.5 rounded-xl border border-stone-200 bg-[#f1f0ed] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#56725a]/60 text-sm text-gray-800 transition"
+                  />
+                </div>
+              </div>
+
+              {/* Atalhos de Homologação da API Governamental para Demo Day */}
+              <div className="flex flex-wrap items-center gap-1.5 text-[10px]">
+                <span className="font-bold text-stone-500">Simular Gov.br / Receita:</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const cpfF = '390.533.447-05';
+                    setFormData((p) => ({ ...p, cpf: cpfF, dataNascimento: '1996-05-20' }));
+                    consultarApiGoverno(cpfF, '1996-05-20');
+                  }}
+                  className="px-2 py-0.5 rounded-full bg-stone-100 hover:bg-[#EBF3ED] text-stone-700 font-semibold cursor-pointer transition"
+                >
+                  Adulta (F)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const cpfM = '145.829.310-65';
+                    setFormData((p) => ({ ...p, cpf: cpfM }));
+                    consultarApiGoverno(cpfM, formData.dataNascimento || '1998-05-10');
+                  }}
+                  className="px-2 py-0.5 rounded-full bg-amber-50 hover:bg-amber-100 text-amber-900 font-semibold cursor-pointer transition"
+                >
+                  Menor 15a (Anti-fraude)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const cpfH = '529.982.247-25';
+                    setFormData((p) => ({ ...p, cpf: cpfH }));
+                    consultarApiGoverno(cpfH, formData.dataNascimento || '1992-03-15');
+                  }}
+                  className="px-2 py-0.5 rounded-full bg-rose-50 hover:bg-rose-100 text-rose-800 font-semibold cursor-pointer transition"
+                >
+                  Masculino (Espaço Seguro)
+                </button>
+              </div>
+
+              {validandoGov && (
+                <p className="text-[11px] font-semibold text-[#56725a]">
+                  Consultando base oficial de identidade civil (CPF / Receita Federal)...
+                </p>
+              )}
+
+              {govResult && (
+                <div
+                  className={`p-3.5 rounded-2xl border text-xs leading-relaxed ${
+                    govResult.bloqueadoEspacoSeguro || !govResult.cpfValido
+                      ? 'bg-rose-50 border-rose-200 text-rose-900'
+                      : govResult.divergenciaCadastral || govResult.menorDeIdade
+                      ? 'bg-amber-50 border-amber-200 text-amber-950'
+                      : 'bg-[#EBF3ED] border-[#56725a]/30 text-[#1f2a22]'
+                  }`}
+                >
+                  <div className="flex items-center gap-1.5 font-bold mb-1">
+                    <ShieldCheck size={15} className="shrink-0" />
+                    <span>
+                      {govResult.bloqueadoEspacoSeguro
+                        ? 'Proteção de Espaço Seguro (Comunidade Exclusiva para Mães)'
+                        : !govResult.cpfValido
+                        ? 'CPF Inválido'
+                        : 'Verificação Receita Federal / Gov.br'}
+                    </span>
+                  </div>
+                  <p className="text-[11px]">{govResult.mensagemClinicaEtica}</p>
+                </div>
+              )}
             </div>
           )}
 
@@ -435,7 +653,7 @@ export default function CadastroScreen() {
           {/* Botão de Cadastro Principal */}
           <button
             type="submit"
-            disabled={carregando || isIdadeAbaixoMinimo || isIdadeAcimaMaximo}
+            disabled={carregando || isIdadeAbaixoMinimo || isIdadeAcimaMaximo || bloqueadoEspacoSeguro}
             className="w-full bg-[#56725a] hover:bg-[#465e4a] disabled:opacity-50 text-white font-bold py-3 px-4 rounded-xl transition-all shadow-md shadow-[#56725a]/20 cursor-pointer flex items-center justify-center gap-2 mt-4"
           >
             <span>{carregando ? 'Preparando seu acesso...' : 'Cadastrar e Acessar Plataforma'}</span>

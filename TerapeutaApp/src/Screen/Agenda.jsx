@@ -1,7 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
-import { Plus, ChevronLeft, ChevronRight, Video, Calendar, Clock, X, Trash2, CheckCircle2, Users, Sparkles } from 'lucide-react';
+import { Plus, ChevronLeft, ChevronRight, Video, Calendar, Clock, X, Trash2, CheckCircle2, Users, Sparkles, Repeat } from 'lucide-react';
+
+const HORARIOS_PADRAO_CATALOGO = [
+  '07:00', '08:00', '09:00', '10:00', '11:00',
+  '13:00', '14:00', '14:30', '15:00', '16:00', '17:00',
+  '18:00', '18:30', '19:00', '20:00', '21:00',
+];
+
+const DIAS_SEMANA_DISPONIVEIS = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'];
 
 /* ---------- Dados iniciais ---------- */
 const sessoesIniciais = [
@@ -78,10 +86,43 @@ export default function Agenda() {
   const [horaNova, setHoraNova] = useState('18:00');
   const [infoNova, setInfoNova] = useState('');
 
-  // Dias e horários liberados pela psicóloga para agendamento pelas mães
-  const [diasDisponiveis, setDiasDisponiveis] = useState(['Segunda', 'Quarta', 'Sexta']);
-  const [horariosDisponiveis, setHorariosDisponiveis] = useState(['09:00', '14:30', '16:00', '18:30']);
+  // Dias e horários liberados pela psicóloga para agendamento pelas mães (totalmente personalizáveis)
+  const [diasDisponiveis, setDiasDisponiveis] = useState(() => {
+    try {
+      const saved = localStorage.getItem('floravel_psi_dias');
+      return saved ? JSON.parse(saved) : ['Segunda', 'Quarta', 'Sexta'];
+    } catch {
+      return ['Segunda', 'Quarta', 'Sexta'];
+    }
+  });
+  const [catalogoHorarios, setCatalogoHorarios] = useState(() => {
+    try {
+      const saved = localStorage.getItem('floravel_psi_catalogo_horarios');
+      return saved ? JSON.parse(saved) : HORARIOS_PADRAO_CATALOGO;
+    } catch {
+      return HORARIOS_PADRAO_CATALOGO;
+    }
+  });
+  const [horariosDisponiveis, setHorariosDisponiveis] = useState(() => {
+    try {
+      const saved = localStorage.getItem('floravel_psi_horarios');
+      return saved ? JSON.parse(saved) : ['09:00', '14:30', '16:00', '18:30'];
+    } catch {
+      return ['09:00', '14:30', '16:00', '18:30'];
+    }
+  });
+  const [novoHorarioCustom, setNovoHorarioCustom] = useState('08:30');
+  const [duracaoPadrao, setDuracaoPadrao] = useState('50');
+  const [recorrenciaSemanal, setRecorrenciaSemanal] = useState(true);
   const [modalidadeVaga, setModalidadeVaga] = useState('Fundo Solidário Florável (Gratuito) & Valor Social');
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('floravel_psi_dias', JSON.stringify(diasDisponiveis));
+      localStorage.setItem('floravel_psi_catalogo_horarios', JSON.stringify(catalogoHorarios));
+      localStorage.setItem('floravel_psi_horarios', JSON.stringify(horariosDisponiveis));
+    } catch {}
+  }, [diasDisponiveis, catalogoHorarios, horariosDisponiveis]);
 
   const toggleDiaDisponivel = (diaNome) => {
     setDiasDisponiveis((prev) =>
@@ -93,6 +134,30 @@ export default function Agenda() {
     setHorariosDisponiveis((prev) =>
       prev.includes(h) ? prev.filter((item) => item !== h) : [...prev, h].sort()
     );
+  };
+
+  const handleAdicionarHorarioCustom = (e) => {
+    e.preventDefault();
+    if (!novoHorarioCustom) return;
+    setCatalogoHorarios((prev) =>
+      prev.includes(novoHorarioCustom) ? prev : [...prev, novoHorarioCustom].sort()
+    );
+    setHorariosDisponiveis((prev) =>
+      prev.includes(novoHorarioCustom) ? prev : [...prev, novoHorarioCustom].sort()
+    );
+    showToast(`Horário ${novoHorarioCustom} adicionado e liberado para as mães!`);
+  };
+
+  const handleRemoverHorarioCatalogo = (h) => {
+    setCatalogoHorarios((prev) => prev.filter((item) => item !== h));
+    setHorariosDisponiveis((prev) => prev.filter((item) => item !== h));
+    showToast(`Horário ${h} removido da sua grade.`);
+  };
+
+  const aplicarTurnoRapido = (listaHoras, nomeTurno) => {
+    setCatalogoHorarios((prev) => Array.from(new Set([...prev, ...listaHoras])).sort());
+    setHorariosDisponiveis((prev) => Array.from(new Set([...prev, ...listaHoras])).sort());
+    showToast(`Turno da ${nomeTurno} ativado na sua agenda!`);
   };
 
   const hoje = new Date();
@@ -194,17 +259,17 @@ export default function Agenda() {
         </div>
       )}
 
-      {/* Cabeçalho */}
-      <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      {/* Cabeçalho — Estilo Editorial Acolhedor (Consistente com Visão Geral) */}
+      <header className="rounded-2xl bg-[#F1E6E1] p-5 sm:p-8 lg:p-10 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-[13.5px] md:text-[15px] text-[#4A5E4D] first-letter:uppercase">
-            Gestão de agenda
+            Gestão de agenda e rodas
           </p>
           <h1 className="mt-2 font-fraunces text-[30px] md:text-[38px] leading-[1.12] tracking-[-0.015em] text-[#1F3A27]">
             Agenda e sessões
           </h1>
           <p className="mt-2 text-[15px] text-[#4A5E4D]">
-            Organize seus encontros individuais e rodas de conversa.
+            Defina livremente seus horários disponíveis e publique rodas de conversa para as mães.
           </p>
         </div>
 
@@ -218,7 +283,7 @@ export default function Agenda() {
             className="inline-flex items-center gap-2 rounded-full border border-[#294D33] bg-white px-5 py-3 text-[13.5px] font-bold text-[#294D33] shadow-2xs hover:bg-[#EBF3ED] transition-colors cursor-pointer active:scale-95"
           >
             <Clock className="w-4 h-4" />
-            Liberar Dias Disponíveis
+            Liberar Horário Pontual
           </button>
 
           <button
@@ -235,77 +300,202 @@ export default function Agenda() {
         </div>
       </header>
 
-      {/* PAINEL RÁPIDO: DIAS E HORÁRIOS DISPONÍVEIS PARA AS MÃES */}
-      <section className="mt-6 rounded-3xl border border-[#E4DAD5] bg-white p-5 sm:p-6 shadow-2xs">
+      {/* PAINEL FLEXÍVEL: DIAS E QUAISQUER HORÁRIOS DISPONÍVEIS PARA AS MÃES */}
+      <section className="mt-6 rounded-3xl border border-[#EFE9EB] bg-white p-5 sm:p-7 shadow-sm">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-stone-100">
           <div>
             <span className="text-[11px] font-bold uppercase tracking-wider text-[#294D33] flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5" /> Grade Pública na Rede de Apoio
+              <Sparkles className="w-3.5 h-3.5" /> Grade Pública Flexível na Rede de Apoio
             </span>
-            <h2 className="font-fraunces text-lg sm:text-xl font-bold text-[#1F3A27] mt-0.5">
+            <h2 className="font-fraunces text-xl sm:text-2xl font-bold text-[#1F3A27] mt-1">
               Meus Dias e Horários Liberados para as Mães
             </h2>
           </div>
-          <span className="text-xs font-semibold text-[#294D33] bg-[#EBF3ED] px-3 py-1 rounded-full self-start sm:self-auto">
-            {diasDisponiveis.length} dias ativos · {horariosDisponiveis.length} horários/dia
-          </span>
+          <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto">
+            <span className="text-xs font-semibold text-[#294D33] bg-[#EBF3ED] px-3.5 py-1.5 rounded-full">
+              {diasDisponiveis.length} dias ativos · {horariosDisponiveis.length} horários/dia
+            </span>
+          </div>
         </div>
 
-        <div className="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <div>
-            <p className="text-xs font-bold text-stone-600 mb-2">
-              Toque nos dias da semana em que você atende mães:
-            </p>
-            <div className="flex flex-wrap gap-1.5">
-              {['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'].map((diaNome) => {
-                const ativo = diasDisponiveis.includes(diaNome);
-                return (
-                  <button
-                    key={diaNome}
-                    type="button"
-                    onClick={() => {
-                      toggleDiaDisponivel(diaNome);
-                      showToast(`Disponibilidade de ${diaNome} atualizada!`);
-                    }}
-                    className={`px-3.5 py-1.5 rounded-full text-xs font-bold border transition cursor-pointer ${
-                      ativo
-                        ? 'bg-[#294D33] text-white border-[#294D33] shadow-2xs'
-                        : 'bg-stone-50 text-stone-500 border-stone-200 hover:bg-stone-100'
-                    }`}
-                  >
-                    {ativo ? `✓ ${diaNome}` : diaNome}
-                  </button>
-                );
-              })}
+        <div className="mt-5 grid grid-cols-1 lg:grid-cols-12 gap-6">
+          {/* Coluna Esquerda: Dias da semana + Duração e Recorrência */}
+          <div className="lg:col-span-5 space-y-4">
+            <div>
+              <p className="text-xs font-bold text-stone-700 mb-2.5">
+                1. Dias da semana em que você acolhe mães:
+              </p>
+              <div className="flex flex-wrap gap-1.5">
+                {DIAS_SEMANA_DISPONIVEIS.map((diaNome) => {
+                  const ativo = diasDisponiveis.includes(diaNome);
+                  return (
+                    <button
+                      key={diaNome}
+                      type="button"
+                      onClick={() => {
+                        toggleDiaDisponivel(diaNome);
+                        showToast(`Disponibilidade de ${diaNome} atualizada!`);
+                      }}
+                      className={`px-3.5 py-1.5 rounded-full text-xs font-bold border transition cursor-pointer ${
+                        ativo
+                          ? 'bg-[#294D33] text-white border-[#294D33] shadow-2xs'
+                          : 'bg-[#FCF7F9] text-stone-500 border-stone-200 hover:bg-stone-100'
+                      }`}
+                    >
+                      {ativo ? `✓ ${diaNome}` : diaNome}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-[#FCF7F9] border border-[#EFE9EB] space-y-3">
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-xs font-bold text-[#1F3A27]">Duração da escuta individual:</span>
+                <div className="inline-flex rounded-full bg-white border border-stone-200 p-0.5">
+                  {['30', '50', '90'].map((min) => (
+                    <button
+                      key={min}
+                      type="button"
+                      onClick={() => {
+                        setDuracaoPadrao(min);
+                        showToast(`Duração padrão definida para ${min} minutos.`);
+                      }}
+                      className={`px-2.5 py-1 rounded-full text-[11px] font-bold transition cursor-pointer ${
+                        duracaoPadrao === min
+                          ? 'bg-[#294D33] text-white'
+                          : 'text-stone-600 hover:text-[#1F3A27]'
+                      }`}
+                    >
+                      {min} min
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <label className="flex items-center justify-between gap-2 cursor-pointer pt-1 border-t border-stone-200/60">
+                <span className="text-xs font-semibold text-stone-600 flex items-center gap-1.5">
+                  <Repeat className="w-3.5 h-3.5 text-[#294D33]" />
+                  Repetir esta grade automaticamente toda semana
+                </span>
+                <input
+                  type="checkbox"
+                  checked={recorrenciaSemanal}
+                  onChange={(e) => {
+                    setRecorrenciaSemanal(e.target.checked);
+                    showToast(
+                      e.target.checked
+                        ? 'Recorrência semanal ativada na Rede de Apoio.'
+                        : 'Recorrência semanal pausada.'
+                    );
+                  }}
+                  className="w-4 h-4 accent-[#294D33] rounded cursor-pointer"
+                />
+              </label>
             </div>
           </div>
 
-          <div>
-            <p className="text-xs font-bold text-stone-600 mb-2">
-              Toque nos horários disponíveis para agendamento individual:
-            </p>
-            <div className="flex flex-wrap gap-1.5">
-              {['09:00', '10:30', '11:30', '14:30', '16:00', '18:30', '20:00'].map((h) => {
+          {/* Coluna Direita: Seleção Livre de Qualquer Horário + Turnos Rápidos */}
+          <div className="lg:col-span-7 space-y-3.5">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <p className="text-xs font-bold text-stone-700">
+                2. Horários liberados (adicione qualquer hora ou ative por turno):
+              </p>
+              <div className="flex flex-wrap gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => aplicarTurnoRapido(['08:00', '09:00', '10:00', '11:00'], 'Manhã')}
+                  className="px-2.5 py-1 rounded-full bg-[#EBF3ED] text-[#294D33] text-[11px] font-bold hover:bg-[#DCE9DF] transition cursor-pointer"
+                >
+                  + Manhã
+                </button>
+                <button
+                  type="button"
+                  onClick={() => aplicarTurnoRapido(['13:00', '14:00', '15:00', '16:00', '17:00'], 'Tarde')}
+                  className="px-2.5 py-1 rounded-full bg-[#EBF3ED] text-[#294D33] text-[11px] font-bold hover:bg-[#DCE9DF] transition cursor-pointer"
+                >
+                  + Tarde
+                </button>
+                <button
+                  type="button"
+                  onClick={() => aplicarTurnoRapido(['18:00', '19:00', '20:00', '21:00'], 'Noite')}
+                  className="px-2.5 py-1 rounded-full bg-[#EBF3ED] text-[#294D33] text-[11px] font-bold hover:bg-[#DCE9DF] transition cursor-pointer"
+                >
+                  + Noite
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setHorariosDisponiveis([]);
+                    showToast('Todos os horários foram desmarcados.');
+                  }}
+                  className="px-2.5 py-1 rounded-full bg-stone-100 text-stone-600 text-[11px] font-semibold hover:bg-stone-200 transition cursor-pointer"
+                >
+                  Limpar
+                </button>
+              </div>
+            </div>
+
+            {/* Grade de Horários Dinâmica */}
+            <div className="flex flex-wrap gap-2">
+              {catalogoHorarios.map((h) => {
                 const ativo = horariosDisponiveis.includes(h);
                 return (
-                  <button
+                  <div
                     key={h}
-                    type="button"
-                    onClick={() => {
-                      toggleHorarioDisponivel(h);
-                      showToast(`Horário ${h} atualizado na sua agenda pública!`);
-                    }}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition cursor-pointer tabular-nums ${
+                    className={`inline-flex items-center rounded-xl border transition tabular-nums ${
                       ativo
-                        ? 'bg-[#F4DDE5] text-[#1F3A27] border-[#E8A9BB]'
+                        ? 'bg-[#F4DDE5] text-[#1F3A27] border-[#E8A9BB] shadow-2xs'
                         : 'bg-stone-50 text-stone-400 border-stone-200 hover:bg-stone-100'
                     }`}
                   >
-                    {h}
-                  </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        toggleHorarioDisponivel(h);
+                        showToast(`Horário ${h} ${ativo ? 'pausado' : 'liberado'} na sua agenda!`);
+                      }}
+                      className="px-3 py-1.5 text-xs font-bold cursor-pointer"
+                    >
+                      {h}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleRemoverHorarioCatalogo(h)}
+                      title={`Remover ${h} da lista`}
+                      aria-label={`Remover horário ${h}`}
+                      className="pr-2 pl-0.5 py-1.5 text-stone-400 hover:text-red-600 transition cursor-pointer"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </div>
                 );
               })}
             </div>
+
+            {/* Adicionar Qualquer Horário Personalizado */}
+            <form
+              onSubmit={handleAdicionarHorarioCustom}
+              className="flex flex-wrap items-center gap-2 pt-2 border-t border-stone-100"
+            >
+              <label htmlFor="novoHorarioCustom" className="text-xs font-semibold text-stone-600">
+                Inserir horário específico:
+              </label>
+              <input
+                id="novoHorarioCustom"
+                type="time"
+                value={novoHorarioCustom}
+                onChange={(e) => setNovoHorarioCustom(e.target.value)}
+                className="rounded-xl border border-stone-200 bg-[#FCF7F9] px-3 py-1.5 text-xs font-bold text-[#1F3A27] outline-none focus:border-[#294D33]"
+              />
+              <button
+                type="submit"
+                className="inline-flex items-center gap-1 rounded-full bg-[#294D33] px-4 py-1.5 text-xs font-bold text-white hover:bg-[#1F3A27] transition cursor-pointer"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                Adicionar horário
+              </button>
+            </form>
           </div>
         </div>
       </section>
@@ -527,7 +717,7 @@ export default function Agenda() {
           onClick={() => setSelectedSessao(null)}
         >
           <div
-            className="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl border border-[#E4DAD5]"
+            className="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl border border-[#E4DAD5] max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between pb-4 border-b border-stone-100">
@@ -608,7 +798,7 @@ export default function Agenda() {
           onClick={() => setIsModalOpen(false)}
         >
           <div
-            className="bg-white rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl border border-[#E4DAD5]"
+            className="bg-white rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl border border-[#E4DAD5] max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between pb-4 border-b border-stone-100">

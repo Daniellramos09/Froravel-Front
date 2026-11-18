@@ -250,6 +250,24 @@ export default function SupportNetworkScreen({
         adicionarAgendamento(novoEncontro);
       }
 
+      // Notifica o Portal da Psicóloga em tempo real (BroadcastChannel + LocalStorage)
+      try {
+        const notifPsi = {
+          id: Date.now(),
+          tipo: "agendamento",
+          title: "Nova mãe agendada",
+          desc: `Mariana Silva agendou escuta individual com ${profEmFoco.name} para ${selectedDay}/10 às ${selectedTime}.`,
+          time: "Agora mesmo",
+          lida: false,
+          destino: "/agenda",
+        };
+        const existentes = JSON.parse(localStorage.getItem("floravel_psi_notificacoes") || "[]");
+        localStorage.setItem("floravel_psi_notificacoes", JSON.stringify([notifPsi, ...existentes]));
+        const bc = new BroadcastChannel("floravel_notificacoes_psi");
+        bc.postMessage({ type: "NOVO_AGENDAMENTO", notif: notifPsi });
+        bc.close();
+      } catch (_) {}
+
       setIsBooking(false);
       setIsConfirmed(true);
 
@@ -550,7 +568,16 @@ export default function SupportNetworkScreen({
                   </div>
 
                   <div className="grid grid-cols-3 sm:grid-cols-5 gap-2.5 mb-7">
-                    {["09:00", "11:30", "14:30", "16:00", "18:30"].map(
+                    {(() => {
+                      let slots = ["09:00", "11:30", "14:30", "16:00", "18:30"];
+                      if (profEmFoco?.id === 1) {
+                        try {
+                          const savedSlots = JSON.parse(localStorage.getItem("floravel_psi_horarios") || "[]");
+                          if (Array.isArray(savedSlots) && savedSlots.length > 0) slots = savedSlots;
+                        } catch (_) {}
+                      }
+                      return slots;
+                    })().map(
                       (hora) => (
                         <button
                           key={hora}

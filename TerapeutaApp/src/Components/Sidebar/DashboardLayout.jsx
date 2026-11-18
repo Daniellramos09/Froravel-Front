@@ -19,10 +19,43 @@ const TITULOS = {
   '/acessibilidade': 'Acessibilidade Clínica',
 };
 
-const NOTIFICACOES = [
-  { id: 1, title: 'Roda de hoje às 18:00', desc: '"Os primeiros meses" tem 3 de 5 vagas preenchidas.', time: 'Há 20 min' },
-  { id: 2, title: 'Nova mãe na sua lista', desc: 'Juliana Costa agendou uma escuta individual no sábado.', time: 'Há 2 horas' },
-  { id: 3, title: 'EPDS registrada', desc: 'Mariana Silva respondeu a triagem demonstrativa.', time: 'Ontem' },
+const NOTIFICACOES_INICIAIS = [
+  {
+    id: 1,
+    tipo: 'agendamento',
+    title: 'Nova mãe agendada',
+    desc: 'Mariana Silva agendou escuta individual para Quinta-feira às 14:30.',
+    time: 'Agora mesmo',
+    lida: false,
+    destino: '/agenda',
+  },
+  {
+    id: 2,
+    tipo: 'roda',
+    title: 'Roda de hoje às 18:00',
+    desc: '"Os primeiros meses" tem 3 de 5 vagas preenchidas.',
+    time: 'Há 20 min',
+    lida: false,
+    destino: '/sala',
+  },
+  {
+    id: 3,
+    tipo: 'agendamento',
+    title: 'Nova mãe na sua lista',
+    desc: 'Juliana Costa agendou uma escuta individual no sábado às 10:00.',
+    time: 'Há 2 horas',
+    lida: true,
+    destino: '/maes',
+  },
+  {
+    id: 4,
+    tipo: 'eca',
+    title: 'Sinalização ECA & Consentimento',
+    desc: 'Camila Ramos (16 anos) possui autorização ativa do responsável legal (ECA Art. 17).',
+    time: 'Ontem',
+    lida: true,
+    destino: '/maes',
+  },
 ];
 
 // Modal de saída, igual ao do Espaço da Mãe
@@ -81,7 +114,15 @@ export default function DashboardLayout() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLogoutOpen, setIsLogoutOpen] = useState(false);
   const [isNotifOpen, setIsNotifOpen] = useState(false);
-  const [hasUnread, setHasUnread] = useState(true);
+  const [notificacoes, setNotificacoes] = useState(() => {
+    try {
+      const saved = localStorage.getItem('floravel_psi_notificacoes');
+      return saved ? JSON.parse(saved) : NOTIFICACOES_INICIAIS;
+    } catch {
+      return NOTIFICACOES_INICIAIS;
+    }
+  });
+  const unreadCount = notificacoes.filter((n) => !n.lida).length;
   const notifRef = useRef(null);
   const contentRef = useRef(null);
   const { pathname } = useLocation();
@@ -114,9 +155,42 @@ export default function DashboardLayout() {
     return () => document.removeEventListener('mousedown', fechar);
   }, []);
 
+  // Persiste notificações e escuta novos agendamentos enviados em tempo real
+  useEffect(() => {
+    try {
+      localStorage.setItem('floravel_psi_notificacoes', JSON.stringify(notificacoes));
+    } catch {}
+  }, [notificacoes]);
+
+  useEffect(() => {
+    let bc = null;
+    try {
+      bc = new BroadcastChannel('floravel_notificacoes_psi');
+      bc.onmessage = (ev) => {
+        if (ev.data?.type === 'NOVO_AGENDAMENTO' && ev.data?.notif) {
+          setNotificacoes((prev) => [{ ...ev.data.notif, id: Date.now(), lida: false }, ...prev]);
+        }
+      };
+    } catch {}
+    return () => {
+      if (bc) bc.close();
+    };
+  }, []);
+
   const abrirNotificacoes = () => {
     setIsNotifOpen((v) => !v);
-    setHasUnread(false);
+  };
+
+  const marcarTodasComoLidas = () => {
+    setNotificacoes((prev) => prev.map((n) => ({ ...n, lida: true })));
+  };
+
+  const handleCliqueNotificacao = (n) => {
+    setNotificacoes((prev) =>
+      prev.map((item) => (item.id === n.id ? { ...item, lida: true } : item))
+    );
+    setIsNotifOpen(false);
+    if (n.destino) navigate(n.destino);
   };
 
   const podeVoltar = pathname !== '/painel';
@@ -250,27 +324,58 @@ export default function DashboardLayout() {
                 type="button"
                 onClick={abrirNotificacoes}
                 className="relative p-2 sm:p-2.5 rounded-2xl text-stone-600 hover:bg-[#FCF7F9] hover:text-[#294D33] transition cursor-pointer active:scale-95"
-                title="Notificações"
+                title="Notificações de agendamentos e acolhimentos"
                 aria-label="Notificações"
               >
                 <Bell size={20} />
-                {hasUnread && (
-                  <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-[#E8A9BB] rounded-full ring-2 ring-white" />
+                {unreadCount > 0 && (
+                  <span className="absolute top-1.5 right-1.5 min-w-[18px] h-[18px] px-1 bg-[#294D33] text-white text-[10px] font-bold rounded-full ring-2 ring-white flex items-center justify-center">
+                    {unreadCount}
+                  </span>
                 )}
               </button>
               {isNotifOpen && (
-                <div className="absolute right-0 mt-2 w-72 sm:w-80 bg-white rounded-3xl shadow-xl border border-stone-100 overflow-hidden animate-fadeIn z-50">
-                  <div className="p-4 border-b border-stone-100 flex items-center justify-between">
-                    <h4 className="font-bold text-[#2B2829] text-[15px]">Notificações</h4>
-                    <span className="text-[12px] text-[#294D33] font-bold">Tudo lido</span>
+                <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-3xl shadow-xl border border-[#EFE9EB] overflow-hidden animate-fadeIn z-50">
+                  <div className="p-4 border-b border-stone-100 flex items-center justify-between bg-[#FCF7F9]">
+                    <div>
+                      <h4 className="font-fraunces font-bold text-[#1F3A27] text-[16px]">Notificações</h4>
+                      <p className="text-[11px] text-stone-500">
+                        {unreadCount > 0 ? `${unreadCount} não lida(s)` : 'Tudo atualizado'}
+                      </p>
+                    </div>
+                    {unreadCount > 0 && (
+                      <button
+                        type="button"
+                        onClick={marcarTodasComoLidas}
+                        className="text-[11px] text-[#294D33] font-bold hover:underline cursor-pointer"
+                      >
+                        Marcar como lidas
+                      </button>
+                    )}
                   </div>
-                  <div className="max-h-80 overflow-y-auto">
-                    {NOTIFICACOES.map((n) => (
-                      <div key={n.id} className="p-4 border-b border-stone-50 hover:bg-[#FCF7F9] transition">
-                        <p className="text-[14px] font-bold text-[#2B2829]">{n.title}</p>
-                        <p className="text-[13px] text-stone-600 mt-0.5">{n.desc}</p>
-                        <span className="text-[11px] text-stone-400 mt-1 block">{n.time}</span>
-                      </div>
+                  <div className="max-h-80 overflow-y-auto divide-y divide-stone-50">
+                    {notificacoes.map((n) => (
+                      <button
+                        key={n.id}
+                        type="button"
+                        onClick={() => handleCliqueNotificacao(n)}
+                        className={`w-full text-left p-4 hover:bg-[#FCF7F9] transition cursor-pointer flex items-start gap-3 ${
+                          !n.lida ? 'bg-[#EBF3ED]/30' : ''
+                        }`}
+                      >
+                        <span
+                          className={`mt-1.5 w-2 h-2 rounded-full shrink-0 ${
+                            !n.lida ? 'bg-[#294D33]' : 'bg-stone-300'
+                          }`}
+                        />
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center justify-between gap-2">
+                            <p className="text-[13.5px] font-bold text-[#1F3A27] truncate">{n.title}</p>
+                            <span className="text-[10px] text-stone-400 shrink-0">{n.time}</span>
+                          </div>
+                          <p className="text-[12.5px] text-stone-600 mt-0.5 leading-snug">{n.desc}</p>
+                        </div>
+                      </button>
                     ))}
                   </div>
                 </div>
