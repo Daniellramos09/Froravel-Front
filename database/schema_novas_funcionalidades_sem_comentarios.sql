@@ -109,4 +109,22 @@ CREATE TABLE `planos_monetizacao` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+DROP TABLE IF EXISTS `transacoes_pagamento`;
+CREATE TABLE `transacoes_pagamento` (
+  `id` char(36) NOT NULL DEFAULT (uuid()),
+  `id_transacao_gateway` varchar(100) NOT NULL,
+  `mae_id` char(36) NOT NULL,
+  `psicologo_id` char(36) DEFAULT NULL,
+  `agendamento_id` char(36) DEFAULT NULL,
+  `tipo_cobranca` varchar(50) NOT NULL,
+  `valor_total` decimal(10,2) NOT NULL,
+  `valor_split_psicologo` decimal(10,2) NOT NULL,
+  `valor_taxa_plataforma` decimal(10,2) NOT NULL,
+  `status` varchar(50) NOT NULL DEFAULT 'CONFIRMADO',
+  `data_hora_sessao` datetime DEFAULT NULL,
+  `data_processamento` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_transacao_gateway` (`id_transacao_gateway`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 SET FOREIGN_KEY_CHECKS = 1;

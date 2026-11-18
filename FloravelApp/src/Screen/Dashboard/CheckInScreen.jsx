@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CheckCircle, ArrowRight, ArrowLeft, Loader2, Sparkles } from 'lucide-react';
+import { CheckCircle, ArrowRight, ArrowLeft, Loader2, Sparkles, PhoneCall, MessageCircleHeart, HeartHandshake, ShieldCheck } from 'lucide-react';
 
 const QUIZ_QUESTIONS = [
   {
@@ -137,6 +137,40 @@ const QUIZ_QUESTIONS = [
         tag: "Acolhimento urgente"
       }
     ]
+  },
+  {
+    id: 10,
+    text: "Nos últimos 7 dias, a dor foi tão grande a ponto de passar pela sua cabeça fazer mal a si mesma?",
+    options: [
+      {
+        value: 0,
+        title: "Não, nunca",
+        message: "Mesmo com o cansaço, não tive pensamentos de me machucar.",
+        img: "/img/fotomae/6.jpg",
+        tag: "Segura"
+      },
+      {
+        value: 1,
+        title: "Raramente passou pela mente",
+        message: "Foi um pensamento rápido em um momento de exaustão extrema.",
+        img: "/img/maeDescansando.jpg",
+        tag: "Preciso de escuta"
+      },
+      {
+        value: 2,
+        title: "Às vezes penso nisso",
+        message: "Sinto um peso muito difícil de carregar sozinha e preciso de amparo.",
+        img: "/img/maternidadeSemFiltro.jpg",
+        tag: "Acolhimento prioritário"
+      },
+      {
+        value: 3,
+        title: "Sim, com frequência",
+        message: "Estou sofrendo muito agora e preciso de ajuda e proteção imediata.",
+        img: "/img/maeexausta.jpg",
+        tag: "Apoio imediato"
+      }
+    ]
   }
 ];
 
@@ -145,6 +179,7 @@ export default function CheckInScreen({ setActiveTab }) {
   const [answers, setAnswers] = useState({});
   const [isFinished, setIsFinished] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [anjoAcionado, setAnjoAcionado] = useState(false);
 
   const handleAnswer = (questionId, optionValue) => {
     setAnswers(prev => ({ ...prev, [questionId]: optionValue }));
@@ -172,6 +207,119 @@ export default function CheckInScreen({ setActiveTab }) {
         <Loader2 size={42} className="text-[#294D33] animate-spin mb-5" />
         <h2 className="text-2xl font-fraunces font-bold text-stone-900 mb-1">Acolhendo o seu sentir...</h2>
         <p className="text-stone-500 text-sm">Preparando recomendações para o seu momento.</p>
+      </div>
+    );
+  }
+
+  // Gatilho da Questão #10 da Escala de Edimburgo (EPDS): valor > 0 ativa o Protocolo de Crise Sem Julgamento
+  const alertaCriseQuestao10 = (answers[10] || 0) > 0;
+
+  if (isFinished && alertaCriseQuestao10) {
+    return (
+      <div className="animate-fadeIn font-dmsans min-h-full flex flex-col items-center justify-center max-w-2xl mx-auto py-8 px-4">
+        <div className="w-full rounded-3xl bg-[#18221B] text-[#FAF7F2] p-6 sm:p-10 shadow-xl border border-[#294D33]/40 space-y-6">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-2xl bg-[#294D33] text-[#F4DDE5] flex items-center justify-center shrink-0">
+              <HeartHandshake size={26} />
+            </div>
+            <div>
+              <span className="text-[11px] font-bold uppercase tracking-widest text-[#E8A9BB]">
+                Espaço Seguro & Sem Julgamento
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-fraunces font-bold text-white leading-tight">
+                Respire fundo. Você não está sozinha.
+              </h2>
+            </div>
+          </div>
+
+          <p className="text-sm sm:text-base text-stone-200 leading-relaxed">
+            Sentir essa dor profunda não faz de você uma mãe ruim. O puerpério e a sobrecarga materna podem ser avassaladores, e esse peso merece acolhimento humano agora mesmo, com total sigilo.
+          </p>
+
+          {/* Atalhos de 1 Clique (Zero Fricção) */}
+          <div className="space-y-3 pt-2">
+            <p className="text-xs font-bold uppercase tracking-wider text-[#E8A9BB]">
+              Canais imediatos de escuta gratuita (1 toque):
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <a
+                href="tel:188"
+                className="flex items-center justify-center gap-2.5 bg-[#E8A9BB] hover:bg-[#f0bac9] text-[#18221B] font-bold py-4 px-5 rounded-2xl text-sm transition shadow-md cursor-pointer"
+              >
+                <PhoneCall size={18} />
+                <span>Ligar CVV (188) — 24h Gratuito</span>
+              </a>
+
+              <a
+                href="https://www.cvv.org.br/chat/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2.5 bg-[#294D33] hover:bg-[#346140] text-white font-bold py-4 px-5 rounded-2xl text-sm border border-white/15 transition cursor-pointer"
+              >
+                <MessageCircleHeart size={18} />
+                <span>Chat Silencioso CVV (Sem falar)</span>
+              </a>
+            </div>
+
+            <p className="text-[11px] text-stone-300">
+              💡 <em>O Chat Silencioso é ideal caso você esteja amamentando no quarto ou com familiares por perto e prefira digitar em silêncio.</em>
+            </p>
+          </div>
+
+          {/* Recurso Contato de Confiança (Anjo da Guarda) — Privacidade LGPD */}
+          <div className="p-4 sm:p-5 rounded-2xl bg-white/8 border border-white/15 space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-[#F4DDE5] flex items-center gap-1.5">
+                <ShieldCheck size={16} /> Rede de Afeto ("Anjo da Guarda")
+              </span>
+              <span className="text-[10px] text-stone-300 bg-white/10 px-2.5 py-0.5 rounded-full">
+                Sigilo LGPD Garantido
+              </span>
+            </div>
+            <p className="text-xs text-stone-200 leading-relaxed">
+              Podemos enviar um aviso carinhoso ao seu contato de confiança pedindo um abraço, <strong>sem revelar suas respostas ou qualquer dado do teste</strong>:
+            </p>
+            {anjoAcionado ? (
+              <div className="p-3 rounded-xl bg-emerald-950/80 border border-emerald-500/40 text-xs text-emerald-200 font-semibold">
+                ✓ Mensagem carinhosa enviada: "Olá! Sua pessoa querida está precisando de um abraço e uma mensagem de carinho agora."
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setAnjoAcionado(true)}
+                className="w-full py-3 px-4 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-bold transition cursor-pointer"
+              >
+                Pedir um abraço ao meu Contato de Confiança
+              </button>
+            )}
+          </div>
+
+          <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-white/10 text-xs">
+            <a
+              href="tel:192"
+              className="text-stone-300 hover:text-white underline font-semibold"
+            >
+              Emergência médica física? Ligar SAMU (192)
+            </a>
+            <div className="flex gap-2 w-full sm:w-auto">
+              <button
+                type="button"
+                onClick={() => setActiveTab('appointments')}
+                className="flex-1 sm:flex-initial px-5 py-2.5 rounded-full bg-white text-[#18221B] font-bold hover:bg-stone-100 transition cursor-pointer"
+              >
+                Falar com Psicóloga Parceira
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveTab('home')}
+                className="px-4 py-2.5 rounded-full border border-white/20 text-stone-200 hover:bg-white/10 transition cursor-pointer"
+              >
+                Início
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

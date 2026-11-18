@@ -3,6 +3,8 @@ import {
   FileCheck2,
   RefreshCw,
   CheckCircle2,
+  ShieldCheck,
+  Lock,
 } from "lucide-react";
 import {
   ResponsiveContainer,
@@ -17,13 +19,14 @@ import {
   Legend,
 } from "recharts";
 
-// Dados Fictícios de Risco x Adesão por Departamento (Barras Empilhadas)
+// Dados Agregados com K-Anonimato (K >= 5):
+// Setores com < 5 colaboradoras (ex: Jurídico [2] e Design [2]) são agrupados automaticamente no Índice Geral (K<5)
 const departmentRiskStackedData = [
-  { dept: "Engenharia", baixoRisco: 65, riscoModerado: 25, alertaClinico: 10 },
-  { dept: "Design", baixoRisco: 70, riscoModerado: 20, alertaClinico: 10 },
-  { dept: "Operações", baixoRisco: 50, riscoModerado: 35, alertaClinico: 15 },
-  { dept: "Marketing", baixoRisco: 60, riscoModerado: 30, alertaClinico: 10 },
-  { dept: "Vendas", baixoRisco: 55, riscoModerado: 30, alertaClinico: 15 },
+  { dept: "Engenharia (n=14)", baixoRisco: 65, riscoModerado: 25, alertaClinico: 10 },
+  { dept: "Operações (n=18)", baixoRisco: 50, riscoModerado: 35, alertaClinico: 15 },
+  { dept: "Marketing (n=8)", baixoRisco: 60, riscoModerado: 30, alertaClinico: 10 },
+  { dept: "Vendas (n=11)", baixoRisco: 55, riscoModerado: 30, alertaClinico: 15 },
+  { dept: "Índice Geral (K<5, n=4)", baixoRisco: 68, riscoModerado: 22, alertaClinico: 10 },
 ];
 
 // Dados Fictícios de Evolução do Esgotamento x Recuperação (Linha Dupla)
@@ -175,6 +178,21 @@ export default function HealthReportsScreen({ onTriggerToast }) {
             )}
           </button>
         </div>
+      </div>
+
+      {/* ========================================================= */}
+      {/* 1.5 BANNER DE K-ANONIMATO (K >= 5) E MURALHA DE FOGO LGPD */}
+      {/* ========================================================= */}
+      <div className="rounded-2xl bg-[#EBF3ED] border border-[#294D33]/20 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="flex items-start gap-3">
+          <ShieldCheck className="w-5 h-5 text-[#294D33] shrink-0 mt-0.5" />
+          <div className="text-xs text-[#1F3A27] leading-relaxed">
+            <strong>Muralha de Fogo & K-Anonimato Ativo (K ≥ 5):</strong> Para impedir a identificação por eliminação lógica, departamentos com menos de 5 colaboradoras ativas (ex: <em>Jurídico [2]</em> e <em>Design [2]</em>) são agrupados compulsoriamente no <strong>Índice Geral (K&lt;5)</strong>. Nenhum diagnóstico, nota da Escala de Edimburgo ou agendamento individual é acessível ao RH.
+          </div>
+        </div>
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white text-[#294D33] text-[11px] font-bold shrink-0 border border-[#294D33]/15">
+          <Lock size={12} /> Sigilo LGPD 100%
+        </span>
       </div>
 
       {/* ========================================================= */}
