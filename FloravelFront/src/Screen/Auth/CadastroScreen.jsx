@@ -79,13 +79,47 @@ export default function CadastroScreen() {
     }
 
     setCarregando(true);
-    setTimeout(() => {
-      if (tipoConta === 'mae') {
-        window.location.href = `${APP_LINKS.mae}?onboarding=true`;
-      } else {
+
+    if (tipoConta === 'mae') {
+      const payload = {
+        nome: formData.nome.trim(),
+        email: formData.email.trim(),
+        senha: formData.senha,
+        dataNascimento: formData.dataNascimento || null,
+        responsavel: isMenorIdade
+          ? {
+              nome: formData.responsavelNome.trim(),
+              cpf: formData.responsavelCpf.trim(),
+              parentesco: formData.responsavelParentesco,
+              telefone: formData.responsavelTelefone.trim(),
+              email: formData.responsavelEmail ? formData.responsavelEmail.trim() : null,
+              consentimentoAceito: formData.consentimentoResponsavel,
+            }
+          : null,
+      };
+
+      fetch('http://localhost:8080/api/maes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+        .then(async (res) => {
+          if (res.ok) {
+            const maeCriada = await res.json();
+            localStorage.setItem('floravel_mae_sessao', JSON.stringify(maeCriada));
+          }
+        })
+        .catch(() => {
+          // Fallback resiliente para Demo Day caso o servidor local esteja desligado
+        })
+        .finally(() => {
+          window.location.href = `${APP_LINKS.mae}?onboarding=true`;
+        });
+    } else {
+      setTimeout(() => {
         navigateToApp(tipoConta);
-      }
-    }, 600);
+      }, 500);
+    }
   };
 
   return (

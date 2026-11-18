@@ -94,6 +94,8 @@ CREATE TABLE `denuncias` (
   PRIMARY KEY (`id`),
   KEY `fk_denuncia_denunciante` (`denunciante_usuario_id`),
   KEY `idx_denuncias_status` (`status`),
+  KEY `idx_denuncia_alvo_data` (`denunciado_usuario_id`,`data_denuncia`),
+  KEY `idx_denuncia_sala_alvo_data` (`sala_id`,`denunciado_usuario_id`,`data_denuncia`),
   CONSTRAINT `fk_denuncia_denunciante` FOREIGN KEY (`denunciante_usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 

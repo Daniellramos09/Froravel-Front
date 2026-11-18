@@ -49,6 +49,55 @@ export default function MeetingRoomModal({
   const [atendeuExpectativa, setAtendeuExpectativa] = useState('sim');
   const [permitirPublicar, setPermitirPublicar] = useState(true);
   const [feedbackEnviado, setFeedbackEnviado] = useState(false);
+  const [disjuntorInfo, setDisjuntorInfo] = useState(null);
+
+  // Sincronização em tempo real entre Abas (BroadcastChannel + Spring Boot /api/sala-ao-vivo)
+  useEffect(() => {
+    if (!isOpen) return;
+    let bc = null;
+    try {
+      bc = new BroadcastChannel('floravel_sala_ao_vivo');
+      bc.onmessage = (ev) => {
+        const data = ev.data || {};
+        if (data.type === 'CHAT_MSG' && data.msg) {
+          setChatMessages((prev) =>
+            prev.some((m) => m.id === data.msg.id) ? prev : [...prev, data.msg]
+          );
+        } else if (data.type === 'DISJUNTOR_ACIONADO') {
+          setDisjuntorInfo(data.alvo || 'Participante reportada');
+        } else if (data.type === 'ROOM_ENDED' && stage === 'in_call') {
+          setStage('post_call');
+        }
+      };
+    } catch (_) {
+      // BroadcastChannel indisponível
+    }
+
+    const syncInterval = setInterval(async () => {
+      try {
+        const res = await fetch('http://localhost:8080/api/sala-ao-vivo/estado');
+        if (res.ok) {
+          const estado = await res.json();
+          if (Array.isArray(estado.mensagens) && estado.mensagens.length > 0) {
+            setChatMessages(estado.mensagens);
+          }
+          if (estado.disjuntorAcionado) {
+            setDisjuntorInfo(estado.usuarioIsoladoDisjuntor || 'Participante isolada');
+          }
+          if (estado.statusSala === 'ENCERRADA' && stage === 'in_call') {
+            setStage('post_call');
+          }
+        }
+      } catch (_) {
+        // Fallback offline silencioso
+      }
+    }, 1500);
+
+    return () => {
+      clearInterval(syncInterval);
+      if (bc) bc.close();
+    };
+  }, [isOpen, stage]);
 
   const participants = [
     { 
@@ -131,19 +180,33 @@ export default function MeetingRoomModal({
     }, 2400);
   };
 
-  const handleSendMessage = (e) => {
+  const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!newMsg.trim()) return;
-    setChatMessages((prev) => [
-      ...prev,
-      { 
-        id: Date.now(), 
-        sender: 'Você', 
-        text: newMsg.trim(), 
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) 
-      }
-    ]);
+    const texto = newMsg.trim();
+    const msgObj = {
+      id: `msg-${Date.now()}`,
+      sender: 'Mariana Silva (Mãe)',
+      text: texto,
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      isHost: false
+    };
+    setChatMessages((prev) => [...prev, msgObj]);
     setNewMsg('');
+
+    try {
+      const bc = new BroadcastChannel('floravel_sala_ao_vivo');
+      bc.postMessage({ type: 'CHAT_MSG', msg: msgObj });
+      bc.close();
+    } catch (_) {}
+
+    try {
+      await fetch('http://localhost:8080/api/sala-ao-vivo/mensagens', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ remetente: 'Mariana Silva (Mãe)', texto, isHost: false })
+      });
+    } catch (_) {}
   };
 
   const handleReportUser = (userName) => {

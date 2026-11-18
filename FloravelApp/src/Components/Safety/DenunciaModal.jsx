@@ -12,17 +12,18 @@ export default function DenunciaModal({ isOpen, onClose, targetUser = null, cont
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!oQueFez.trim() || !oQueSentiu.trim()) return;
 
     const novoProtocolo = `DEN-${Date.now().toString().slice(-6)}`;
     setProtocolo(novoProtocolo);
+    const alvoReportado = targetUser || 'Usuária em reunião';
 
     // Salva denúncia no histórico local para persistência de demonstração
     const novaDenuncia = {
       id: novoProtocolo,
-      targetUser: targetUser || 'Usuária em reunião',
+      targetUser: alvoReportado,
       context,
       motivo,
       oQueFez,
@@ -33,6 +34,21 @@ export default function DenunciaModal({ isOpen, onClose, targetUser = null, cont
 
     const existentes = JSON.parse(localStorage.getItem('floravel_denuncias') || '[]');
     localStorage.setItem('floravel_denuncias', JSON.stringify([novaDenuncia, ...existentes]));
+
+    // Aciona o Disjuntor de Sala Ao Vivo (Room Circuit Breaker) via BroadcastChannel e API Spring Boot
+    try {
+      const bc = new BroadcastChannel('floravel_sala_ao_vivo');
+      bc.postMessage({ type: 'DISJUNTOR_ACIONADO', alvo: alvoReportado });
+      bc.close();
+    } catch (_) {}
+
+    try {
+      await fetch('http://localhost:8080/api/sala-ao-vivo/disjuntor', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ alvo: alvoReportado })
+      });
+    } catch (_) {}
 
     setEnviado(true);
   };

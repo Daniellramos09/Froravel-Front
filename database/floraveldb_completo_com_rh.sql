@@ -65,6 +65,7 @@ CREATE TABLE `triagem_edimburgo` (
   `nivel_risco` varchar(50) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_triagem_mae` (`mae_id`),
+  KEY `idx_triagem_mae_data` (`mae_id`,`data_realizacao`),
   CONSTRAINT `fk_triagem_mae` FOREIGN KEY (`mae_id`) REFERENCES `maes` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -110,6 +111,8 @@ CREATE TABLE `rodas_de_conversa` (
   `status` varchar(50) DEFAULT 'AGENDADA',
   PRIMARY KEY (`id`),
   KEY `fk_roda_psicologo` (`psicologo_id`),
+  KEY `idx_rodas_status_data` (`status`,`data_hora_inicio`),
+  FULLTEXT KEY `ft_rodas_tema` (`tema`),
   CONSTRAINT `fk_roda_psicologo` FOREIGN KEY (`psicologo_id`) REFERENCES `psicologos` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -296,6 +299,8 @@ CREATE TABLE `denuncias` (
   PRIMARY KEY (`id`),
   KEY `fk_denuncia_denunciante` (`denunciante_usuario_id`),
   KEY `idx_denuncias_status` (`status`),
+  KEY `idx_denuncia_alvo_data` (`denunciado_usuario_id`,`data_denuncia`),
+  KEY `idx_denuncia_sala_alvo_data` (`sala_id`,`denunciado_usuario_id`,`data_denuncia`),
   CONSTRAINT `fk_denuncia_denunciante` FOREIGN KEY (`denunciante_usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 

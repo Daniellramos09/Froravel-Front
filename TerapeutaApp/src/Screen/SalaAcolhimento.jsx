@@ -49,10 +49,16 @@ export default function SalaAcolhimento() {
   const [confirmarSaida, setConfirmarSaida] = useState(false);
   const [segundos, setSegundos] = useState(0);
 
-  // Cronômetro da chamada
+  // Cronômetro da chamada & Sincronização Ao Vivo com App da Mãe (BroadcastChannel + Spring Boot)
   useEffect(() => {
     let interval = null;
     if (emChamada) {
+      fetch('http://localhost:8080/api/sala-ao-vivo/status', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'AO_VIVO' })
+      }).catch(() => {});
+
       interval = setInterval(() => {
         setSegundos((s) => s + 1);
       }, 1000);
@@ -62,28 +68,99 @@ export default function SalaAcolhimento() {
     return () => clearInterval(interval);
   }, [emChamada]);
 
+  useEffect(() => {
+    let bc = null;
+    try {
+      bc = new BroadcastChannel('floravel_sala_ao_vivo');
+      bc.onmessage = (ev) => {
+        const data = ev.data || {};
+        if (data.type === 'CHAT_MSG' && data.msg) {
+          setMensagens((prev) => [
+            ...prev,
+            { remetente: data.msg.sender, texto: data.msg.text, hora: data.msg.time }
+          ]);
+        }
+      };
+    } catch (_) {}
+
+    const poll = setInterval(async () => {
+      try {
+        const res = await fetch('http://localhost:8080/api/sala-ao-vivo/estado');
+        if (res.ok) {
+          const estado = await res.json();
+          if (Array.isArray(estado.mensagens) && estado.mensagens.length > 0) {
+            setMensagens(
+              estado.mensagens.map((m) => ({
+                remetente: m.sender,
+                texto: m.text,
+                hora: m.time
+              }))
+            );
+          }
+        }
+      } catch (_) {}
+    }, 1500);
+
+    return () => {
+      clearInterval(poll);
+      if (bc) bc.close();
+    };
+  }, []);
+
   const formatarTempo = (totalSec) => {
     const min = String(Math.floor(totalSec / 60)).padStart(2, '0');
     const sec = String(totalSec % 60).padStart(2, '0');
     return `${min}:${sec}`;
   };
 
-  const handleEnviarMensagem = (e) => {
+  const handleEnviarMensagem = async (e) => {
     e.preventDefault();
     if (!novaMensagem.trim()) return;
 
+    const texto = novaMensagem.trim();
     const agora = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
     const msg = {
-      remetente: 'Dra. Helena Souza (Você)',
-      texto: novaMensagem.trim(),
+      remetente: 'Dra. Helena Souza (Host)',
+      texto,
       hora: agora,
     };
 
     setMensagens((prev) => [...prev, msg]);
     setNovaMensagem('');
+
+    try {
+      const bc = new BroadcastChannel('floravel_sala_ao_vivo');
+      bc.postMessage({
+        type: 'CHAT_MSG',
+        msg: { id: `msg-${Date.now()}`, sender: 'Dra. Helena Souza (Host)', text: texto, time: agora, isHost: true }
+      });
+      bc.close();
+    } catch (_) {}
+
+    try {
+      await fetch('http://localhost:8080/api/sala-ao-vivo/mensagens', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ remetente: 'Dra. Helena Souza (Host)', texto, isHost: true })
+      });
+    } catch (_) {}
   };
 
-  const handleEncerrarSessao = () => {
+  const handleEncerrarSessao = async () => {
+    try {
+      const bc = new BroadcastChannel('floravel_sala_ao_vivo');
+      bc.postMessage({ type: 'ROOM_ENDED' });
+      bc.close();
+    } catch (_) {}
+
+    try {
+      await fetch('http://localhost:8080/api/sala-ao-vivo/status', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'ENCERRADA' })
+      });
+    } catch (_) {}
+
     setEmChamada(false);
     setConfirmarSaida(false);
     navigate('/agenda');
