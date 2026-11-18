@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Search, Clock, ArrowRight, BookOpen, Star, PlayCircle, X, Share2, Check } from 'lucide-react';
+import { getIllustrationBgClass } from '../../utils/illustrationFrame';
 
 const ARTIGOS_MOCK = [
   { 
@@ -174,11 +175,11 @@ export default function BibliotecaScreen() {
           onClick={() => setSelectedArticle(DESTAQUE_ARTIGO)}
           className="mb-12 bg-white rounded-[32px] border border-gray5 overflow-hidden flex flex-col md:flex-row shadow-sm group cursor-pointer hover:border-primary/40 hover:shadow-md transition text-left"
         >
-          <div className="md:w-1/2 h-64 md:h-auto relative overflow-hidden">
+          <div className={`md:w-1/2 h-64 md:h-80 relative overflow-hidden flex items-center justify-center p-3 ${getIllustrationBgClass(DESTAQUE_ARTIGO.img)}`}>
             <img 
               src={DESTAQUE_ARTIGO.img} 
               alt="Destaque" 
-              className="w-full h-full object-cover object-[center_30%] transition duration-700 group-hover:scale-105" 
+              className="w-full h-full object-contain transition duration-700 group-hover:scale-105" 
             />
             <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full text-[12px] font-bold text-primary flex items-center gap-1 shadow-xs">
               <Star size={14} /> Leitura Recomendada
@@ -212,11 +213,11 @@ export default function BibliotecaScreen() {
             className="bg-white rounded-3xl border border-gray5 overflow-hidden flex flex-col hover:shadow-md hover:border-primary/30 transition group cursor-pointer"
           >
             {/* ÁREA DA IMAGEM */}
-            <div className="h-56 relative overflow-hidden bg-[#F4DDE5]">
+            <div className={`h-56 relative overflow-hidden flex items-center justify-center p-2 ${getIllustrationBgClass(artigo.img)}`}>
               <img 
                 src={artigo.img} 
                 alt={artigo.titulo} 
-                className="w-full h-full object-cover object-top transition duration-500 group-hover:scale-105"
+                className="w-full h-full object-contain transition duration-500 group-hover:scale-105"
                 onError={(e) => {
                   e.currentTarget.onerror = null;
                   e.currentTarget.src = "/img/ilustracoes/leitura.jpg";
@@ -286,11 +287,11 @@ export default function BibliotecaScreen() {
             </p>
 
             {/* Imagem do artigo */}
-            <div className="w-full h-56 rounded-2xl overflow-hidden mb-6 bg-[#FCF7F9]">
+            <div className={`w-full h-60 rounded-2xl overflow-hidden mb-6 flex items-center justify-center p-2 ${getIllustrationBgClass(selectedArticle.img)}`}>
               <img 
                 src={selectedArticle.img} 
                 alt={selectedArticle.titulo} 
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain"
                 onError={(e) => {
                   e.currentTarget.onerror = null;
                   e.currentTarget.src = "/img/ilustracoes/leitura.jpg";

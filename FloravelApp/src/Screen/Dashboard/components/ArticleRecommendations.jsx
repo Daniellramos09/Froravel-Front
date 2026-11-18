@@ -68,12 +68,12 @@ export default function ArticleRecommendations({ onNavigateToLibrary }) {
             aria-label={`Ler artigo: ${destaque.titulo}`}
             className={`flex @3xl:block items-center gap-4 w-full text-left rounded-2xl @3xl:rounded-lg bg-white/85 @3xl:bg-transparent border border-[#E4DAD5]/70 @3xl:border-none p-3 @3xl:p-0 cursor-pointer ${focusRing}`}
           >
-            <div className="w-24 h-24 @3xl:w-full @3xl:h-auto @3xl:aspect-[16/10] shrink-0 overflow-hidden rounded-xl @3xl:rounded-lg bg-[#F1E6E1]">
+            <div className="w-24 h-24 @3xl:w-full @3xl:h-auto @3xl:aspect-[16/10] shrink-0 overflow-hidden rounded-xl @3xl:rounded-lg bg-[#F7F5F0] flex items-center justify-center p-1.5">
               <img
                 src={destaque.img}
                 alt={destaque.titulo}
                 loading="lazy"
-                className="h-full w-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-[1.02]"
+                className="h-full w-full object-contain transition-transform duration-500 ease-out group-hover:scale-[1.02]"
                 onError={(e) => {
                   if (destaque.fallback) e.currentTarget.src = destaque.fallback;
                 }}

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { CheckCircle, ArrowRight, ArrowLeft, Loader2, Sparkles, PhoneCall, MessageCircleHeart, HeartHandshake, ShieldCheck } from 'lucide-react';
+import { getIllustrationBgClass } from '../../utils/illustrationFrame';
 
 const QUIZ_QUESTIONS = [
   {
@@ -443,12 +444,12 @@ export default function CheckInScreen({ setActiveTab }) {
                   : 'border-stone-200/90 hover:border-[#E8A9BB] hover:shadow-md'
               }`}
             >
-              {/* Imagem Representativa (Lateral no mobile, Topo no desktop) */}
-              <div className="w-28 sm:w-full h-auto sm:h-40 relative shrink-0 overflow-hidden bg-stone-100">
+              {/* Imagem Representativa (Inteira na moldura sem cortes) */}
+              <div className={`w-28 sm:w-full h-28 sm:h-48 relative shrink-0 overflow-hidden flex items-center justify-center p-1.5 ${getIllustrationBgClass(option.img)}`}>
                 <img
                   src={option.img}
                   alt={option.title}
-                  className="w-full h-full object-cover transition duration-500 group-hover:scale-105"
+                  className="w-full h-full object-contain transition duration-500 group-hover:scale-105"
                 />
                 <span className="hidden sm:inline-block absolute top-3 left-3 px-2.5 py-1 rounded-full bg-black/55 backdrop-blur-xs text-white text-[11px] font-bold">
                   {option.tag}

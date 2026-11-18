@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import MeetingRoomModal from '../../Components/Meeting/MeetingRoomModal';
 import DenunciaModal from '../../Components/Safety/DenunciaModal';
+import { getIllustrationBgClass } from '../../utils/illustrationFrame';
 
 const FILTER_OPTIONS = [
   { id: 'todas', label: 'Todas as rodas' },
@@ -184,12 +185,12 @@ export default function ComunidadeScreen() {
               key={group.id} 
               className="bg-white rounded-3xl border border-stone-200/90 overflow-hidden flex flex-col hover:shadow-md transition group"
             >
-              {/* IMAGEM DO CARD */}
-              <div className="h-44 sm:h-48 relative overflow-hidden bg-stone-100">
+              {/* IMAGEM DO CARD (Enquadramento completo sem cortes) */}
+              <div className={`h-52 sm:h-56 relative overflow-hidden flex items-center justify-center p-2 ${getIllustrationBgClass(group.img)}`}>
                 <img 
                   src={group.img} 
                   alt={group.title} 
-                  className="w-full h-full object-cover object-[center_30%] transition duration-500 group-hover:scale-105"
+                  className="w-full h-full object-contain transition duration-500 group-hover:scale-105"
                 />
 
                 {isRecommended && (

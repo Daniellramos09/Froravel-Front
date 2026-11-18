@@ -93,14 +93,12 @@ export default function DailyCheckInCard({ onOpenDiary, onSelectMood, currentMoo
           </div>
         </div>
 
-        {/* LADO DIREITO: FOTO SERENA DE UMA MÃE */}
-        <div className="lg:w-[360px] xl:w-[400px] relative min-h-[240px] sm:min-h-[280px] lg:min-h-auto bg-[#FBF4F6] flex items-center justify-center overflow-hidden border-t lg:border-t-0 lg:border-l border-stone-100">
-          <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-white via-transparent to-transparent z-10 pointer-events-none" />
-
+        {/* LADO DIREITO: ILUSTRAÇÃO SERENA DE UMA MÃE NA MOLDURA */}
+        <div className="lg:w-[360px] xl:w-[400px] relative min-h-[240px] sm:min-h-[280px] lg:min-h-auto bg-[#FAF8F5] flex items-center justify-center overflow-hidden border-t lg:border-t-0 lg:border-l border-stone-100 p-4">
           <img
             src="/img/ilustracoes/florescer.jpg"
             alt="Ilustração acolhedora Florável de uma mãe em momento de respiro"
-            className="w-full h-full object-cover object-center transform transition-transform duration-700 hover:scale-105"
+            className="w-full h-full max-h-[300px] object-contain transform transition-transform duration-700 hover:scale-105"
             onError={(e) => {
               e.currentTarget.src = "/img/ilustracoes/autocuidado.jpg";
             }}

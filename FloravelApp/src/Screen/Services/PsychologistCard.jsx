@@ -53,7 +53,7 @@ export default function PsychologistCard({ professional, onSelectAgenda }) {
               src={professional.photo}
               alt={`Foto de ${professional.name}`}
               onError={() => setImgError(true)}
-              className="w-full h-full object-cover object-top transition duration-500 group-hover:scale-105"
+              className="w-full h-full object-cover object-[center_18%] transition duration-500 group-hover:scale-105"
             />
           ) : (
             <div
