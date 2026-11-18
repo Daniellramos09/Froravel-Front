@@ -15,6 +15,7 @@
 5. [Post 5: LGPD & Estatística B2B — K-Anonimato (K ≥ 5) e a Muralha de Fogo no RH](#post-5-lgpd--estatística-b2b--k-anonimato-k--5-e-a-muralha-de-fogo-no-rh)
 6. [Post 6: Performance de Banco & Latência — O mito das Stored Functions e o poder dos Índices B-Tree](#post-6-performance-de-banco--latência--o-mito-das-stored-functions-e-o-poder-dos-índices-b-tree)
 7. [Post 7: UX Sensorial & Engenharia Empática — Como lidar com crises graves sem alarmismo](#post-7-ux-sensorial--engenharia-empática--como-lidar-com-crises-graves-sem-alarmismo)
+8. [Post 8: Persistência Poliglota (SQL vs. NoSQL) — Por que o chat da chamada não vai para o MySQL](#post-8-persistência-poliglota-sql-vs-nosql--por-que-o-chat-da-chamada-não-vai-para-o-mysql)
 
 ---
 
@@ -207,3 +208,28 @@ Isso só gera pânico, culpa puerperal e o medo terrível de perder a guarda do 
 Engenharia de software não é só entregar features; é sobre o impacto humano e a responsabilidade social do código que colocamos no ar.
 
 #UX #HumanCenteredDesign #MentalHealth #SaudeMaterna #Frontend #React #ImpactoSocial #TechForGood
+
+---
+
+### Post 8: Persistência Poliglota (SQL vs. NoSQL) — Por que o chat da chamada não vai para o MySQL
+
+**Título/Gancho:**  
+Por que gravar as mensagens do chat de uma chamada de vídeo em um banco relacional (MySQL) pode ser um erro duplo de performance e de privacidade? 💬🗄️
+
+**Conteúdo:**
+Ao projetar o chat ao vivo das Rodas de Conversa da Florável, surgiu uma decisão clássica de *System Design*: devemos criar uma tabela `mensagens_chat` no MySQL ou tratar o chat em uma camada NoSQL / In-Memory?
+
+A resposta está no conceito de **Persistência Poliglota (*Polyglot Persistence*)**: usar a ferramenta certa para a natureza de cada dado.
+
+**1. Onde o Relacional (MySQL 8.0) é imbatível na Florável:**
+* Dados financeiros de Split de Pagamento (`transacoes_pagamento`), vínculos de `responsaveis_legais` (ECA/LGPD), licenças corporativas de RH e triagens da Escala de Edimburgo exigem **consistência transacional estrita (ACID)** e integridade referencial.
+
+**2. Por que o Chat da Roda Ao Vivo pede uma abordagem In-Memory / NoSQL:**
+* **Padrão *Write-Heavy* e Latência Sub-Milissegundo:** Em uma sala ao vivo com mães enviando mensagens, reações e eventos de presença simultaneamente, fazer `INSERT` transacional em disco no banco relacional cria contenção desnecessária.
+* **Privacy by Design & Efemeridade (TTL Nativo):** Uma mãe que desabafa no chat durante uma roda de vídeo precisa ter a segurança psicológica de que aquela conversa é **efêmera** (como no Google Meet) e não ficará eternamente arquivada em um prontuário.
+* **Autodestruição Pós-Sessão:** Operando o chat em estrutura concorrente em memória (evoluindo para Redis / NoSQL com *Time-To-Live* nativo em escala), as mensagens existem apenas durante o ciclo de vida da reunião e são destruídas ao encerrar a sala, sem custo de comandos `DELETE` em disco e com 100% de respeito ao sigilo materno.
+
+Escolher entre SQL e NoSQL não é sobre "qual banco está na moda", mas sobre entender o ciclo de vida, a garantia ACID e a privacidade de cada dado do seu domínio.
+
+#SystemDesign #NoSQL #MySQL #Redis #ArquiteturaDeSoftware #PrivacyByDesign #LGPD #BackendEngineering
+
