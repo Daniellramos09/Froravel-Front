@@ -11,6 +11,8 @@ import {
   SearchX,
   GraduationCap,
   HeartHandshake,
+  Star,
+  MessageSquareHeart,
 } from "lucide-react";
 
 import FilterToolbar from "./FilterToolbar";
@@ -272,6 +274,43 @@ export default function SupportNetworkScreen({
       String(profEmFoco.priceFormatted).toLowerCase().includes("gratuito");
 
     const sessionsCount = profEmFoco.sessionsCompleted || 16;
+
+    // Carrega avaliações salvas pós-reunião + avaliações base da profissional
+    const savedReviewsRaw = JSON.parse(localStorage.getItem("floravel_feedbacks_reunioes") || "[]");
+    const userReviewsForProf = savedReviewsRaw
+      .filter((fb) => !fb.terapeuta || fb.terapeuta.toLowerCase().includes(profEmFoco.name.split(" ")[1]?.toLowerCase() || ""))
+      .map((fb) => ({
+        id: fb.id,
+        author: "Você (Mariana S.)",
+        context: fb.reuniao || "Sessão / Roda Florável",
+        rating: fb.rating || 5,
+        text: fb.achouTexto && fb.achouTexto.trim() && fb.achouTexto.trim().toLowerCase() !== "ok" ? fb.achouTexto.trim() : "",
+        expectativa: fb.atendeuExpectativa === "sim" ? "Superou as expectativas" : fb.atendeuExpectativa === "parcialmente" ? "Atendeu em parte" : "Avaliado",
+        date: "Recente",
+      }));
+
+    const defaultReviews = [
+      {
+        id: `rev-1-${profEmFoco.id}`,
+        author: "Mariana P.",
+        context: `Atendimento com ${profEmFoco.name}`,
+        rating: 5,
+        text: "Saí da sessão com o coração leve pela primeira vez em semanas. A escuta acolhedora e sem julgamentos me ajudou demais no puerpério.",
+        expectativa: "Superou as expectativas",
+        date: "Há 3 dias",
+      },
+      {
+        id: `rev-2-${profEmFoco.id}`,
+        author: "Camila D.",
+        context: `Roda & Escuta · ${profEmFoco.spec}`,
+        rating: 5,
+        text: "Condução extremamente humana e ética. Me senti segura para falar sobre meus medos na maternidade.",
+        expectativa: "Superou as expectativas",
+        date: "Há 1 semana",
+      },
+    ];
+
+    const allProfReviews = [...userReviewsForProf, ...defaultReviews];
 
     return (
       <div className="animate-fadeIn font-dmsans max-w-[1040px] mx-auto pb-16 text-[#2B2829]">
@@ -558,6 +597,71 @@ export default function SupportNetworkScreen({
                 </div>
               </div>
             )}
+
+            {/* ========================================================= */}
+            {/* SEÇÃO DE FEEDBACKS E AVALIAÇÕES NO PERFIL DA PSICÓLOGA    */}
+            {/* ========================================================= */}
+            <div className="mt-8 pt-7 border-t border-[#E4DAD5]">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
+                <div>
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-[#516B55] flex items-center gap-1.5">
+                    <MessageSquareHeart size={14} className="text-[#294D33]" />
+                    Relatos de Mães Acolhidas
+                  </span>
+                  <h3
+                    className="text-[20px] font-normal text-[#1F3A27] mt-0.5"
+                    style={{ fontFamily: "'Fraunces', serif" }}
+                  >
+                    Avaliações sobre {profEmFoco.name}
+                  </h3>
+                </div>
+
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#E4DAD5] self-start sm:self-auto">
+                  <div className="flex items-center gap-0.5 text-amber-400">
+                    {[1, 2, 3, 4, 5].map((s) => (
+                      <Star key={s} size={14} className="fill-amber-400 text-amber-400" />
+                    ))}
+                  </div>
+                  <span className="text-xs font-bold text-[#1F3A27]">4.9 / 5.0</span>
+                  <span className="text-[11px] text-[#6B6365]">({allProfReviews.length} relatos)</span>
+                </div>
+              </div>
+
+              <div className="space-y-3.5">
+                {allProfReviews.map((rev) => (
+                  <div
+                    key={rev.id}
+                    className="bg-white rounded-2xl p-4 sm:p-5 border border-[#E4DAD5] shadow-2xs space-y-2"
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-1 text-amber-400">
+                        {[...Array(rev.rating)].map((_, idx) => (
+                          <Star key={idx} size={14} className="fill-amber-400 text-amber-400" />
+                        ))}
+                      </div>
+                      <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-[#E3EDE5] text-[#1F3A27]">
+                        {rev.expectativa}
+                      </span>
+                    </div>
+
+                    {rev.text ? (
+                      <p className="text-[13.5px] text-[#2B2829] leading-relaxed">
+                        "{rev.text}"
+                      </p>
+                    ) : (
+                      <p className="text-[12.5px] text-[#6B6365] italic">
+                        Avaliação registrada com {rev.rating} estrelas pela participante (sem comentário escrito).
+                      </p>
+                    )}
+
+                    <div className="flex items-center justify-between pt-1 text-[11.5px] text-[#6B6365]">
+                      <span className="font-bold text-[#1F3A27]">{rev.author}</span>
+                      <span>{rev.context} · {rev.date}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>

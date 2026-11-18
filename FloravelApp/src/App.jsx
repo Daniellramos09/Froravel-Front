@@ -301,7 +301,6 @@ function AppContent() {
           <NavItem icon={<MessageSquare size={20} />} label="Rodas de Conversa" active={activeTab === 'groups'} onClick={() => handleTabChange('groups')} />
           <NavItem icon={<Users size={20} />} label="Comunidade" active={activeTab === 'feed'} onClick={() => handleTabChange('feed')} />
           <NavItem icon={<Calendar size={20} />} label="Meus Agendamentos" active={activeTab === 'booking'} onClick={() => handleTabChange('booking')} />
-          <NavItem icon={<Star size={20} />} label="Feedbacks" active={activeTab === 'feedbacks'} onClick={() => handleTabChange('feedbacks')} />
           <NavItem icon={<BookOpen size={20} />} label="Biblioteca & Conteúdos" active={activeTab === 'library'} onClick={() => handleTabChange('library')} />
           <NavItem icon={<Eye size={20} />} label="Acessibilidade" active={activeTab === 'accessibility'} onClick={() => handleTabChange('accessibility')} />
         </nav>

@@ -1,6 +1,6 @@
 // src/Screen/Services/PsychologistCard.jsx
 import React, { useState } from "react";
-import { ArrowRight, Video, Award, Clock } from "lucide-react";
+import { ArrowRight, Video, Award, Clock, Star } from "lucide-react";
 
 /**
  * PsychologistCard — Card Padronizado com a Tipografia de Rodas de Conversa
@@ -74,9 +74,15 @@ export default function PsychologistCard({ professional, onSelectAgenda }) {
             <span className="text-[12px] font-bold uppercase tracking-wider text-secondary">
               {professional.spec}
             </span>
-            <span className="text-[12px] text-gray4 font-mono font-medium">
-              {professional.crp || "CRP 06/142980"}
-            </span>
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-50 border border-amber-200/80 text-amber-800 text-[11px] font-bold">
+                <Star size={11} className="fill-amber-400 text-amber-400" />
+                {professional.rating || "4.9"} ({professional.sessionsCompleted || 24})
+              </span>
+              <span className="text-[12px] text-gray4 font-mono font-medium">
+                {professional.crp || "CRP 06/142980"}
+              </span>
+            </div>
           </div>
 
           {/* Nome da Profissional: Fraunces Bold 22px-24px (igual a Rodas de Conversa) */}

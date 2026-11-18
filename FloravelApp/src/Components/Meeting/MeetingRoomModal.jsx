@@ -1032,14 +1032,13 @@ export default function MeetingRoomModal({
 
                   <div>
                     <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">
-                      Conte o que você achou do encontro:
+                      Conte o que você achou do encontro (Opcional):
                     </label>
                     <textarea
                       rows={3}
-                      required
                       value={achouTexto}
                       onChange={(e) => setAchouTexto(e.target.value)}
-                      placeholder="Escreva como se sentiu na roda e o que achou da condução..."
+                      placeholder="Se desejar, deixe um relato sobre a condução da psicóloga (ficará visível no perfil da profissional)..."
                       className="w-full p-3.5 text-sm rounded-2xl border border-stone-200 bg-stone-50/60 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#294D33] resize-none"
                     />
                   </div>
