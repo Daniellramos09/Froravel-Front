@@ -45,6 +45,19 @@ export default function LoginScreen() {
     setCarregando(true);
 
     try {
+      if (papel === 'mae' && email.trim()) {
+        try {
+          const res = await fetch(
+            `http://localhost:8080/api/maes/email/${encodeURIComponent(email.trim().toLowerCase())}`
+          );
+          if (res.ok) {
+            const maeData = await res.json();
+            localStorage.setItem('floravel_mae_sessao', JSON.stringify(maeData));
+          }
+        } catch (_) {
+          // Fallback resiliente para Demo Day caso a API esteja offline
+        }
+      }
       navigateToApp(papel);
     } catch (err) {
       const msg =

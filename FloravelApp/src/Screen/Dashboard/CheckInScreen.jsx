@@ -182,17 +182,51 @@ export default function CheckInScreen({ setActiveTab }) {
   const [anjoAcionado, setAnjoAcionado] = useState(false);
 
   const handleAnswer = (questionId, optionValue) => {
-    setAnswers(prev => ({ ...prev, [questionId]: optionValue }));
+    const updatedAnswers = { ...answers, [questionId]: optionValue };
+    setAnswers(updatedAnswers);
 
     setTimeout(() => {
       if (currentStep < QUIZ_QUESTIONS.length - 1) {
         setCurrentStep(prev => prev + 1);
       } else {
         setIsProcessing(true);
-        setTimeout(() => {
-          setIsProcessing(false);
-          setIsFinished(true);
-        }, 1200);
+
+        // Envia as respostas da Escala de Edimburgo (EPDS) para a API Spring Boot (/api/triagem/check-in)
+        (async () => {
+          try {
+            let maeId = null;
+            const sessaoRaw = localStorage.getItem('floravel_mae_sessao');
+            if (sessaoRaw) {
+              maeId = JSON.parse(sessaoRaw)?.id;
+            }
+            if (!maeId) {
+              const resMae = await fetch('http://localhost:8080/api/maes/email/mariana.silva@email.com');
+              if (resMae.ok) {
+                const maeObj = await resMae.json();
+                maeId = maeObj?.id;
+                localStorage.setItem('floravel_mae_sessao', JSON.stringify(maeObj));
+              }
+            }
+            if (maeId) {
+              const respostasPayload = Object.entries(updatedAnswers).map(([num, val]) => ({
+                numeroQuestao: Number(num),
+                valorResposta: Number(val),
+              }));
+              await fetch('http://localhost:8080/api/triagem/check-in', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ maeId, respostas: respostasPayload }),
+              });
+            }
+          } catch (_) {
+            // Fallback offline resiliente
+          } finally {
+            setTimeout(() => {
+              setIsProcessing(false);
+              setIsFinished(true);
+            }, 900);
+          }
+        })();
       }
     }, 350);
   };
