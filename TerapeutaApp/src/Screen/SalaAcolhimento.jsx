@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import {
   Users,
@@ -17,6 +17,28 @@ import {
   Heart,
   Volume2
 } from 'lucide-react';
+
+function LiveWebcamPreview({ stream }) {
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    if (videoRef.current && stream) {
+      videoRef.current.srcObject = stream;
+    }
+  }, [stream]);
+
+  if (!stream) return null;
+
+  return (
+    <video
+      ref={videoRef}
+      autoPlay
+      playsInline
+      muted
+      className="absolute inset-0 w-full h-full object-cover -scale-x-100"
+    />
+  );
+}
 
 /* ---------- Dados da Sessão ---------- */
 const sessaoInicial = {
@@ -48,6 +70,38 @@ export default function SalaAcolhimento() {
   const [novaMensagem, setNovaMensagem] = useState('');
   const [confirmarSaida, setConfirmarSaida] = useState(false);
   const [segundos, setSegundos] = useState(0);
+  const [localStream, setLocalStream] = useState(null);
+
+  // Captura real da Webcam na tela da Psicóloga (Lobby e Chamada Ao Vivo)
+  useEffect(() => {
+    let activeStream = null;
+    let cancelled = false;
+
+    if (camLigada && navigator.mediaDevices?.getUserMedia) {
+      navigator.mediaDevices
+        .getUserMedia({ video: true, audio: false })
+        .then((stream) => {
+          if (cancelled) {
+            stream.getTracks().forEach((t) => t.stop());
+            return;
+          }
+          activeStream = stream;
+          setLocalStream(stream);
+        })
+        .catch(() => {
+          setLocalStream(null);
+        });
+    } else {
+      setLocalStream(null);
+    }
+
+    return () => {
+      cancelled = true;
+      if (activeStream) {
+        activeStream.getTracks().forEach((t) => t.stop());
+      }
+    };
+  }, [camLigada]);
 
   // Cronômetro da chamada & Sincronização Ao Vivo com App da Mãe (BroadcastChannel + Spring Boot)
   useEffect(() => {
@@ -201,11 +255,17 @@ export default function SalaAcolhimento() {
               <div className="relative aspect-video rounded-2xl bg-stone-900 overflow-hidden flex items-center justify-center border border-stone-200 shadow-inner">
                 {camLigada ? (
                   <div className="relative w-full h-full bg-gradient-to-br from-stone-800 to-stone-900 flex flex-col items-center justify-center text-white">
-                    <div className="w-20 h-20 rounded-full bg-[#F4DDE5] text-[#294D33] font-bold text-2xl flex items-center justify-center shadow-md">
-                      HS
-                    </div>
-                    <p className="mt-3 text-sm font-semibold tracking-wide">Dra. Helena Souza</p>
-                    <p className="text-xs text-stone-300">Câmera ativa · Prévia de teste</p>
+                    {localStream ? (
+                      <LiveWebcamPreview stream={localStream} />
+                    ) : (
+                      <>
+                        <div className="w-20 h-20 rounded-full bg-[#F4DDE5] text-[#294D33] font-bold text-2xl flex items-center justify-center shadow-md">
+                          HS
+                        </div>
+                        <p className="mt-3 text-sm font-semibold tracking-wide">Dra. Helena Souza</p>
+                        <p className="text-xs text-stone-300">Câmera ativa · Prévia de teste</p>
+                      </>
+                    )}
                   </div>
                 ) : (
                   <div className="text-stone-400 text-center p-6">
@@ -341,14 +401,20 @@ export default function SalaAcolhimento() {
               {/* Vídeo 1: Terapeuta (Você) */}
               <div className="relative rounded-2xl bg-stone-800 border border-white/10 overflow-hidden flex flex-col items-center justify-center shadow-lg">
                 {camLigada ? (
-                  <div className="w-full h-full bg-gradient-to-br from-stone-800 via-stone-850 to-stone-900 flex flex-col items-center justify-center">
-                    <div className="w-20 h-20 rounded-full bg-[#F4DDE5] text-[#294D33] font-bold text-2xl flex items-center justify-center ring-4 ring-[#294D33]/30">
-                      HS
-                    </div>
-                    <p className="mt-3 text-sm font-semibold">Dra. Helena Souza (Você)</p>
-                    <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-[#294D33] text-white mt-1">
-                      Terapeuta Perinatal
-                    </span>
+                  <div className="relative w-full h-full bg-gradient-to-br from-stone-800 via-stone-850 to-stone-900 flex flex-col items-center justify-center">
+                    {localStream ? (
+                      <LiveWebcamPreview stream={localStream} />
+                    ) : (
+                      <>
+                        <div className="w-20 h-20 rounded-full bg-[#F4DDE5] text-[#294D33] font-bold text-2xl flex items-center justify-center ring-4 ring-[#294D33]/30">
+                          HS
+                        </div>
+                        <p className="mt-3 text-sm font-semibold">Dra. Helena Souza (Você)</p>
+                        <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-[#294D33] text-white mt-1">
+                          Terapeuta Perinatal
+                        </span>
+                      </>
+                    )}
                   </div>
                 ) : (
                   <div className="text-center text-stone-500">

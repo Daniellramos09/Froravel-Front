@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { 
   Video, VideoOff, Mic, MicOff, PhoneOff, MessageSquare, Hand, 
@@ -6,6 +6,31 @@ import {
   Lock, Volume2, Subtitles, LayoutGrid, Maximize2, Smile, MoreVertical, Pin
 } from 'lucide-react';
 import DenunciaModal from '../Safety/DenunciaModal';
+
+// Componente que renderiza o stream real da Webcam (com espelhamento natural estilo Google Meet)
+function LiveWebcamTile({ stream, fallbackImg, alt }) {
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    if (videoRef.current && stream) {
+      videoRef.current.srcObject = stream;
+    }
+  }, [stream]);
+
+  if (!stream) {
+    return <img src={fallbackImg} alt={alt} className="w-full h-full object-cover" />;
+  }
+
+  return (
+    <video
+      ref={videoRef}
+      autoPlay
+      playsInline
+      muted
+      className="w-full h-full object-cover -scale-x-100"
+    />
+  );
+}
 
 export default function MeetingRoomModal({ 
   isOpen, 
@@ -50,6 +75,38 @@ export default function MeetingRoomModal({
   const [permitirPublicar, setPermitirPublicar] = useState(true);
   const [feedbackEnviado, setFeedbackEnviado] = useState(false);
   const [disjuntorInfo, setDisjuntorInfo] = useState(null);
+  const [localStream, setLocalStream] = useState(null);
+
+  // Captura real da Webcam do navegador quando o modal está aberto e a câmera está ligada
+  useEffect(() => {
+    let activeStream = null;
+    let cancelled = false;
+
+    if (isOpen && isCameraOn && stage !== 'post_call' && navigator.mediaDevices?.getUserMedia) {
+      navigator.mediaDevices
+        .getUserMedia({ video: true, audio: false })
+        .then((stream) => {
+          if (cancelled) {
+            stream.getTracks().forEach((t) => t.stop());
+            return;
+          }
+          activeStream = stream;
+          setLocalStream(stream);
+        })
+        .catch(() => {
+          setLocalStream(null);
+        });
+    } else {
+      setLocalStream(null);
+    }
+
+    return () => {
+      cancelled = true;
+      if (activeStream) {
+        activeStream.getTracks().forEach((t) => t.stop());
+      }
+    };
+  }, [isOpen, isCameraOn, stage]);
 
   // Sincronização em tempo real entre Abas (BroadcastChannel + Spring Boot /api/sala-ao-vivo)
   useEffect(() => {
@@ -293,10 +350,10 @@ export default function MeetingRoomModal({
             <div className="lg:col-span-7 flex flex-col items-center">
               <div className="w-full aspect-video rounded-3xl bg-[#202124] overflow-hidden relative shadow-xl border border-stone-800 flex items-center justify-center">
                 {isCameraOn ? (
-                  <img 
-                    src="/img/fotomae/6.jpg" 
-                    alt="Preview da sua câmera" 
-                    className="w-full h-full object-cover"
+                  <LiveWebcamTile
+                    stream={localStream}
+                    fallbackImg="/img/fotomae/6.jpg"
+                    alt="Preview da sua câmera"
                   />
                 ) : (
                   <div className="flex flex-col items-center justify-center text-white">
@@ -495,6 +552,12 @@ export default function MeetingRoomModal({
                         </div>
                         <p className="text-xs text-stone-400 mt-2">Câmera desativada</p>
                       </div>
+                    ) : pinnedParticipant.isUser ? (
+                      <LiveWebcamTile
+                        stream={localStream}
+                        fallbackImg={pinnedParticipant.img}
+                        alt={pinnedParticipant.name}
+                      />
                     ) : (
                       <img 
                         src={pinnedParticipant.img} 
@@ -551,6 +614,12 @@ export default function MeetingRoomModal({
                             </div>
                             <span className="text-[11px] text-stone-400 mt-1">Câmera desligada</span>
                           </div>
+                        ) : p.isUser ? (
+                          <LiveWebcamTile
+                            stream={localStream}
+                            fallbackImg={p.img}
+                            alt={p.name}
+                          />
                         ) : (
                           <img src={p.img} alt={p.name} className="w-full h-full object-cover" />
                         )}
@@ -612,6 +681,12 @@ export default function MeetingRoomModal({
                           </div>
                           <span className="text-xs text-stone-400 mt-2">Câmera desligada</span>
                         </div>
+                      ) : p.isUser ? (
+                        <LiveWebcamTile
+                          stream={localStream}
+                          fallbackImg={p.img}
+                          alt={p.name}
+                        />
                       ) : (
                         <img src={p.img} alt={p.name} className="w-full h-full object-cover" />
                       )}
