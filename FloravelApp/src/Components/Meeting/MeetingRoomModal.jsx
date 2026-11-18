@@ -221,7 +221,7 @@ export default function MeetingRoomModal({
       isHost: false,
       isSpeaking: false, 
       isUser: true,
-      img: '/img/fotomae/6.jpg' 
+      img: '/img/ilustracoes/florescer.jpg' 
     },
     { 
       id: 'part1', 
@@ -230,7 +230,7 @@ export default function MeetingRoomModal({
       role: 'Mãe do Gael (3m)', 
       isHost: false,
       isSpeaking: false, 
-      img: '/img/variasMaes.jpg' 
+      img: '/img/ilustracoes/mae-bebe-tranquilidade.jpg' 
     },
     { 
       id: 'part2', 
@@ -239,7 +239,7 @@ export default function MeetingRoomModal({
       role: 'Mãe da Alice (5m)', 
       isHost: false,
       isSpeaking: false, 
-      img: '/img/maeconversando.jpg' 
+      img: '/img/ilustracoes/acolhimento.jpg' 
     },
   ];
 
@@ -377,7 +377,7 @@ export default function MeetingRoomModal({
                   <p className="text-xs font-bold text-stone-800">mariana.silva@floravel.com.br</p>
                   <p className="text-[11px] text-emerald-700 font-medium">Conta Verificada</p>
                 </div>
-                <img src="/img/fotomae/6.jpg" alt="Mariana" className="w-9 h-9 rounded-full object-cover border border-[#E8A9BB]" />
+                <img src="/img/ilustracoes/florescer.jpg" alt="Mariana" className="w-9 h-9 rounded-full object-cover border border-[#E8A9BB]" />
               </div>
 
               <button
@@ -399,7 +399,7 @@ export default function MeetingRoomModal({
                 {isCameraOn ? (
                   <LiveWebcamTile
                     stream={localStream}
-                    fallbackImg="/img/fotomae/6.jpg"
+                    fallbackImg="/img/ilustracoes/florescer.jpg"
                     alt="Preview da sua câmera"
                   />
                 ) : (
@@ -482,8 +482,8 @@ export default function MeetingRoomModal({
                 <div className="flex items-center gap-3 mb-6 p-3.5 rounded-2xl bg-[#FCF7F9] border border-[#E8A9BB]/40">
                   <div className="flex -space-x-2.5 overflow-hidden shrink-0">
                     <img src="/img/fotopsicologo/psicologa1.jpg" alt="Host" className="inline-block h-8 w-8 rounded-full ring-2 ring-white object-cover" />
-                    <img src="/img/variasMaes.jpg" alt="Mãe" className="inline-block h-8 w-8 rounded-full ring-2 ring-white object-cover" />
-                    <img src="/img/maeconversando.jpg" alt="Mãe" className="inline-block h-8 w-8 rounded-full ring-2 ring-white object-cover" />
+                    <img src="/img/ilustracoes/mae-bebe-tranquilidade.jpg" alt="Mãe" className="inline-block h-8 w-8 rounded-full ring-2 ring-white object-cover" />
+                    <img src="/img/ilustracoes/acolhimento.jpg" alt="Mãe" className="inline-block h-8 w-8 rounded-full ring-2 ring-white object-cover" />
                   </div>
                   <p className="text-xs text-stone-700 font-medium">
                     <strong>Dra. Helena</strong> e outras 2 mães já estão na sala

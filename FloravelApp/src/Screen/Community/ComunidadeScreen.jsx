@@ -26,7 +26,7 @@ const ALL_GROUPS = [
     prof: "Dra. Helena Souza",
     spots: "11/15",
     isLiveNow: true,
-    img: "/img/variasMaes.jpg"
+    img: "/img/ilustracoes/roda.jpg"
   },
   {
     id: 'grp-2',
@@ -38,7 +38,7 @@ const ALL_GROUPS = [
     prof: "Dra. Camila Santos",
     spots: "8/12",
     isLiveNow: false,
-    img: "/img/maeDescansando.jpg"
+    img: "/img/ilustracoes/autocuidado.jpg"
   },
   {
     id: 'grp-3',
@@ -50,7 +50,7 @@ const ALL_GROUPS = [
     prof: "Dr. Rafael Lima",
     spots: "9/15",
     isLiveNow: true,
-    img: "/img/maeconversando.jpg"
+    img: "/img/ilustracoes/pausa.jpg"
   },
   {
     id: 'grp-4',
@@ -62,7 +62,7 @@ const ALL_GROUPS = [
     prof: "Dra. Beatriz Nogueira",
     spots: "10/15",
     isLiveNow: false,
-    img: "/img/fotomae/fotomae1.jpg"
+    img: "/img/ilustracoes/mae-bebe-tranquilidade.jpg"
   }
 ];
 

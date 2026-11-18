@@ -10,8 +10,8 @@ const ARTIGOS = [
     resumo:
       'Como diferenciar a oscilação hormonal dos primeiros dias de sinais que pedem apoio profissional.',
     tempo: '3 min de leitura',
-    img: '/img/maternidadeSemFiltro.jpg',
-    fallback: '/img/maeexausta.jpg',
+    img: '/img/ilustracoes/mae-bebe-tranquilidade.jpg',
+    fallback: '/img/ilustracoes/vinculo.jpg',
   },
   {
     id: 2,

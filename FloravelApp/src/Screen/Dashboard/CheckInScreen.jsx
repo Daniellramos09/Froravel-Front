@@ -10,28 +10,28 @@ const QUIZ_QUESTIONS = [
         value: 0,
         title: "Me sinto leve e presente",
         message: "Consigo sorrir e aproveitar pequenos momentos com meu bebê.",
-        img: "/img/fotomae/6.jpg",
+        img: "/img/ilustracoes/florescer.jpg",
         tag: "Bem e estável"
       },
       {
         value: 1,
         title: "Oscilando um pouco",
         message: "Tenho bons momentos, mas o cansaço às vezes pesa no fim do dia.",
-        img: "/img/maeDescansando.jpg",
+        img: "/img/ilustracoes/autocuidado.jpg",
         tag: "Um pouco cansada"
       },
       {
         value: 2,
         title: "Tem sido difícil sorrir",
         message: "Sinto que a alegria está distante e quase não tenho energia.",
-        img: "/img/maesono.jpg",
+        img: "/img/ilustracoes/pausa.jpg",
         tag: "Sobrecarregada"
       },
       {
         value: 3,
         title: "Me sinto esgotada e triste",
         message: "Um vazio constante no peito, preciso muito de escuta e colo.",
-        img: "/img/maeexausta.jpg",
+        img: "/img/ilustracoes/acolhimento.jpg",
         tag: "Preciso de apoio"
       }
     ]
@@ -44,28 +44,28 @@ const QUIZ_QUESTIONS = [
         value: 0,
         title: "Sim, consigo relaxar",
         message: "Consigo desligar a mente e recuperar minhas forças.",
-        img: "/img/maeDescansando.jpg",
+        img: "/img/ilustracoes/florescer.jpg",
         tag: "Descanso tranquilo"
       },
       {
         value: 1,
         title: "Descanso aos poucos",
         message: "Durmo leve, sempre alerta aos barulhos da casa.",
-        img: "/img/fotomae/fotomae1.jpg",
+        img: "/img/ilustracoes/mae-bebe-tranquilidade.jpg",
         tag: "Sono leve"
       },
       {
         value: 2,
         title: "Mente acelerada",
         message: "Mesmo quando o bebê dorme, minha cabeça não para de pensar.",
-        img: "/img/maesono.jpg",
+        img: "/img/ilustracoes/pausa.jpg",
         tag: "Ansiedade"
       },
       {
         value: 3,
         title: "Exaustão profunda",
         message: "Não consigo pregar o olho, sinto meu corpo no limite.",
-        img: "/img/maeexausta.jpg",
+        img: "/img/ilustracoes/acolhimento.jpg",
         tag: "No limite"
       }
     ]
@@ -78,28 +78,28 @@ const QUIZ_QUESTIONS = [
         value: 0,
         title: "Me sinto bem amparada",
         message: "Tenho pessoas por perto que me escutam sem julgar.",
-        img: "/img/variasMaes.jpg",
+        img: "/img/ilustracoes/roda.jpg",
         tag: "Com rede de apoio"
       },
       {
         value: 1,
         title: "Tenho ajuda pontual",
         message: "Alguém ajuda com o bebê, mas sinto falta de conversar sobre mim.",
-        img: "/img/maeconversando.jpg",
+        img: "/img/ilustracoes/rede.jpg",
         tag: "Apoio parcial"
       },
       {
         value: 2,
         title: "Me sinto incompreendida",
         message: "Há pessoas ao redor, mas ninguém entende o que estou passando.",
-        img: "/img/maternidadeSemFiltro.jpg",
+        img: "/img/ilustracoes/diario.jpg",
         tag: "Solitária"
       },
       {
         value: 3,
         title: "Carrego tudo sozinha",
         message: "Sinto que tudo depende exclusivamente de mim o tempo inteiro.",
-        img: "/img/maeexausta.jpg",
+        img: "/img/ilustracoes/acolhimento.jpg",
         tag: "Sem rede"
       }
     ]
@@ -112,28 +112,28 @@ const QUIZ_QUESTIONS = [
         value: 0,
         title: "Cheia de esperança",
         message: "Sei que é uma fase intensa e confio que dias mais leves virão.",
-        img: "/img/fotomae/6.jpg",
+        img: "/img/ilustracoes/florescer.jpg",
         tag: "Confiante"
       },
       {
         value: 1,
         title: "Vivendo um dia de cada vez",
         message: "Prefiro focar apenas no hoje para não ficar ansiosa.",
-        img: "/img/maeDescansando.jpg",
+        img: "/img/ilustracoes/autocuidado.jpg",
         tag: "Passo a passo"
       },
       {
         value: 2,
         title: "Com medo e insegurança",
         message: "Me cobro muito e tenho receio de não dar conta de tudo.",
-        img: "/img/maternidadeSemFiltro.jpg",
+        img: "/img/ilustracoes/diario.jpg",
         tag: "Insegura"
       },
       {
         value: 3,
         title: "Com muita angústia",
         message: "O amanhã me assusta e sinto que preciso de ajuda profissional.",
-        img: "/img/maeexausta.jpg",
+        img: "/img/ilustracoes/acolhimento.jpg",
         tag: "Acolhimento urgente"
       }
     ]
@@ -146,28 +146,28 @@ const QUIZ_QUESTIONS = [
         value: 0,
         title: "Não, nunca",
         message: "Mesmo com o cansaço, não tive pensamentos de me machucar.",
-        img: "/img/fotomae/6.jpg",
+        img: "/img/ilustracoes/florescer.jpg",
         tag: "Segura"
       },
       {
         value: 1,
         title: "Raramente passou pela mente",
         message: "Foi um pensamento rápido em um momento de exaustão extrema.",
-        img: "/img/maeDescansando.jpg",
+        img: "/img/ilustracoes/autocuidado.jpg",
         tag: "Preciso de escuta"
       },
       {
         value: 2,
         title: "Às vezes penso nisso",
         message: "Sinto um peso muito difícil de carregar sozinha e preciso de amparo.",
-        img: "/img/maternidadeSemFiltro.jpg",
+        img: "/img/ilustracoes/rede.jpg",
         tag: "Acolhimento prioritário"
       },
       {
         value: 3,
         title: "Sim, com frequência",
         message: "Estou sofrendo muito agora e preciso de ajuda e proteção imediata.",
-        img: "/img/maeexausta.jpg",
+        img: "/img/ilustracoes/acolhimento.jpg",
         tag: "Apoio imediato"
       }
     ]

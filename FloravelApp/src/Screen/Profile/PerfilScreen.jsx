@@ -6,7 +6,7 @@ export default function PerfilScreen({ onRedoOnboarding, onOpenDenuncia }) {
   const [email, setEmail] = useState('mariana.silva@email.com');
   const [nascimento, setNascimento] = useState('1999-05-14');
   const [fase, setFase] = useState('Bebê de 2 meses');
-  const [avatar, setAvatar] = useState('/img/fotomae/6.jpg');
+  const [avatar, setAvatar] = useState('/img/ilustracoes/florescer.jpg');
   const [isSaved, setIsSaved] = useState(false);
   const [saveMessage, setSaveMessage] = useState('');
 
@@ -24,7 +24,7 @@ export default function PerfilScreen({ onRedoOnboarding, onOpenDenuncia }) {
   };
 
   const handleRemovePhoto = () => {
-    setAvatar('/img/fotomae/fotomae1.jpg');
+    setAvatar('/img/ilustracoes/mae-bebe-tranquilidade.jpg');
     setSaveMessage('Foto restaurada para a padrão.');
     setIsSaved(true);
     setTimeout(() => setIsSaved(false), 3000);

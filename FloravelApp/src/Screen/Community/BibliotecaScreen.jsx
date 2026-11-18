@@ -9,7 +9,7 @@ const ARTIGOS_MOCK = [
     titulo: 'Como lidar com a exaustão nos primeiros meses', 
     desc: 'Pequenas dicas de autocuidado para momentos de sobrecarga mental e física.', 
     tempo: '3 min de leitura', 
-    img: '/img/maeexausta.jpg',
+    img: '/img/ilustracoes/autocuidado.jpg',
     autor: 'Dra. Helena Souza · Psicóloga Perinatal',
     conteudo: [
       'A exaustão no pós-parto não é fraqueza, preguiça ou incapacidade: é uma resposta biológica e neurológica à maior transformação que o corpo e a mente de uma mulher podem vivenciar.',
@@ -23,7 +23,7 @@ const ARTIGOS_MOCK = [
     titulo: 'A privação de sono e o impacto nas emoções', 
     desc: 'Compreender porque é que o cansaço afeta tanto o nosso humor e como pedir ajuda.', 
     tempo: '5 min de leitura', 
-    img: '/img/maesono.jpg',
+    img: '/img/ilustracoes/pausa.jpg',
     autor: 'Equipe Clínica Florável',
     conteudo: [
       'Dormir em blocos fragmentados de duas horas destrói a fase de sono REM, responsável pela regulação afetiva e memória.',
@@ -37,7 +37,7 @@ const ARTIGOS_MOCK = [
     titulo: 'Como comunicar o que precisa à sua família', 
     desc: 'Estratégias para estabelecer limites saudáveis e delegar tarefas no pós-parto.', 
     tempo: '4 min de leitura', 
-    img: '/img/maeconversando.jpg',
+    img: '/img/ilustracoes/rede.jpg',
     autor: 'Psi. Camila Santos',
     conteudo: [
       'Visitas que chegam para segurar o bebê e esperar um café pronto não são apoio, são trabalho extra.',
@@ -51,7 +51,7 @@ const ARTIGOS_MOCK = [
     titulo: 'A pressão do amor à primeira vista pelo bebê', 
     desc: 'Desmistificando a culpa: o vínculo é construído e não nasce pronto no bloco operatório.', 
     tempo: '6 min de leitura', 
-    img: '/img/maternidadeSemFiltro.jpg',
+    img: '/img/ilustracoes/vinculo.jpg',
     autor: 'Dra. Mariana Costa',
     conteudo: [
       'Muitas mães esperam uma explosão mágica de amor imediato no parto e, quando isso não acontece, sentem uma culpa dilacerante.',
@@ -65,7 +65,7 @@ const ARTIGOS_MOCK = [
     titulo: 'Redescobrindo o seu corpo após a gravidez', 
     desc: 'Um olhar gentil para as transformações físicas e o respeito pelo seu tempo.', 
     tempo: '4 min de leitura', 
-    img: '/img/maeDescansando.jpg',
+    img: '/img/ilustracoes/florescer.jpg',
     autor: 'Dra. Beatriz Albuquerque',
     conteudo: [
       'A cultura das redes sociais cobra que o corpo "volte ao normal" em semanas. Mas o corpo não precisa voltar: ele foi a casa onde uma vida inteira se desenvolveu.',
@@ -79,7 +79,7 @@ const ARTIGOS_MOCK = [
     titulo: 'Roda de Conversa: Mães de múltiplas viagens', 
     desc: 'Relatos reais de mulheres que já passaram pela montanha-russa do puerpério.', 
     tempo: '10 min de vídeo', 
-    img: '/img/variasMaes.jpg', 
+    img: '/img/ilustracoes/roda.jpg', 
     isVideo: true,
     autor: 'Roda Florável',
     conteudo: [
@@ -95,7 +95,7 @@ const DESTAQUE_ARTIGO = {
   titulo: 'O mito da "Mãe Perfeita" e a cobrança social.',
   desc: 'Por que nos cobramos tanto? Um artigo sobre como baixar as expectativas e viver a maternidade de forma mais leve e compassiva.',
   tempo: '8 min de leitura',
-  img: '/img/2.jpg',
+  img: '/img/ilustracoes/leitura.jpg',
   autor: 'Equipe Editorial Florável',
   conteudo: [
     'Desde a infância somos bombardeadas por imagens de maternidade imaculada: mães serenas, casas brilhando, bebês que dormem a noite toda e sorrisos sem cansaço.',
@@ -219,7 +219,7 @@ export default function BibliotecaScreen() {
                 className="w-full h-full object-cover object-top transition duration-500 group-hover:scale-105"
                 onError={(e) => {
                   e.currentTarget.onerror = null;
-                  e.currentTarget.src = "/img/1.jpg";
+                  e.currentTarget.src = "/img/ilustracoes/leitura.jpg";
                 }}
               />
               {artigo.isVideo && (
@@ -293,7 +293,7 @@ export default function BibliotecaScreen() {
                 className="w-full h-full object-cover"
                 onError={(e) => {
                   e.currentTarget.onerror = null;
-                  e.currentTarget.src = "/img/2.jpg";
+                  e.currentTarget.src = "/img/ilustracoes/leitura.jpg";
                 }}
               />
             </div>

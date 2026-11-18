@@ -22,7 +22,11 @@ import {
   Copy,
   PhoneCall,
   CheckCircle2,
-  Lock
+  Lock,
+  Calendar,
+  Clock,
+  ArrowLeft,
+  ChevronRight
 } from 'lucide-react';
 
 /**
@@ -123,40 +127,93 @@ function LiveWebcamPreview({ stream }) {
   );
 }
 
-/* ---------- Dados da Sessão ---------- */
-const sessaoInicial = {
-  titulo: 'Roda de Acolhimento: Os Primeiros Meses',
-  tipo: 'grupo', // 'grupo' | 'individual'
-  status: 'Pronta para Iniciar',
-  data: 'Hoje, 23 de Outubro',
-  horario: '18:00 – 19:30',
-  vagas: 5,
-  participantes: [
-    { id: 1, nome: 'Mariana Silva', status: 'Conectada', bebe: 'Bento (3m)', micOn: true, camOn: true },
-    { id: 2, nome: 'Beatriz Santos', status: 'Conectada', bebe: 'Gael (2m)', micOn: false, camOn: true },
-    { id: 3, nome: 'Larissa Oliveira', status: 'Aguardando', bebe: 'Maya (4m)', micOn: false, camOn: false },
-  ],
-  mensagensIniciais: [
-    { remetente: 'Sistema', texto: 'Sala criptografada ponta a ponta criada em conformidade com o CFP.', hora: '17:58' },
-    { remetente: 'Mariana Silva', texto: 'Boa noite, doutora! Cheguei um pouquinho antes para testar o som.', hora: '18:00' },
-  ],
-};
+/* ---------- Sessões Agendadas Prontas para Sala Virtual ---------- */
+const SESSOES_AGENDADAS_SALA = [
+  {
+    id: 'roda-primeiros-meses',
+    titulo: 'Roda de Acolhimento: Os Primeiros Meses',
+    tipo: 'grupo',
+    statusBadge: 'Mães na Sala',
+    data: 'Hoje, 23 de Outubro',
+    horario: '18:00 – 19:30',
+    resumo: '3 de 5 mães inscritas · 2 já conectadas aguardando você iniciar',
+    vagas: 5,
+    participantes: [
+      { id: 1, nome: 'Mariana Silva', status: 'Conectada', bebe: 'Bento (3m)', micOn: true, camOn: true },
+      { id: 2, nome: 'Beatriz Santos', status: 'Conectada', bebe: 'Gael (2m)', micOn: false, camOn: true },
+      { id: 3, nome: 'Larissa Oliveira', status: 'Aguardando', bebe: 'Maya (4m)', micOn: false, camOn: false },
+    ],
+    mensagensIniciais: [
+      { remetente: 'Sistema', texto: 'Sala criptografada ponta a ponta criada em conformidade com o CFP.', hora: '17:58' },
+      { remetente: 'Mariana Silva', texto: 'Boa noite, doutora! Cheguei um pouquinho antes para testar o som.', hora: '18:00' },
+    ],
+  },
+  {
+    id: 'ind-mariana',
+    titulo: 'Escuta Individual · Mariana Silva',
+    tipo: 'individual',
+    statusBadge: 'Hoje · 14:30',
+    data: 'Hoje, 23 de Outubro',
+    horario: '14:30 – 15:20',
+    resumo: 'Bebê Bento (3m) · Acolhimento Moderado Prioritário (Puerpério noturno)',
+    vagas: 1,
+    participantes: [
+      { id: 1, nome: 'Mariana Silva', status: 'Conectada', bebe: 'Bento (3m)', micOn: true, camOn: true },
+    ],
+    mensagensIniciais: [
+      { remetente: 'Sistema', texto: 'Canal individual sigiloso CFP ativado (Zero Prontuário).', hora: '14:28' },
+    ],
+  },
+  {
+    id: 'ind-camila',
+    titulo: 'Escuta Individual · Camila Ramos (16a)',
+    tipo: 'individual',
+    statusBadge: 'Consentimento ECA Art. 17',
+    data: 'Quinta, 24 de Outubro',
+    horario: '16:00 – 16:50',
+    resumo: 'Bebê Lucas (2m) · Jovem mãe com autorização validada pelo responsável legal',
+    vagas: 1,
+    participantes: [
+      { id: 6, nome: 'Camila Ramos', status: 'Aguardando', bebe: 'Lucas (2m)', micOn: false, camOn: false },
+    ],
+    mensagensIniciais: [
+      { remetente: 'Sistema', texto: 'Acolhimento sigiloso protegido pelo Art. 17 do ECA.', hora: '15:58' },
+    ],
+  },
+  {
+    id: 'ind-juliana',
+    titulo: 'Escuta Individual · Juliana Costa',
+    tipo: 'individual',
+    statusBadge: 'Sábado · 10:00',
+    data: 'Sábado, 26 de Outubro',
+    horario: '10:00 – 10:50',
+    resumo: 'Bebê Arthur (6m) · Retorno ao trabalho pós-licença maternidade',
+    vagas: 1,
+    participantes: [
+      { id: 5, nome: 'Juliana Costa', status: 'Aguardando', bebe: 'Arthur (6m)', micOn: false, camOn: false },
+    ],
+    mensagensIniciais: [
+      { remetente: 'Sistema', texto: 'Sala individual pronta para acolhimento.', hora: '09:58' },
+    ],
+  },
+];
 
 export default function SalaAcolhimento() {
   const navigate = useNavigate();
+  const [sessaoSelecionada, setSessaoSelecionada] = useState(null);
   const [emChamada, setEmChamada] = useState(false);
   const [micLigado, setMicLigado] = useState(true);
   const [camLigada, setCamLigada] = useState(true);
   const [telaCompartilhada, setTelaCompartilhada] = useState(false);
   const [chatAberto, setChatAberto] = useState(true);
-  const [mensagens, setMensagens] = useState(sessaoInicial.mensagensIniciais);
+  const [mensagens, setMensagens] = useState(SESSOES_AGENDADAS_SALA[0].mensagensIniciais);
   const [novaMensagem, setNovaMensagem] = useState('');
   const [confirmarSaida, setConfirmarSaida] = useState(false);
   const [segundos, setSegundos] = useState(0);
   const [localStream, setLocalStream] = useState(null);
 
   // Participantes e aviso sonoro/visual rápido de entrada na sala
-  const [participantes, setParticipantes] = useState(sessaoInicial.participantes);
+  const [participantes, setParticipantes] = useState(SESSOES_AGENDADAS_SALA[0].participantes);
   const [somEntradaAtivo, setSomEntradaAtivo] = useState(true);
   const [entradaBanner, setEntradaBanner] = useState('');
 
@@ -168,10 +225,20 @@ export default function SalaAcolhimento() {
   // Modal de Salvaguarda Clínica (Menor de Idade ECA Art. 17 & Protocolo Emergência)
   const [salvaguardaOpen, setSalvaguardaOpen] = useState(false);
   const [salvaguardaAba, setSalvaguardaAba] = useState('menor');
-  const [maeSinalizada, setMaeSinalizada] = useState(sessaoInicial.participantes[2]?.nome || 'Larissa Oliveira');
+  const [maeSinalizada, setMaeSinalizada] = useState('Larissa Oliveira');
   const [respNome, setRespNome] = useState('');
   const [respTelefone, setRespTelefone] = useState('');
   const [sinalizacaoSucesso, setSinalizacaoSucesso] = useState(false);
+
+  const sessaoAtiva = sessaoSelecionada || SESSOES_AGENDADAS_SALA[0];
+
+  const handleSelecionarSessao = (sessao) => {
+    setSessaoSelecionada(sessao);
+    setParticipantes(sessao.participantes);
+    setMensagens(sessao.mensagensIniciais);
+    setMaeSinalizada(sessao.participantes[sessao.participantes.length - 1]?.nome || 'Mariana Silva');
+    setEmChamada(false);
+  };
 
   const notificarEntradaMae = (nomeMae) => {
     setParticipantes((prev) =>
@@ -184,12 +251,14 @@ export default function SalaAcolhimento() {
     setTimeout(() => setEntradaBanner(''), 4200);
   };
 
-  // Captura única da Webcam na tela da Psicóloga (Lobby e Chamada Ao Vivo sem pedir permissão 2x)
+  // Só ativa a câmera quando a psicóloga clica em uma sessão agendada para preparar a sala
+  const deveCapturarCamera = Boolean(sessaoSelecionada) && camLigada;
+
   useEffect(() => {
     let cancelled = false;
     let acquired = false;
 
-    if (camLigada) {
+    if (deveCapturarCamera) {
       acquired = true;
       psiCamManager.acquire().then((stream) => {
         if (!cancelled) {
@@ -206,7 +275,7 @@ export default function SalaAcolhimento() {
         psiCamManager.release();
       }
     };
-  }, [camLigada]);
+  }, [deveCapturarCamera]);
 
   // Cronômetro da chamada & Sincronização Ao Vivo com App da Mãe (BroadcastChannel + Spring Boot)
   useEffect(() => {
@@ -222,10 +291,13 @@ export default function SalaAcolhimento() {
         setSegundos((s) => s + 1);
       }, 1000);
 
-      // Ao entrar na sala ao vivo, simula a chegada da mãe que estava "Aguardando" após 3,5s com som rápido
+      // Ao entrar na sala ao vivo, simula a chegada da mãe que estava "Aguardando" após 3s com som rápido
       const timerChegada = setTimeout(() => {
-        notificarEntradaMae('Larissa Oliveira');
-      }, 3500);
+        const aguardando = (sessaoAtiva?.participantes || []).find((p) => p.status === 'Aguardando');
+        if (aguardando) {
+          notificarEntradaMae(aguardando.nome);
+        }
+      }, 3000);
 
       return () => {
         clearInterval(interval);
@@ -369,19 +441,150 @@ export default function SalaAcolhimento() {
 
   return (
     <div className="w-full relative">
-      {/* ---------- TELA 1: LOBBY DE ESPERA / PREVIEW ---------- */}
-      {!emChamada ? (
+      {/* ---------- TELA 0: CENTRAL DE SESSÕES AGENDADAS (SEM ABRIR CÂMERA DE CARA) ---------- */}
+      {!sessaoSelecionada ? (
         <div className="space-y-6">
           <header className="rounded-2xl bg-[#F1E6E1] p-5 sm:p-8 lg:p-10 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="text-[13.5px] md:text-[15px] text-[#4A5E4D] first-letter:uppercase">
-                Sala de Acolhimento Virtual
+              <p className="text-[13.5px] md:text-[15px] text-[#4A5E4D]">
+                Consultório Virtual · Escolha um atendimento para entrar
               </p>
               <h1 className="mt-2 font-fraunces text-[30px] md:text-[38px] leading-[1.12] tracking-[-0.015em] text-[#1F3A27]">
-                {sessaoInicial.titulo}
+                Sala de acolhimento
               </h1>
               <p className="mt-2 text-[15px] text-[#4A5E4D]">
-                {sessaoInicial.data} · {sessaoInicial.horario}
+                Selecione uma roda ou atendimento individual abaixo para testar sua câmera e iniciar a sessão.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2.5">
+              <button
+                type="button"
+                onClick={() => setSomEntradaAtivo((v) => !v)}
+                className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2.5 text-xs font-bold border transition cursor-pointer ${
+                  somEntradaAtivo
+                    ? 'bg-white border-[#294D33]/30 text-[#294D33]'
+                    : 'bg-stone-100 border-stone-200 text-stone-500'
+                }`}
+              >
+                {somEntradaAtivo ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+                <span>{somEntradaAtivo ? 'Aviso Sonoro Ativo' : 'Aviso Mudo'}</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setSalvaguardaAba('menor');
+                  setSalvaguardaOpen(true);
+                }}
+                className="inline-flex items-center gap-2 rounded-full bg-amber-50 border border-amber-300 px-5 py-2.5 text-xs font-bold text-amber-900 hover:bg-amber-100 transition cursor-pointer shadow-2xs"
+              >
+                <ShieldAlert className="w-4 h-4" />
+                Salvaguarda Clínica (ECA / Emergência)
+              </button>
+            </div>
+          </header>
+
+          {/* Lista de Sessões Agendadas */}
+          <section className="rounded-3xl border border-[#EFE9EB] bg-white shadow-sm overflow-hidden">
+            <div className="flex flex-wrap items-center justify-between gap-3 px-6 py-5 border-b border-[#EFE9EB]">
+              <div>
+                <h2 className="font-fraunces text-[22px] text-[#1F3A27]">
+                  Sessões Agendadas Prontas
+                </h2>
+                <p className="text-xs text-stone-500">
+                  Sua câmera permanece desligada até você escolher qual sala deseja preparar.
+                </p>
+              </div>
+              <Link
+                to="/agenda"
+                className="rounded-full bg-[#F4DDE5] px-4 py-1.5 text-xs font-bold text-[#294D33] hover:bg-[#E8A9BB]/50 transition"
+              >
+                Gerenciar Agenda
+              </Link>
+            </div>
+
+            <ul className="divide-y divide-[#EFE9EB]">
+              {SESSOES_AGENDADAS_SALA.map((s) => (
+                <li
+                  key={s.id}
+                  className="p-5 sm:px-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-[#FCF7F9]/60 transition"
+                >
+                  <div className="flex items-start gap-4 min-w-0">
+                    <div
+                      className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 ${
+                        s.tipo === 'grupo' ? 'bg-[#EBF3ED] text-[#294D33]' : 'bg-[#F4DDE5] text-[#294D33]'
+                      }`}
+                    >
+                      {s.tipo === 'grupo' ? <Users className="w-5 h-5" /> : <Video className="w-5 h-5" />}
+                    </div>
+
+                    <div className="min-w-0">
+                      <div className="flex flex-wrap items-center gap-2 mb-1">
+                        <span
+                          className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full ${
+                            s.tipo === 'grupo'
+                              ? 'bg-[#EBF3ED] text-[#294D33]'
+                              : 'bg-[#F4DDE5] text-[#1F3A27]'
+                          }`}
+                        >
+                          {s.tipo === 'grupo' ? 'Roda em Grupo' : 'Atendimento Individual'}
+                        </span>
+                        <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-stone-100 text-stone-700">
+                          {s.statusBadge}
+                        </span>
+                      </div>
+
+                      <h3 className="font-fraunces text-lg sm:text-xl font-bold text-[#1F3A27]">
+                        {s.titulo}
+                      </h3>
+                      <p className="text-xs text-stone-500 mt-0.5 flex flex-wrap items-center gap-3">
+                        <span className="inline-flex items-center gap-1">
+                          <Calendar className="w-3.5 h-3.5" /> {s.data}
+                        </span>
+                        <span className="inline-flex items-center gap-1">
+                          <Clock className="w-3.5 h-3.5" /> {s.horario}
+                        </span>
+                      </p>
+                      <p className="text-xs text-[#4A5E4D] mt-1">{s.resumo}</p>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => handleSelecionarSessao(s)}
+                    className="inline-flex items-center justify-center gap-2 rounded-full bg-[#294D33] px-5 py-2.5 text-xs font-bold text-white shadow-sm hover:bg-[#1F3A27] transition cursor-pointer shrink-0 active:scale-95"
+                  >
+                    <Video className="w-4 h-4" />
+                    <span>Preparar Sala e Câmera</span>
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </section>
+        </div>
+      ) : !emChamada ? (
+        /* ---------- TELA 1: LOBBY DE ESPERA / PREVIEW DA SESSÃO ESCOLHIDA ---------- */
+        <div className="space-y-6">
+          <header className="rounded-2xl bg-[#F1E6E1] p-5 sm:p-8 lg:p-10 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <button
+                type="button"
+                onClick={() => setSessaoSelecionada(null)}
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-[#294D33] hover:underline mb-2 cursor-pointer"
+              >
+                <ArrowLeft className="w-3.5 h-3.5" />
+                Voltar para sessões agendadas
+              </button>
+              <p className="text-[13.5px] md:text-[15px] text-[#4A5E4D] first-letter:uppercase">
+                Pré-Sala de Acolhimento Virtual
+              </p>
+              <h1 className="mt-1 font-fraunces text-[30px] md:text-[38px] leading-[1.12] tracking-[-0.015em] text-[#1F3A27]">
+                {sessaoAtiva.titulo}
+              </h1>
+              <p className="mt-2 text-[15px] text-[#4A5E4D]">
+                {sessaoAtiva.data} · {sessaoAtiva.horario}
               </p>
             </div>
 
@@ -420,7 +623,9 @@ export default function SalaAcolhimento() {
               <div className="flex items-center gap-2 mb-4">
                 <span className="inline-flex items-center gap-1.5 rounded-full bg-[#EBF3ED] px-3 py-1 text-xs font-bold text-[#294D33]">
                   <Users className="h-3.5 w-3.5" />
-                  Roda em Grupo · {sessaoInicial.participantes.length}/{sessaoInicial.vagas} mães
+                  {sessaoAtiva.tipo === 'grupo'
+                    ? `Roda em Grupo · ${participantes.length}/${sessaoAtiva.vagas} mães`
+                    : 'Escuta Individual 1:1'}
                 </span>
                 <span className="inline-flex items-center gap-1.5 rounded-full bg-[#FCF7F9] border border-[#E8A9BB]/40 px-3 py-1 text-xs font-semibold text-[#1F3A27]">
                   <ShieldCheck className="h-3.5 w-3.5 text-[#294D33]" />
@@ -483,12 +688,13 @@ export default function SalaAcolhimento() {
                   <Video className="w-4 h-4" />
                   Iniciar Atendimento Agora
                 </button>
-                <Link
-                  to="/agenda"
-                  className="w-full sm:w-auto px-6 py-3.5 rounded-full border border-stone-200 text-stone-700 text-sm font-bold hover:bg-stone-50 transition text-center"
+                <button
+                  type="button"
+                  onClick={() => setSessaoSelecionada(null)}
+                  className="w-full sm:w-auto px-6 py-3.5 rounded-full border border-stone-200 text-stone-700 text-sm font-bold hover:bg-stone-50 transition text-center cursor-pointer"
                 >
-                  Voltar à Agenda
-                </Link>
+                  Trocar Sessão
+                </button>
               </div>
             </div>
 
@@ -498,11 +704,17 @@ export default function SalaAcolhimento() {
               <div className="rounded-3xl border border-[#EFE9EB] bg-white p-6 shadow-sm">
                 <div className="flex items-center justify-between gap-2 mb-3">
                   <h3 className="font-fraunces text-xl font-bold text-[#1F3A27]">
-                    Mães Inscritas ({participantes.length}/{sessaoInicial.vagas})
+                    {sessaoAtiva.tipo === 'grupo'
+                      ? `Mães Inscritas (${participantes.length}/${sessaoAtiva.vagas})`
+                      : 'Mãe na Sessão'}
                   </h3>
                   <button
                     type="button"
-                    onClick={() => notificarEntradaMae('Larissa Oliveira')}
+                    onClick={() =>
+                      notificarEntradaMae(
+                        participantes[participantes.length - 1]?.nome || 'Larissa Oliveira'
+                      )
+                    }
                     className="text-[11px] font-bold text-[#294D33] bg-[#EBF3ED] hover:bg-[#DCE9DF] px-2.5 py-1 rounded-full transition cursor-pointer"
                     title="Testar aviso sonoro rápido e visual de entrada na sala"
                   >
@@ -566,7 +778,7 @@ export default function SalaAcolhimento() {
               </span>
               <div className="min-w-0">
                 <h2 className="text-sm font-bold tracking-wide text-white truncate max-w-xs sm:max-w-md">
-                  {sessaoInicial.titulo}
+                  {sessaoAtiva.titulo}
                 </h2>
                 <p className="text-[11px] text-stone-400 flex items-center gap-2">
                   <span>Duração: {formatarTempo(segundos)}</span>
@@ -658,68 +870,51 @@ export default function SalaAcolhimento() {
                 </div>
               </div>
 
-              {/* Vídeo 2: Mariana Silva */}
-              <div className="relative rounded-2xl bg-stone-800 border border-white/10 overflow-hidden flex flex-col items-center justify-center shadow-lg">
-                <div className="w-full h-full bg-gradient-to-br from-stone-850 to-stone-900 flex flex-col items-center justify-center">
-                  <div className="w-20 h-20 rounded-full bg-[#EBF3ED] text-[#294D33] font-bold text-2xl flex items-center justify-center ring-2 ring-emerald-500/40">
-                    MS
-                  </div>
-                  <p className="mt-3 text-sm font-semibold">Mariana Silva</p>
-                  <p className="text-xs text-stone-400">Bebê Bento (3m)</p>
-                </div>
-                <div className="absolute bottom-3 left-3 flex items-center gap-2 bg-black/60 backdrop-blur-sm px-3 py-1 rounded-full text-xs">
-                  <Volume2 className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
-                  <span>Mariana Silva</span>
-                </div>
-              </div>
-
-              {/* Vídeo 3: Beatriz Santos */}
-              <div className="relative rounded-2xl bg-stone-800 border border-white/10 overflow-hidden flex flex-col items-center justify-center shadow-lg">
-                <div className="w-full h-full bg-gradient-to-br from-stone-850 to-stone-900 flex flex-col items-center justify-center">
-                  <div className="w-20 h-20 rounded-full bg-[#F4DDE5] text-[#294D33] font-bold text-2xl flex items-center justify-center">
-                    BS
-                  </div>
-                  <p className="mt-3 text-sm font-semibold">Beatriz Santos</p>
-                  <p className="text-xs text-stone-400">Bebê Gael (2m)</p>
-                </div>
-                <div className="absolute bottom-3 left-3 flex items-center gap-2 bg-black/60 backdrop-blur-sm px-3 py-1 rounded-full text-xs">
-                  <MicOff className="w-3.5 h-3.5 text-stone-400" />
-                  <span>Beatriz Santos</span>
-                </div>
-              </div>
-
-              {/* Vídeo 4: Larissa Oliveira (status dinâmico com chegada sonora) */}
-              {(() => {
-                const larissa = participantes.find((p) => p.nome === 'Larissa Oliveira') || { status: 'Aguardando' };
-                const conectada = larissa.status === 'Conectada';
+              {/* Vídeos Dinâmicos das Mães Participantes (Grupo ou Individual 1:1) */}
+              {participantes.map((p, idx) => {
+                const conectada = p.status === 'Conectada';
+                const iniciaisMae = p.nome
+                  .split(' ')
+                  .filter(Boolean)
+                  .slice(0, 2)
+                  .map((part) => part[0])
+                  .join('')
+                  .toUpperCase();
                 return (
-                  <div className="relative rounded-2xl bg-stone-800 border border-white/10 overflow-hidden flex flex-col items-center justify-center shadow-lg">
+                  <div
+                    key={p.id || idx}
+                    className="relative rounded-2xl bg-stone-800 border border-white/10 overflow-hidden flex flex-col items-center justify-center shadow-lg"
+                  >
                     <div className="w-full h-full bg-gradient-to-br from-stone-850 to-stone-900 flex flex-col items-center justify-center">
                       <div
                         className={`w-20 h-20 rounded-full font-bold text-2xl flex items-center justify-center transition-all ${
                           conectada
-                            ? 'bg-[#EBF3ED] text-[#294D33] ring-2 ring-emerald-400/50'
+                            ? idx % 2 === 0
+                              ? 'bg-[#EBF3ED] text-[#294D33] ring-2 ring-emerald-400/50'
+                              : 'bg-[#F4DDE5] text-[#294D33] ring-2 ring-[#E8A9BB]/50'
                             : 'bg-stone-700 text-stone-300'
                         }`}
                       >
-                        LO
+                        {iniciaisMae}
                       </div>
-                      <p className="mt-3 text-sm font-semibold">Larissa Oliveira</p>
+                      <p className="mt-3 text-sm font-semibold">{p.nome}</p>
                       <p className={`text-xs ${conectada ? 'text-emerald-300' : 'text-stone-400'}`}>
-                        {conectada ? 'Bebê Maya (4m) • Conectada' : 'Conectando áudio...'}
+                        {conectada ? `${p.bebe} • Conectada` : `${p.bebe} • Conectando áudio...`}
                       </p>
                     </div>
                     <div className="absolute bottom-3 left-3 flex items-center gap-2 bg-black/60 backdrop-blur-sm px-3 py-1 rounded-full text-xs">
-                      {conectada ? (
+                      {conectada && p.micOn ? (
+                        <Volume2 className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
+                      ) : conectada ? (
                         <Volume2 className="w-3.5 h-3.5 text-emerald-400" />
                       ) : (
                         <MicOff className="w-3.5 h-3.5 text-stone-400" />
                       )}
-                      <span>Larissa Oliveira</span>
+                      <span>{p.nome}</span>
                     </div>
                   </div>
                 );
-              })()}
+              })}
             </div>
 
             {/* Painel Lateral: Chat da Roda ou Notas Efêmeras (Zero Prontuário) */}

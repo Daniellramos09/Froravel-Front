@@ -98,11 +98,11 @@ export default function DailyCheckInCard({ onOpenDiary, onSelectMood, currentMoo
           <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-white via-transparent to-transparent z-10 pointer-events-none" />
 
           <img
-            src="/img/6.jpg"
-            alt="Mãe sorridente ao ar livre celebrando a vida e acolhimento"
+            src="/img/ilustracoes/florescer.jpg"
+            alt="Ilustração acolhedora Florável de uma mãe em momento de respiro"
             className="w-full h-full object-cover object-center transform transition-transform duration-700 hover:scale-105"
             onError={(e) => {
-              e.currentTarget.src = "/img/fotomae/6.jpg";
+              e.currentTarget.src = "/img/ilustracoes/autocuidado.jpg";
             }}
           />
 

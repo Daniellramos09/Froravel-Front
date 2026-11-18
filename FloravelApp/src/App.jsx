@@ -339,7 +339,7 @@ function AppContent() {
         >
           <div className="relative w-10 h-10 rounded-full overflow-hidden border-2 border-[#E8A9BB]/40 shadow-2xs shrink-0 bg-[#F4DDE5]">
             <img
-              src="/img/fotomae/6.jpg"
+              src="/img/ilustracoes/florescer.jpg"
               alt="Mariana Silva"
               className="w-full h-full object-cover object-top"
             />
@@ -478,7 +478,7 @@ function AppContent() {
               title="Meu Perfil · Mariana Silva"
             >
               <img
-                src="/img/fotomae/6.jpg"
+                src="/img/ilustracoes/florescer.jpg"
                 alt="Mariana Silva"
                 className="w-full h-full object-cover object-top"
               />
