@@ -1,5 +1,21 @@
 SET FOREIGN_KEY_CHECKS = 0;
 
+DROP TABLE IF EXISTS `responsaveis_legais`;
+CREATE TABLE `responsaveis_legais` (
+  `id` char(36) NOT NULL DEFAULT (uuid()),
+  `mae_id` char(36) NOT NULL,
+  `nome` varchar(150) NOT NULL,
+  `cpf` varchar(14) NOT NULL,
+  `parentesco` varchar(50) NOT NULL,
+  `telefone` varchar(30) NOT NULL,
+  `email` varchar(150) DEFAULT NULL,
+  `consentimento_aceito` tinyint(1) NOT NULL DEFAULT '1',
+  `data_consentimento` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_responsavel_mae` (`mae_id`),
+  CONSTRAINT `fk_responsavel_mae` FOREIGN KEY (`mae_id`) REFERENCES `maes` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 DROP TABLE IF EXISTS `onboarding_mae`;
 CREATE TABLE `onboarding_mae` (
   `id` char(36) NOT NULL DEFAULT (uuid()),

@@ -1,0 +1,27 @@
+# Florável — Regras de Desenvolvimento (Cursor & Agentic AI)
+
+## Stack Tecnológica
+- **Front-end:** React 19, Vite, Tailwind CSS v4, Lucide React, React Router.
+- **Back-end:** Java 21, Spring Boot 3+, Spring Data JPA, Hibernate, MySQL 8.
+- **Arquitetura:** Package by Domain no Back-end; Component-Driven no Front-end.
+
+---
+
+## Regras de Código — Front-End (React)
+1. **Componentes Funcionais Limpos:** Use hooks padrão (`useState`, `useEffect`, `useMemo`). Evite re-renders desnecessários.
+2. **Design Acolhedor:** Respeite a paleta `#294D33` (Verde Florável), `#FCF7F9` (Fundo suave) e `#E8A9BB` (Rosa apoio).
+3. **Sem Over-Engineering:** Prefira soluções nativas com Tailwind em vez de instalar novas bibliotecas pesadas de terceiros.
+4. **Modais em Tela Cheia:** Use `createPortal(..., document.body)` para modais que precisem cobrir toda a viewport (como o Florável Meet) para evitar problemas de stacking context com classes de animação.
+5. **Responsividade Mobile:** Todo componente deve ser testado mentalmente para telas de 375px a 430px (iPhone/Android padrão).
+
+---
+
+## Regras de Código — Back-End (Java / Spring Boot)
+1. **Package by Domain:** Todo arquivo de uma funcionalidade vive dentro de `br.com.floravel.floravel.domain.<modulo>` (Entidades, DTOs, Repositories, Services, Controllers, Exceptions).
+2. **DTOs Obrigatórios:** Entidades `@Entity` NUNCA são expostas diretamente nos Controllers. Use DTOs para Request e Response.
+3. **Validação na Entrada:** Use `@Valid` com anotações do Jakarta Validation (`@NotBlank`, `@NotNull`, `@Min`, `@Max`, `@Future`).
+4. **Sem ENUMs no Banco:** As tabelas do MySQL usam `varchar(50)` para status e tipos. O Java mapeia e valida as constantes no código.
+5. **Transações Otimizadas:**
+   - Métodos de leitura usam `@Transactional(readOnly = true)`.
+   - Métodos de escrita usam `@Transactional`.
+6. **Testes Unitários (Superpowers Rule):** Toda nova regra de negócio em Services deve ser acompanhada de testes unitários com JUnit 5 e Mockito antes de ser dada como concluída.

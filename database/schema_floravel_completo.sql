@@ -48,6 +48,22 @@ CREATE TABLE IF NOT EXISTS maes (
         REFERENCES usuarios(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
+-- Tabela desacoplada para responsáveis legais de mães adolescentes (13 a 17 anos)
+-- Mantém a tabela maes limpa e assegura conformidade com ECA e LGPD
+CREATE TABLE IF NOT EXISTS responsaveis_legais (
+    id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    mae_id CHAR(36) NOT NULL UNIQUE,
+    nome VARCHAR(150) NOT NULL,
+    cpf VARCHAR(14) NOT NULL,
+    parentesco VARCHAR(50) NOT NULL,
+    telefone VARCHAR(30) NOT NULL,
+    email VARCHAR(150),
+    consentimento_aceito BOOLEAN DEFAULT TRUE NOT NULL,
+    data_consentimento TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_responsavel_mae FOREIGN KEY (mae_id)
+        REFERENCES maes(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
 CREATE TABLE IF NOT EXISTS psicologos (
     id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
     usuario_id CHAR(36) NOT NULL UNIQUE,
