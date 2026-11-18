@@ -12,8 +12,10 @@ function LiveWebcamTile({ stream, fallbackImg, alt }) {
   const videoRef = useRef(null);
 
   useEffect(() => {
-    if (videoRef.current && stream) {
-      videoRef.current.srcObject = stream;
+    const el = videoRef.current;
+    if (el && stream) {
+      el.srcObject = stream;
+      el.play?.().catch(() => {});
     }
   }, [stream]);
 
@@ -27,6 +29,7 @@ function LiveWebcamTile({ stream, fallbackImg, alt }) {
       autoPlay
       playsInline
       muted
+      onLoadedMetadata={(e) => e.currentTarget.play?.().catch(() => {})}
       className="w-full h-full object-cover -scale-x-100"
     />
   );
@@ -156,15 +159,21 @@ export default function MeetingRoomModal({
     };
   }, [isOpen, stage]);
 
+  const therapistImg = therapistName.toLowerCase().includes('rafael')
+    ? '/img/fotopsicologo/psicologos7.jpg'
+    : therapistName.toLowerCase().includes('camila')
+    ? '/img/fotopsicologo/psicologa2.jpg'
+    : '/img/fotopsicologo/psicologa1.jpg';
+
   const participants = [
     { 
       id: 'therapist', 
       name: therapistName, 
-      shortName: 'Dra. Helena Souza',
-      role: 'Anfitriã (Host) • Psicóloga Perinatal', 
+      shortName: therapistName.split(' (')[0],
+      role: 'Anfitriã(o) (Host) • Psicologia Perinatal', 
       isHost: true,
       isSpeaking: true, 
-      img: '/img/fotopsicologo/psicologa1.jpg' 
+      img: therapistImg 
     },
     { 
       id: 'user', 
@@ -503,6 +512,25 @@ export default function MeetingRoomModal({
             <div className="flex items-center gap-2">
               <button
                 type="button"
+                onClick={() => {
+                  setLayoutMode('spotlight');
+                  setPinnedId(pinnedId === 'user' ? 'therapist' : 'user');
+                }}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition cursor-pointer ${
+                  pinnedId === 'user' && layoutMode === 'spotlight'
+                    ? 'bg-emerald-600 text-white'
+                    : 'bg-[#3c4043] hover:bg-[#4a4e52] text-emerald-300'
+                }`}
+                title="Alternar destaque da sua câmera na tela principal"
+              >
+                <Video size={15} />
+                <span className="hidden sm:inline">
+                  {pinnedId === 'user' && layoutMode === 'spotlight' ? 'Ver Host no Palco' : 'Destacar Minha Câmera'}
+                </span>
+              </button>
+
+              <button
+                type="button"
                 onClick={() => setLayoutMode(layoutMode === 'spotlight' ? 'grid' : 'spotlight')}
                 className="px-3 py-1.5 rounded-lg bg-[#3c4043] hover:bg-[#4a4e52] text-xs font-medium text-stone-200 flex items-center gap-1.5 transition cursor-pointer"
                 title="Alternar modo de visualização"
@@ -713,7 +741,7 @@ export default function MeetingRoomModal({
               {/* BARRA DE LEGENDAS AO VIVO (CC) */}
               {isCaptionsOn && (
                 <div className="mt-2.5 mx-auto max-w-3xl w-full px-4 py-2 rounded-xl bg-black/75 border border-white/10 text-center text-xs sm:text-sm text-stone-100 shrink-0">
-                  <span className="text-emerald-400 font-bold mr-2">[Dra. Helena Souza]:</span>
+                  <span className="text-emerald-400 font-bold mr-2">[{therapistName.split(' (')[0]}]:</span>
                   "Lembrem-se de que pedir ajuda no puerpério não é sinal de fraqueza, é o maior gesto de cuidado com vocês mesmas..."
                 </div>
               )}
