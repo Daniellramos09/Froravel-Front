@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { Plus, CalendarClock, Calendar, Users, User, Video, ChevronRight, X, Clock, CheckCircle2 } from 'lucide-react';
 
@@ -180,14 +181,14 @@ export default function Painel() {
         </ul>
       </section>
 
-      {/* Modal Detalhes do Atendimento */}
-      {selectedAppt && (
+      {/* Modal Detalhes do Atendimento via Portal (Sem quadrado escuro preso no container) */}
+      {selectedAppt && createPortal(
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-fadeIn"
+          className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-[#1F3A27]/30 backdrop-blur-sm animate-fadeIn font-dmsans"
           onClick={() => setSelectedAppt(null)}
         >
           <div
-            className="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl border border-stone-100"
+            className="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl border border-[#E4DAD5]"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between pb-4 border-b border-stone-100">
@@ -236,22 +237,23 @@ export default function Painel() {
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
-      {/* Modal Nova Sessão */}
-      {isNewModalOpen && (
+      {/* Modal Criar Roda de Conversa ou Liberar Vaga via Portal */}
+      {isNewModalOpen && createPortal(
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-fadeIn"
+          className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-[#1F3A27]/30 backdrop-blur-sm animate-fadeIn font-dmsans"
           onClick={() => setIsNewModalOpen(false)}
         >
           <div
-            className="bg-white rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl border border-stone-100"
+            className="bg-white rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl border border-[#E4DAD5]"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between pb-4 border-b border-stone-100">
               <h3 className="font-fraunces text-2xl font-bold text-[#1F3A27]">
-                Nova Sessão ou Roda
+                {novoTipo === 'Grupo' ? 'Criar Roda de Conversa' : 'Liberar Horário para Mães'}
               </h3>
               <button
                 onClick={() => setIsNewModalOpen(false)}
@@ -263,19 +265,8 @@ export default function Painel() {
 
             <form onSubmit={handleCreateSession} className="mt-5 space-y-4">
               <div>
-                <label className="block text-xs font-bold text-stone-600 mb-1">Tipo de Encontro</label>
+                <label className="block text-xs font-bold text-stone-600 mb-1">O que deseja configurar?</label>
                 <div className="grid grid-cols-2 gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setNovoTipo('Individual')}
-                    className={`py-2.5 px-4 rounded-xl text-xs font-bold border transition cursor-pointer ${
-                      novoTipo === 'Individual'
-                        ? 'border-[#294D33] bg-[#EBF3ED] text-[#294D33]'
-                        : 'border-stone-200 bg-white text-stone-600 hover:bg-stone-50'
-                    }`}
-                  >
-                    Atendimento Individual
-                  </button>
                   <button
                     type="button"
                     onClick={() => setNovoTipo('Grupo')}
@@ -285,19 +276,30 @@ export default function Painel() {
                         : 'border-stone-200 bg-white text-stone-600 hover:bg-stone-50'
                     }`}
                   >
-                    Roda de Conversa (Grupo)
+                    Criar Roda de Conversa
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setNovoTipo('Individual')}
+                    className={`py-2.5 px-4 rounded-xl text-xs font-bold border transition cursor-pointer ${
+                      novoTipo === 'Individual'
+                        ? 'border-[#294D33] bg-[#EBF3ED] text-[#294D33]'
+                        : 'border-stone-200 bg-white text-stone-600 hover:bg-stone-50'
+                    }`}
+                  >
+                    Liberar Horário Individual
                   </button>
                 </div>
               </div>
 
               <div>
                 <label className="block text-xs font-bold text-stone-600 mb-1">
-                  {novoTipo === 'Individual' ? 'Nome da Paciente' : 'Tema da Roda'}
+                  {novoTipo === 'Grupo' ? 'Tema / Título da Roda de Conversa' : 'Modalidade / Foco do Horário'}
                 </label>
                 <input
                   type="text"
                   required
-                  placeholder={novoTipo === 'Individual' ? 'Ex: Camila Ramos' : 'Ex: Roda: Desafios da Amamentação'}
+                  placeholder={novoTipo === 'Grupo' ? 'Ex: Roda: O Sono do Bebê e a Exaustão Materna' : 'Ex: Vaga Social Disponível - Escuta Perinatal'}
                   value={novoTitulo}
                   onChange={(e) => setNovoTitulo(e.target.value)}
                   className="w-full rounded-xl border border-stone-200 px-4 py-2.5 text-sm outline-none focus:border-[#294D33] focus:ring-1 focus:ring-[#294D33]"
@@ -306,7 +308,7 @@ export default function Painel() {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-bold text-stone-600 mb-1">Data</label>
+                  <label className="block text-xs font-bold text-stone-600 mb-1">Data Disponível</label>
                   <input
                     type="date"
                     required
@@ -316,7 +318,7 @@ export default function Painel() {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-stone-600 mb-1">Horário</label>
+                  <label className="block text-xs font-bold text-stone-600 mb-1">Horário de Início</label>
                   <input
                     type="time"
                     required
@@ -329,11 +331,11 @@ export default function Painel() {
 
               <div>
                 <label className="block text-xs font-bold text-stone-600 mb-1">
-                  {novoTipo === 'Individual' ? 'Foco da Escuta / Queixa' : 'Vagas Disponíveis'}
+                  {novoTipo === 'Grupo' ? 'Descrição da Roda & Limite de Vagas' : 'Observações da Vaga para as Mães'}
                 </label>
                 <input
                   type="text"
-                  placeholder={novoTipo === 'Individual' ? 'Ex: Ansiedade no puerpério' : 'Ex: 5 vagas'}
+                  placeholder={novoTipo === 'Grupo' ? 'Ex: 12 vagas · Espaço seguro sobre puerpério' : 'Ex: Sessão 50 min · Fundo Solidário / Valor Social'}
                   value={novaInfo}
                   onChange={(e) => setNovaInfo(e.target.value)}
                   className="w-full rounded-xl border border-stone-200 px-4 py-2.5 text-sm outline-none focus:border-[#294D33]"
@@ -352,12 +354,13 @@ export default function Painel() {
                   type="submit"
                   className="flex-1 py-3 rounded-full bg-[#294D33] text-white font-bold text-sm shadow-sm hover:bg-[#1F3A27] transition cursor-pointer"
                 >
-                  Confirmar Sessão
+                  {novoTipo === 'Grupo' ? 'Publicar Roda' : 'Liberar Horário'}
                 </button>
               </div>
             </form>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

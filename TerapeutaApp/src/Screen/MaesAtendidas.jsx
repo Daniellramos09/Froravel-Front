@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { Search, X, Calendar, ShieldCheck, CheckCircle2, ChevronRight, Activity, Users } from 'lucide-react';
 
@@ -178,14 +179,14 @@ export default function MaesAtendidas() {
         )}
       </ul>
 
-      {/* Modal Resumo de Acolhimento & Participação (Zero Prontuário) */}
-      {selectedMae && (
+      {/* Modal Resumo de Acolhimento & Participação (Zero Prontuário) via Portal Centralizado */}
+      {selectedMae && createPortal(
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-fadeIn"
+          className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-[#1F3A27]/30 backdrop-blur-sm animate-fadeIn font-dmsans"
           onClick={() => setSelectedMae(null)}
         >
           <div
-            className="bg-white rounded-3xl p-6 sm:p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-stone-100"
+            className="bg-white rounded-3xl p-6 sm:p-7 max-w-xl w-full shadow-2xl border border-[#E4DAD5]"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header do Resumo */}
@@ -279,7 +280,8 @@ export default function MaesAtendidas() {
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

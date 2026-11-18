@@ -3,6 +3,7 @@
 import { NavLink } from 'react-router-dom';
 import { HeartHandshake, LogOut, X } from 'lucide-react';
 import { menuItems } from './menuItems';
+import { usePsiAccessibility } from '../Accessibility/PsiAccessibilityContext';
 
 // Item de navegação com barra lateral de destaque, igual ao app da Mãe
 function NavItem({ to, icon: Icon, label, onNavigate }) {
@@ -48,6 +49,7 @@ function NavItem({ to, icon: Icon, label, onNavigate }) {
 
 export default function Sidebar({ onNavigate, onClose, onLogout }) {
   const landingUrl = import.meta.env.VITE_LANDING_URL || 'http://localhost:5173';
+  const { psiProfile } = usePsiAccessibility();
 
   return (
     <>
@@ -108,17 +110,34 @@ export default function Sidebar({ onNavigate, onClose, onLogout }) {
         </div>
       </div>
 
-      {/* RODAPÉ DO PERFIL */}
+      {/* RODAPÉ DO PERFIL (CLICÁVEL PARA ABRIR PERFIL & CONFIGURAÇÕES) */}
       <div className="flex items-center justify-between px-2 pt-4 border-t border-stone-100">
-        <div className="flex items-center gap-3 p-1.5 -ml-1 flex-1 mr-2 min-w-0">
-          <div className="w-11 h-11 rounded-full bg-[#F4DDE5] text-[#294D33] flex items-center justify-center font-bold text-[15px] border border-[#E8A9BB]/40 shadow-2xs shrink-0">
-            HS
-          </div>
+        <NavLink
+          to="/perfil"
+          onClick={onNavigate}
+          className="flex items-center gap-3 p-1.5 -ml-1 flex-1 mr-2 min-w-0 rounded-2xl hover:bg-[#F4DDE5]/50 transition group"
+          title="Editar Perfil, CRP, Graduações e Medalhas"
+        >
+          {psiProfile?.fotoUrl ? (
+            <img
+              src={psiProfile.fotoUrl}
+              alt={psiProfile.nome}
+              className="w-11 h-11 rounded-full object-cover border border-[#E8A9BB] shadow-2xs shrink-0"
+            />
+          ) : (
+            <div className="w-11 h-11 rounded-full bg-[#F4DDE5] text-[#294D33] flex items-center justify-center font-bold text-[15px] border border-[#E8A9BB]/40 shadow-2xs shrink-0">
+              HS
+            </div>
+          )}
           <div className="min-w-0">
-            <p className="text-[15px] font-bold text-[#2B2829] leading-tight truncate">Dra. Helena Souza</p>
-            <p className="text-[12px] text-stone-500 font-medium">CRP 06/142980</p>
+            <p className="text-[15px] font-bold text-[#2B2829] group-hover:text-[#294D33] leading-tight truncate">
+              {psiProfile?.nome || 'Dra. Helena Souza'}
+            </p>
+            <p className="text-[12px] text-stone-500 font-medium truncate">
+              {psiProfile?.crp || 'CRP 06/142980'} · Ver Perfil
+            </p>
           </div>
-        </div>
+        </NavLink>
         <button
           type="button"
           onClick={onLogout}

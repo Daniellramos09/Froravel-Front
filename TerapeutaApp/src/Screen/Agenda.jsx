@@ -1,6 +1,7 @@
 import { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
-import { Plus, ChevronLeft, ChevronRight, Video, Calendar, Clock, X, Trash2, CheckCircle2 } from 'lucide-react';
+import { Plus, ChevronLeft, ChevronRight, Video, Calendar, Clock, X, Trash2, CheckCircle2, Users, Sparkles } from 'lucide-react';
 
 /* ---------- Dados iniciais ---------- */
 const sessoesIniciais = [
@@ -67,12 +68,32 @@ export default function Agenda() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
 
-  // Formulário Nova Sessão
-  const [tipoNovo, setTipoNovo] = useState('individual');
+  // Formulário: 'grupo' (Criar Roda de Conversa) ou 'disponibilidade' (Liberar Dias e Horários para Mães)
+  const [tipoNovo, setTipoNovo] = useState('grupo');
   const [tituloNovo, setTituloNovo] = useState('');
+  const [categoriaRoda, setCategoriaRoda] = useState('Depressão Pós-Parto & Puerpério');
+  const [vagasRoda, setVagasRoda] = useState('12');
+  const [duracaoRoda, setDuracaoRoda] = useState('60');
   const [dataNova, setDataNova] = useState(toKey(new Date()));
-  const [horaNova, setHoraNova] = useState('14:00');
+  const [horaNova, setHoraNova] = useState('18:00');
   const [infoNova, setInfoNova] = useState('');
+
+  // Dias e horários liberados pela psicóloga para agendamento pelas mães
+  const [diasDisponiveis, setDiasDisponiveis] = useState(['Segunda', 'Quarta', 'Sexta']);
+  const [horariosDisponiveis, setHorariosDisponiveis] = useState(['09:00', '14:30', '16:00', '18:30']);
+  const [modalidadeVaga, setModalidadeVaga] = useState('Fundo Solidário Florável (Gratuito) & Valor Social');
+
+  const toggleDiaDisponivel = (diaNome) => {
+    setDiasDisponiveis((prev) =>
+      prev.includes(diaNome) ? prev.filter((d) => d !== diaNome) : [...prev, diaNome]
+    );
+  };
+
+  const toggleHorarioDisponivel = (h) => {
+    setHorariosDisponiveis((prev) =>
+      prev.includes(h) ? prev.filter((item) => item !== h) : [...prev, h].sort()
+    );
+  };
 
   const hoje = new Date();
   const hojeKey = toKey(hoje);
@@ -124,22 +145,37 @@ export default function Agenda() {
 
   const handleCreateSession = (e) => {
     e.preventDefault();
+    if (tipoNovo === 'disponibilidade') {
+      const novaVaga = {
+        id: Date.now(),
+        data: dataNova,
+        hora: horaNova,
+        titulo: `Horário Livre (${modalidadeVaga.split(' ')[0]})`,
+        tipo: 'individual',
+        info: infoNova || `Disponível nos dias: ${diasDisponiveis.join(', ')}`,
+      };
+      setSessoes((prev) => [novaVaga, ...prev]);
+      setIsModalOpen(false);
+      showToast('Dias e horários liberados para agendamento das mães!');
+      return;
+    }
+
     if (!tituloNovo.trim()) return;
 
-    const nova = {
+    const novaRoda = {
       id: Date.now(),
       data: dataNova,
       hora: horaNova,
-      titulo: tituloNovo,
-      tipo: tipoNovo,
-      info: infoNova || (tipoNovo === 'grupo' ? '5 vagas' : 'Acolhimento perinatal'),
+      titulo: tituloNovo.startsWith('Roda:') ? tituloNovo : `Roda: ${tituloNovo}`,
+      tipo: 'grupo',
+      info: `${vagasRoda} vagas · ${duracaoRoda} min · ${categoriaRoda}${infoNova ? ` — ${infoNova}` : ''}`,
     };
 
-    setSessoes((prev) => [nova, ...prev]);
+    setSessoes((prev) => [novaRoda, ...prev]);
     setIsModalOpen(false);
     setTituloNovo('');
     setInfoNova('');
-    showToast('Nova sessão agendada com sucesso!');
+    showToast('Nova Roda de Conversa publicada para a comunidade!');
   };
 
   const handleDeleteSession = (id) => {
@@ -172,14 +208,107 @@ export default function Agenda() {
           </p>
         </div>
 
-        <button
-          onClick={() => handleOpenAddForDate(toKey(new Date()))}
-          className="inline-flex items-center gap-2 rounded-full bg-[#294D33] px-6 py-3 text-[14px] font-bold text-white shadow-sm hover:bg-[#1F3A27] transition-colors cursor-pointer active:scale-95"
-        >
-          <Plus className="w-4 h-4" />
-          Nova sessão
-        </button>
+        <div className="flex flex-wrap items-center gap-2.5">
+          <button
+            type="button"
+            onClick={() => {
+              setTipoNovo('disponibilidade');
+              handleOpenAddForDate(toKey(new Date()));
+            }}
+            className="inline-flex items-center gap-2 rounded-full border border-[#294D33] bg-white px-5 py-3 text-[13.5px] font-bold text-[#294D33] shadow-2xs hover:bg-[#EBF3ED] transition-colors cursor-pointer active:scale-95"
+          >
+            <Clock className="w-4 h-4" />
+            Liberar Dias Disponíveis
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              setTipoNovo('grupo');
+              handleOpenAddForDate(toKey(new Date()));
+            }}
+            className="inline-flex items-center gap-2 rounded-full bg-[#294D33] px-6 py-3 text-[13.5px] font-bold text-white shadow-sm hover:bg-[#1F3A27] transition-colors cursor-pointer active:scale-95"
+          >
+            <Plus className="w-4 h-4" />
+            Criar Roda de Conversa
+          </button>
+        </div>
       </header>
+
+      {/* PAINEL RÁPIDO: DIAS E HORÁRIOS DISPONÍVEIS PARA AS MÃES */}
+      <section className="mt-6 rounded-3xl border border-[#E4DAD5] bg-white p-5 sm:p-6 shadow-2xs">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-stone-100">
+          <div>
+            <span className="text-[11px] font-bold uppercase tracking-wider text-[#294D33] flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5" /> Grade Pública na Rede de Apoio
+            </span>
+            <h2 className="font-fraunces text-lg sm:text-xl font-bold text-[#1F3A27] mt-0.5">
+              Meus Dias e Horários Liberados para as Mães
+            </h2>
+          </div>
+          <span className="text-xs font-semibold text-[#294D33] bg-[#EBF3ED] px-3 py-1 rounded-full self-start sm:self-auto">
+            {diasDisponiveis.length} dias ativos · {horariosDisponiveis.length} horários/dia
+          </span>
+        </div>
+
+        <div className="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div>
+            <p className="text-xs font-bold text-stone-600 mb-2">
+              Toque nos dias da semana em que você atende mães:
+            </p>
+            <div className="flex flex-wrap gap-1.5">
+              {['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'].map((diaNome) => {
+                const ativo = diasDisponiveis.includes(diaNome);
+                return (
+                  <button
+                    key={diaNome}
+                    type="button"
+                    onClick={() => {
+                      toggleDiaDisponivel(diaNome);
+                      showToast(`Disponibilidade de ${diaNome} atualizada!`);
+                    }}
+                    className={`px-3.5 py-1.5 rounded-full text-xs font-bold border transition cursor-pointer ${
+                      ativo
+                        ? 'bg-[#294D33] text-white border-[#294D33] shadow-2xs'
+                        : 'bg-stone-50 text-stone-500 border-stone-200 hover:bg-stone-100'
+                    }`}
+                  >
+                    {ativo ? `✓ ${diaNome}` : diaNome}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div>
+            <p className="text-xs font-bold text-stone-600 mb-2">
+              Toque nos horários disponíveis para agendamento individual:
+            </p>
+            <div className="flex flex-wrap gap-1.5">
+              {['09:00', '10:30', '11:30', '14:30', '16:00', '18:30', '20:00'].map((h) => {
+                const ativo = horariosDisponiveis.includes(h);
+                return (
+                  <button
+                    key={h}
+                    type="button"
+                    onClick={() => {
+                      toggleHorarioDisponivel(h);
+                      showToast(`Horário ${h} atualizado na sua agenda pública!`);
+                    }}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition cursor-pointer tabular-nums ${
+                      ativo
+                        ? 'bg-[#F4DDE5] text-[#1F3A27] border-[#E8A9BB]'
+                        : 'bg-stone-50 text-stone-400 border-stone-200 hover:bg-stone-100'
+                    }`}
+                  >
+                    {h}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Barra de controles */}
       <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
@@ -391,14 +520,14 @@ export default function Agenda() {
         </section>
       )}
 
-      {/* Modal Detalhes da Sessão */}
-      {selectedSessao && (
+      {/* Modal Detalhes da Sessão via Portal */}
+      {selectedSessao && createPortal(
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-fadeIn"
+          className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-[#1F3A27]/30 backdrop-blur-sm animate-fadeIn font-dmsans"
           onClick={() => setSelectedSessao(null)}
         >
           <div
-            className="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl border border-stone-100"
+            className="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl border border-[#E4DAD5]"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between pb-4 border-b border-stone-100">
@@ -468,22 +597,23 @@ export default function Agenda() {
               </div>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
-      {/* Modal Nova Sessão */}
-      {isModalOpen && (
+      {/* Modal Criar Roda de Conversa ou Liberar Dias Disponíveis via Portal */}
+      {isModalOpen && createPortal(
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-fadeIn"
+          className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-[#1F3A27]/30 backdrop-blur-sm animate-fadeIn font-dmsans"
           onClick={() => setIsModalOpen(false)}
         >
           <div
-            className="bg-white rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl border border-stone-100"
+            className="bg-white rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl border border-[#E4DAD5]"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between pb-4 border-b border-stone-100">
               <h3 className="font-fraunces text-2xl font-bold text-[#1F3A27]">
-                Novo Agendamento
+                {tipoNovo === 'grupo' ? 'Criar Roda de Conversa' : 'Liberar Dias & Horários'}
               </h3>
               <button
                 onClick={() => setIsModalOpen(false)}
@@ -495,19 +625,8 @@ export default function Agenda() {
 
             <form onSubmit={handleCreateSession} className="mt-5 space-y-4">
               <div>
-                <label className="block text-xs font-bold text-stone-600 mb-1">Tipo de Encontro</label>
+                <label className="block text-xs font-bold text-stone-600 mb-1">Modalidade na Agenda</label>
                 <div className="grid grid-cols-2 gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setTipoNovo('individual')}
-                    className={`py-2.5 px-4 rounded-xl text-xs font-bold border transition cursor-pointer ${
-                      tipoNovo === 'individual'
-                        ? 'border-[#294D33] bg-[#EBF3ED] text-[#294D33]'
-                        : 'border-stone-200 bg-white text-stone-600 hover:bg-stone-50'
-                    }`}
-                  >
-                    Atendimento Individual
-                  </button>
                   <button
                     type="button"
                     onClick={() => setTipoNovo('grupo')}
@@ -519,22 +638,103 @@ export default function Agenda() {
                   >
                     Roda de Conversa (Grupo)
                   </button>
+                  <button
+                    type="button"
+                    onClick={() => setTipoNovo('disponibilidade')}
+                    className={`py-2.5 px-4 rounded-xl text-xs font-bold border transition cursor-pointer ${
+                      tipoNovo === 'disponibilidade'
+                        ? 'border-[#294D33] bg-[#EBF3ED] text-[#294D33]'
+                        : 'border-stone-200 bg-white text-stone-600 hover:bg-stone-50'
+                    }`}
+                  >
+                    Liberar Horário p/ Mães
+                  </button>
                 </div>
               </div>
 
-              <div>
-                <label className="block text-xs font-bold text-stone-600 mb-1">
-                  {tipoNovo === 'individual' ? 'Nome da Mãe / Paciente' : 'Tema da Roda'}
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder={tipoNovo === 'individual' ? 'Ex: Beatriz Oliveira' : 'Ex: Roda: Sono Compartilhado'}
-                  value={tituloNovo}
-                  onChange={(e) => setTituloNovo(e.target.value)}
-                  className="w-full rounded-xl border border-stone-200 px-4 py-2.5 text-sm outline-none focus:border-[#294D33]"
-                />
-              </div>
+              {tipoNovo === 'grupo' ? (
+                <>
+                  <div>
+                    <label className="block text-xs font-bold text-stone-600 mb-1">
+                      Título da Roda de Conversa *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="Ex: O Sono do Bebê e a Sanidade Materna"
+                      value={tituloNovo}
+                      onChange={(e) => setTituloNovo(e.target.value)}
+                      className="w-full rounded-xl border border-stone-200 px-4 py-2.5 text-sm outline-none focus:border-[#294D33]"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-bold text-stone-600 mb-1">Categoria Temática</label>
+                      <select
+                        value={categoriaRoda}
+                        onChange={(e) => setCategoriaRoda(e.target.value)}
+                        className="w-full rounded-xl border border-stone-200 px-3 py-2.5 text-xs font-medium outline-none focus:border-[#294D33] bg-white"
+                      >
+                        <option value="Depressão Pós-Parto & Puerpério">Depressão Pós-Parto & Puerpério</option>
+                        <option value="Sobrecarga Materna & Burnout">Sobrecarga Materna & Burnout</option>
+                        <option value="Ansiedade & Privação de Sono">Ansiedade & Privação de Sono</option>
+                        <option value="Mães de Primeira Viagem">Mães de Primeira Viagem</option>
+                        <option value="Luto Perinatal & Acolhimento">Luto Perinatal & Acolhimento</option>
+                        <option value="Maternidade Solo & Rede">Maternidade Solo & Rede</option>
+                      </select>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2">
+                      <div>
+                        <label className="block text-xs font-bold text-stone-600 mb-1">Vagas Máx.</label>
+                        <select
+                          value={vagasRoda}
+                          onChange={(e) => setVagasRoda(e.target.value)}
+                          className="w-full rounded-xl border border-stone-200 px-2.5 py-2.5 text-xs font-medium outline-none focus:border-[#294D33] bg-white"
+                        >
+                          <option value="8">8 mães</option>
+                          <option value="10">10 mães</option>
+                          <option value="12">12 mães</option>
+                          <option value="15">15 mães</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold text-stone-600 mb-1">Duração</label>
+                        <select
+                          value={duracaoRoda}
+                          onChange={(e) => setDuracaoRoda(e.target.value)}
+                          className="w-full rounded-xl border border-stone-200 px-2.5 py-2.5 text-xs font-medium outline-none focus:border-[#294D33] bg-white"
+                        >
+                          <option value="60">60 min</option>
+                          <option value="90">90 min</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <div>
+                  <label className="block text-xs font-bold text-stone-600 mb-1">
+                    Tipo de Vaga Liberada para as Mães
+                  </label>
+                  <select
+                    value={modalidadeVaga}
+                    onChange={(e) => setModalidadeVaga(e.target.value)}
+                    className="w-full rounded-xl border border-stone-200 px-3.5 py-2.5 text-xs font-medium outline-none focus:border-[#294D33] bg-white"
+                  >
+                    <option value="Fundo Solidário Florável (Gratuito) & Valor Social">
+                      Fundo Solidário Florável (Gratuito) & Valor Social
+                    </option>
+                    <option value="Sessão Social Acessível (R$ 40,00)">
+                      Sessão Social Acessível (R$ 40,00)
+                    </option>
+                    <option value="Plano Florável Plus (Inclusa no Ciclo Mensal)">
+                      Plano Florável Plus (Inclusa no Ciclo Mensal)
+                    </option>
+                  </select>
+                </div>
+              )}
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
@@ -560,10 +760,16 @@ export default function Agenda() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-stone-600 mb-1">Observações ou Vagas</label>
+                <label className="block text-xs font-bold text-stone-600 mb-1">
+                  {tipoNovo === 'grupo' ? 'Descrição Acolhedora da Roda (Visível para as Mães)' : 'Observação da Disponibilidade'}
+                </label>
                 <input
                   type="text"
-                  placeholder={tipoNovo === 'individual' ? 'Ex: Acolhimento pós-parto' : 'Ex: 5 vagas disponíveis'}
+                  placeholder={
+                    tipoNovo === 'grupo'
+                      ? 'Ex: Espaço sem julgamentos para dividir o peso das madrugadas...'
+                      : 'Ex: Horário aberto para primeira escuta perinatal'
+                  }
                   value={infoNova}
                   onChange={(e) => setInfoNova(e.target.value)}
                   className="w-full rounded-xl border border-stone-200 px-4 py-2.5 text-sm outline-none focus:border-[#294D33]"
@@ -582,12 +788,13 @@ export default function Agenda() {
                   type="submit"
                   className="flex-1 py-3 rounded-full bg-[#294D33] text-white font-bold text-sm shadow-sm hover:bg-[#1F3A27] transition cursor-pointer"
                 >
-                  Salvar na Agenda
+                  {tipoNovo === 'grupo' ? 'Publicar Roda na Comunidade' : 'Liberar Horário na Agenda'}
                 </button>
               </div>
             </form>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

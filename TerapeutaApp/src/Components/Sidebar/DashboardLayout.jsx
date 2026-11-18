@@ -3,10 +3,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { Bell, ChevronLeft, LogOut, Menu } from 'lucide-react';
+import { Bell, ChevronLeft, LogOut, Menu, Volume2, Sun, Eye } from 'lucide-react';
 import Sidebar from './Sidebar';
 import { menuItems } from './menuItems';
 import InstallAppButton from '../Pwa/InstallAppButton';
+import { usePsiAccessibility } from '../Accessibility/PsiAccessibilityContext';
 
 const TITULOS = {
   '/painel': 'Visão geral',
@@ -14,6 +15,8 @@ const TITULOS = {
   '/maes': 'Mães atendidas',
   '/sala': 'Sala de acolhimento',
   '/comunidade': 'Comunidade',
+  '/perfil': 'Perfil & Medalhas',
+  '/acessibilidade': 'Acessibilidade Clínica',
 };
 
 const NOTIFICACOES = [
@@ -84,6 +87,18 @@ export default function DashboardLayout() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const landingUrl = import.meta.env.VITE_LANDING_URL || 'http://localhost:5173';
+  const {
+    psiProfile,
+    cycleFontSize,
+    colorFilter,
+    setColorFilter,
+    isSpeaking,
+    toggleClinicalVoiceSummary,
+    getFontSizeClass,
+    getFilterClass,
+    reducedMotion,
+    expandedSpacing,
+  } = usePsiAccessibility();
 
   // O conteúdo rola dentro da área principal: volta ao topo a cada troca de tela
   useEffect(() => {
@@ -107,7 +122,11 @@ export default function DashboardLayout() {
   const podeVoltar = pathname !== '/painel';
 
   return (
-    <div className="flex h-dvh bg-[#FCF7F9] font-dmsans text-[#2B2829] relative overflow-hidden">
+    <div
+      className={`flex h-dvh bg-[#FCF7F9] font-dmsans text-[#2B2829] relative overflow-hidden ${getFilterClass()} ${getFontSizeClass()} ${
+        reducedMotion ? 'reduce-motion' : ''
+      } ${expandedSpacing ? 'spacing-expanded' : ''}`}
+    >
       <LogoutModal
         isOpen={isLogoutOpen}
         onConfirm={() => (window.location.href = landingUrl)}
@@ -163,8 +182,67 @@ export default function DashboardLayout() {
             </span>
           </div>
 
-          <div className="flex items-center gap-1.5 sm:gap-4 flex-shrink-0">
-            <InstallAppButton className="p-2.5 sm:px-4 bg-[#294D33] text-white hover:bg-[#1f3c27]" />
+          <div className="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0">
+            <InstallAppButton className="p-2 sm:px-3.5 bg-[#294D33] text-white hover:bg-[#1f3c27]" />
+
+            {/* BARRA RÁPIDA DE ACESSIBILIDADE CLÍNICA PARA A PSICÓLOGA */}
+            <div className="hidden md:flex items-center gap-1 bg-[#FCF7F9] border border-[#E4DAD5] rounded-full px-2 py-1">
+              <button
+                type="button"
+                onClick={toggleClinicalVoiceSummary}
+                className={`px-2.5 py-1 rounded-full text-xs font-bold flex items-center gap-1 transition cursor-pointer ${
+                  isSpeaking
+                    ? 'bg-red-600 text-white'
+                    : 'text-[#294D33] hover:bg-[#EBF3ED]'
+                }`}
+                title="Ouvir resumo da agenda por voz (descanso ocular entre sessões)"
+              >
+                <Volume2 size={14} />
+                <span>{isSpeaking ? 'Parar' : 'Ouvir Agenda'}</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() =>
+                  setColorFilter(colorFilter === 'sepia_clinico' ? 'none' : 'sepia_clinico')
+                }
+                className={`px-2.5 py-1 rounded-full text-xs font-bold flex items-center gap-1 transition cursor-pointer ${
+                  colorFilter === 'sepia_clinico'
+                    ? 'bg-[#294D33] text-white'
+                    : 'text-stone-600 hover:bg-stone-100'
+                }`}
+                title="Modo Consultório (Filtro de Luz Quente anti-fadiga ocular)"
+              >
+                <Sun size={13} />
+                <span>Consultório</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => cycleFontSize(-1)}
+                className="px-2 py-1 rounded-full text-xs font-bold text-stone-600 hover:bg-stone-100 cursor-pointer"
+                title="Diminuir fonte"
+              >
+                A-
+              </button>
+              <button
+                type="button"
+                onClick={() => cycleFontSize(1)}
+                className="px-2 py-1 rounded-full text-xs font-bold text-stone-600 hover:bg-stone-100 cursor-pointer"
+                title="Aumentar fonte"
+              >
+                A+
+              </button>
+
+              <button
+                type="button"
+                onClick={() => navigate('/acessibilidade')}
+                className="p-1.5 rounded-full text-[#294D33] hover:bg-[#EBF3ED] cursor-pointer"
+                title="Abrir painel de Acessibilidade Clínica"
+              >
+                <Eye size={14} />
+              </button>
+            </div>
 
             {/* NOTIFICAÇÕES */}
             <div className="relative" ref={notifRef}>
@@ -199,13 +277,19 @@ export default function DashboardLayout() {
               )}
             </div>
 
-            {/* AVATAR */}
-            <div
-              className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#F4DDE5] text-[#294D33] flex items-center justify-center font-bold text-[13px] sm:text-[14px]"
-              title="Dra. Helena Souza"
+            {/* AVATAR (CLICÁVEL PARA ABRIR PERFIL & MEDALHAS) */}
+            <button
+              type="button"
+              onClick={() => navigate('/perfil')}
+              className="w-9 h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden bg-[#F4DDE5] text-[#294D33] flex items-center justify-center font-bold text-[13px] sm:text-[14px] border border-[#E8A9BB] cursor-pointer hover:ring-2 hover:ring-[#294D33] transition"
+              title={`${psiProfile?.nome || 'Dra. Helena Souza'} — Abrir Perfil & Medalhas`}
             >
-              HS
-            </div>
+              {psiProfile?.fotoUrl ? (
+                <img src={psiProfile.fotoUrl} alt={psiProfile.nome} className="w-full h-full object-cover" />
+              ) : (
+                'HS'
+              )}
+            </button>
           </div>
         </header>
 

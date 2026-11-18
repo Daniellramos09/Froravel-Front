@@ -55,20 +55,23 @@ button:active {
   transform: scale(0.97);
 }
 
-/* 3. ANIMAÇÕES DE ENTRADA SUAVE */
+/* 3. ANIMAÇÕES DE ENTRADA SUAVE (Sem transform residual para não prender modais position:fixed) */
 .animate-fadeIn {
-  animation: slideUpFade 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: slideUpFade 0.25s ease-out;
 }
 
 @keyframes slideUpFade {
   0% {
     opacity: 0;
-    transform: translateY(8px);
   }
   100% {
     opacity: 1;
-    transform: translateY(0);
   }
+}
+
+/* Modo Consultório / Conforto Ocular (Filtro de Luz Azul / Sépia Clínico para Psicólogas) */
+.filter-sepia-clinico {
+  filter: sepia(0.18) contrast(0.98) brightness(0.98);
 }
 
 .animate-scaleUp {

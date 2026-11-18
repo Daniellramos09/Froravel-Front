@@ -1,5 +1,6 @@
 // src/Screen/DashboardRh/screens/LicensesScreen.jsx
 import { useState, useId, useEffect } from "react";
+import { createPortal } from "react-dom";
 import {
   UserPlus,
   Search,
@@ -532,11 +533,11 @@ export default function LicensesScreen({ onTriggerToast }) {
       </div>
 
       {/* ========================================================= */}
-      {/* MODAL DE CONVITE                                          */}
+      {/* MODAL DE CONVITE VIA PORTAL (TELA CHEIA SEM QUADRADO)     */}
       {/* ========================================================= */}
-      {isInviteModalOpen && (
+      {isInviteModalOpen && createPortal(
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-fade-in"
+          className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-[#1F3A27]/30 backdrop-blur-sm animate-fadeIn font-sans"
           role="dialog"
           aria-modal="true"
           onClick={() => setIsInviteModalOpen(false)}
@@ -636,7 +637,8 @@ export default function LicensesScreen({ onTriggerToast }) {
               </div>
             </form>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

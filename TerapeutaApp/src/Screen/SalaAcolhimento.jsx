@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { useNavigate, Link } from 'react-router-dom';
 import {
   Users,
@@ -352,9 +353,9 @@ export default function SalaAcolhimento() {
             </div>
           </div>
         </div>
-      ) : (
-        /* ---------- TELA 2: SALA VIRTUAL AO VIVO (IN-APP MEETING) ---------- */
-        <div className="fixed inset-0 z-50 bg-[#1A1A1A] text-white flex flex-col font-dmsans animate-fadeIn">
+      ) : createPortal(
+        /* ---------- TELA 2: SALA VIRTUAL AO VIVO TELA CHEIA (PORTAL 100VW x 100VH) ---------- */
+        <div className="fixed inset-0 z-[99999] w-screen h-dvh bg-[#1A1A1A] text-white flex flex-col font-dmsans animate-fadeIn select-none">
           {/* Header da Chamada */}
           <header className="h-16 bg-black/40 backdrop-blur-md border-b border-white/10 px-6 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-3">
@@ -625,7 +626,8 @@ export default function SalaAcolhimento() {
               </div>
             </div>
           )}
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
