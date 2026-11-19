@@ -200,7 +200,7 @@ export default function SupportNetworkScreen({
   const [backendPsychologists, setBackendPsychologists] = useState([]);
 
   useEffect(() => {
-    if (!API_BASE) return () => { active = false; };
+    if (!API_BASE) return;
     fetch(`${API_BASE}/api/psicologos`)
       .then((res) => (res.ok ? res.json() : []))
       .then((lista) => {
