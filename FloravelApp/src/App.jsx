@@ -622,11 +622,11 @@ function hidratarSessaoDoHash() {
 class AppErrorBoundary extends Component {
   constructor(props) {
     super(props);
-    this.state = { hasError: false };
+    this.state = { hasError: false, errorMsg: '' };
   }
 
-  static getDerivedStateFromError() {
-    return { hasError: true };
+  static getDerivedStateFromError(error) {
+    return { hasError: true, errorMsg: error?.message || String(error || '') };
   }
 
   handleRecover = async () => {
@@ -651,9 +651,14 @@ class AppErrorBoundary extends Component {
             <h2 className="text-2xl font-fraunces font-bold text-[#294D33] mb-2">
               Atualizando seu espaço Florável
             </h2>
-            <p className="text-sm text-stone-600 mb-6">
-              Detectamos uma versão antiga em cache no navegador. Clique abaixo para atualizar com segurança.
+            <p className="text-sm text-stone-600 mb-4">
+              Detectamos uma falha inesperada na tela. Clique abaixo para recarregar com segurança.
             </p>
+            {this.state.errorMsg && (
+              <p className="text-[11px] font-mono text-red-700 bg-red-50 border border-red-200 rounded-xl p-2.5 mb-5 break-words">
+                {this.state.errorMsg}
+              </p>
+            )}
             <button
               type="button"
               onClick={this.handleRecover}
