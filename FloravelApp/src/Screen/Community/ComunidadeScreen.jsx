@@ -185,12 +185,12 @@ export default function ComunidadeScreen() {
               key={group.id} 
               className="bg-white rounded-3xl border border-stone-200/90 overflow-hidden flex flex-col hover:shadow-md transition group"
             >
-              {/* IMAGEM DO CARD (Enquadramento completo sem cortes) */}
-              <div className={`h-52 sm:h-56 relative overflow-hidden flex items-center justify-center p-2 ${getIllustrationBgClass(group.img)}`}>
+              {/* IMAGEM DO CARD */}
+              <div className="h-52 sm:h-56 relative overflow-hidden bg-stone-100">
                 <img 
                   src={group.img} 
                   alt={group.title} 
-                  className="w-full h-full object-contain transition duration-500 group-hover:scale-105"
+                  className="w-full h-full object-cover object-top transition duration-500 group-hover:scale-105"
                 />
 
                 {isRecommended && (

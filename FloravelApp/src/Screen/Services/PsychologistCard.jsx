@@ -65,16 +65,16 @@ export default function PsychologistCard({ professional, onSelectAgenda }) {
           )}
         </div>
 
-        {/* Medalha Roseta de Patente sobre o canto inferior da foto */}
+        {/* Selo de Credibilidade sobre o canto inferior da foto */}
         <div
           className="absolute -bottom-2.5 -right-2.5 bg-white rounded-full p-1 shadow-md border border-stone-200/80"
-          title={professional.patenteNome || "Patente Florável"}
+          title={professional.patenteNome || "Selo de Credibilidade Florável"}
         >
           <FloravelMedalBadge
             variant={professional.patenteVariant || "guardia"}
             tier={professional.patenteTier || "ouro_floravel"}
             size={30}
-            title={professional.patenteNome || "Patente Florável"}
+            title={professional.patenteNome || "Selo de Credibilidade Florável"}
           />
         </div>
       </div>

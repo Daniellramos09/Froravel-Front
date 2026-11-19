@@ -13,6 +13,7 @@ import {
   HeartHandshake,
   Star,
   MessageSquareHeart,
+  ShieldCheck,
 } from "lucide-react";
 
 const isLocal = typeof window !== 'undefined' && ['localhost', '127.0.0.1'].includes(window.location.hostname);
@@ -37,7 +38,7 @@ export const MOCK_PSYCHOLOGISTS = [
     rating: 4.9,
     positiveStarsCount: 58,
     patenteNivel: 4,
-    patenteNome: "Guardiã do Puerpério",
+    patenteNome: "Selo Experiência Perinatal",
     patenteVariant: "guardia",
     patenteTier: "ouro_floravel",
     isNewcomer: false,
@@ -61,7 +62,7 @@ export const MOCK_PSYCHOLOGISTS = [
     rating: 4.9,
     positiveStarsCount: 44,
     patenteNivel: 3,
-    patenteNome: "Escuta 5 Estrelas",
+    patenteNome: "Selo Escuta Humanizada",
     patenteVariant: "estrelas",
     patenteTier: "rosa_floravel",
     isNewcomer: false,
@@ -85,7 +86,7 @@ export const MOCK_PSYCHOLOGISTS = [
     rating: 4.8,
     positiveStarsCount: 51,
     patenteNivel: 4,
-    patenteNome: "Facilitador de Rodas",
+    patenteNome: "Selo Facilitador de Rodas",
     patenteVariant: "rodas",
     patenteTier: "esmeralda",
     isNewcomer: false,
@@ -109,7 +110,7 @@ export const MOCK_PSYCHOLOGISTS = [
     rating: 5.0,
     positiveStarsCount: 14,
     patenteNivel: 2,
-    patenteNome: "Estrela Nascente",
+    patenteNome: "Selo Profissional Credenciada",
     patenteVariant: "nascente",
     patenteTier: "bronze_terra",
     isNewcomer: true,
@@ -133,7 +134,7 @@ export const MOCK_PSYCHOLOGISTS = [
     rating: 4.8,
     positiveStarsCount: 39,
     patenteNivel: 3,
-    patenteNome: "Anjo Fundo Solidário",
+    patenteNome: "Selo Acolhimento Solidário",
     patenteVariant: "anjo",
     patenteTier: "prata_salvia",
     isNewcomer: false,
@@ -157,7 +158,7 @@ export const MOCK_PSYCHOLOGISTS = [
     rating: 5.0,
     positiveStarsCount: 8,
     patenteNivel: 2,
-    patenteNome: "Estrela Nascente",
+    patenteNome: "Selo Profissional Credenciada",
     patenteVariant: "nascente",
     patenteTier: "bronze_terra",
     isNewcomer: true,
@@ -944,12 +945,20 @@ export default function SupportNetworkScreen({
             onChange={(e) => setSortMode(e.target.value)}
             className="rounded-full border border-[#E4DAD5] bg-white px-3.5 py-1.5 text-[12px] font-bold text-[#1F3A27] outline-none focus:border-[#294D33] cursor-pointer"
           >
-            <option value="equilibrio">Recomendadas (Patentes + Recém-chegadas)</option>
-            <option value="patentes">Maior Patente & Estrelas</option>
+            <option value="equilibrio">Todas as Psicólogas Credenciadas (Ordem Equitativa)</option>
+            <option value="patentes">Mais Experiência em Rodas & Acolhimentos</option>
             <option value="novas">Novas na Florável (Oportunidade)</option>
             <option value="social">Gratuitas & Menor Valor</option>
           </select>
         </div>
+      </div>
+
+      {/* AVISO ÉTICO CFP PARA AS MÃES (EVITA INTERPRETAÇÃO DE QUALIDADE COMPARATIVA) */}
+      <div className="rounded-2xl bg-[#EBF3ED]/80 border border-[#294D33]/20 p-3.5 sm:p-4 flex items-start gap-3">
+        <ShieldCheck className="w-4 h-4 text-[#294D33] shrink-0 mt-0.5" />
+        <p className="text-[12px] text-stone-700 leading-relaxed">
+          <strong className="text-[#1F3A27]">Acolhimento com Responsabilidade Ética (Diretriz CFP):</strong> Todas as psicólogas da Rede Florável possuem CRP ativo e especialização em saúde materna. Os selos certificam áreas de experiência, rodas comunitárias e participação no Fundo Social, não constituindo classificação comparativa de qualidade clínica.
+        </p>
       </div>
 
       {/* Lista de Profissionais: 1 coluna no mobile, 2 colunas em telas amplas */}

@@ -453,12 +453,12 @@ export default function CheckInScreen({ setActiveTab }) {
                   : 'border-stone-200/90 hover:border-[#E8A9BB] hover:shadow-md'
               }`}
             >
-              {/* Imagem Representativa (Inteira na moldura sem cortes) */}
-              <div className={`w-28 sm:w-full h-28 sm:h-48 relative shrink-0 overflow-hidden flex items-center justify-center p-1.5 ${getIllustrationBgClass(option.img)}`}>
+              {/* Fotografia Editorial */}
+              <div className="w-28 sm:w-full h-28 sm:h-48 relative shrink-0 overflow-hidden bg-stone-100">
                 <img
                   src={option.img}
                   alt={option.title}
-                  className="w-full h-full object-contain transition duration-500 group-hover:scale-105"
+                  className="w-full h-full object-cover object-top transition duration-500 group-hover:scale-105"
                 />
                 <span className="hidden sm:inline-block absolute top-3 left-3 px-2.5 py-1 rounded-full bg-black/55 backdrop-blur-xs text-white text-[11px] font-bold">
                   {option.tag}

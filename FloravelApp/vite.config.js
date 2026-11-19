@@ -38,7 +38,7 @@ export default defineConfig({
             urlPattern: ({ url, sameOrigin }) => sameOrigin && url.pathname.startsWith('/img/'),
             handler: 'NetworkFirst',
             options: {
-              cacheName: 'imagens-v2',
+              cacheName: 'imagens-v3',
               networkTimeoutSeconds: 3,
               expiration: { maxEntries: 80, maxAgeSeconds: 7 * 24 * 60 * 60 },
             },
