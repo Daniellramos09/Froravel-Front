@@ -199,7 +199,7 @@ export default function BreathingExerciseCard({ startSignal = 0 }) {
       {/* Ilustração: mãe respirando ao lado do bebê */}
       <div className="hidden @3xl:flex items-end justify-center pt-6 pr-6">
         <img
-          src="/img/ilustracoes/pausa.jpg"
+          src="/img/ilustracoes/hero-pausa.jpg"
           alt=""
           loading="lazy"
           className="w-full max-h-[260px] object-contain object-bottom"
