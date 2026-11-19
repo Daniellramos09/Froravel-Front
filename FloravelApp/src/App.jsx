@@ -1,5 +1,5 @@
 // src/App.jsx
-import { useState, useEffect, useRef } from 'react';
+import { Component, useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import {
   Home, ClipboardList, HeartHandshake, MessageSquare, Calendar, Bell,
@@ -619,11 +619,63 @@ function hidratarSessaoDoHash() {
   window.history.replaceState(null, '', window.location.pathname + window.location.search);
 }
 
+class AppErrorBoundary extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  handleRecover = async () => {
+    try {
+      if ('serviceWorker' in navigator) {
+        const regs = await navigator.serviceWorker.getRegistrations();
+        await Promise.all(regs.map((r) => r.unregister()));
+      }
+      if ('caches' in window) {
+        const keys = await caches.keys();
+        await Promise.all(keys.map((k) => caches.delete(k)));
+      }
+    } catch (_) {}
+    window.location.reload();
+  };
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="min-h-dvh flex items-center justify-center bg-[#FCF7F9] p-6 font-dmsans text-center">
+          <div className="max-w-md bg-white rounded-3xl p-8 border border-stone-200 shadow-sm">
+            <h2 className="text-2xl font-fraunces font-bold text-[#294D33] mb-2">
+              Atualizando seu espaço Florável
+            </h2>
+            <p className="text-sm text-stone-600 mb-6">
+              Detectamos uma versão antiga em cache no navegador. Clique abaixo para atualizar com segurança.
+            </p>
+            <button
+              type="button"
+              onClick={this.handleRecover}
+              className="px-6 py-3 rounded-full bg-[#294D33] text-white font-bold text-sm hover:bg-[#1f3c27] transition cursor-pointer"
+            >
+              Limpar cache e recarregar
+            </button>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 export default function App() {
   hidratarSessaoDoHash();
   return (
-    <AccessibilityProvider>
-      <AppContent />
-    </AccessibilityProvider>
+    <AppErrorBoundary>
+      <AccessibilityProvider>
+        <AppContent />
+      </AccessibilityProvider>
+    </AppErrorBoundary>
   );
 }
