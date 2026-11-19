@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { CheckCircle, ArrowRight, ArrowLeft, Loader2, Sparkles, PhoneCall, MessageCircleHeart, HeartHandshake, ShieldCheck } from 'lucide-react';
 import { getIllustrationBgClass } from '../../utils/illustrationFrame';
 
+const isLocal = typeof window !== 'undefined' && ['localhost', '127.0.0.1'].includes(window.location.hostname);
+const API_BASE = import.meta.env.VITE_API_URL || (isLocal ? 'http://localhost:8080' : '');
+
 const QUIZ_QUESTIONS = [
   {
     id: 1,
@@ -195,29 +198,35 @@ export default function CheckInScreen({ setActiveTab }) {
         // Envia as respostas da Escala de Edimburgo (EPDS) para a API Spring Boot (/api/triagem/check-in)
         (async () => {
           try {
-            let maeId = null;
-            const sessaoRaw = localStorage.getItem('floravel_mae_sessao');
-            if (sessaoRaw) {
-              maeId = JSON.parse(sessaoRaw)?.id;
-            }
-            if (!maeId) {
-              const resMae = await fetch('http://localhost:8080/api/maes/email/mariana.silva@email.com');
-              if (resMae.ok) {
-                const maeObj = await resMae.json();
-                maeId = maeObj?.id;
-                localStorage.setItem('floravel_mae_sessao', JSON.stringify(maeObj));
+            if (API_BASE) {
+              let maeId = null;
+              const sessaoRaw = localStorage.getItem('floravel_mae_sessao');
+              if (sessaoRaw) {
+                maeId = JSON.parse(sessaoRaw)?.id;
               }
-            }
-            if (maeId) {
-              const respostasPayload = Object.entries(updatedAnswers).map(([num, val]) => ({
-                numeroQuestao: Number(num),
-                valorResposta: Number(val),
-              }));
-              await fetch('http://localhost:8080/api/triagem/check-in', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ maeId, respostas: respostasPayload }),
-              });
+              const token = localStorage.getItem('floravel_jwt');
+              const authHeaders = token ? { Authorization: `Bearer ${token}` } : {};
+              if (!maeId) {
+                const resMae = await fetch(`${API_BASE}/api/maes/email/mariana.silva@email.com`, {
+                  headers: authHeaders,
+                });
+                if (resMae.ok) {
+                  const maeObj = await resMae.json();
+                  maeId = maeObj?.id;
+                  localStorage.setItem('floravel_mae_sessao', JSON.stringify(maeObj));
+                }
+              }
+              if (maeId) {
+                const respostasPayload = Object.entries(updatedAnswers).map(([num, val]) => ({
+                  numeroQuestao: Number(num),
+                  valorResposta: Number(val),
+                }));
+                await fetch(`${API_BASE}/api/triagem/check-in`, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json', ...authHeaders },
+                  body: JSON.stringify({ maeId, respostas: respostasPayload }),
+                });
+              }
             }
           } catch (_) {
             // Fallback offline resiliente

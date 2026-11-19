@@ -1,14 +1,47 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { ShieldAlert, X, AlertTriangle, Heart, CheckCircle2, Lock } from 'lucide-react';
+import { ShieldAlert, X, AlertTriangle, Heart, CheckCircle2, Lock, UserCheck } from 'lucide-react';
 
-export default function DenunciaModal({ isOpen, onClose, targetUser = null, context = 'Geral' }) {
+const isLocal = typeof window !== 'undefined' && ['localhost', '127.0.0.1'].includes(window.location.hostname);
+const API_BASE = import.meta.env.VITE_API_URL || (isLocal ? 'http://localhost:8080' : '');
+
+const PARTICIPANTES_PADRAO_SALA = [
+  { nome: 'Dra. Helena Souza', codigoPublico: 'FLR-PSI842' },
+  { nome: 'Camila R. (Participante)', codigoPublico: 'FLR-C4T9P1' },
+  { nome: 'Juliana M. (Participante)', codigoPublico: 'FLR-J7N2W8' },
+];
+
+export default function DenunciaModal({
+  isOpen,
+  onClose,
+  targetUser = null,
+  targetCodigoPublico = null,
+  participants = null,
+  context = 'Geral',
+}) {
+  const opcoesParticipantes = Array.isArray(participants) && participants.length > 0
+    ? participants
+    : PARTICIPANTES_PADRAO_SALA;
+
+  const [alvoSelecionado, setAlvoSelecionado] = useState(targetUser || '');
+  const [codigoPublicoAlvo, setCodigoPublicoAlvo] = useState(targetCodigoPublico || '');
   const [motivo, setMotivo] = useState('comentario_ofensivo');
   const [oQueFez, setOQueFez] = useState('');
   const [oQueSentiu, setOQueSentiu] = useState('');
   const [bloquearUsuario, setBloquearUsuario] = useState(true);
   const [enviado, setEnviado] = useState(false);
   const [protocolo, setProtocolo] = useState('');
+
+  useEffect(() => {
+    if (!isOpen) return;
+    if (targetUser && targetUser !== 'Participante na chamada') {
+      setAlvoSelecionado(targetUser);
+      setCodigoPublicoAlvo(targetCodigoPublico || '');
+    } else if (!alvoSelecionado && opcoesParticipantes.length > 0) {
+      setAlvoSelecionado(opcoesParticipantes[0].nome);
+      setCodigoPublicoAlvo(opcoesParticipantes[0].codigoPublico || '');
+    }
+  }, [isOpen, targetUser, targetCodigoPublico]);
 
   if (!isOpen) return null;
 
@@ -18,12 +51,14 @@ export default function DenunciaModal({ isOpen, onClose, targetUser = null, cont
 
     const novoProtocolo = `DEN-${Date.now().toString().slice(-6)}`;
     setProtocolo(novoProtocolo);
-    const alvoReportado = targetUser || 'Usuária em reunião';
+    const alvoReportado = alvoSelecionado.trim() || targetUser || 'Conta não especificada';
+    const codigoNormalizado = codigoPublicoAlvo.trim().toUpperCase();
 
     // Salva denúncia no histórico local para persistência de demonstração
     const novaDenuncia = {
       id: novoProtocolo,
       targetUser: alvoReportado,
+      targetCodigoPublico: codigoNormalizado || null,
       context,
       motivo,
       oQueFez,
@@ -35,18 +70,41 @@ export default function DenunciaModal({ isOpen, onClose, targetUser = null, cont
     const existentes = JSON.parse(localStorage.getItem('floravel_denuncias') || '[]');
     localStorage.setItem('floravel_denuncias', JSON.stringify([novaDenuncia, ...existentes]));
 
+    // Envia para API oficial Spring Boot usando o código público opaco (OWASP Dual-ID)
+    try {
+      const sessao = JSON.parse(localStorage.getItem('floravel_mae_sessao') || '{}');
+      const token = localStorage.getItem('floravel_jwt');
+      if (sessao?.usuarioId) {
+        await fetch(`${API_BASE}/api/denuncias`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+          body: JSON.stringify({
+            denuncianteUsuarioId: sessao.usuarioId,
+            denunciadoCodigoPublico: codigoNormalizado || null,
+            motivo,
+            oQueFez,
+            oQueSentiu,
+            bloquearUsuario,
+          }),
+        });
+      }
+    } catch (_) {}
+
     // Aciona o Disjuntor de Sala Ao Vivo (Room Circuit Breaker) via BroadcastChannel e API Spring Boot
     try {
       const bc = new BroadcastChannel('floravel_sala_ao_vivo');
-      bc.postMessage({ type: 'DISJUNTOR_ACIONADO', alvo: alvoReportado });
+      bc.postMessage({ type: 'DISJUNTOR_ACIONADO', alvo: alvoReportado, codigoPublico: codigoNormalizado });
       bc.close();
     } catch (_) {}
 
     try {
-      await fetch('http://localhost:8080/api/sala-ao-vivo/disjuntor', {
+      await fetch(`${API_BASE}/api/sala-ao-vivo/disjuntor`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ alvo: alvoReportado })
+        body: JSON.stringify({ alvo: alvoReportado, codigoPublico: codigoNormalizado })
       });
     } catch (_) {}
 
@@ -122,11 +180,43 @@ export default function DenunciaModal({ isOpen, onClose, targetUser = null, cont
               </span>
             </div>
 
-            {targetUser && (
-              <div className="text-xs text-stone-600 bg-stone-50 p-2.5 rounded-xl border border-stone-200">
-                Denunciando: <strong className="text-stone-900">{targetUser}</strong> ({context})
+            <div className="bg-stone-50 p-3 rounded-2xl border border-stone-200 space-y-2.5">
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-bold text-stone-700 uppercase tracking-wider flex items-center gap-1.5">
+                  <UserCheck size={14} className="text-[#294D33]" />
+                  Quem você deseja reportar?
+                </span>
+                <span className="text-[11px] text-stone-500">{context}</span>
               </div>
-            )}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <select
+                  value={alvoSelecionado}
+                  onChange={(e) => {
+                    const nome = e.target.value;
+                    setAlvoSelecionado(nome);
+                    const found = opcoesParticipantes.find((p) => p.nome === nome);
+                    if (found?.codigoPublico) setCodigoPublicoAlvo(found.codigoPublico);
+                  }}
+                  className="w-full px-3 py-2 text-xs rounded-xl border border-stone-200 bg-white focus:outline-none focus:ring-2 focus:ring-red-500"
+                >
+                  {opcoesParticipantes.map((p) => (
+                    <option key={p.nome} value={p.nome}>
+                      {p.nome} {p.codigoPublico ? `(#${p.codigoPublico.replace(/^#/, '')})` : ''}
+                    </option>
+                  ))}
+                  {targetUser && !opcoesParticipantes.some((p) => p.nome === targetUser) && (
+                    <option value={targetUser}>{targetUser}</option>
+                  )}
+                </select>
+                <input
+                  type="text"
+                  value={codigoPublicoAlvo}
+                  onChange={(e) => setCodigoPublicoAlvo(e.target.value)}
+                  placeholder="Código público (ex: #FLR-C4T9P1)"
+                  className="w-full px-3 py-2 text-xs font-mono rounded-xl border border-stone-200 bg-white focus:outline-none focus:ring-2 focus:ring-red-500"
+                />
+              </div>
+            </div>
 
             <div>
               <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">

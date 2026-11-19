@@ -15,7 +15,7 @@ const TITULOS = {
   '/maes': 'Mães atendidas',
   '/sala': 'Sala de acolhimento',
   '/comunidade': 'Comunidade',
-  '/perfil': 'Perfil & Medalhas',
+  '/perfil': 'Perfil & Selos de Credibilidade',
   '/acessibilidade': 'Acessibilidade Clínica',
 };
 
@@ -127,7 +127,10 @@ export default function DashboardLayout() {
   const contentRef = useRef(null);
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const landingUrl = import.meta.env.VITE_LANDING_URL || 'http://localhost:5173';
+  const isLocal =
+    typeof window !== 'undefined' && ['localhost', '127.0.0.1'].includes(window.location.hostname);
+  const landingUrl =
+    import.meta.env.VITE_LANDING_URL || (isLocal ? 'http://localhost:5173' : 'https://froravel-lading.vercel.app');
   const {
     psiProfile,
     cycleFontSize,

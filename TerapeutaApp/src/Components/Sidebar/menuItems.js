@@ -7,6 +7,6 @@ export const menuItems = [
   { name: 'Mães atendidas', short: 'Mães', path: '/maes', icon: Users },
   { name: 'Sala de acolhimento', short: 'Sala', path: '/sala', icon: Video },
   { name: 'Comunidade', short: 'Comunidade', path: '/comunidade', icon: MessagesSquare },
-  { name: 'Perfil & Medalhas', short: 'Perfil', path: '/perfil', icon: Award },
+  { name: 'Perfil & Selos', short: 'Perfil', path: '/perfil', icon: Award },
   { name: 'Acessibilidade', short: 'Acessib.', path: '/acessibilidade', icon: Eye },
 ];

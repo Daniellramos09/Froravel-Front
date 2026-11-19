@@ -1,6 +1,6 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
-import { APP_LINKS, navigateToApp } from '../../utils/appLinks';
+import { APP_LINKS, getApiBase, navigateToApp } from '../../utils/appLinks';
 import {
   ArrowLeft,
   ExternalLink,
@@ -15,6 +15,10 @@ import {
 
 const LOGIN_IMAGE = '/login-bg.png';
 const LOGO = '/img/fotoheader/logo.png';
+const API_BASE = getApiBase();
+const GOOGLE_CLIENT_ID_PUBLIC =
+  import.meta.env.VITE_GOOGLE_CLIENT_ID ||
+  '339469409890-1g5vn0mmj2hir5ishgi0kh2q47rglfb2.apps.googleusercontent.com';
 
 const PAPEIS = [
   { id: 'mae', label: 'Sou Mãe', desc: 'Acolhimento emocional, diário, triagem e rodas comunitárias.' },
@@ -95,6 +99,9 @@ export default function LoginScreen({ initialMode = 'login' }) {
   const [govResult, setGovResult] = useState(null);
   const [validandoGov, setValidandoGov] = useState(false);
   const [mostrarAjudaVulnerabilidade, setMostrarAjudaVulnerabilidade] = useState(false);
+  const [googleClientId, setGoogleClientId] = useState(GOOGLE_CLIENT_ID_PUBLIC);
+  const [googleReady, setGoogleReady] = useState(false);
+  const googleBtnRef = useRef(null);
 
   const isCadastro = modo === 'cadastro';
 
@@ -107,6 +114,92 @@ export default function LoginScreen({ initialMode = 'login' }) {
   useEffect(() => {
     setModo(initialMode);
   }, [initialMode]);
+
+  useEffect(() => {
+    if (googleClientId || !API_BASE) return;
+    fetch(`${API_BASE}/api/auth/oauth/google/config`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((cfg) => {
+        if (cfg?.enabled && cfg?.clientId) {
+          setGoogleClientId(cfg.clientId);
+        }
+      })
+      .catch(() => {});
+  }, [googleClientId]);
+
+  const salvarSessaoLocal = (authData, papelAtual) => {
+    const chave = papelAtual === 'terapeuta' ? 'floravel_psi_sessao' : 'floravel_mae_sessao';
+    localStorage.setItem(chave, JSON.stringify(authData));
+    if (authData?.tokenSessao) {
+      localStorage.setItem('floravel_jwt', authData.tokenSessao);
+    }
+    if (authData?.codigoPublico) {
+      localStorage.setItem('floravel_codigo_publico', authData.codigoPublico);
+    }
+  };
+
+  useEffect(() => {
+    if (!googleClientId) return;
+    const initGsi = () => {
+      if (!window.google?.accounts?.id) return;
+      window.google.accounts.id.initialize({
+        client_id: googleClientId,
+        callback: async (response) => {
+          if (!response?.credential) return;
+          if (!API_BASE) {
+            setErroLogin('Conta Google validada, mas o servidor backend ainda não está configurado neste ambiente.');
+            return;
+          }
+          setCarregandoLogin(true);
+          setErroLogin('');
+          try {
+            const res = await fetch(`${API_BASE}/api/auth/oauth/google`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                idToken: response.credential,
+                tipoPerfil: papel === 'terapeuta' ? 'PSICOLOGO' : papel === 'rh' ? 'RH' : 'MAE',
+              }),
+            });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) {
+              setErroLogin(data.message || 'Falha ao autenticar conta Google.');
+              setCarregandoLogin(false);
+              return;
+            }
+            salvarSessaoLocal(data, papel);
+            navigateToApp(papel, data);
+          } catch (_) {
+            setErroLogin('Não foi possível validar o login Google no servidor.');
+            setCarregandoLogin(false);
+          }
+        },
+      });
+      if (googleBtnRef.current) {
+        googleBtnRef.current.innerHTML = '';
+        window.google.accounts.id.renderButton(googleBtnRef.current, {
+          theme: 'outline',
+          size: 'large',
+          shape: 'pill',
+          text: 'continue_with',
+          locale: 'pt-BR',
+          width: googleBtnRef.current.offsetWidth || 380,
+        });
+      }
+      setGoogleReady(true);
+    };
+
+    if (window.google?.accounts?.id) {
+      initGsi();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://accounts.google.com/gsi/client';
+    script.async = true;
+    script.defer = true;
+    script.onload = initGsi;
+    document.head.appendChild(script);
+  }, [googleClientId, papel]);
 
   useEffect(() => {
     const handlePageShow = (e) => {
@@ -135,33 +228,57 @@ export default function LoginScreen({ initialMode = 'login' }) {
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
     setErroLogin('');
-    setCarregandoLogin(true);
 
+    const emailLimpo = email.trim().toLowerCase();
+    if (!emailLimpo || !senha) {
+      setErroLogin('Informe seu e-mail e sua senha para entrar.');
+      return;
+    }
+
+    if (!API_BASE) {
+      setErroLogin('Servidor de autenticação ainda não configurado na nuvem. Use o Acesso Rápido Demo Day abaixo para navegar.');
+      return;
+    }
+
+    setCarregandoLogin(true);
     try {
-      if (papel === 'mae' && email.trim()) {
-        try {
-          const res = await fetch(
-            `http://localhost:8080/api/maes/email/${encodeURIComponent(email.trim().toLowerCase())}`
-          );
-          if (res.ok) {
-            const maeData = await res.json();
-            localStorage.setItem('floravel_mae_sessao', JSON.stringify(maeData));
-          }
-        } catch (_) {}
+      const authRes = await fetch(`${API_BASE}/api/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: emailLimpo, senha }),
+      });
+
+      if (authRes.ok) {
+        const authData = await authRes.json();
+        salvarSessaoLocal(authData, papel);
+        navigateToApp(papel, authData);
+        return;
       }
-      navigateToApp(papel);
-    } catch (err) {
-      const msg =
-        err?.response?.status === 401
-          ? 'E-mail ou senha inválidos.'
-          : 'Não foi possível conectar. Tente novamente.';
-      setErroLogin(msg);
+
+      const errJson = await authRes.json().catch(() => ({}));
+      setErroLogin(errJson.message || 'E-mail ou senha inválidos.');
+      setCarregandoLogin(false);
+    } catch (_) {
+      setErroLogin('Não foi possível conectar ao servidor de autenticação.');
       setCarregandoLogin(false);
     }
   };
 
   const handleGoogle = () => {
-    navigateToApp(papel);
+    setErroLogin('');
+    if (!googleClientId) {
+      setErroLogin('Login com Google não configurado neste ambiente.');
+      return;
+    }
+    if (googleReady && window.google?.accounts?.id) {
+      window.google.accounts.id.prompt((notification) => {
+        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+          setErroLogin('Use o botão oficial do Google abaixo ou desative o bloqueador de pop-ups.');
+        }
+      });
+      return;
+    }
+    setErroLogin('Serviço do Google ainda carregando. Tente novamente em instantes.');
   };
 
   const handleForgotSubmit = (e) => {
@@ -228,19 +345,20 @@ export default function LoginScreen({ initialMode = 'login' }) {
     setErroCadastro('');
     let resultado = null;
 
-    try {
-      const apiBase = import.meta.env.VITE_API_URL || 'http://localhost:8080';
-      const res = await fetch(`${apiBase}/api/governo/validar-identidade`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          cpf: cpfLimpo,
-          dataNascimentoInformada: dataAtual || null,
-          nomeInformado: formCadastro.nome || null,
-        }),
-      });
-      if (res.ok) resultado = await res.json();
-    } catch (_) {}
+    if (API_BASE) {
+      try {
+        const res = await fetch(`${API_BASE}/api/governo/validar-identidade`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            cpf: cpfLimpo,
+            dataNascimentoInformada: dataAtual || null,
+            nomeInformado: formCadastro.nome || null,
+          }),
+        });
+        if (res.ok) resultado = await res.json();
+      } catch (_) {}
+    }
 
     if (!resultado) {
       resultado = simularFallbackGovernoLocal(cpfLimpo, dataAtual);
@@ -303,6 +421,11 @@ export default function LoginScreen({ initialMode = 'login' }) {
       }
     }
 
+    if (!API_BASE) {
+      setErroCadastro('Servidor de cadastro indisponível neste ambiente. Use o Acesso Rápido Demo Day para testar.');
+      return;
+    }
+
     setCarregandoCadastro(true);
 
     if (papel === 'mae') {
@@ -324,7 +447,7 @@ export default function LoginScreen({ initialMode = 'login' }) {
           : null,
       };
 
-      fetch('http://localhost:8080/api/maes', {
+      fetch(`${API_BASE}/api/maes`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -332,17 +455,21 @@ export default function LoginScreen({ initialMode = 'login' }) {
         .then(async (res) => {
           if (res.ok) {
             const maeCriada = await res.json();
-            localStorage.setItem('floravel_mae_sessao', JSON.stringify(maeCriada));
+            salvarSessaoLocal(maeCriada, 'mae');
+            navigateToApp('mae', maeCriada);
+            return;
           }
+          const errJson = await res.json().catch(() => ({}));
+          setErroCadastro(errJson.message || 'Não foi possível concluir o cadastro. Verifique os dados.');
+          setCarregandoCadastro(false);
         })
-        .catch(() => {})
-        .finally(() => {
-          window.location.href = `${APP_LINKS.mae}?onboarding=true`;
+        .catch(() => {
+          setErroCadastro('Não foi possível conectar ao servidor para concluir o cadastro.');
+          setCarregandoCadastro(false);
         });
     } else {
-      setTimeout(() => {
-        navigateToApp(papel);
-      }, 450);
+      setCarregandoCadastro(false);
+      setErroCadastro('Cadastro direto disponível para Mães. Para Terapeuta ou RH, use o Acesso Rápido Demo Day ou Google.');
     }
   };
 
@@ -552,20 +679,23 @@ export default function LoginScreen({ initialMode = 'login' }) {
                 <div className="flex-1 h-px bg-[#d9d6cf]" />
               </div>
 
-              <button
-                type="button"
-                onClick={handleGoogle}
-                aria-label="Entrar com Google"
-                className="w-full py-2 rounded-xl bg-[#f1f0ed] hover:bg-white border border-[#e2dfd8] shadow-2xs flex items-center justify-center gap-2 transition-colors cursor-pointer text-xs font-semibold text-stone-700"
-              >
-                <svg width="16" height="16" viewBox="0 0 48 48" aria-hidden="true">
-                  <path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z" />
-                  <path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.5 5.8c4.4-4.1 7.1-10.1 7.1-17.5z" />
-                  <path fill="#FBBC05" d="M10.5 28.7c-.5-1.5-.8-3-.8-4.7s.3-3.2.8-4.7l-7.9-6.1C.9 16.4 0 20.1 0 24s.9 7.6 2.6 10.8l7.9-6.1z" />
-                  <path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.5-5.8c-2.1 1.4-4.8 2.3-8.4 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z" />
-                </svg>
-                <span>Continuar com Google</span>
-              </button>
+              <div ref={googleBtnRef} className="w-full flex justify-center min-h-[42px]" />
+              {!googleReady && (
+                <button
+                  type="button"
+                  onClick={handleGoogle}
+                  aria-label="Entrar com Google"
+                  className="w-full py-2 rounded-xl bg-[#f1f0ed] hover:bg-white border border-[#e2dfd8] shadow-2xs flex items-center justify-center gap-2 transition-colors cursor-pointer text-xs font-semibold text-stone-700"
+                >
+                  <svg width="16" height="16" viewBox="0 0 48 48" aria-hidden="true">
+                    <path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z" />
+                    <path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.5 5.8c4.4-4.1 7.1-10.1 7.1-17.5z" />
+                    <path fill="#FBBC05" d="M10.5 28.7c-.5-1.5-.8-3-.8-4.7s.3-3.2.8-4.7l-7.9-6.1C.9 16.4 0 20.1 0 24s.9 7.6 2.6 10.8l7.9-6.1z" />
+                    <path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.5-5.8c-2.1 1.4-4.8 2.3-8.4 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z" />
+                  </svg>
+                  <span>Continuar com Google</span>
+                </button>
+              )}
 
               <p className="text-[11px] text-center text-gray-600 mt-3">
                 Não possui uma conta?{' '}

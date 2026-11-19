@@ -48,7 +48,10 @@ function NavItem({ to, icon: Icon, label, onNavigate }) {
 }
 
 export default function Sidebar({ onNavigate, onClose, onLogout }) {
-  const landingUrl = import.meta.env.VITE_LANDING_URL || 'http://localhost:5173';
+  const isLocal =
+    typeof window !== 'undefined' && ['localhost', '127.0.0.1'].includes(window.location.hostname);
+  const landingUrl =
+    import.meta.env.VITE_LANDING_URL || (isLocal ? 'http://localhost:5173' : 'https://froravel-lading.vercel.app');
   const { psiProfile } = usePsiAccessibility();
 
   return (

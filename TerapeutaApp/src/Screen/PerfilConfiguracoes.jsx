@@ -8,6 +8,8 @@ import {
   CheckCircle2,
   Save,
   Sparkles,
+  Copy,
+  ShieldCheck,
 } from 'lucide-react';
 import { usePsiAccessibility } from '../Components/Accessibility/PsiAccessibilityContext';
 import FloravelMedalBadge from '../Components/Badges/FloravelMedalBadge';
@@ -74,79 +76,85 @@ export default function PerfilConfiguracoes() {
     showToast('Perfil clínico e configurações salvos com sucesso!');
   };
 
-  // Sistema de Patentes & Medalhas de Impacto Materno (Cores Florável + Formato Roseta)
+  // Sistema de Selos de Credibilidade & Compromisso Ético (Alinhados às normas do CFP)
   const medalhas = [
     {
       id: 'guardia-puerperio',
-      titulo: 'Patente Guardiã do Puerpério',
-      criterio: 'Atender 10 mães na plataforma',
+      titulo: 'Selo Experiência em Saúde Perinatal',
+      criterio: 'Mais de 10 acolhimentos dedicados à saúde materno-infantil na plataforma',
       progressoAtual: psiProfile.maesAtendidasCount || 12,
       meta: 10,
       conquistada: (psiProfile.maesAtendidasCount || 12) >= 10,
       variant: 'guardia',
       tier: 'ouro_floravel',
       cor: 'bg-[#FCF7F9] text-[#1F3A27] border-[#294D33]/25',
-      selo: 'Patente Ouro Botânico',
+      selo: 'Selo Ouro Perinatal',
+      natureza: 'Prática Continuada',
     },
     {
       id: 'escuta-5-estrelas',
-      titulo: 'Patente Escuta 5 Estrelas',
-      criterio: 'Receber 50 estrelas positivas das mães',
+      titulo: 'Selo Escuta Humanizada Validada',
+      criterio: 'Devolutivas consistentes de acolhimento seguro reportadas pelas mães',
       progressoAtual: psiProfile.estrelasRecebidasCount || 58,
       meta: 50,
       conquistada: (psiProfile.estrelasRecebidasCount || 58) >= 50,
       variant: 'estrelas',
       tier: 'rosa_floravel',
       cor: 'bg-[#FCF7F9] text-[#1F3A27] border-[#E8A9BB]',
-      selo: 'Excelência Rosa Pétala',
+      selo: 'Selo Acolhimento Positivo',
+      natureza: 'Feedback Acolhedor',
     },
     {
       id: 'mestre-rodas',
-      titulo: 'Patente Facilitadora de Rodas',
-      criterio: 'Conduzir 15 Rodas de Conversa em grupo',
+      titulo: 'Selo Facilitadora de Rodas Perinatais',
+      criterio: 'Experiência comprovada em condução de grupos e rodas temáticas',
       progressoAtual: psiProfile.rodasConduzidasCount || 18,
       meta: 15,
       conquistada: (psiProfile.rodasConduzidasCount || 18) >= 15,
       variant: 'rodas',
       tier: 'esmeralda',
       cor: 'bg-[#EBF3ED]/60 text-[#1F3A27] border-[#294D33]/20',
-      selo: 'Impacto Esmeralda',
+      selo: 'Selo Condução de Grupos',
+      natureza: 'Apoio Coletivo',
     },
     {
       id: 'anjo-fundo-solidario',
-      titulo: 'Patente Anjo Fundo Solidário',
-      criterio: 'Realizar 25 atendimentos sociais/gratuitos',
+      titulo: 'Selo Compromisso Social & Fundo Florável',
+      criterio: 'Participação ativa em acolhimentos sociais e vagas subsidiadas',
       progressoAtual: psiProfile.atendimentosSociaisCount || 21,
       meta: 25,
       conquistada: (psiProfile.atendimentosSociaisCount || 21) >= 25,
       variant: 'anjo',
       tier: 'prata_salvia',
       cor: 'bg-stone-50 text-stone-700 border-stone-200',
-      selo: 'Prata Sálvia (84%)',
+      selo: 'Selo Acolhimento Social',
+      natureza: 'Impacto Social',
     },
     {
       id: 'sigilo-etico-cfp',
-      titulo: 'Selo Guardiã do Sigilo (CFP)',
-      criterio: '100% conformidade Zero Prontuário & LGPD',
+      titulo: 'Selo Guardiã do Sigilo (CFP & LGPD)',
+      criterio: '100% conformidade com a diretriz Zero Prontuário e privacidade de dados',
       progressoAtual: 1,
       meta: 1,
       conquistada: true,
       variant: 'sigilo',
       tier: 'ouro_floravel',
       cor: 'bg-[#EBF3ED]/50 text-[#1F3A27] border-[#294D33]/30',
-      selo: 'Verificada CFP',
+      selo: 'Verificada CFP & LGPD',
+      natureza: 'Conformidade Ética',
     },
     {
       id: 'estrela-nascente',
-      titulo: 'Patente Estrela Nascente',
-      criterio: 'Primeiros 5 acolhimentos (Impulso Inicial)',
+      titulo: 'Selo Profissional Credenciada Florável',
+      criterio: 'Homologação documental, CRP ativo e boas-vindas à Rede de Apoio',
       progressoAtual: 5,
       meta: 5,
       conquistada: true,
       variant: 'nascente',
       tier: 'bronze_terra',
       cor: 'bg-[#FAF6F3] text-[#1F3A27] border-[#E4DAD5]',
-      selo: 'Semente Acolhedora',
+      selo: 'Credencial Ativa',
+      natureza: 'Acolhimento Inicial',
     },
   ];
 
@@ -163,36 +171,70 @@ export default function PerfilConfiguracoes() {
 
       {/* Cabeçalho — Consistente com Visão Geral */}
       <header className="rounded-2xl bg-[#F1E6E1] p-5 sm:p-8 lg:p-10">
-        <p className="text-[13.5px] md:text-[15px] text-[#4A5E4D]">
-          Identidade Clínica & Patentes Florável
-        </p>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <p className="text-[13.5px] md:text-[15px] text-[#4A5E4D]">
+            Identidade Clínica & Selos de Credibilidade Florável
+          </p>
+          <button
+            type="button"
+            onClick={() => {
+              const code = `#${String(psiProfile.codigoPublico || 'FLR-PSI842').replace(/^#/, '')}`;
+              navigator.clipboard?.writeText(code).catch(() => {});
+              showToast(`Código público ${code} copiado!`);
+            }}
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 border border-[#294D33]/20 text-xs font-bold text-[#1F3A27] hover:bg-white transition cursor-pointer self-start"
+            title="Seu código público opaco protege seu CPF e UUID interno (padrão OWASP Dual-ID)"
+          >
+            <ShieldCheck className="w-3.5 h-3.5 text-[#294D33]" />
+            <span>ID Público:</span>
+            <span className="font-mono text-[#294D33]">
+              #{String(psiProfile.codigoPublico || 'FLR-PSI842').replace(/^#/, '')}
+            </span>
+            <Copy className="w-3 h-3 text-stone-500" />
+          </button>
+        </div>
         <h1 className="mt-2 font-fraunces text-[30px] md:text-[38px] leading-[1.12] tracking-[-0.015em] text-[#1F3A27]">
-          Perfil & Medalhas
+          Perfil & Selos de Credibilidade
         </h1>
         <p className="mt-2 text-[15px] text-[#4A5E4D]">
-          Suas patentes de impacto materno e estrelas positivas ampliam sua visibilidade na Rede de Apoio, mantendo espaço justo para novas profissionais.
+          Seus selos atestam compromissos éticos, modalidades de atuação e credenciais verificadas na Rede de Apoio.
         </p>
       </header>
 
       {/* =================================================================== */}
-      {/* 1. GALERIA DE PATENTES E MEDALHAS DE IMPACTO MATERNO                */}
+      {/* 1. GALERIA DE SELOS DE CREDIBILIDADE & ÉTICA CFP                   */}
       {/* =================================================================== */}
       <section className="rounded-3xl border border-[#EFE9EB] bg-white p-6 sm:p-8 shadow-sm">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
           <div>
             <span className="text-xs font-bold uppercase tracking-wider text-[#294D33] flex items-center gap-1.5">
-              <Award className="w-4 h-4" /> Patentes Oficiais Florável
+              <Award className="w-4 h-4" /> Selos Oficiais de Habilitação & Credibilidade
             </span>
             <h2 className="font-fraunces text-2xl font-bold text-[#1F3A27] mt-1">
-              Conquistas & Rosetas de Acolhimento
+              Compromissos Clínicos & Acolhimento
             </h2>
             <p className="text-xs text-stone-500 mt-0.5">
-              Quanto mais patentes e avaliações 5 estrelas você conquista, mais destaque ganha — sempre equilibrado com o impulso às recém-chegadas.
+              Certificações de prática em saúde perinatal, sigilo ético e acolhimento solidário.
             </p>
           </div>
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#F4DDE5] text-[#294D33] text-xs font-bold self-start">
             <Sparkles className="w-4 h-4" />
-            <span>{totalConquistadas} de {medalhas.length} Patentes Ativas</span>
+            <span>{totalConquistadas} de {medalhas.length} Selos Ativos</span>
+          </div>
+        </div>
+
+        {/* NOTA DE ESCLARECIMENTO ÉTICO CFP (EVITA QUE MÃES INTERPRETEM COMO QUALIDADE DO ATENDIMENTO) */}
+        <div className="rounded-2xl bg-[#EBF3ED]/80 border border-[#294D33]/20 p-4 mb-6">
+          <div className="flex items-start gap-3">
+            <ShieldCheck className="w-5 h-5 text-[#294D33] shrink-0 mt-0.5" />
+            <div className="text-xs text-[#1F3A27]">
+              <p className="font-bold text-[13px] text-[#1F3A27]">
+                Compromisso Ético & Transparência (Diretriz do Conselho Federal de Psicologia)
+              </p>
+              <p className="text-stone-600 mt-1 leading-relaxed">
+                Os selos da Florável são <strong>atestados de credenciamento técnico, conformidade documental (CRP ativo) e áreas de atuação</strong> (como rodas comunitárias e acolhimento social). Conforme as normas éticas do CFP, <strong>os selos não representam ranqueamento nem indicam qualidade superior ou inferior do atendimento clínico</strong> — garantindo que todas as mães saibam que qualquer profissional credenciada na plataforma oferece acolhimento técnico, ético e humanizado com a mesma excelência.
+              </p>
+            </div>
           </div>
         </div>
 
@@ -228,7 +270,7 @@ export default function PerfilConfiguracoes() {
                 <div className="mt-4 pt-3 border-t border-black/5">
                   <div className="flex items-center justify-between text-[11px] font-bold mb-1.5">
                     <span className={m.conquistada ? 'text-[#294D33]' : 'text-stone-500'}>
-                      {m.conquistada ? '✓ Patente Conquistada' : 'Em progresso'}
+                      {m.conquistada ? '✓ Selo Verificado' : 'Em validação'}
                     </span>
                     <span className="tabular-nums">
                       {m.progressoAtual} / {m.meta}

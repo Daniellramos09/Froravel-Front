@@ -1,5 +1,5 @@
 // src/Screen/Services/SupportNetworkScreen.jsx
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   Video,
   ArrowLeft,
@@ -14,6 +14,9 @@ import {
   Star,
   MessageSquareHeart,
 } from "lucide-react";
+
+const isLocal = typeof window !== 'undefined' && ['localhost', '127.0.0.1'].includes(window.location.hostname);
+const API_BASE = import.meta.env.VITE_API_URL || (isLocal ? "http://localhost:8080" : "");
 
 import FilterToolbar from "./FilterToolbar";
 import PsychologistCard from "./PsychologistCard";
@@ -193,6 +196,83 @@ export default function SupportNetworkScreen({
   const [selectedTime, setSelectedTime] = useState(null);
   const [isBooking, setIsBooking] = useState(false);
   const [isConfirmed, setIsConfirmed] = useState(false);
+  const [backendPsychologists, setBackendPsychologists] = useState([]);
+
+  useEffect(() => {
+    if (!API_BASE) return () => { active = false; };
+    fetch(`${API_BASE}/api/psicologos`)
+      .then((res) => (res.ok ? res.json() : []))
+      .then((lista) => {
+        if (Array.isArray(lista)) {
+          setBackendPsychologists(lista);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const allPsychologists = useMemo(() => {
+    const merged = MOCK_PSYCHOLOGISTS.map((mock) => {
+      const dbMatch = backendPsychologists.find(
+        (b) =>
+          (b.crp && mock.crp.includes(b.crp)) ||
+          (b.nome && b.nome.toLowerCase() === mock.name.toLowerCase())
+      );
+      if (!dbMatch) return mock;
+      return {
+        ...mock,
+        backendId: dbMatch.id,
+        codigoPublico: dbMatch.codigoPublico || mock.codigoPublico,
+        name: dbMatch.nome || mock.name,
+        spec: dbMatch.especialidade || mock.spec,
+        approach: dbMatch.abordagem || mock.approach,
+        desc: dbMatch.biografia || mock.desc,
+        fotoUrl: dbMatch.fotoUrl || mock.photo,
+        horariosDisponiveis:
+          Array.isArray(dbMatch.horariosDisponiveis) && dbMatch.horariosDisponiveis.length > 0
+            ? dbMatch.horariosDisponiveis
+            : null,
+      };
+    });
+
+    const extras = backendPsychologists
+      .filter(
+        (b) =>
+          !MOCK_PSYCHOLOGISTS.some(
+            (m) =>
+              (b.crp && m.crp.includes(b.crp)) ||
+              (b.nome && b.nome.toLowerCase() === m.name.toLowerCase())
+          )
+      )
+      .map((b) => ({
+        id: b.id,
+        backendId: b.id,
+        codigoPublico: b.codigoPublico,
+        name: b.nome,
+        crp: b.crp?.startsWith("CRP") ? b.crp : `CRP ${b.crp || ""}`,
+        spec: b.especialidade || "Psicologia Perinatal",
+        approach: b.abordagem || "Escuta Acolhedora",
+        education: Array.isArray(b.graduacoes) && b.graduacoes.length > 0 ? b.graduacoes[0] : "Psicologia Clínica",
+        sessionsCompleted: b.maesAtendidasCount || 1,
+        rating: 5.0,
+        positiveStarsCount: b.estrelasRecebidasCount || 5,
+        patenteNivel: 2,
+        patenteNome: "Estrela Nascente",
+        patenteVariant: "estrela",
+        patenteTier: "ouro_floravel",
+        isNewcomer: true,
+        desc: b.biografia || "Psicóloga credenciada pela rede Florável.",
+        modality: `Online · ${b.duracaoSessaoMinutos || 50} min`,
+        price: Number(b.valorConsulta || 0),
+        priceFormatted: Number(b.valorConsulta || 0) === 0 ? "Gratuito (Fundo Florável)" : `R$ ${Number(b.valorConsulta).toFixed(2).replace(".", ",")}`,
+        isSocial: Number(b.valorConsulta || 0) === 0,
+        verified: true,
+        tags: [b.especialidade || "Psicologia Perinatal", "Nova na Rede"],
+        photo: b.fotoUrl || "/img/fotopsicologo/psicologa1.jpg",
+        horariosDisponiveis: Array.isArray(b.horariosDisponiveis) ? b.horariosDisponiveis : ["09:00", "14:30", "18:30"],
+      }));
+
+    return [...merged, ...extras];
+  }, [backendPsychologists]);
 
   const diasOutubro = Array.from({ length: 31 }, (_, i) => i + 1);
 
@@ -221,7 +301,7 @@ export default function SupportNetworkScreen({
   };
 
   const filteredProfessionals = useMemo(() => {
-    const filtrados = MOCK_PSYCHOLOGISTS.filter((prof) => {
+    const filtrados = allPsychologists.filter((prof) => {
       const term = searchTerm.toLowerCase().trim();
       const matchesSearch =
         !term ||
@@ -665,7 +745,11 @@ export default function SupportNetworkScreen({
 
                   <div className="grid grid-cols-3 sm:grid-cols-5 gap-2.5 mb-7">
                     {(() => {
-                      let slots = ["09:00", "11:30", "14:30", "16:00", "18:30"];
+                      let slots =
+                        Array.isArray(profEmFoco?.horariosDisponiveis) &&
+                        profEmFoco.horariosDisponiveis.length > 0
+                          ? profEmFoco.horariosDisponiveis
+                          : ["09:00", "11:30", "14:30", "16:00", "18:30"];
                       if (profEmFoco?.id === 1) {
                         try {
                           const savedSlots = JSON.parse(localStorage.getItem("floravel_psi_horarios") || "[]");

@@ -286,7 +286,12 @@ function AppContent() {
 
         {/* Atalho de Navegação para o Portal Principal */}
         <a
-          href={import.meta.env.VITE_LANDING_URL || 'http://localhost:5173'}
+          href={
+            import.meta.env.VITE_LANDING_URL ||
+            (typeof window !== 'undefined' && ['localhost', '127.0.0.1'].includes(window.location.hostname)
+              ? 'http://localhost:5173'
+              : 'https://froravel-lading.vercel.app')
+          }
           className="flex items-center justify-between px-3.5 py-2 mx-2 mb-4 rounded-xl text-xs font-semibold text-[#516B55] bg-[#FCF7F9] hover:bg-[#F4DDE5]/60 border border-[#E8A9BB]/40 transition"
           title="Voltar para a Landing Page principal"
         >
@@ -370,7 +375,16 @@ function AppContent() {
     >
       <LogoutModal
         isOpen={isLogoutModalOpen}
-        onConfirm={() => (window.location.href = import.meta.env.VITE_LANDING_URL || 'http://localhost:5173')}
+        onConfirm={() => {
+          localStorage.removeItem('floravel_jwt');
+          localStorage.removeItem('floravel_mae_sessao');
+          const landingTarget =
+            import.meta.env.VITE_LANDING_URL ||
+            (typeof window !== 'undefined' && ['localhost', '127.0.0.1'].includes(window.location.hostname)
+              ? 'http://localhost:5173'
+              : 'https://froravel-lading.vercel.app');
+          window.location.href = landingTarget;
+        }}
         onCancel={() => setIsLogoutModalOpen(false)}
       />
 
@@ -588,7 +602,25 @@ function AppContent() {
   );
 }
 
+function hidratarSessaoDoHash() {
+  if (typeof window === 'undefined') return;
+  const hash = window.location.hash || '';
+  if (!hash.startsWith('#auth=')) return;
+  try {
+    const b64 = decodeURIComponent(hash.slice('#auth='.length));
+    const jsonStr = decodeURIComponent(escape(atob(b64)));
+    const authData = JSON.parse(jsonStr);
+    if (authData && typeof authData === 'object') {
+      localStorage.setItem('floravel_mae_sessao', JSON.stringify(authData));
+      if (authData.tokenSessao) localStorage.setItem('floravel_jwt', authData.tokenSessao);
+      if (authData.codigoPublico) localStorage.setItem('floravel_codigo_publico', authData.codigoPublico);
+    }
+  } catch (_) {}
+  window.history.replaceState(null, '', window.location.pathname + window.location.search);
+}
+
 export default function App() {
+  hidratarSessaoDoHash();
   return (
     <AccessibilityProvider>
       <AppContent />

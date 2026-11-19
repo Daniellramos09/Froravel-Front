@@ -29,6 +29,9 @@ import {
   ChevronRight
 } from 'lucide-react';
 
+const isLocal = typeof window !== 'undefined' && ['localhost', '127.0.0.1'].includes(window.location.hostname);
+const API_BASE = import.meta.env.VITE_API_URL || (isLocal ? 'http://localhost:8080' : '');
+
 /**
  * Gera um aviso sonoro suave e ultra-rápido (~0.35s) nativo via Web Audio API
  * quando uma mãe entra ou reconecta na sala de acolhimento.
@@ -281,11 +284,13 @@ export default function SalaAcolhimento() {
   useEffect(() => {
     let interval = null;
     if (emChamada) {
-      fetch('http://localhost:8080/api/sala-ao-vivo/status', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: 'AO_VIVO' })
-      }).catch(() => {});
+      if (API_BASE) {
+        fetch(`${API_BASE}/api/sala-ao-vivo/status`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: 'AO_VIVO' })
+        }).catch(() => {});
+      }
 
       interval = setInterval(() => {
         setSegundos((s) => s + 1);
@@ -326,9 +331,9 @@ export default function SalaAcolhimento() {
       };
     } catch (_) {}
 
-    const poll = setInterval(async () => {
+    const poll = API_BASE ? setInterval(async () => {
       try {
-        const res = await fetch('http://localhost:8080/api/sala-ao-vivo/estado');
+        const res = await fetch(`${API_BASE}/api/sala-ao-vivo/estado`);
         if (res.ok) {
           const estado = await res.json();
           if (Array.isArray(estado.mensagens) && estado.mensagens.length > 0) {
@@ -342,10 +347,10 @@ export default function SalaAcolhimento() {
           }
         }
       } catch (_) {}
-    }, 1500);
+    }, 2500) : null;
 
     return () => {
-      clearInterval(poll);
+      if (poll) clearInterval(poll);
       if (bc) bc.close();
     };
   }, []);
@@ -380,13 +385,15 @@ export default function SalaAcolhimento() {
       bc.close();
     } catch (_) {}
 
-    try {
-      await fetch('http://localhost:8080/api/sala-ao-vivo/mensagens', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ remetente: 'Dra. Helena Souza (Host)', texto, isHost: true })
-      });
-    } catch (_) {}
+    if (API_BASE) {
+      try {
+        await fetch(`${API_BASE}/api/sala-ao-vivo/mensagens`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ remetente: 'Dra. Helena Souza (Host)', texto, isHost: true })
+        });
+      } catch (_) {}
+    }
   };
 
   const handleEncerrarSessao = async () => {
@@ -396,13 +403,15 @@ export default function SalaAcolhimento() {
       bc.close();
     } catch (_) {}
 
-    try {
-      await fetch('http://localhost:8080/api/sala-ao-vivo/status', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: 'ENCERRADA' })
-      });
-    } catch (_) {}
+    if (API_BASE) {
+      try {
+        await fetch(`${API_BASE}/api/sala-ao-vivo/status`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: 'ENCERRADA' })
+        });
+      } catch (_) {}
+    }
 
     setEmChamada(false);
     setNotasEfemeras(''); // Zero Prontuário: notas efêmeras são limpas ao encerrar a sessão
@@ -419,17 +428,23 @@ export default function SalaAcolhimento() {
 
   const handleEnviarSalvaguardaMenor = async (e) => {
     e.preventDefault();
-    try {
-      await fetch('http://localhost:8080/api/maes/demo-mae/sinalizar-menor', {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          responsavelNome: respNome.trim() || 'Responsável Legal',
-          responsavelTelefone: respTelefone.trim() || '(11) 99999-0000',
-          responsavelParentesco: 'Responsável Legal',
-        }),
-      });
-    } catch (_) {}
+    if (API_BASE) {
+      try {
+        const token = localStorage.getItem('floravel_jwt');
+        await fetch(`${API_BASE}/api/maes/demo-mae/sinalizar-menor`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+          body: JSON.stringify({
+            responsavelNome: respNome.trim() || 'Responsável Legal',
+            responsavelTelefone: respTelefone.trim() || '(11) 99999-0000',
+            responsavelParentesco: 'Responsável Legal',
+          }),
+        });
+      } catch (_) {}
+    }
     setSinalizacaoSucesso(true);
     setTimeout(() => {
       setSinalizacaoSucesso(false);

@@ -1,14 +1,29 @@
-import React, { useState, useRef } from 'react';
-import { User, Mail, Calendar, Baby, CheckCircle, Camera, Trash2, Sparkles, ShieldAlert } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { User, Mail, Calendar, Baby, CheckCircle, Camera, Trash2, Sparkles, ShieldAlert, Copy, ShieldCheck } from 'lucide-react';
 
 export default function PerfilScreen({ onRedoOnboarding, onOpenDenuncia }) {
   const [nome, setNome] = useState('Mariana Silva');
   const [email, setEmail] = useState('mariana.silva@email.com');
   const [nascimento, setNascimento] = useState('1999-05-14');
   const [fase, setFase] = useState('Bebê de 2 meses');
+  const [codigoPublico, setCodigoPublico] = useState('FLR-M8R4K2');
   const [avatar, setAvatar] = useState('/img/ilustracoes/florescer.jpg');
   const [isSaved, setIsSaved] = useState(false);
   const [saveMessage, setSaveMessage] = useState('');
+
+  useEffect(() => {
+    try {
+      const sessao = JSON.parse(localStorage.getItem('floravel_mae_sessao') || '{}');
+      if (sessao?.nome) setNome(sessao.nome);
+      if (sessao?.email) setEmail(sessao.email);
+      if (sessao?.dataNascimento) setNascimento(sessao.dataNascimento);
+      if (sessao?.codigoPublico) setCodigoPublico(sessao.codigoPublico);
+      else {
+        const storedCode = localStorage.getItem('floravel_codigo_publico');
+        if (storedCode) setCodigoPublico(storedCode);
+      }
+    } catch (_) {}
+  }, []);
 
   const fileInputRef = useRef(null);
 
@@ -65,7 +80,30 @@ export default function PerfilScreen({ onRedoOnboarding, onOpenDenuncia }) {
           </div>
           <div className="mt-2">
             <h2 className="text-[28px] font-fraunces font-bold text-gray1">{nome}</h2>
-            <p className="text-[16px] text-gray3 mb-4">Mãe • {fase}</p>
+            <p className="text-[16px] text-gray3 mb-2">Mãe • {fase}</p>
+
+            <div className="mb-4 flex flex-wrap items-center justify-center md:justify-start gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  const formatted = `#${String(codigoPublico || 'FLR-M8R4K2').replace(/^#/, '')}`;
+                  navigator.clipboard?.writeText(formatted).catch(() => {});
+                  setSaveMessage(`Código público ${formatted} copiado!`);
+                  setIsSaved(true);
+                  setTimeout(() => setIsSaved(false), 3000);
+                }}
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EBF3ED] border border-[#294D33]/20 text-xs font-bold text-[#294D33] hover:bg-[#dceadf] transition cursor-pointer"
+                title="Identificador público opaco: protege seu CPF e UUID interno"
+              >
+                <ShieldCheck size={14} />
+                <span>Código Público:</span>
+                <span className="font-mono">#{String(codigoPublico || 'FLR-M8R4K2').replace(/^#/, '')}</span>
+                <Copy size={12} className="opacity-70" />
+              </button>
+              <span className="text-[11px] text-gray3">
+                (protege seu CPF e ID interno em rodas e denúncias)
+              </span>
+            </div>
 
             <input 
               type="file" 

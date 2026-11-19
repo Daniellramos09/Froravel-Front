@@ -7,6 +7,9 @@ import {
 } from 'lucide-react';
 import DenunciaModal from '../Safety/DenunciaModal';
 
+const isLocal = typeof window !== 'undefined' && ['localhost', '127.0.0.1'].includes(window.location.hostname);
+const API_BASE = import.meta.env.VITE_API_URL || (isLocal ? 'http://localhost:8080' : '');
+
 // Gerenciador singleton de câmera: evita pedir permissão 2x (transição lobby -> chamada ou StrictMode)
 const camManager = {
   stream: null,
@@ -173,7 +176,7 @@ export default function MeetingRoomModal({
 
     const syncInterval = setInterval(async () => {
       try {
-        const res = await fetch('http://localhost:8080/api/sala-ao-vivo/estado');
+        const res = await fetch(`${API_BASE}/api/sala-ao-vivo/estado`);
         if (res.ok) {
           const estado = await res.json();
           if (Array.isArray(estado.mensagens) && estado.mensagens.length > 0) {
@@ -305,7 +308,7 @@ export default function MeetingRoomModal({
     } catch (_) {}
 
     try {
-      await fetch('http://localhost:8080/api/sala-ao-vivo/mensagens', {
+      await fetch(`${API_BASE}/api/sala-ao-vivo/mensagens`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ remetente: 'Mariana Silva (Mãe)', texto, isHost: false })

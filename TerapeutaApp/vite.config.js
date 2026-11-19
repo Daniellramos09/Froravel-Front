@@ -26,17 +26,20 @@ export default defineConfig({
         ],
       },
       workbox: {
-        // Só o essencial entra no cache de instalação; as fotos são guardadas conforme aparecem
+        skipWaiting: true,
+        clientsClaim: true,
+        cleanupOutdatedCaches: true,
         globPatterns: ['**/*.{js,css,html}', 'icons/*.png', 'img/fotoheader/logo.png'],
         navigateFallback: '/index.html',
         maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
         runtimeCaching: [
           {
             urlPattern: ({ url, sameOrigin }) => sameOrigin && url.pathname.startsWith('/img/'),
-            handler: 'CacheFirst',
+            handler: 'NetworkFirst',
             options: {
-              cacheName: 'imagens',
-              expiration: { maxEntries: 80, maxAgeSeconds: 30 * 24 * 60 * 60 },
+              cacheName: 'imagens-v2',
+              networkTimeoutSeconds: 3,
+              expiration: { maxEntries: 80, maxAgeSeconds: 7 * 24 * 60 * 60 },
             },
           },
         ],
