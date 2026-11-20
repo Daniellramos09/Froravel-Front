@@ -281,7 +281,16 @@ export default function LoginScreen({ initialMode = 'login' }) {
     }
 
     if (!API_BASE) {
-      setErroLogin('Servidor de autenticação ainda não configurado na nuvem. Use o Acesso Rápido Demo Day abaixo para navegar.');
+      const demoAuthData = {
+        usuarioId: `demo-${papel}`,
+        perfilId: `demo-${papel}`,
+        codigoPublico: papel === 'terapeuta' ? 'FLR-P14H90' : papel === 'rh' ? 'FLR-RH01' : 'FLR-M2C8R4',
+        nome: emailLimpo.split('@')[0] || 'Mariana Silva',
+        email: emailLimpo,
+        tipoPerfil: papel === 'terapeuta' ? 'PSICOLOGO' : papel === 'rh' ? 'RH' : 'MAE',
+      };
+      salvarSessaoLocal(demoAuthData, papel);
+      navigateToApp(papel, demoAuthData);
       return;
     }
 
@@ -470,7 +479,16 @@ export default function LoginScreen({ initialMode = 'login' }) {
     }
 
     if (!API_BASE) {
-      setErroCadastro('Servidor de cadastro indisponível neste ambiente. Use o Acesso Rápido Demo Day para testar.');
+      const demoAuthData = {
+        usuarioId: `demo-${papel}`,
+        perfilId: `demo-${papel}`,
+        codigoPublico: papel === 'terapeuta' ? 'FLR-P14H90' : papel === 'rh' ? 'FLR-RH01' : 'FLR-M2C8R4',
+        nome: formCadastro.nome.trim() || 'Mariana Silva',
+        email: formCadastro.email.trim().toLowerCase(),
+        tipoPerfil: papel === 'terapeuta' ? 'PSICOLOGO' : papel === 'rh' ? 'RH' : 'MAE',
+      };
+      salvarSessaoLocal(demoAuthData, papel);
+      navigateToApp(papel, demoAuthData);
       return;
     }
 

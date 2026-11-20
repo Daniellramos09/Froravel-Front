@@ -293,7 +293,7 @@ function AppContent() {
             import.meta.env.VITE_LANDING_URL ||
             (typeof window !== 'undefined' && ['localhost', '127.0.0.1'].includes(window.location.hostname)
               ? 'http://localhost:5173'
-              : 'https://froravel-lading.vercel.app')
+              : 'https://froravel-front.vercel.app')
           }
           className="flex items-center justify-between px-3.5 py-2 mx-2 mb-4 rounded-xl text-xs font-semibold text-[#516B55] bg-[#FCF7F9] hover:bg-[#F4DDE5]/60 border border-[#E8A9BB]/40 transition"
           title="Voltar para a Landing Page principal"
@@ -386,7 +386,7 @@ function AppContent() {
             import.meta.env.VITE_LANDING_URL ||
             (typeof window !== 'undefined' && ['localhost', '127.0.0.1'].includes(window.location.hostname)
               ? 'http://localhost:5173'
-              : 'https://froravel-lading.vercel.app');
+              : 'https://froravel-front.vercel.app');
           window.location.href = landingTarget;
         }}
         onCancel={() => setIsLogoutModalOpen(false)}
