@@ -5,36 +5,38 @@ import { getIllustrationBgClass } from '../../utils/illustrationFrame';
 const isLocal = typeof window !== 'undefined' && ['localhost', '127.0.0.1'].includes(window.location.hostname);
 const API_BASE = import.meta.env.VITE_API_URL || (isLocal ? 'http://localhost:8080' : '');
 
+// Escala de Depressão Pós-parto de Edimburgo (EPDS — Cox, Holden & Sagovsky, 1987; Augusto et al., 1996 / DGS, 2005)
+// Itens 1, 2 e 4: cotação direta (0, 1, 2, 3) | Itens 3, 5, 6, 7, 8, 9 e 10: cotação inversa (3, 2, 1, 0) na ordem original
 const QUIZ_QUESTIONS = [
   {
     id: 1,
-    text: "Como tem estado o seu humor e a sua leveza nos últimos dias?",
+    text: "Nos últimos 7 dias, tenho sido capaz de rir e ver o lado divertido das coisas:",
     options: [
       {
         value: 0,
-        title: "Me sinto leve e presente",
+        title: "Tanto como antes",
         message: "Consigo sorrir e aproveitar pequenos momentos com meu bebê.",
         img: "/img/ilustracoes/florescer.jpg",
-        tag: "Bem e estável"
+        tag: "Estável"
       },
       {
         value: 1,
-        title: "Oscilando um pouco",
-        message: "Tenho bons momentos, mas o cansaço às vezes pesa no fim do dia.",
+        title: "Menos do que antes",
+        message: "Ainda tenho bons momentos, mas com menos frequência do que costumava.",
         img: "/img/ilustracoes/autocuidado.jpg",
-        tag: "Um pouco cansada"
+        tag: "Um pouco menos"
       },
       {
         value: 2,
-        title: "Tem sido difícil sorrir",
-        message: "Sinto que a alegria está distante e quase não tenho energia.",
+        title: "Muito menos do que antes",
+        message: "Tem sido difícil encontrar leveza ou motivos para sorrir no dia a dia.",
         img: "/img/ilustracoes/pausa.jpg",
-        tag: "Sobrecarregada"
+        tag: "Bem menos"
       },
       {
         value: 3,
-        title: "Me sinto esgotada e triste",
-        message: "Um vazio constante no peito, preciso muito de escuta e colo.",
+        title: "Nunca",
+        message: "Não tenho conseguido rir ou sentir leveza nos últimos dias.",
         img: "/img/ilustracoes/acolhimento.jpg",
         tag: "Preciso de apoio"
       }
@@ -42,307 +44,307 @@ const QUIZ_QUESTIONS = [
   },
   {
     id: 2,
-    text: "Quando surge uma brecha na rotina, você consegue descansar?",
+    text: "Nos últimos 7 dias, tenho tido esperança no futuro:",
     options: [
       {
         value: 0,
-        title: "Sim, consigo relaxar",
-        message: "Consigo desligar a mente e recuperar minhas forças.",
-        img: "/img/ilustracoes/florescer.jpg",
-        tag: "Descanso tranquilo"
-      },
-      {
-        value: 1,
-        title: "Descanso aos poucos",
-        message: "Durmo leve, sempre alerta aos barulhos da casa.",
-        img: "/img/ilustracoes/mae-bebe-tranquilidade.jpg",
-        tag: "Sono leve"
-      },
-      {
-        value: 2,
-        title: "Mente acelerada",
-        message: "Mesmo quando o bebê dorme, minha cabeça não para de pensar.",
-        img: "/img/ilustracoes/pausa.jpg",
-        tag: "Ansiedade"
-      },
-      {
-        value: 3,
-        title: "Exaustão profunda",
-        message: "Não consigo pregar o olho, sinto meu corpo no limite.",
-        img: "/img/ilustracoes/acolhimento.jpg",
-        tag: "No limite"
-      }
-    ]
-  },
-  {
-    id: 3,
-    text: "Você sente que tem com quem dividir o peso da rotina?",
-    options: [
-      {
-        value: 0,
-        title: "Me sinto bem amparada",
-        message: "Tenho pessoas por perto que me escutam sem julgar.",
-        img: "/img/ilustracoes/roda.jpg",
-        tag: "Com rede de apoio"
-      },
-      {
-        value: 1,
-        title: "Tenho ajuda pontual",
-        message: "Alguém ajuda com o bebê, mas sinto falta de conversar sobre mim.",
-        img: "/img/ilustracoes/rede.jpg",
-        tag: "Apoio parcial"
-      },
-      {
-        value: 2,
-        title: "Me sinto incompreendida",
-        message: "Há pessoas ao redor, mas ninguém entende o que estou passando.",
-        img: "/img/ilustracoes/diario.jpg",
-        tag: "Solitária"
-      },
-      {
-        value: 3,
-        title: "Carrego tudo sozinha",
-        message: "Sinto que tudo depende exclusivamente de mim o tempo inteiro.",
-        img: "/img/ilustracoes/acolhimento.jpg",
-        tag: "Sem rede"
-      }
-    ]
-  },
-  {
-    id: 4,
-    text: "Como está o seu coração em relação ao futuro e aos seus planos?",
-    options: [
-      {
-        value: 0,
-        title: "Cheia de esperança",
-        message: "Sei que é uma fase intensa e confio que dias mais leves virão.",
+        title: "Tanta como sempre tive",
+        message: "Confio que esta fase intensa vai se equilibrar e dias mais leves virão.",
         img: "/img/ilustracoes/florescer.jpg",
         tag: "Confiante"
       },
       {
         value: 1,
-        title: "Vivendo um dia de cada vez",
-        message: "Prefiro focar apenas no hoje para não ficar ansiosa.",
+        title: "Menos do que costumava ter",
+        message: "Sigo um dia de cada vez, às vezes com menos entusiasmo do que antes.",
         img: "/img/ilustracoes/autocuidado.jpg",
-        tag: "Passo a passo"
+        tag: "Oscilando"
       },
       {
         value: 2,
-        title: "Com medo e insegurança",
-        message: "Me cobro muito e tenho receio de não dar conta de tudo.",
+        title: "Muito menos do que costumava ter",
+        message: "Sinto dificuldade de enxergar melhora ou fazer planos para frente.",
         img: "/img/ilustracoes/diario.jpg",
-        tag: "Insegura"
+        tag: "Desanimada"
       },
       {
         value: 3,
-        title: "Com muita angústia",
-        message: "O amanhã me assusta e sinto que preciso de ajuda profissional.",
+        title: "Quase nenhuma",
+        message: "O futuro parece muito pesado e sinto que preciso de acolhimento.",
         img: "/img/ilustracoes/acolhimento.jpg",
         tag: "Acolhimento urgente"
       }
     ]
   },
   {
-    id: 5,
-    text: "Nos últimos 7 dias, você tem se culpado sem necessidade quando algo dá errado?",
+    id: 3,
+    text: "Nos últimos 7 dias, tenho me culpado sem necessidade quando as coisas dão errado:",
     options: [
       {
-        value: 0,
-        title: "Não, de jeito nenhum",
-        message: "Entendo que imprevistos acontecem e não carrego essa culpa.",
-        img: "/img/ilustracoes/florescer.jpg",
-        tag: "Sem culpa"
-      },
-      {
-        value: 1,
-        title: "Raramente",
-        message: "Às vezes me cobro, mas logo consigo me acolher.",
-        img: "/img/ilustracoes/autocuidado.jpg",
-        tag: "Cobrança leve"
+        value: 3,
+        title: "Sim, na maioria das vezes",
+        message: "Carrego a sensação constante de que tudo que dá errado é culpa minha.",
+        img: "/img/ilustracoes/acolhimento.jpg",
+        tag: "Culpa intensa"
       },
       {
         value: 2,
         title: "Sim, algumas vezes",
-        message: "Costumo achar que a culpa é minha mesmo quando não é.",
+        message: "Costumo me cobrar bastante mesmo quando não está no meu controle.",
         img: "/img/ilustracoes/pausa.jpg",
         tag: "Autocobrança"
       },
       {
-        value: 3,
-        title: "Sim, na maioria das vezes",
-        message: "Me sinto culpada por quase tudo que acontece ao meu redor.",
-        img: "/img/ilustracoes/acolhimento.jpg",
-        tag: "Culpa intensa"
+        value: 1,
+        title: "Raramente",
+        message: "Às vezes me cobro um pouco, mas logo consigo me acolher.",
+        img: "/img/ilustracoes/autocuidado.jpg",
+        tag: "Cobrança leve"
+      },
+      {
+        value: 0,
+        title: "Não, nunca",
+        message: "Entendo que imprevistos acontecem e não carrego essa culpa.",
+        img: "/img/ilustracoes/florescer.jpg",
+        tag: "Sem culpa"
       }
     ]
   },
   {
-    id: 6,
-    text: "Você tem se sentido ansiosa ou preocupada sem um motivo claro?",
+    id: 4,
+    text: "Nos últimos 7 dias, tenho estado ansiosa ou preocupada sem motivo:",
     options: [
       {
         value: 0,
-        title: "Não, estou tranquila",
-        message: "Minhas preocupações são proporcionais à rotina com o bebê.",
+        title: "Não, nunca",
+        message: "Minhas preocupações têm sido proporcionais à rotina com o bebê.",
         img: "/img/ilustracoes/mae-bebe-tranquilidade.jpg",
-        tag: "Em paz"
+        tag: "Tranquila"
       },
       {
         value: 1,
         title: "Quase nunca",
-        message: "Apenas em momentos pontuais do dia.",
+        message: "Apenas em momentos pontuais ao longo da semana.",
         img: "/img/ilustracoes/autocuidado.jpg",
-        tag: "Leve alerta"
+        tag: "Pontual"
       },
       {
         value: 2,
         title: "Sim, às vezes",
-        message: "Sinto um aperto ou inquietação mesmo quando está tudo bem.",
+        message: "Sinto inquietação ou aperto no peito mesmo quando está tudo bem.",
         img: "/img/ilustracoes/pausa.jpg",
         tag: "Ansiedade"
       },
       {
         value: 3,
-        title: "Sim, com muita frequência",
-        message: "A preocupação constante não me dá trégua.",
+        title: "Sim, muitas vezes",
+        message: "A preocupação constante sem motivo claro tem me acompanhado.",
         img: "/img/ilustracoes/acolhimento.jpg",
         tag: "Atenção"
       }
     ]
   },
   {
-    id: 7,
-    text: "Você tem sentido medo ou pânico repentino sem um motivo aparente?",
+    id: 5,
+    text: "Nos últimos 7 dias, tenho me sentido com medo ou muito assustada, sem motivo:",
     options: [
       {
-        value: 0,
-        title: "Não, nunca",
-        message: "Não tenho tido crises de medo ou sobressalto.",
-        img: "/img/ilustracoes/florescer.jpg",
-        tag: "Estável"
-      },
-      {
-        value: 1,
-        title: "Raramente",
-        message: "Aconteceu pouquíssimas vezes, mas logo passou.",
-        img: "/img/ilustracoes/mae-bebe-tranquilidade.jpg",
-        tag: "Pontual"
+        value: 3,
+        title: "Sim, muitas vezes",
+        message: "Tenho sentido medo repentino ou sensação de pânico com frequência.",
+        img: "/img/ilustracoes/acolhimento.jpg",
+        tag: "Acolhimento"
       },
       {
         value: 2,
-        title: "Sim, algumas vezes",
-        message: "Às vezes o coração dispara e bate um medo do nada.",
+        title: "Sim, às vezes",
+        message: "Em alguns momentos o coração acelera e bate um medo sem razão aparente.",
         img: "/img/ilustracoes/pausa.jpg",
         tag: "Sobressalto"
       },
       {
+        value: 1,
+        title: "Não, raramente",
+        message: "Aconteceu muito pouco, quase sem impacto no meu dia.",
+        img: "/img/ilustracoes/mae-bebe-tranquilidade.jpg",
+        tag: "Raro"
+      },
+      {
+        value: 0,
+        title: "Não, nunca",
+        message: "Não tenho tido sensações de medo ou susto sem motivo.",
+        img: "/img/ilustracoes/florescer.jpg",
+        tag: "Estável"
+      }
+    ]
+  },
+  {
+    id: 6,
+    text: "Nos últimos 7 dias, tenho sentido que as coisas são demais para mim:",
+    options: [
+      {
         value: 3,
-        title: "Sim, muitas vezes",
-        message: "Sinto medo ou pânico com frequência e preciso de apoio.",
+        title: "Sim, na maioria das vezes não consigo resolver",
+        message: "As tarefas e demandas parecem maiores do que minhas forças agora.",
         img: "/img/ilustracoes/acolhimento.jpg",
-        tag: "Acolhimento"
+        tag: "Exausta"
+      },
+      {
+        value: 2,
+        title: "Sim, às vezes não consigo resolver como antes",
+        message: "Sinto dificuldade de dar conta do que antes eu resolvia com mais facilidade.",
+        img: "/img/ilustracoes/diario.jpg",
+        tag: "Sobrecarregada"
+      },
+      {
+        value: 1,
+        title: "Não, na maioria das vezes resolvo facilmente",
+        message: "Mesmo cansada, consigo organizar o essencial do dia a dia.",
+        img: "/img/ilustracoes/rede.jpg",
+        tag: "Ritmo possível"
+      },
+      {
+        value: 0,
+        title: "Não, resolvo tão bem como antes",
+        message: "Tenho conseguido lidar com a rotina no meu ritmo.",
+        img: "/img/ilustracoes/roda.jpg",
+        tag: "Equilibrada"
+      }
+    ]
+  },
+  {
+    id: 7,
+    text: "Nos últimos 7 dias, tenho me sentido tão infeliz que durmo mal:",
+    options: [
+      {
+        value: 3,
+        title: "Sim, quase sempre",
+        message: "Mesmo quando o bebê dorme, a angústia não me deixa descansar.",
+        img: "/img/ilustracoes/acolhimento.jpg",
+        tag: "No limite"
+      },
+      {
+        value: 2,
+        title: "Sim, às vezes",
+        message: "Em várias noites o peso emocional atrapalha o meu sono.",
+        img: "/img/ilustracoes/pausa.jpg",
+        tag: "Sono afetado"
+      },
+      {
+        value: 1,
+        title: "Raramente",
+        message: "Só em uma ou outra noite mais difícil da semana.",
+        img: "/img/ilustracoes/mae-bebe-tranquilidade.jpg",
+        tag: "Pontual"
+      },
+      {
+        value: 0,
+        title: "Não, nunca",
+        message: "Quando tenho oportunidade, consigo dormir e descansar.",
+        img: "/img/ilustracoes/florescer.jpg",
+        tag: "Descanso tranquilo"
       }
     ]
   },
   {
     id: 8,
-    text: "Você sente que as tarefas e demandas têm se acumulado além do que consegue lidar?",
+    text: "Nos últimos 7 dias, tenho me sentido triste ou muito infeliz:",
     options: [
       {
-        value: 0,
-        title: "Consigo lidar bem",
-        message: "Mesmo com dias cheios, dou conta no meu ritmo.",
-        img: "/img/ilustracoes/roda.jpg",
-        tag: "Equilibrada"
-      },
-      {
-        value: 1,
-        title: "Na maior parte do tempo, sim",
-        message: "Às vezes aperta, mas consigo organizar o essencial.",
-        img: "/img/ilustracoes/rede.jpg",
-        tag: "Ritmo possível"
+        value: 3,
+        title: "Sim, quase sempre",
+        message: "Sinto uma tristeza profunda e constante nos últimos dias.",
+        img: "/img/ilustracoes/acolhimento.jpg",
+        tag: "Tristeza intensa"
       },
       {
         value: 2,
-        title: "Tenho tido dificuldade",
-        message: "Sinto que não estou conseguindo acompanhar tanta demanda.",
-        img: "/img/ilustracoes/diario.jpg",
-        tag: "Sobrecarregada"
+        title: "Sim, muitas vezes",
+        message: "O desânimo tem aparecido com frequência ao longo dos dias.",
+        img: "/img/ilustracoes/pausa.jpg",
+        tag: "Desanimada"
       },
       {
-        value: 3,
-        title: "Não estou dando conta",
-        message: "Tudo parece pesado demais e sinto que vou desabar.",
-        img: "/img/ilustracoes/acolhimento.jpg",
-        tag: "Exausta"
+        value: 1,
+        title: "Raramente",
+        message: "Tive momentos passageiros de tristeza, mas logo passaram.",
+        img: "/img/ilustracoes/autocuidado.jpg",
+        tag: "Passageiro"
+      },
+      {
+        value: 0,
+        title: "Não, nunca",
+        message: "Me sinto emocionalmente estável nos últimos dias.",
+        img: "/img/ilustracoes/florescer.jpg",
+        tag: "Estável"
       }
     ]
   },
   {
     id: 9,
-    text: "Nos últimos 7 dias, você se sentiu tão triste a ponto de chorar?",
+    text: "Nos últimos 7 dias, tenho me sentido tão infeliz que choro:",
     options: [
       {
-        value: 0,
-        title: "Não, não chorei por tristeza",
-        message: "Me sinto emocionalmente estável nos últimos dias.",
-        img: "/img/ilustracoes/florescer.jpg",
-        tag: "Estável"
-      },
-      {
-        value: 1,
-        title: "Apenas ocasionalmente",
-        message: "Chorei um pouco pelo cansaço, mas me senti aliviada depois.",
-        img: "/img/ilustracoes/autocuidado.jpg",
-        tag: "Desabafo leve"
+        value: 3,
+        title: "Sim, quase sempre",
+        message: "Tenho chorado muito e sinto um peso muito difícil de segurar.",
+        img: "/img/ilustracoes/acolhimento.jpg",
+        tag: "Choro frequente"
       },
       {
         value: 2,
-        title: "Sim, com frequência",
-        message: "As lágrimas têm vindo facilmente e com tristeza.",
+        title: "Sim, muitas vezes",
+        message: "As lágrimas vêm facilmente com a tristeza nos últimos dias.",
         img: "/img/ilustracoes/pausa.jpg",
         tag: "Sensível"
       },
       {
-        value: 3,
-        title: "Sim, quase todos os dias",
-        message: "Tenho chorado muito e sinto uma tristeza profunda.",
-        img: "/img/ilustracoes/acolhimento.jpg",
-        tag: "Tristeza intensa"
+        value: 1,
+        title: "Só às vezes",
+        message: "Chorei pontualmente pelo cansaço ou emoção do puerpério.",
+        img: "/img/ilustracoes/autocuidado.jpg",
+        tag: "Desabafo leve"
+      },
+      {
+        value: 0,
+        title: "Não, nunca",
+        message: "Não tenho chorado por tristeza nos últimos 7 dias.",
+        img: "/img/ilustracoes/florescer.jpg",
+        tag: "Estável"
       }
     ]
   },
   {
     id: 10,
-    text: "Nos últimos 7 dias, a dor foi tão grande a ponto de passar pela sua cabeça fazer mal a si mesma?",
+    text: "Nos últimos 7 dias, tive ideias de fazer mal a mim mesma:",
     options: [
       {
-        value: 0,
-        title: "Não, nunca",
-        message: "Mesmo com o cansaço, não tive pensamentos de me machucar.",
-        img: "/img/ilustracoes/florescer.jpg",
-        tag: "Segura"
-      },
-      {
-        value: 1,
-        title: "Raramente passou pela mente",
-        message: "Foi um pensamento rápido em um momento de exaustão extrema.",
-        img: "/img/ilustracoes/autocuidado.jpg",
-        tag: "Preciso de escuta"
+        value: 3,
+        title: "Sim, muitas vezes",
+        message: "Estou sofrendo muito agora e preciso de ajuda e proteção imediata.",
+        img: "/img/ilustracoes/acolhimento.jpg",
+        tag: "Apoio imediato"
       },
       {
         value: 2,
-        title: "Às vezes penso nisso",
+        title: "Por vezes",
         message: "Sinto um peso muito difícil de carregar sozinha e preciso de amparo.",
         img: "/img/ilustracoes/rede.jpg",
         tag: "Acolhimento prioritário"
       },
       {
-        value: 3,
-        title: "Sim, com frequência",
-        message: "Estou sofrendo muito agora e preciso de ajuda e proteção imediata.",
-        img: "/img/ilustracoes/acolhimento.jpg",
-        tag: "Apoio imediato"
+        value: 1,
+        title: "Muito raramente",
+        message: "Foi um pensamento rápido em um momento de exaustão extrema.",
+        img: "/img/ilustracoes/autocuidado.jpg",
+        tag: "Preciso de escuta"
+      },
+      {
+        value: 0,
+        title: "Nunca",
+        message: "Mesmo com o cansaço, não tive pensamentos de me machucar.",
+        img: "/img/ilustracoes/florescer.jpg",
+        tag: "Segura"
       }
     ]
   }
@@ -559,8 +561,11 @@ export default function CheckInScreen({ setActiveTab }) {
         <h2 className="text-2xl sm:text-3xl font-fraunces font-bold text-stone-900 mb-3">
           Obrigada por se escutar hoje.
         </h2>
-        <p className="text-sm sm:text-base text-stone-600 leading-relaxed mb-8">
+        <p className="text-sm sm:text-base text-stone-600 leading-relaxed mb-4">
           Qualquer que seja o seu sentir, você não precisa dar conta de tudo sozinha. Separamos rodas de conversa e psicólogas prontas para acolher você.
+        </p>
+        <p className="text-xs text-stone-500 leading-relaxed mb-8">
+          Baseado na Escala de Depressão Pós-Parto de Edimburgo (EPDS — Cox, Holden &amp; Sagovsky, 1987). Esta triagem complementa, mas não substitui, a avaliação clínica profissional.
         </p>
         <div className="flex flex-col sm:flex-row items-center gap-3 justify-center w-full">
           <button
