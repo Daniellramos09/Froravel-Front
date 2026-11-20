@@ -4,8 +4,9 @@ import tailwindcss from '@tailwindcss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig(() => {
-  // Na Vercel ou ambientes CI sem suporte a SW Rollup bundling, desabilita a geração pesada do PWA
-  const disablePwa = process.env.VERCEL === '1' || process.env.DISABLE_PWA === 'true'
+  // Em ambientes de CI (GitHub Actions, etc.) ou Vercel, o Rollup nativo da Workbox falha procurando @rollup/rollup-linux-x64-gnu.
+  // Desabilitamos o PWA nesses ambientes ou quando DISABLE_PWA=true.
+  const disablePwa = !!process.env.VERCEL || !!process.env.CI || process.env.DISABLE_PWA === 'true'
 
   return {
     plugins: [
