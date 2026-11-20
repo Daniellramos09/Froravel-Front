@@ -147,21 +147,21 @@ export default function OrionixNavbar({ onOpenTriagem }) {
                       Ambientes da Plataforma
                     </p>
                   </div>
-                  <Link
-                    to="/login?perfil=mae"
+                  <a
+                    href={APP_LINKS.mae}
                     onClick={() => setPortalOpen(false)}
                     className="flex items-start justify-between gap-2 p-2.5 rounded-2xl hover:bg-[#F9F8F6] transition group"
                   >
                     <div>
                       <p className="text-xs font-bold text-[#294D33]">Espaço da Mãe</p>
                       <p className="text-[11px] text-[#516B55] mt-0.5">
-                        Diário emocional, triagem EPDS, pausa e rede de apoio
+                        Diário emocional, triagem EPDS, denúncias e acolhimento
                       </p>
                     </div>
                     <ArrowUpRight size={14} className="text-[#6E9473] shrink-0 mt-0.5" />
-                  </Link>
-                  <Link
-                    to="/login?perfil=terapeuta"
+                  </a>
+                  <a
+                    href={APP_LINKS.terapeuta}
                     onClick={() => setPortalOpen(false)}
                     className="flex items-start justify-between gap-2 p-2.5 rounded-2xl hover:bg-[#F9F8F6] transition group"
                   >
@@ -172,9 +172,9 @@ export default function OrionixNavbar({ onOpenTriagem }) {
                       </p>
                     </div>
                     <ArrowUpRight size={14} className="text-[#6E9473] shrink-0 mt-0.5" />
-                  </Link>
-                  <Link
-                    to="/login?perfil=rh"
+                  </a>
+                  <a
+                    href={APP_LINKS.rh}
                     onClick={() => setPortalOpen(false)}
                     className="flex items-start justify-between gap-2 p-2.5 rounded-2xl hover:bg-[#F9F8F6] transition group"
                   >
@@ -185,7 +185,7 @@ export default function OrionixNavbar({ onOpenTriagem }) {
                       </p>
                     </div>
                     <ArrowUpRight size={14} className="text-[#6E9473] shrink-0 mt-0.5" />
-                  </Link>
+                  </a>
                   <div className="pt-1 border-t border-stone-100">
                     <Link
                       to="/"
@@ -201,14 +201,13 @@ export default function OrionixNavbar({ onOpenTriagem }) {
             </div>
 
             {/* Orionix Primary Pill Button */}
-            <button
-              type="button"
-              onClick={onOpenTriagem}
+            <a
+              href={APP_LINKS.mae}
               className="inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-full bg-[#294D33] hover:bg-[#1E3926] text-[#FCF7F9] text-xs font-semibold tracking-wide transition-all duration-300 shadow-[0_4px_14px_rgba(41,77,51,0.22)] cursor-pointer whitespace-nowrap shrink-0"
             >
               <span className="w-1.5 h-1.5 rounded-full bg-[#D98A9C] shrink-0" />
               <span>Começar acolhimento</span>
-            </button>
+            </a>
 
             {/* Mobile Hamburger */}
             <button
