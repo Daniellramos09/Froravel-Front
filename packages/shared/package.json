@@ -1,0 +1,12 @@
+{
+  "name": "@floravel/shared",
+  "version": "1.0.0",
+  "description": "Contratos, tokens e utilitários compartilhados entre as aplicações Florável",
+  "type": "module",
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./appLinks": "./src/appLinks.js",
+    "./tokens": "./src/tokens.js"
+  }
+}

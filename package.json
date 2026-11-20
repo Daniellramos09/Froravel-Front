@@ -1,0 +1,33 @@
+{
+  "name": "floravel-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Monorepo Corporativo da Plataforma Florável (Landing, Mãe, Psicólogo, RH)",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:landing": "npm --workspace=@floravel/landing run dev",
+    "dev:mae": "npm --workspace=@floravel/mae run dev",
+    "dev:psicologo": "npm --workspace=@floravel/psicologo run dev",
+    "dev:rh": "npm --workspace=@floravel/rh run dev",
+    "build:landing": "npm --workspace=@floravel/landing run build",
+    "build:mae": "npm --workspace=@floravel/mae run build",
+    "build:psicologo": "npm --workspace=@floravel/psicologo run build",
+    "build:rh": "npm --workspace=@floravel/rh run build",
+    "build:all": "npm run build --workspaces --if-present",
+    "lint:all": "npm run lint --workspaces --if-present",
+    "test:all": "npm run test --workspaces --if-present",
+    "test:landing": "npm --workspace=@floravel/landing run test"
+  },
+  "devDependencies": {
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/jest-dom": "^8.0.0",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.13",
+    "concurrently": "^9.1.2",
+    "jsdom": "^31.0.1",
+    "vitest": "^5.1.1"
+  }
+}

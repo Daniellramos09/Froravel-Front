@@ -1,111 +1,90 @@
-# 🌸 Floravel
+# 🌸 Florável — Frontend Monorepo
 
-> Uma plataforma de apoio, acolhimento e auxílio no tratamento de mães que enfrentam a depressão pós-parto.
-
-O **Floravel** é um projeto desenvolvido para conscientizar, acolher e conectar mães que sofrem de depressão pós-parto a ferramentas de suporte, profissionais de saúde e redes de apoio. O objetivo principal é facilitar o acesso ao tratamento de forma humanizada, segura e acessível.
+> Ecossistema frontend de saúde perinatal e suporte emocional materno, estruturado em arquitetura Monorepo corporativa (Workspaces) conectada ao backend Spring Boot em Domain-Driven Design (DDD).
 
 ---
 
-## 🚀 Tecnologias Utilizadas
+## 🏛️ Arquitetura do Ecossistema
 
-O projeto utiliza uma stack moderna para garantir performance, escalabilidade e segurança dos dados das usuárias:
-
-*   **Front-end:** React
-*   **Back-end:** Node.js & Java
-*   **Banco de Dados:** MySQL
-*   **Estilização:** TailwindCSS
----
-
-## 🛠️ Como Iniciar o Projeto
-
-Siga as instruções abaixo para rodar o projeto localmente em sua máquina.
-
-### Pré-requisitos
-
-Antes de começar, você vai precisar ter instalado em seu computador:
-*   [Git](https://git-scm.com)
-*   [Node.js](https://nodejs.org) (versão LTS recomendada) ou o gerenciador da sua stack (Docker, Python, etc.)
-
-### 1. Clonar o Repositório
-
-Abra o terminal e execute o comando abaixo:
-
-```bash
-git clone https://github.com/gabrielZS1/Froravel-Front.git
-
-cd FloravelFront
-```
-
-### 2. Configurar Variáveis de Ambiente
-
-Crie um arquivo chamado `.env` na raiz do projeto (utilize o arquivo `.env.example` como base, se disponível).
-
-```bash
-cp .env.example .env
-```
-
-Abra o arquivo `.env` e configure suas variáveis (como conexões de banco de dados e chaves de API):
-
-```env
-# Exemplo de configuração
-PORT=3000
-DATABASE_URL="sua_string_de_conexao"
-```
-*(Lembre-se: use `#` para adicionar comentários em seu arquivo `.env` e nunca envie suas chaves reais para o GitHub).*
-
-### 3. Instalar as Dependências
-
-```bash
-# Se o projeto usar npm
-npm install
-
-# Se o projeto usar yarn
-yarn install
-```
-
-### 4. Executar a Aplicação
-
-```bash
-# Se o projeto usar npm
-npm run dev
-
-# Se o projeto usar yarn
-yarn dev
-```
-
-A aplicação estará disponível no seu navegador através do endereço `http://localhost:3000` (ou a porta configurada no seu `.env`).
-
----
-
-## 📐 Estrutura de Páginas e Rotas ( em desenvolvimento )
-
-Abaixo está o mapeamento inicial da estrutura de páginas configurada no ecossistema do Floravel:
+O repositório é organizado no padrão corporativo **Workspaces (`apps/` + `packages/`)**, separando claramente as 4 aplicações do negócio e compartilhando contratos e tokens de design:
 
 ```text
-├── 🏠 /             -> Página Inicial (Apresentação, estatísticas e conscientização)
-├── 📝 /cadastro     -> Fluxo de registro de mães e profissionais de saúde
-├── 🔐 /login        -> Autenticação segura na plataforma
-├── 📊 /dashboard    -> Espaço privado da mãe (Acompanhamento de humor, diário e tarefas)
-├── 🩺 /profissionais-> Listagem e agendamento com psicólogos/psiquiatras parceiros
-└── 👥 /comunidade   -> Fórum moderado de apoio mútuo
+floravel-front/
+├── apps/
+│   ├── landing/                   # Portal Institucional & Conversão (B2C / B2B / ESG)
+│   ├── mae/                       # PWA da Mãe: Diário, Humor, Rodas e Consultas
+│   ├── psicologo/                 # PWA do Terapeuta: Agenda, Sala de Acolhimento e Gestão
+│   └── rh/                        # Dashboard Corporativo B2B: Métricas de Clima e LGPD
+│
+├── packages/
+│   └── shared/                    # Contratos de rotas (appLinks), tokens e utilitários
+│
+├── package.json                   # Gerenciador raiz do Monorepo (npm workspaces)
+└── README.md
 ```
 
 ---
 
-## 🤝 Como Contribuir
+## 🚀 Como Executar o Projeto
 
-Contribuições fazem a comunidade open source um lugar incrível para aprender, inspirar e criar. Toda ajuda para o Floravel é muito bem-vinda!
+### 1. Instalação de Dependências
+Na raiz do repositório, instale todas as dependências de todos os apps e pacotes com um único comando:
 
-Como o projeto utiliza o padrão de **Conventional Commits**, siga os passos abaixo para contribuir:
+```bash
+npm install
+```
 
-1. Faça um **Fork** do projeto.
-2. Crie uma Branch para sua funcionalidade (`git checkout -b feat/nova-funcionalidade`).
-3. Faça o commit das suas alterações utilizando mensagens padronizadas (ex: `feat(pages): estruturar nova tela de perfil`).
-4. Envie a Branch para o seu Fork (`git push origin feat/nova-funcionalidade`).
-5. Abra um **Pull Request** detalhando as alterações.
+### 2. Rodar Aplicações em Desenvolvimento
+
+Você pode iniciar cada aplicação individualmente a partir da raiz:
+
+```bash
+# Iniciar a Landing Page (porta padrão 5173)
+npm run dev:landing
+
+# Iniciar o App da Mãe (porta padrão 5174)
+npm run dev:mae
+
+# Iniciar o Portal do Psicólogo (porta padrão 5175)
+npm run dev:psicologo
+
+# Iniciar o Dashboard Corporativo RH (porta padrão 5176)
+npm run dev:rh
+```
+
+### 3. Build de Produção
+
+```bash
+# Compilar todas as 4 aplicações simultaneamente
+npm run build:all
+
+# Ou compilar apenas uma aplicação específica
+npm run build:landing
+npm run build:mae
+npm run build:psicologo
+npm run build:rh
+```
 
 ---
 
-## 💜 Agradecimentos
+## 🌐 Mapeamento com os Domínios do Backend (Spring Boot)
 
-A depressão pós-parto é uma realidade silenciosa que afeta milhares de famílias. Desenvolver o **Floravel** é o nosso passo em direção a um ecossistema de saúde mental materno mais acolhedor e sem julgamentos. Obrigado por fazer parte disso!
+| Domínio Backend Java | Aplicação Frontend Responsável | Funcionalidade Principal |
+| :--- | :--- | :--- |
+| `domain/triagem` | `apps/mae` & `apps/rh` | Escala de Edimburgo (EPDS) e relatórios de risco anônimos |
+| `domain/rodaconversa` | `apps/mae` & `apps/psicologo` | Rodas de escuta abertas e mediação clínica |
+| `domain/agendamento` | `apps/mae` & `apps/psicologo` | Escolha de especialista e gestão de horários |
+| `domain/reuniao` | `apps/psicologo` | Sala virtual de acolhimento e prontuário ético |
+| `domain/rh` | `apps/rh` & `apps/landing` | Gestão de licenças corporativas, planos PME e métricas |
+| `domain/pagamento` | `apps/psicologo` & `apps/rh` | Repasse integral (R$ 29,90) e faturamento corporativo |
+| `domain/validacaogoverno` | `apps/psicologo` | Validação de CRP e conformidade com CFP |
+
+---
+
+## 🎨 Paleta e Tokens de Design (`@floravel/shared`)
+
+* **Canvas Linho Suave:** `#FAF7F2`
+* **Verde Botânico Profundo:** `#1D382B`
+* **Verde Sálvia Clínico:** `#73937E` / `#EBF1ED`
+* **Rosa Acolhimento:** `#F4C4D4` / `#FDF2F5` / `#C96E82`
+* **Grafite Suave:** `#27272A` / `#52525B`

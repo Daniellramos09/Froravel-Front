@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Anatomia de uma Requisição Limpa</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #000000;
+      color: #ffffff;
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      width: 720px;
+      height: 940px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 44px 44px 36px;
+      position: relative;
+    }
+
+    /* Header */
+    .header {
+      position: relative;
+      z-index: 2;
+    }
+    .brand-tag {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+    .brand-icon {
+      background: #ffffff;
+      color: #000000;
+      font-weight: 800;
+      font-size: 13px;
+      width: 26px;
+      height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+    }
+    .brand-source {
+      font-size: 13px;
+      color: #777777;
+      letter-spacing: 0.5px;
+    }
+    h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 38px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      line-height: 1.15;
+      margin-bottom: 8px;
+    }
+    .subtitle {
+      font-size: 15px;
+      color: #888888;
+      font-weight: 400;
+    }
+
+    /* Flow Area */
+    .flow-container {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin: 16px 0;
+      z-index: 2;
+    }
+
+    /* Central Spine Line */
+    .spine-line {
+      position: absolute;
+      left: 50%;
+      top: 15px;
+      bottom: 15px;
+      width: 2px;
+      background: #1c1c1c;
+      transform: translateX(-50%);
+      z-index: 1;
+    }
+
+    /* Flow Step */
+    .step-row {
+      display: flex;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+      width: 100%;
+    }
+
+    .step-card {
+      width: 44%;
+      border: 1.5px solid #242424;
+      background: #000000;
+      border-radius: 14px;
+      padding: 13px 18px;
+      transition: all 0.4s ease;
+    }
+
+    .step-card.active {
+      border-color: #ffffff;
+      box-shadow: 0 0 25px rgba(255, 255, 255, 0.2);
+    }
+
+    .step-card.left {
+      margin-right: auto;
+      text-align: left;
+    }
+
+    .step-card.right {
+      margin-left: auto;
+      text-align: left;
+    }
+
+    .node-number {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #000000;
+      border: 2px solid #2a2a2a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: #777777;
+      z-index: 3;
+      transition: all 0.4s ease;
+    }
+
+    .node-number.active {
+      background: #ffffff;
+      color: #000000;
+      border-color: #ffffff;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 3px;
+    }
+
+    .card-desc {
+      font-size: 12px;
+      color: #8e8e93;
+      line-height: 1.35;
+    }
+
+    /* Footer */
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 14px;
+      border-top: 1px solid #1a1a1a;
+      z-index: 2;
+    }
+    .footer-quote {
+      font-size: 13px;
+      font-weight: 500;
+      color: #cccccc;
+    }
+    .footer-brand {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    /* Screen Record Helper Bar */
+    .record-helper {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 11px;
+      color: #333333;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="brand-tag">
+      <div class="brand-icon">FL</div>
+      <span class="brand-source">floravel.app • engenharia de software</span>
+    </div>
+    <h1>Anatomia de uma Requisição Limpa</h1>
+    <div class="subtitle">Cada camada responde apenas pelo que foi designada a fazer.</div>
+  </div>
+
+  <div class="flow-container">
+    <div class="spine-line"></div>
+
+    <!-- Step 1 -->
+    <div class="step-row" id="row-1">
+      <div class="step-card left" id="card-1">
+        <div class="card-title">1. Cliente (React SPA)</div>
+        <div class="card-desc">Dispara HTTP com DTO estrito e token JWT no header Authorization.</div>
+      </div>
+      <div class="node-number" id="node-1">1</div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="step-row" id="row-2">
+      <div class="node-number" id="node-2">2</div>
+      <div class="step-card right" id="card-2">
+        <div class="card-title">2. Interceptor (JWT)</div>
+        <div class="card-desc">Valida assinatura HS256 e popula o contexto de segurança. Bloqueia acessos indevidos.</div>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="step-row" id="row-3">
+      <div class="step-card left" id="card-3">
+        <div class="card-title">3. Controller REST</div>
+        <div class="card-desc">Valida contrato de entrada com @Valid e mapeia o status HTTP. Zero regra de negócio.</div>
+      </div>
+      <div class="node-number" id="node-3">3</div>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="step-row" id="row-4">
+      <div class="node-number" id="node-4">4</div>
+      <div class="step-card right" id="card-4">
+        <div class="card-title">4. Service (Domínio & POO)</div>
+        <div class="card-desc">Coração das regras de negócio. Usa Enums tipados, orquestra acolhimento e agendamento.</div>
+      </div>
+    </div>
+
+    <!-- Step 5 -->
+    <div class="step-row" id="row-5">
+      <div class="step-card left" id="card-5">
+        <div class="card-title">5. Repository (MySQL)</div>
+        <div class="card-desc">Persistência segura das entidades JPA. Dados sensíveis cifrados em repouso.</div>
+      </div>
+      <div class="node-number" id="node-5">5</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-quote">Código limpo: regras no domínio, segurança na borda.</div>
+    <div class="footer-brand">FLORÁVEL</div>
+  </div>
+
+  <script>
+    let step = 1;
+    function pulse() {
+      for (let i = 1; i <= 5; i++) {
+        const card = document.getElementById('card-' + i);
+        const node = document.getElementById('node-' + i);
+        if (i === step) {
+          card.classList.add('active');
+          node.classList.add('active');
+        } else {
+          card.classList.remove('active');
+          node.classList.remove('active');
+        }
+      }
+      step = step >= 5 ? 1 : step + 1;
+    }
+    setInterval(pulse, 850);
+  </script>
+</body>
+</html>

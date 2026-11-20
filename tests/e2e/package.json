@@ -1,0 +1,15 @@
+{
+  "name": "floravel-e2e-tests",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Independent opaque-box E2E test suite (Tiers 1-4) for Florável Platform (Blocks R1-R4)",
+  "scripts": {
+    "test": "node run-e2e.mjs",
+    "test:dry-run": "node run-e2e.mjs --dry-run",
+    "test:tier1": "node run-e2e.mjs --tier=1",
+    "test:tier2": "node run-e2e.mjs --tier=2",
+    "test:tier3": "node run-e2e.mjs --tier=3",
+    "test:tier4": "node run-e2e.mjs --tier=4"
+  }
+}
