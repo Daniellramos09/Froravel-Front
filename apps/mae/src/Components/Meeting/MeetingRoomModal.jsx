@@ -6,6 +6,7 @@ import {
   Lock, Volume2, Subtitles, LayoutGrid, Maximize2, Smile, MoreVertical, Pin
 } from 'lucide-react';
 import DenunciaModal from '../Safety/DenunciaModal';
+import { registrarContatosEncontro } from '../../utils/contatosSeguranca';
 import {
   conectarEventosSala,
   entrarSala,
@@ -407,6 +408,22 @@ export default function MeetingRoomModal({
     }, 1000);
     return () => clearInterval(timer);
   }, [isOpen, stage]);
+
+  // Registra participantes da chamada no histórico de segurança para permitir denúncia posterior
+  useEffect(() => {
+    if (!isOpen || stage !== 'in_call') return;
+    registrarContatosEncontro(
+      participantesRegistro.map((p) => ({
+        id: p.id,
+        nome: p.nome,
+        codigoPublico: p.codigoPublico,
+        papel: p.role.includes('Psicóloga') ? 'psicologo' : 'mae',
+        papelLabel: p.role,
+        canal: `${meetingType} · ${meetingTitle}`,
+        tipoCanal: 'video_grupo',
+      }))
+    );
+  }, [isOpen, stage, participantesHistorico.length]);
 
   if (!isOpen) return null;
 

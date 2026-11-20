@@ -4,7 +4,7 @@ import { createPortal } from 'react-dom';
 import {
   Home, ClipboardList, HeartHandshake, MessageSquare, Calendar, Bell,
   LogOut, ArrowRight, ChevronLeft, BookOpen, Eye, Menu, X, Users,
-  Star
+  Star, ShieldAlert
 } from 'lucide-react';
 import InstallAppButton from './Components/Pwa/InstallAppButton';
 import { getApiBase, fetchCurrentUserProfile } from '@floravel/shared';
@@ -20,6 +20,7 @@ import PerfilScreen from './Screen/Profile/PerfilScreen';
 import BibliotecaScreen from './Screen/Community/BibliotecaScreen';
 import FeedbacksScreen from './Screen/Feedback/FeedbacksScreen';
 import AcessibilidadeScreen from './Screen/Accessibility/AcessibilidadeScreen';
+import DenunciasScreen from './Screen/Safety/DenunciasScreen';
 
 // CONTEXTO E BARRA DE ACESSIBILIDADE
 import {
@@ -155,7 +156,7 @@ function AppContent() {
   const [flowersCount, setFlowersCount] = useState(12);
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
   const [isGlobalDenunciaOpen, setIsGlobalDenunciaOpen] = useState(false);
-  const [denunciaTarget, setDenunciaTarget] = useState({ targetUser: '', context: 'Plataforma Geral' });
+  const [denunciaTarget, setDenunciaTarget] = useState({ targetUser: '', targetCodigoPublico: '', context: 'Plataforma Geral' });
 
   // 4. ESTADO DO QUESTIONÁRIO DE PRIMEIRO ACESSO (ANTES DO DASHBOARD)
   const [userProfile, setUserProfile] = useState(() => {
@@ -309,6 +310,7 @@ function AppContent() {
           <NavItem icon={<Users size={20} />} label="Comunidade" active={activeTab === 'feed'} onClick={() => handleTabChange('feed')} />
           <NavItem icon={<Calendar size={20} />} label="Meus Agendamentos" active={activeTab === 'booking'} onClick={() => handleTabChange('booking')} />
           <NavItem icon={<BookOpen size={20} />} label="Biblioteca & Conteúdos" active={activeTab === 'library'} onClick={() => handleTabChange('library')} />
+          <NavItem icon={<ShieldAlert size={20} />} label="Denúncias" active={activeTab === 'safety'} onClick={() => handleTabChange('safety')} />
           <NavItem icon={<Eye size={20} />} label="Acessibilidade" active={activeTab === 'accessibility'} onClick={() => handleTabChange('accessibility')} />
         </nav>
 
@@ -536,6 +538,18 @@ function AppContent() {
           )}
           {activeTab === 'feedbacks' && <FeedbacksScreen />}
           {activeTab === 'library' && <BibliotecaScreen />}
+          {activeTab === 'safety' && (
+            <DenunciasScreen
+              onOpenDenuncia={({ targetUser, targetCodigoPublico, context }) => {
+                setDenunciaTarget({
+                  targetUser: targetUser || '',
+                  targetCodigoPublico: targetCodigoPublico || '',
+                  context: context || 'Canal de Denúncias',
+                });
+                setIsGlobalDenunciaOpen(true);
+              }}
+            />
+          )}
           {activeTab === 'accessibility' && <AcessibilidadeScreen />}
 
           {activeTab === 'booking' && (
@@ -600,6 +614,7 @@ function AppContent() {
           isOpen={isGlobalDenunciaOpen}
           onClose={() => setIsGlobalDenunciaOpen(false)}
           targetUser={denunciaTarget.targetUser}
+          targetCodigoPublico={denunciaTarget.targetCodigoPublico}
           context={denunciaTarget.context}
         />
 
