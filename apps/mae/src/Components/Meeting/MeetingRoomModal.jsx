@@ -137,6 +137,7 @@ export default function MeetingRoomModal({
   const [sseBanner, setSseBanner] = useState('');
   const [confirmingExit, setConfirmingExit] = useState(false);
   const [showFeedbackForm, setShowFeedbackForm] = useState(false);
+  const [participantesHistorico, setParticipantesHistorico] = useState([]);
   const [jitsiAtivo, setJitsiAtivo] = useState(false);
   const jitsiContainerRef = useRef(null);
   const jitsiApiRef = useRef(null);
@@ -189,12 +190,30 @@ export default function MeetingRoomModal({
       apiBase: API_BASE,
       salaId,
       token,
-      onConnected: (payload) => aplicarEstadoInicial(payload?.estado),
+      onConnected: (payload) => {
+        aplicarEstadoInicial(payload?.estado);
+        if (Array.isArray(payload?.estado?.participantes)) {
+          setParticipantesHistorico((prev) => {
+            const merged = [...prev];
+            payload.estado.participantes.forEach((p) => {
+              if (p?.nome && !merged.some((x) => x.nome === p.nome)) {
+                merged.push(p);
+              }
+            });
+            return merged;
+          });
+        }
+      },
       onParticipantJoined: (payload) => {
         const p = payload?.participante;
-        if (p?.nome && p.role !== 'MAE') {
-          setSseBanner(`${p.nome} entrou na sala de acolhimento.`);
-          setTimeout(() => setSseBanner(''), 3800);
+        if (p?.nome) {
+          setParticipantesHistorico((prev) =>
+            prev.some((x) => x.nome === p.nome) ? prev : [...prev, p]
+          );
+          if (p.role !== 'MAE') {
+            setSseBanner(`${p.nome} entrou na sala de acolhimento.`);
+            setTimeout(() => setSseBanner(''), 3800);
+          }
         }
       },
       onParticipantLeft: (payload) => {
@@ -306,6 +325,7 @@ export default function MeetingRoomModal({
   const participants = [
     { 
       id: 'therapist', 
+      codigoPublico: '#FLR-P14H90',
       name: therapistName, 
       shortName: therapistName.split(' (')[0],
       role: 'Anfitriã(o) (Host) • Psicologia Perinatal', 
@@ -315,6 +335,7 @@ export default function MeetingRoomModal({
     },
     { 
       id: 'user', 
+      codigoPublico: localStorage.getItem('floravel_codigo_publico') || '#FLR-M8R4K2',
       name: 'Você (Mariana Silva)', 
       shortName: 'Você (Mariana)',
       role: 'Participante', 
@@ -325,6 +346,7 @@ export default function MeetingRoomModal({
     },
     { 
       id: 'part1', 
+      codigoPublico: '#FLR-M2C8R4',
       name: 'Camila Rocha', 
       shortName: 'Camila Rocha',
       role: 'Mãe do Gael (3m)', 
@@ -334,6 +356,7 @@ export default function MeetingRoomModal({
     },
     { 
       id: 'part2', 
+      codigoPublico: '#FLR-M9B5L7',
       name: 'Beatriz Lima', 
       shortName: 'Beatriz Lima',
       role: 'Mãe da Alice (5m)', 
@@ -341,6 +364,23 @@ export default function MeetingRoomModal({
       isSpeaking: false, 
       img: '/img/ilustracoes/acolhimento.jpg' 
     },
+  ];
+
+  const participantesRegistro = [
+    ...participants.filter((p) => !p.isUser).map((p) => ({
+      id: p.id,
+      nome: p.shortName || p.name,
+      role: p.isHost ? 'Anfitriã (Psicóloga)' : 'Participante',
+      codigoPublico: p.codigoPublico,
+    })),
+    ...participantesHistorico
+      .filter((hp) => hp?.nome && !participants.some((p) => (p.shortName || p.name) === hp.nome || p.name === hp.nome))
+      .map((hp, idx) => ({
+        id: hp.usuarioId || hp.perfilId || `sse-${idx}`,
+        nome: hp.nome,
+        role: hp.role === 'PSICOLOGO' ? 'Anfitriã (Psicóloga)' : 'Participante',
+        codigoPublico: hp.codigoPublico || `#FLR-${String(hp.usuarioId || hp.nome).slice(-6).toUpperCase().replace(/[^A-Z0-9]/g, 'X')}`,
+      })),
   ];
 
   useEffect(() => {
@@ -1190,6 +1230,40 @@ export default function MeetingRoomModal({
                         Avaliar encontro (opcional)
                       </button>
                     )}
+                  </div>
+                </div>
+
+                {/* REGISTRO DE PARTICIPANTES DA CALL PARA SEGURANÇA E MODERAÇÃO */}
+                <div className="mb-5 rounded-2xl border border-stone-200 bg-[#FCF7F9] p-4">
+                  <div className="flex items-center justify-between mb-2.5">
+                    <span className="text-xs font-bold text-[#1F3A27] flex items-center gap-1.5">
+                      <Users size={14} /> Participantes deste encontro
+                    </span>
+                    <span className="text-[11px] text-stone-500">Moderação segura</span>
+                  </div>
+                  <div className="space-y-2 max-h-40 overflow-y-auto">
+                    {participantesRegistro.map((p) => (
+                      <div
+                        key={p.id}
+                        className="flex items-center justify-between gap-2 rounded-xl bg-white px-3 py-2 border border-stone-200/80 text-xs"
+                      >
+                        <div className="min-w-0">
+                          <p className="font-bold text-stone-800 truncate">{p.nome}</p>
+                          <p className="text-[11px] text-stone-500">
+                            {p.role} · <span className="font-mono">{p.codigoPublico}</span>
+                          </p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => handleReportUser(`${p.nome} (${p.codigoPublico})`)}
+                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] font-bold text-red-700 bg-red-50 hover:bg-red-100 transition shrink-0 cursor-pointer"
+                          title={`Denunciar ${p.nome}`}
+                        >
+                          <ShieldAlert size={13} />
+                          <span>Denunciar</span>
+                        </button>
+                      </div>
+                    ))}
                   </div>
                 </div>
 
