@@ -51,7 +51,7 @@ export default function Sidebar({ onNavigate, onClose, onLogout }) {
   const isLocal =
     typeof window !== 'undefined' && ['localhost', '127.0.0.1'].includes(window.location.hostname);
   const landingUrl =
-    import.meta.env.VITE_LANDING_URL || (isLocal ? 'http://localhost:5173' : 'https://froravel-lading.vercel.app');
+    import.meta.env.VITE_LANDING_URL || (isLocal ? 'http://localhost:5173' : 'https://froravel-front.vercel.app');
   const { psiProfile } = usePsiAccessibility();
 
   return (

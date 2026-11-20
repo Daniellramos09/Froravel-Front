@@ -1,8 +1,18 @@
-import { APP_LINKS } from './appLinks';
+import { APP_LINKS, getApiBase } from './appLinks';
 
 export const SESSION_KEY = 'floravel_rh_sessao';
 export const JWT_KEY = 'floravel_jwt';
 export const PUBLIC_CODE_KEY = 'floravel_codigo_publico';
+
+const DEMO_RH_SESSION = {
+  usuarioId: 'demo-rh-1',
+  perfilId: 'demo-rh-1',
+  codigoPublico: 'FLR-RH01',
+  nome: 'Gestão RH Corporativo',
+  email: 'rh@techmaes.com.br',
+  tipoPerfil: 'RH',
+  tokenSessao: 'demo-cloud-rh-jwt',
+};
 
 function decodeBase64Utf8(b64) {
   const binary = atob(b64);
@@ -39,9 +49,13 @@ export function hidratarSessaoDoHash() {
 export function getStoredJwt() {
   if (typeof window === 'undefined') return null;
   const rawToken = localStorage.getItem(JWT_KEY);
-  if (typeof rawToken !== 'string') return null;
-  const trimmed = rawToken.trim();
-  return trimmed.length > 0 ? trimmed : null;
+  if (typeof rawToken === 'string' && rawToken.trim().length > 0) {
+    return rawToken.trim();
+  }
+  if (!getApiBase()) {
+    return DEMO_RH_SESSION.tokenSessao;
+  }
+  return null;
 }
 
 export function getRhAuthState() {
@@ -55,6 +69,9 @@ export function getRhAuthState() {
     session = raw ? JSON.parse(raw) : null;
   } catch {
     session = null;
+  }
+  if (!session && !getApiBase()) {
+    session = DEMO_RH_SESSION;
   }
   const role = session?.tipoPerfil ? String(session.tipoPerfil).trim().toUpperCase() : '';
   return {
