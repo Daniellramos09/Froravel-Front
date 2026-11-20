@@ -19,22 +19,22 @@ export const APP_LINKS = {
   // 1. Landing Page Institucional (apps/landing)
   landing:
     (typeof import.meta !== 'undefined' && import.meta.env?.VITE_LANDING_URL) ||
-    (isLocalEnvironment ? 'http://localhost:5173' : 'https://froravel-lading.vercel.app'),
+    (isLocalEnvironment ? 'http://localhost:5173' : 'https://froravel-front.vercel.app'),
 
   // 2. Área da Mãe / PWA (apps/mae)
   mae:
     (typeof import.meta !== 'undefined' && import.meta.env?.VITE_MAE_APP_URL) ||
-    (isLocalEnvironment ? 'http://localhost:5174' : 'https://floravel.vercel.app'),
+    (isLocalEnvironment ? 'http://localhost:5174' : 'https://floravel-mae.vercel.app'),
 
   // 3. Portal do Terapeuta / Psicólogo (apps/psicologo)
   terapeuta:
     (typeof import.meta !== 'undefined' && import.meta.env?.VITE_TERAPEUTA_APP_URL) ||
-    (isLocalEnvironment ? 'http://localhost:5175' : 'https://floravel-terapeuta.vercel.app'),
+    (isLocalEnvironment ? 'http://localhost:5175' : 'https://psicologo-blue.vercel.app'),
 
   // 4. Dashboard RH Corporativo B2B (apps/rh)
   rh:
     (typeof import.meta !== 'undefined' && import.meta.env?.VITE_RH_APP_URL) ||
-    (isLocalEnvironment ? 'http://localhost:5176' : 'https://floravel-rh.vercel.app'),
+    (isLocalEnvironment ? 'http://localhost:5176' : 'https://rh-lilac-two.vercel.app'),
 };
 
 /**
