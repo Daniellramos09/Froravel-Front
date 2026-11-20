@@ -275,13 +275,13 @@ export default function DashboardRh({ session = null, onLogout }) {
   const todayFormatted = formatTodayPtBr();
 
   return (
-    <div className="min-h-screen bg-[#FCF7F9] font-sans text-stone-800 flex flex-col lg:flex-row antialiased">
+    <div className="min-h-screen bg-[#FAF7F2] font-sans text-[#2B2829] flex flex-col lg:flex-row antialiased">
       {/* Toast de Notificação */}
       {toastMessage && (
         <div
           role="status"
           aria-live="polite"
-          className="fixed top-6 right-6 z-50 flex items-center gap-2.5 bg-[#1F3224] text-white px-5 py-3 rounded-xl shadow-xl text-sm animate-fade-in border border-white/10"
+          className="fixed top-6 right-6 z-50 flex items-center gap-2.5 bg-[#1D382B] text-white px-5 py-3 rounded-xl shadow-xl text-sm animate-fade-in border border-white/10"
         >
           <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
           <span>{toastMessage}</span>
@@ -302,7 +302,7 @@ export default function DashboardRh({ session = null, onLogout }) {
       {/* Conteúdo Principal */}
       <main className="flex-1 flex flex-col min-w-0 pb-16">
         {/* TOP BAR */}
-        <header className="sticky top-0 bg-[#FCF7F9]/90 backdrop-blur-md z-30 px-6 lg:px-10 py-4 flex items-center justify-between border-b border-stone-200/60">
+        <header className="sticky top-0 bg-[#FAF7F2]/90 backdrop-blur-md z-30 px-6 lg:px-10 py-4 flex items-center justify-between border-b border-[#E4DAD5]/70">
           <div className="flex items-center gap-3">
             <button
               type="button"
@@ -469,22 +469,25 @@ export default function DashboardRh({ session = null, onLogout }) {
 
               {!loading && !error && company && (
                 <>
-                  {/* BANNER PRIVACIDADE (LGPD) & BOAS-VINDAS */}
-                  <div className="space-y-4">
+                  {/* BANNER EDITORIAL FLORÁVEL & PRIVACIDADE (LGPD) */}
+                  <div className="rounded-3xl bg-[#F1E6E1] p-6 sm:p-8 border border-[#E4DAD5]/70 space-y-4">
                     <div>
+                      <span className="text-[11px] font-bold uppercase tracking-widest text-[#516B55] block mb-1">
+                        Portal Corporativo Florável
+                      </span>
                       <h2
-                        className="text-2xl sm:text-3xl font-normal text-slate-900 tracking-tight flex items-center gap-2"
+                        className="text-2xl sm:text-3xl font-normal text-[#1D382B] tracking-tight flex items-center gap-2"
                         style={{ fontFamily: "'Fraunces', serif" }}
                       >
                         Olá, {company.nome}!
                       </h2>
-                      <p className="text-sm text-slate-500 mt-1">
+                      <p className="text-sm text-[#4A5E4D] mt-1">
                         Acompanhe em tempo real a adesão ao programa de saúde emocional materna com proteção K-Anonimato.
                       </p>
                     </div>
 
-                    <div className="inline-flex flex-wrap items-center gap-2.5 px-4 py-2 rounded-2xl bg-white border border-slate-200/90 text-xs text-slate-600 shadow-2xs">
-                      <span className="inline-flex items-center gap-1 font-bold text-[#294D33]">
+                    <div className="inline-flex flex-wrap items-center gap-2.5 px-4 py-2 rounded-2xl bg-white/90 border border-[#E4DAD5] text-xs text-stone-700 shadow-2xs">
+                      <span className="inline-flex items-center gap-1 font-bold text-[#1D382B]">
                         <ShieldCheck className="w-4 h-4 text-[#73937E]" />
                         K-Anonimato (K ≥ {parametroK}) Ativo:
                       </span>
@@ -499,32 +502,32 @@ export default function DashboardRh({ session = null, onLogout }) {
                   {/* SEÇÃO 1: 4 KPIS REAIS */}
                   <section className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4.5">
                     {/* Card 1: Licenças Ativadas */}
-                    <div className="relative overflow-hidden bg-white rounded-2xl p-5 border border-slate-100 shadow-sm transition-all duration-300 hover:shadow-md">
+                    <div className="relative overflow-hidden bg-white rounded-2xl p-5 border border-[#E4DAD5]/70 shadow-sm transition-all duration-300 hover:shadow-md">
                       <div
                         aria-hidden="true"
-                        className="absolute top-0 right-0 w-24 h-24 rounded-full bg-gradient-to-br from-[#FCE7F0]/80 to-transparent blur-xl pointer-events-none"
+                        className="absolute top-0 right-0 w-24 h-24 rounded-full bg-gradient-to-br from-[#F4DDE5]/80 to-transparent blur-xl pointer-events-none"
                       />
                       <div className="relative z-10 flex flex-col justify-between h-full">
                         <div className="flex items-center justify-between mb-2">
-                          <span className="text-xs font-semibold text-slate-500">
+                          <span className="text-xs font-semibold text-stone-500">
                             Licenças Ativadas
                           </span>
-                          <Users className="w-4 h-4 text-slate-400" />
+                          <Users className="w-4 h-4 text-[#73937E]" />
                         </div>
                         <div className="flex items-baseline gap-1.5 my-2">
-                          <span className="text-3xl font-bold text-slate-900">{totalAtivadas}</span>
-                          <span className="text-sm font-medium text-slate-400">
+                          <span className="text-3xl font-bold text-[#1D382B]">{totalAtivadas}</span>
+                          <span className="text-sm font-medium text-stone-400">
                             / {totalEmitidas}
                           </span>
                         </div>
                         <div className="mt-2">
-                          <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                          <div className="w-full bg-stone-100 h-2 rounded-full overflow-hidden">
                             <div
                               className="h-full rounded-full transition-all duration-700 bg-gradient-to-r from-[#73937E] to-[#E8A9B8]"
                               style={{ width: `${Math.min(100, Math.max(0, taxaAdesao))}%` }}
                             />
                           </div>
-                          <span className="text-[11px] font-medium text-slate-400 mt-1.5 block">
+                          <span className="text-[11px] font-medium text-stone-500 mt-1.5 block">
                             {taxaAdesao}% das licenças emitidas
                           </span>
                         </div>
@@ -532,18 +535,18 @@ export default function DashboardRh({ session = null, onLogout }) {
                     </div>
 
                     {/* Card 2: Taxa de Adesão */}
-                    <div className="relative overflow-hidden bg-white rounded-2xl p-5 border border-slate-100 shadow-sm transition-all duration-300 hover:shadow-md">
+                    <div className="relative overflow-hidden bg-white rounded-2xl p-5 border border-[#E4DAD5]/70 shadow-sm transition-all duration-300 hover:shadow-md">
                       <div className="relative z-10 flex flex-col justify-between h-full">
                         <div className="flex items-center justify-between mb-2">
-                          <span className="text-xs font-semibold text-slate-500">
+                          <span className="text-xs font-semibold text-stone-500">
                             Taxa de Adesão
                           </span>
-                          <Activity className="w-4 h-4 text-slate-400" />
+                          <Activity className="w-4 h-4 text-[#73937E]" />
                         </div>
                         <div className="flex items-center gap-3 my-2">
-                          <span className="text-3xl font-bold text-slate-900">{taxaAdesao}%</span>
+                          <span className="text-3xl font-bold text-[#1D382B]">{taxaAdesao}%</span>
                         </div>
-                        <p className="text-[11px] text-slate-400 mt-2 leading-tight">
+                        <p className="text-[11px] text-stone-500 mt-2 leading-tight">
                           Convites ativados sobre o total emitido pela empresa.
                         </p>
                       </div>

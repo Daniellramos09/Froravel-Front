@@ -16,11 +16,11 @@
 }
 
 html {
-  background-color: #FCF7F9;
+  background-color: #FAF7F2;
 }
 
 body {
-  font-family: 'DM Sans', sans-serif;
-  background-color: #FCF7F9;
-  color: #294D33;
+  font-family: 'DM Sans', 'Nunito', system-ui, -apple-system, sans-serif;
+  background-color: #FAF7F2;
+  color: #1D382B;
 }
