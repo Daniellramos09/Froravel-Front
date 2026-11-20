@@ -1,4 +1,4 @@
-import { useState, useId, useEffect, useCallback, useMemo } from "react";
+import { useState, useId, useEffect, useCallback, useMemo, useRef } from "react";
 import { createPortal } from "react-dom";
 import {
   UserPlus,
@@ -15,6 +15,7 @@ import {
   Send,
   AlertTriangle,
   RefreshCw,
+  LogIn,
 } from "lucide-react";
 import { APP_LINKS } from "../utils/appLinks";
 import {
@@ -64,10 +65,11 @@ export default function LicensesScreen({
   parentLoading = false,
   parentError = null,
   onRetry,
+  onLogout,
   onLicensesUpdated,
   onTriggerToast,
 }) {
-  const isControlledByParent = propLicenses !== undefined && Boolean(propEmpresaId);
+  const isControlledByParent = propLicenses !== undefined;
 
   const [localEmpresaId, setLocalEmpresaId] = useState(propEmpresaId || "");
   const [localLicenses, setLocalLicenses] = useState(propLicenses || []);
@@ -83,6 +85,8 @@ export default function LicensesScreen({
   const [localToast, setLocalToast] = useState(null);
   const [busyId, setBusyId] = useState(null);
   const [isSubmittingInvite, setIsSubmittingInvite] = useState(false);
+  const busyActionRef = useRef(false);
+  const submittingInviteRef = useRef(false);
 
   const [inviteForm, setInviteForm] = useState({
     nomeColaboradora: "",
@@ -123,8 +127,11 @@ export default function LicensesScreen({
     } catch (err) {
       setStandaloneError(
         err instanceof RhApiError
-          ? err.message
-          : "Não foi possível carregar as licenças corporativas."
+          ? { message: err.message, isAuthError: err.isAuthError }
+          : {
+              message: "Não foi possível carregar as licenças corporativas.",
+              isAuthError: false,
+            }
       );
     } finally {
       setStandaloneLoading(false);
@@ -146,8 +153,11 @@ export default function LicensesScreen({
         if (!active) return;
         setStandaloneError(
           err instanceof RhApiError
-            ? err.message
-            : "Não foi possível carregar as licenças corporativas."
+            ? { message: err.message, isAuthError: err.isAuthError }
+            : {
+                message: "Não foi possível carregar as licenças corporativas.",
+                isAuthError: false,
+              }
         );
       })
       .finally(() => {
@@ -159,10 +169,21 @@ export default function LicensesScreen({
   }, [isControlledByParent, loadStandalonePayload]);
 
   const effectiveEmpresaId = propEmpresaId || localEmpresaId;
-  const licenses = propLicenses !== undefined ? propLicenses : localLicenses;
+  const licenses = useMemo(
+    () =>
+      isControlledByParent
+        ? Array.isArray(propLicenses)
+          ? propLicenses
+          : []
+        : localLicenses,
+    [isControlledByParent, propLicenses, localLicenses]
+  );
   const relatorio = propRelatorio !== undefined ? propRelatorio : localRelatorio;
   const loading = isControlledByParent ? parentLoading : standaloneLoading;
-  const errorMessage = isControlledByParent ? parentError?.message : standaloneError;
+  const rawError = isControlledByParent ? parentError : standaloneError;
+  const activeError =
+    typeof rawError === "string" ? { message: rawError, isAuthError: false } : rawError;
+  const errorMessage = activeError?.message || null;
 
   const triggerNotification = (message) => {
     if (onTriggerToast) {
@@ -215,6 +236,8 @@ export default function LicensesScreen({
   };
 
   const handleResendInvite = async (colab) => {
+    if (busyActionRef.current) return;
+    busyActionRef.current = true;
     setActiveMenuId(null);
     setBusyId(colab.id);
     try {
@@ -226,6 +249,7 @@ export default function LicensesScreen({
         err instanceof RhApiError ? err.message : "Erro ao reenviar convite."
       );
     } finally {
+      busyActionRef.current = false;
       setBusyId(null);
     }
   };
@@ -234,13 +258,21 @@ export default function LicensesScreen({
     setActiveMenuId(null);
     const token = colab.tokenConvite || "";
     const inviteUrl = `${APP_LINKS.landing}/cadastro?perfil=mae&convite=${encodeURIComponent(token)}`;
-    if (navigator.clipboard?.writeText) {
-      await navigator.clipboard.writeText(inviteUrl);
+    if (typeof navigator === "undefined" || !navigator.clipboard?.writeText) {
+      triggerNotification("Não foi possível copiar o link de ativação.");
+      return;
     }
-    triggerNotification("Link de ativação copiado!");
+    try {
+      await navigator.clipboard.writeText(inviteUrl);
+      triggerNotification("Link de ativação copiado!");
+    } catch {
+      triggerNotification("Não foi possível copiar o link de ativação.");
+    }
   };
 
   const handleRevoke = async (colab) => {
+    if (busyActionRef.current) return;
+    busyActionRef.current = true;
     setActiveMenuId(null);
     setBusyId(colab.id);
     try {
@@ -252,11 +284,14 @@ export default function LicensesScreen({
         err instanceof RhApiError ? err.message : "Erro ao revogar licença."
       );
     } finally {
+      busyActionRef.current = false;
       setBusyId(null);
     }
   };
 
   const handleReactivate = async (colab) => {
+    if (busyActionRef.current) return;
+    busyActionRef.current = true;
     setActiveMenuId(null);
     setBusyId(colab.id);
     try {
@@ -268,12 +303,14 @@ export default function LicensesScreen({
         err instanceof RhApiError ? err.message : "Erro ao reativar licença."
       );
     } finally {
+      busyActionRef.current = false;
       setBusyId(null);
     }
   };
 
   const handleSendInvite = async (e) => {
     e.preventDefault();
+    if (submittingInviteRef.current) return;
     if (!inviteForm.nomeColaboradora.trim() || !inviteForm.emailCorporativo.trim()) {
       setInviteError("Preencha nome completo e e-mail.");
       return;
@@ -287,6 +324,7 @@ export default function LicensesScreen({
       return;
     }
 
+    submittingInviteRef.current = true;
     setIsSubmittingInvite(true);
     setInviteError("");
     try {
@@ -317,6 +355,7 @@ export default function LicensesScreen({
           : "Não foi possível emitir o convite corporativo."
       );
     } finally {
+      submittingInviteRef.current = false;
       setIsSubmittingInvite(false);
     }
   };
@@ -394,14 +433,26 @@ export default function LicensesScreen({
             <AlertTriangle className="w-5 h-5 text-[#9B1C1C] shrink-0 mt-0.5" aria-hidden="true" />
             <p className="text-xs sm:text-sm text-[#9B1C1C] font-medium">{errorMessage}</p>
           </div>
-          <button
-            type="button"
-            onClick={() => (onRetry ? onRetry() : fetchStandaloneData())}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-stone-200 bg-white text-stone-700 text-xs font-bold hover:bg-stone-50 transition cursor-pointer shrink-0"
-          >
-            <RefreshCw className="w-3.5 h-3.5" aria-hidden="true" />
-            <span>Tentar novamente</span>
-          </button>
+          <div className="flex items-center gap-2 shrink-0">
+            {activeError?.isAuthError && onLogout && (
+              <button
+                type="button"
+                onClick={onLogout}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#294D33] text-white text-xs font-bold hover:bg-[#1e3a27] transition cursor-pointer"
+              >
+                <LogIn className="w-3.5 h-3.5" aria-hidden="true" />
+                <span>Fazer login novamente</span>
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={() => (onRetry ? onRetry() : fetchStandaloneData())}
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-stone-200 bg-white text-stone-700 text-xs font-bold hover:bg-stone-50 transition cursor-pointer shrink-0"
+            >
+              <RefreshCw className="w-3.5 h-3.5" aria-hidden="true" />
+              <span>Tentar novamente</span>
+            </button>
+          </div>
         </div>
       )}
 

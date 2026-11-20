@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import { getApiBase, uploadProfilePhoto, updateProfilePhotoUrl } from '@floravel/shared';
 import {
   Camera,
   Award,
@@ -44,18 +45,20 @@ export default function PerfilConfiguracoes() {
     setTimeout(() => setToast(''), 3500);
   };
 
-  const handlePhotoUpload = (e) => {
+  const handlePhotoUpload = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (typeof reader.result === 'string') {
-        setForm((prev) => ({ ...prev, fotoUrl: reader.result }));
-        updatePsiProfile({ fotoUrl: reader.result });
-        showToast('Foto de perfil atualizada com sucesso!');
-      }
-    };
-    reader.readAsDataURL(file);
+    try {
+      const token = localStorage.getItem('floravel_jwt');
+      const apiBase = getApiBase();
+      const result = await uploadProfilePhoto({ apiBase, file, token });
+      const novaUrl = result.fotoUrl;
+      setForm((prev) => ({ ...prev, fotoUrl: novaUrl }));
+      updatePsiProfile({ fotoUrl: novaUrl });
+      showToast('Foto de perfil atualizada com sucesso!');
+    } catch (err) {
+      showToast(err?.message || 'Não foi possível enviar a foto.');
+    }
   };
 
   const handleAddGraduacao = () => {

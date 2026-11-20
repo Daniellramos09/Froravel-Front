@@ -4,9 +4,10 @@ import { createPortal } from 'react-dom';
 import {
   Home, ClipboardList, HeartHandshake, MessageSquare, Calendar, Bell,
   LogOut, ArrowRight, ChevronLeft, BookOpen, Eye, Menu, X, Users,
-  Star
+  Star, ShieldAlert
 } from 'lucide-react';
 import InstallAppButton from './Components/Pwa/InstallAppButton';
+import { getApiBase, fetchCurrentUserProfile } from '@floravel/shared';
 
 // IMPORTANDO AS TELAS
 import DashboardScreen from './Screen/Dashboard/DashboardScreen';
@@ -19,6 +20,7 @@ import PerfilScreen from './Screen/Profile/PerfilScreen';
 import BibliotecaScreen from './Screen/Community/BibliotecaScreen';
 import FeedbacksScreen from './Screen/Feedback/FeedbacksScreen';
 import AcessibilidadeScreen from './Screen/Accessibility/AcessibilidadeScreen';
+import DenunciasScreen from './Screen/Safety/DenunciasScreen';
 
 // CONTEXTO E BARRA DE ACESSIBILIDADE
 import {
@@ -154,6 +156,7 @@ function AppContent() {
   const [flowersCount, setFlowersCount] = useState(12);
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
   const [isGlobalDenunciaOpen, setIsGlobalDenunciaOpen] = useState(false);
+  const [denunciaTarget, setDenunciaTarget] = useState({ targetUser: '', targetCodigoPublico: '', context: 'Plataforma Geral' });
 
   // 4. ESTADO DO QUESTIONÁRIO DE PRIMEIRO ACESSO (ANTES DO DASHBOARD)
   const [userProfile, setUserProfile] = useState(() => {
@@ -307,6 +310,7 @@ function AppContent() {
           <NavItem icon={<Users size={20} />} label="Comunidade" active={activeTab === 'feed'} onClick={() => handleTabChange('feed')} />
           <NavItem icon={<Calendar size={20} />} label="Meus Agendamentos" active={activeTab === 'booking'} onClick={() => handleTabChange('booking')} />
           <NavItem icon={<BookOpen size={20} />} label="Biblioteca & Conteúdos" active={activeTab === 'library'} onClick={() => handleTabChange('library')} />
+          <NavItem icon={<ShieldAlert size={20} />} label="Denúncias" active={activeTab === 'safety'} onClick={() => handleTabChange('safety')} />
           <NavItem icon={<Eye size={20} />} label="Acessibilidade" active={activeTab === 'accessibility'} onClick={() => handleTabChange('accessibility')} />
         </nav>
 
@@ -489,11 +493,11 @@ function AppContent() {
             <div 
               className="w-9 h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden border border-[#E8A9BB]/50 shadow-2xs cursor-pointer hover:ring-2 hover:ring-[#294D33]/30 transition-all shrink-0 bg-[#F4DDE5]" 
               onClick={() => handleTabChange('perfil')}
-              title="Meu Perfil · Mariana Silva"
+              title={`Meu Perfil · ${(() => { try { return JSON.parse(localStorage.getItem('floravel_mae_sessao') || '{}')?.nome || 'Mariana Silva'; } catch { return 'Mariana Silva'; } })()}`}
             >
               <img
-                src="/img/ilustracoes/florescer.jpg"
-                alt="Mariana Silva"
+                src={(() => { try { return JSON.parse(localStorage.getItem('floravel_mae_sessao') || '{}')?.fotoUrl || '/img/ilustracoes/florescer.jpg'; } catch { return '/img/ilustracoes/florescer.jpg'; } })()}
+                alt="Meu Perfil"
                 className="w-full h-full object-cover object-top"
               />
             </div>
@@ -518,19 +522,34 @@ function AppContent() {
           {activeTab === 'groups' && <ComunidadeScreen />}
           {activeTab === 'feed' && (
             <FeedScreen
-              currentUser={{ id: 'mariana-silva', name: 'Mariana Silva', initials: 'MS', role: 'mae', detail: 'Puerpério · semana 7' }}
+              currentUser={{ id: 'mariana-silva', codigoPublico: localStorage.getItem('floravel_codigo_publico') || '#FLR-M8R4K2', name: 'Mariana Silva', initials: 'MS', role: 'mae', detail: 'Puerpério · semana 7' }}
               allowAnonymous
               showCrisisNote
+              onReport={({ targetUser, context }) => {
+                setDenunciaTarget({ targetUser: targetUser || '', context: context || 'Comunidade Florável' });
+                setIsGlobalDenunciaOpen(true);
+              }}
             />
           )}
           {activeTab === 'perfil' && (
             <PerfilScreen 
               onRedoOnboarding={() => setIsOnboardingOpen(true)} 
-              onOpenDenuncia={() => setIsGlobalDenunciaOpen(true)} 
             />
           )}
           {activeTab === 'feedbacks' && <FeedbacksScreen />}
           {activeTab === 'library' && <BibliotecaScreen />}
+          {activeTab === 'safety' && (
+            <DenunciasScreen
+              onOpenDenuncia={({ targetUser, targetCodigoPublico, context }) => {
+                setDenunciaTarget({
+                  targetUser: targetUser || '',
+                  targetCodigoPublico: targetCodigoPublico || '',
+                  context: context || 'Canal de Denúncias',
+                });
+                setIsGlobalDenunciaOpen(true);
+              }}
+            />
+          )}
           {activeTab === 'accessibility' && <AcessibilidadeScreen />}
 
           {activeTab === 'booking' && (
@@ -594,7 +613,9 @@ function AppContent() {
         <DenunciaModal
           isOpen={isGlobalDenunciaOpen}
           onClose={() => setIsGlobalDenunciaOpen(false)}
-          context="Plataforma Geral"
+          targetUser={denunciaTarget.targetUser}
+          targetCodigoPublico={denunciaTarget.targetCodigoPublico}
+          context={denunciaTarget.context}
         />
 
       </main>

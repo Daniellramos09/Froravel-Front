@@ -28,6 +28,15 @@ import {
   ArrowLeft,
   ChevronRight
 } from 'lucide-react';
+import {
+  conectarEventosSala,
+  entrarSala,
+  sairSala,
+  atualizarStatusSala,
+  enviarMensagemSala,
+  buildJitsiRoomName,
+  loadJitsiExternalApi,
+} from '@floravel/shared';
 
 const isLocal = typeof window !== 'undefined' && ['localhost', '127.0.0.1'].includes(window.location.hostname);
 const API_BASE = import.meta.env.VITE_API_URL || (isLocal ? 'http://localhost:8080' : '');
@@ -214,6 +223,9 @@ export default function SalaAcolhimento() {
   const [confirmarSaida, setConfirmarSaida] = useState(false);
   const [segundos, setSegundos] = useState(0);
   const [localStream, setLocalStream] = useState(null);
+  const [jitsiAtivo, setJitsiAtivo] = useState(false);
+  const jitsiContainerRef = useRef(null);
+  const jitsiApiRef = useRef(null);
 
   // Participantes e aviso sonoro/visual rápido de entrada na sala
   const [participantes, setParticipantes] = useState(SESSOES_AGENDADAS_SALA[0].participantes);
@@ -244,9 +256,13 @@ export default function SalaAcolhimento() {
   };
 
   const notificarEntradaMae = (nomeMae) => {
-    setParticipantes((prev) =>
-      prev.map((p) => (p.nome === nomeMae ? { ...p, status: 'Conectada', micOn: true, camOn: true } : p))
-    );
+    setParticipantes((prev) => {
+      const existe = prev.some((p) => p.nome === nomeMae);
+      if (!existe) {
+        return [...prev, { id: `sse-${Date.now()}`, nome: nomeMae, status: 'Conectada', bebe: 'Ao vivo', micOn: true, camOn: true }];
+      }
+      return prev.map((p) => (p.nome === nomeMae ? { ...p, status: 'Conectada', micOn: true, camOn: true } : p));
+    });
     setEntradaBanner(`${nomeMae} conectou seu áudio e vídeo na sala.`);
     if (somEntradaAtivo) {
       playSoftArrivalChime();
@@ -254,8 +270,17 @@ export default function SalaAcolhimento() {
     setTimeout(() => setEntradaBanner(''), 4200);
   };
 
-  // Só ativa a câmera quando a psicóloga clica em uma sessão agendada para preparar a sala
-  const deveCapturarCamera = Boolean(sessaoSelecionada) && camLigada;
+  const notificarSaidaParticipante = (nomeParticipante) => {
+    if (!nomeParticipante) return;
+    setParticipantes((prev) =>
+      prev.map((p) => (p.nome === nomeParticipante ? { ...p, status: 'Desconectada', micOn: false, camOn: false } : p))
+    );
+    setEntradaBanner(`${nomeParticipante} saiu da sala.`);
+    setTimeout(() => setEntradaBanner(''), 3500);
+  };
+
+  // Só ativa a câmera local quando preparando a sala ou quando Jitsi externo não está montado
+  const deveCapturarCamera = Boolean(sessaoSelecionada) && camLigada && !jitsiAtivo;
 
   useEffect(() => {
     let cancelled = false;
@@ -280,80 +305,122 @@ export default function SalaAcolhimento() {
     };
   }, [deveCapturarCamera]);
 
-  // Cronômetro da chamada & Sincronização Ao Vivo com App da Mãe (BroadcastChannel + Spring Boot)
+  // Cronômetro da chamada & Jitsi Meet SDK + Sincronização via backend
   useEffect(() => {
     let interval = null;
+    let cancelled = false;
+    const salaId = sessaoAtiva?.id || 'default';
+    const token = typeof window !== 'undefined' ? localStorage.getItem('floravel_jwt') : null;
+
     if (emChamada) {
       if (API_BASE) {
-        fetch(`${API_BASE}/api/sala-ao-vivo/status`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ status: 'AO_VIVO' })
+        atualizarStatusSala({ apiBase: API_BASE, salaId, status: 'AO_VIVO', token }).catch(() => {});
+        entrarSala({
+          apiBase: API_BASE,
+          salaId,
+          token,
+          participante: { nome: 'Dra. Helena Souza', role: 'PSICOLOGO' },
         }).catch(() => {});
       }
+
+      loadJitsiExternalApi().then((JitsiAPI) => {
+        if (cancelled || !JitsiAPI || !jitsiContainerRef.current) return;
+        try {
+          const api = new JitsiAPI('meet.jit.si', {
+            roomName: buildJitsiRoomName(salaId),
+            parentNode: jitsiContainerRef.current,
+            width: '100%',
+            height: '100%',
+            userInfo: { displayName: 'Dra. Helena Souza (Host)' },
+            configOverwrite: {
+              prejoinPageEnabled: false,
+              startWithAudioMuted: !micLigado,
+              startWithVideoMuted: !camLigada,
+            },
+          });
+          jitsiApiRef.current = api;
+          setJitsiAtivo(true);
+        } catch {
+          setJitsiAtivo(false);
+        }
+      });
 
       interval = setInterval(() => {
         setSegundos((s) => s + 1);
       }, 1000);
 
-      // Ao entrar na sala ao vivo, simula a chegada da mãe que estava "Aguardando" após 3s com som rápido
-      const timerChegada = setTimeout(() => {
-        const aguardando = (sessaoAtiva?.participantes || []).find((p) => p.status === 'Aguardando');
-        if (aguardando) {
-          notificarEntradaMae(aguardando.nome);
-        }
-      }, 3000);
-
       return () => {
+        cancelled = true;
         clearInterval(interval);
-        clearTimeout(timerChegada);
+        if (jitsiApiRef.current) {
+          try { jitsiApiRef.current.dispose(); } catch {}
+          jitsiApiRef.current = null;
+        }
+        setJitsiAtivo(false);
+        if (API_BASE) {
+          sairSala({
+            apiBase: API_BASE,
+            salaId,
+            token,
+            participante: { nome: 'Dra. Helena Souza', role: 'PSICOLOGO' },
+          }).catch(() => {});
+        }
       };
     } else {
       setSegundos(0);
     }
     return () => clearInterval(interval);
-  }, [emChamada]);
+  }, [emChamada, sessaoAtiva?.id]);
 
+  // Notificações em tempo real via Server-Sent Events (SSE)
   useEffect(() => {
-    let bc = null;
-    try {
-      bc = new BroadcastChannel('floravel_sala_ao_vivo');
-      bc.onmessage = (ev) => {
-        const data = ev.data || {};
-        if (data.type === 'CHAT_MSG' && data.msg) {
-          setMensagens((prev) => [
-            ...prev,
-            { remetente: data.msg.sender, texto: data.msg.text, hora: data.msg.time }
-          ]);
-        } else if (data.type === 'PARTICIPANT_JOINED' && data.nome) {
-          notificarEntradaMae(data.nome);
-        }
-      };
-    } catch (_) {}
+    const salaId = sessaoAtiva?.id || 'default';
+    const token = typeof window !== 'undefined' ? localStorage.getItem('floravel_jwt') : null;
 
-    const poll = API_BASE ? setInterval(async () => {
-      try {
-        const res = await fetch(`${API_BASE}/api/sala-ao-vivo/estado`);
-        if (res.ok) {
-          const estado = await res.json();
-          if (Array.isArray(estado.mensagens) && estado.mensagens.length > 0) {
-            setMensagens(
-              estado.mensagens.map((m) => ({
-                remetente: m.sender,
-                texto: m.text,
-                hora: m.time
-              }))
-            );
-          }
-        }
-      } catch (_) {}
-    }, 2500) : null;
-
-    return () => {
-      if (poll) clearInterval(poll);
-      if (bc) bc.close();
+    const aplicarMensagensEstado = (estado) => {
+      if (Array.isArray(estado?.mensagens) && estado.mensagens.length > 0) {
+        setMensagens(
+          estado.mensagens.map((m) => ({
+            remetente: m.sender,
+            texto: m.text,
+            hora: m.time,
+          }))
+        );
+      }
     };
-  }, []);
+
+    const disconnect = conectarEventosSala({
+      apiBase: API_BASE,
+      salaId,
+      token,
+      onConnected: (payload) => {
+        aplicarMensagensEstado(payload?.estado);
+      },
+      onParticipantJoined: (payload) => {
+        const p = payload?.participante;
+        if (p?.nome && p.role !== 'PSICOLOGO') {
+          notificarEntradaMae(p.nome);
+        }
+      },
+      onParticipantLeft: (payload) => {
+        const p = payload?.participante;
+        if (p?.nome && p.role !== 'PSICOLOGO') {
+          notificarSaidaParticipante(p.nome);
+        }
+      },
+      onChatMessage: (payload) => {
+        const msg = payload?.mensagem;
+        if (msg) {
+          setMensagens((prev) => {
+            const existe = prev.some((m) => m.remetente === msg.sender && m.texto === msg.text && m.hora === msg.time);
+            return existe ? prev : [...prev, { remetente: msg.sender, texto: msg.text, hora: msg.time }];
+          });
+        }
+      },
+    });
+
+    return () => disconnect();
+  }, [sessaoAtiva?.id]);
 
   const formatarTempo = (totalSec) => {
     const min = String(Math.floor(totalSec / 60)).padStart(2, '0');
@@ -376,40 +443,28 @@ export default function SalaAcolhimento() {
     setMensagens((prev) => [...prev, msg]);
     setNovaMensagem('');
 
-    try {
-      const bc = new BroadcastChannel('floravel_sala_ao_vivo');
-      bc.postMessage({
-        type: 'CHAT_MSG',
-        msg: { id: `msg-${Date.now()}`, sender: 'Dra. Helena Souza (Host)', text: texto, time: agora, isHost: true }
-      });
-      bc.close();
-    } catch (_) {}
-
     if (API_BASE) {
+      const salaId = sessaoAtiva?.id || 'default';
+      const token = typeof window !== 'undefined' ? localStorage.getItem('floravel_jwt') : null;
       try {
-        await fetch(`${API_BASE}/api/sala-ao-vivo/mensagens`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ remetente: 'Dra. Helena Souza (Host)', texto, isHost: true })
+        await enviarMensagemSala({
+          apiBase: API_BASE,
+          salaId,
+          remetente: 'Dra. Helena Souza (Host)',
+          texto,
+          isHost: true,
+          token,
         });
       } catch (_) {}
     }
   };
 
   const handleEncerrarSessao = async () => {
-    try {
-      const bc = new BroadcastChannel('floravel_sala_ao_vivo');
-      bc.postMessage({ type: 'ROOM_ENDED' });
-      bc.close();
-    } catch (_) {}
-
+    const salaId = sessaoAtiva?.id || 'default';
+    const token = typeof window !== 'undefined' ? localStorage.getItem('floravel_jwt') : null;
     if (API_BASE) {
       try {
-        await fetch(`${API_BASE}/api/sala-ao-vivo/status`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ status: 'ENCERRADA' })
-        });
+        await atualizarStatusSala({ apiBase: API_BASE, salaId, status: 'ENCERRADA', token });
       } catch (_) {}
     }
 
@@ -849,7 +904,13 @@ export default function SalaAcolhimento() {
 
           {/* Área Central: Grid de Vídeos e Chat Lateral */}
           <div className="flex-1 flex overflow-hidden p-4 gap-4">
-            {/* Grid de Vídeos dos Participantes */}
+            <div className="relative flex-1 flex flex-col min-h-0">
+              <div
+                ref={jitsiContainerRef}
+                data-testid="jitsi-meet-container"
+                className={jitsiAtivo ? 'w-full h-full rounded-2xl overflow-hidden border border-white/10 shadow-lg' : 'hidden'}
+              />
+              {!jitsiAtivo && (
             <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4 auto-rows-fr">
               {/* Vídeo 1: Terapeuta (Você) */}
               <div className="relative rounded-2xl bg-stone-800 border border-white/10 overflow-hidden flex flex-col items-center justify-center shadow-lg">
@@ -930,6 +991,8 @@ export default function SalaAcolhimento() {
                   </div>
                 );
               })}
+            </div>
+              )}
             </div>
 
             {/* Painel Lateral: Chat da Roda ou Notas Efêmeras (Zero Prontuário) */}

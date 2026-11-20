@@ -192,8 +192,21 @@ export default function SupportNetworkScreen({
   const [modalityFilter, setModalityFilter] = useState("all");
   const [sortMode, setSortMode] = useState("equilibrio"); // 'equilibrio' | 'patentes' | 'novas' | 'social'
 
-  // Estados de Agendamento
-  const [selectedDay, setSelectedDay] = useState(15);
+  // Estados de Agendamento (sempre a partir da data atual)
+  const hoje = useMemo(() => {
+    const d = new Date();
+    d.setHours(0, 0, 0, 0);
+    return d;
+  }, []);
+  const [mesVisualizado, setMesVisualizado] = useState(() => ({
+    ano: new Date().getFullYear(),
+    mes: new Date().getMonth(),
+  }));
+  const [selectedDate, setSelectedDate] = useState(() => {
+    const d = new Date();
+    d.setHours(0, 0, 0, 0);
+    return d;
+  });
   const [selectedTime, setSelectedTime] = useState(null);
   const [isBooking, setIsBooking] = useState(false);
   const [isConfirmed, setIsConfirmed] = useState(false);
@@ -227,6 +240,7 @@ export default function SupportNetworkScreen({
         spec: dbMatch.especialidade || mock.spec,
         approach: dbMatch.abordagem || mock.approach,
         desc: dbMatch.biografia || mock.desc,
+        photo: dbMatch.fotoUrl || mock.photo,
         fotoUrl: dbMatch.fotoUrl || mock.photo,
         horariosDisponiveis:
           Array.isArray(dbMatch.horariosDisponiveis) && dbMatch.horariosDisponiveis.length > 0
@@ -275,7 +289,37 @@ export default function SupportNetworkScreen({
     return [...merged, ...extras];
   }, [backendPsychologists]);
 
-  const diasOutubro = Array.from({ length: 31 }, (_, i) => i + 1);
+  const NOMES_MESES = [
+    "janeiro", "fevereiro", "março", "abril", "maio", "junho",
+    "julho", "agosto", "setembro", "outubro", "novembro", "dezembro",
+  ];
+
+  const primeiroDiaSemana = new Date(mesVisualizado.ano, mesVisualizado.mes, 1).getDay();
+  const totalDiasMes = new Date(mesVisualizado.ano, mesVisualizado.mes + 1, 0).getDate();
+  const diasDoMes = Array.from({ length: totalDiasMes }, (_, i) => i + 1);
+  const ehMesAtual =
+    mesVisualizado.ano === hoje.getFullYear() && mesVisualizado.mes === hoje.getMonth();
+
+  const tituloMesAno = `${NOMES_MESES[mesVisualizado.mes].charAt(0).toUpperCase() + NOMES_MESES[mesVisualizado.mes].slice(1)} de ${mesVisualizado.ano}`;
+  const selectedDay = selectedDate.getDate();
+  const selectedMesNum = String(selectedDate.getMonth() + 1).padStart(2, "0");
+  const selectedDayPad = String(selectedDay).padStart(2, "0");
+  const selectedDateFormatted = `${selectedDayPad}/${selectedMesNum}/${selectedDate.getFullYear()}`;
+  const selectedDateShort = `${selectedDayPad}/${selectedMesNum}`;
+  const selectedDateExtenso = `${selectedDay} de ${NOMES_MESES[selectedDate.getMonth()]}`;
+
+  const irParaMesAnterior = () => {
+    if (ehMesAtual) return;
+    setMesVisualizado((prev) =>
+      prev.mes === 0 ? { ano: prev.ano - 1, mes: 11 } : { ano: prev.ano, mes: prev.mes - 1 }
+    );
+  };
+
+  const irParaProximoMes = () => {
+    setMesVisualizado((prev) =>
+      prev.mes === 11 ? { ano: prev.ano + 1, mes: 0 } : { ano: prev.ano, mes: prev.mes + 1 }
+    );
+  };
 
   const specialties = [
     "Todas",
@@ -403,7 +447,7 @@ export default function SupportNetworkScreen({
         profId: profEmFoco.id,
         profName: profEmFoco.name,
         spec: profEmFoco.spec,
-        date: `${selectedDay}/10/2026`,
+        date: selectedDateFormatted,
         time: selectedTime,
         type: "Consulta · Apoio Psicológico Social",
         status: "CONFIRMADO",
@@ -419,7 +463,7 @@ export default function SupportNetworkScreen({
           id: Date.now(),
           tipo: "agendamento",
           title: "Nova mãe agendada",
-          desc: `Mariana Silva agendou escuta individual com ${profEmFoco.name} para ${selectedDay}/10 às ${selectedTime}.`,
+          desc: `Mariana Silva agendou escuta individual com ${profEmFoco.name} para ${selectedDateShort} às ${selectedTime}.`,
           time: "Agora mesmo",
           lida: false,
           destino: "/agenda",
@@ -662,7 +706,7 @@ export default function SupportNetworkScreen({
                   Encontro agendado com sucesso
                 </h3>
                 <p className="text-[14px] text-[#6B6365] max-w-md mx-auto leading-relaxed">
-                  Sua sessão com {profEmFoco.name} para o dia {selectedDay}/10 às{" "}
+                  Sua sessão com {profEmFoco.name} para o dia {selectedDateShort} às{" "}
                   {selectedTime} foi confirmada. Redirecionando para seus agendamentos...
                 </p>
               </div>
@@ -690,16 +734,23 @@ export default function SupportNetworkScreen({
                 <div className="flex items-center justify-between py-3 px-4 rounded-xl bg-[#F5EDE9]/70 border border-[#E4DAD5] mb-5">
                   <button
                     type="button"
-                    className="p-1 text-[#6B6365] hover:text-[#1F3A27] cursor-pointer"
+                    onClick={irParaMesAnterior}
+                    disabled={ehMesAtual}
+                    className={`p-1 transition ${
+                      ehMesAtual
+                        ? "text-stone-300 cursor-not-allowed"
+                        : "text-[#6B6365] hover:text-[#1F3A27] cursor-pointer"
+                    }`}
                     aria-label="Mês anterior"
                   >
                     <ChevronLeft size={18} />
                   </button>
                   <span className="font-medium text-[#1F3A27] text-[14px]">
-                    Outubro de 2026
+                    {tituloMesAno}
                   </span>
                   <button
                     type="button"
+                    onClick={irParaProximoMes}
                     className="p-1 text-[#6B6365] hover:text-[#1F3A27] cursor-pointer"
                     aria-label="Próximo mês"
                   >
@@ -716,28 +767,46 @@ export default function SupportNetworkScreen({
 
                 {/* Grade de dias com áreas de toque confortáveis para mobile */}
                 <div className="grid grid-cols-7 gap-1.5 text-center mb-7">
-                  <div className="col-span-4" />
-                  {diasOutubro.map((dia) => (
-                    <button
-                      key={dia}
-                      type="button"
-                      onClick={() => setSelectedDay(dia)}
-                      className={`h-10 w-10 mx-auto rounded-lg flex items-center justify-center text-[13px] font-medium transition cursor-pointer tabular-nums ${
-                        selectedDay === dia
-                          ? "bg-[#294D33] text-[#FAF6F3]"
-                          : "text-[#2B2829] hover:bg-[#F1E6E1]"
-                      }`}
-                    >
-                      {dia}
-                    </button>
+                  {Array.from({ length: primeiroDiaSemana }).map((_, idx) => (
+                    <div key={`empty-${idx}`} />
                   ))}
+                  {diasDoMes.map((dia) => {
+                    const dataDia = new Date(mesVisualizado.ano, mesVisualizado.mes, dia);
+                    dataDia.setHours(0, 0, 0, 0);
+                    const passado = dataDia < hoje;
+                    const selecionado =
+                      selectedDate.getFullYear() === dataDia.getFullYear() &&
+                      selectedDate.getMonth() === dataDia.getMonth() &&
+                      selectedDate.getDate() === dia;
+
+                    return (
+                      <button
+                        key={dia}
+                        type="button"
+                        disabled={passado}
+                        onClick={() => {
+                          setSelectedDate(dataDia);
+                          setSelectedTime(null);
+                        }}
+                        className={`h-10 w-10 mx-auto rounded-lg flex items-center justify-center text-[13px] font-medium transition tabular-nums ${
+                          passado
+                            ? "text-stone-300 cursor-not-allowed line-through"
+                            : selecionado
+                            ? "bg-[#294D33] text-[#FAF6F3] cursor-pointer"
+                            : "text-[#2B2829] hover:bg-[#F1E6E1] cursor-pointer"
+                        }`}
+                      >
+                        {dia}
+                      </button>
+                    );
+                  })}
                 </div>
 
                 {/* Seleção de Horários */}
                 <div className="border-t border-[#E4DAD5] pt-6">
                   <div className="flex items-center justify-between mb-3">
                     <h3 className="text-[13px] font-medium text-[#1F3A27]">
-                      Horários disponíveis · {selectedDay} de outubro
+                      Horários disponíveis · {selectedDateExtenso}
                     </h3>
                     <span className="text-[12px] text-[#6B6365]">
                       Horário de Brasília

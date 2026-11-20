@@ -37,6 +37,30 @@ describe('rhApi', () => {
     expect(fetchSpy).not.toHaveBeenCalled();
   });
 
+  it('rejects whitespace-only floravel_jwt with 401 RhApiError without calling fetch', async () => {
+    localStorage.setItem(JWT_KEY, '   \t\n ');
+    const fetchSpy = vi.spyOn(globalThis, 'fetch');
+
+    await expect(obterEmpresaAtual()).rejects.toMatchObject({
+      name: 'RhApiError',
+      status: 401,
+      isAuthError: true,
+    });
+    expect(fetchSpy).not.toHaveBeenCalled();
+  });
+
+  it('trims padded floravel_jwt before sending Authorization header', async () => {
+    localStorage.setItem(JWT_KEY, '  jwt-rh-token  ');
+    const fetchMock = vi
+      .spyOn(globalThis, 'fetch')
+      .mockResolvedValueOnce(jsonResponse({ id: 'emp-1', nome: 'TechMães Brasil S.A.' }));
+
+    await obterEmpresaAtual();
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(fetchMock.mock.calls[0][1].headers.Authorization).toBe('Bearer jwt-rh-token');
+  });
+
   it('attaches Bearer JWT and resolves all 8 RH endpoints', async () => {
     const fetchMock = vi
       .spyOn(globalThis, 'fetch')

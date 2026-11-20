@@ -20,7 +20,7 @@ html {
 }
 
 body {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
   background-color: #FCF7F9;
-  color: #294D33;
+  color: #2B2829;
 }

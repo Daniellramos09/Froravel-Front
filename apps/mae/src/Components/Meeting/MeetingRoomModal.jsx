@@ -6,6 +6,15 @@ import {
   Lock, Volume2, Subtitles, LayoutGrid, Maximize2, Smile, MoreVertical, Pin
 } from 'lucide-react';
 import DenunciaModal from '../Safety/DenunciaModal';
+import { registrarContatosEncontro } from '../../utils/contatosSeguranca';
+import {
+  conectarEventosSala,
+  entrarSala,
+  sairSala,
+  enviarMensagemSala,
+  buildJitsiRoomName,
+  loadJitsiExternalApi,
+} from '@floravel/shared';
 
 const isLocal = typeof window !== 'undefined' && ['localhost', '127.0.0.1'].includes(window.location.hostname);
 const API_BASE = import.meta.env.VITE_API_URL || (isLocal ? 'http://localhost:8080' : '');
@@ -84,7 +93,8 @@ function LiveWebcamTile({ stream, fallbackImg, alt }) {
 export default function MeetingRoomModal({ 
   isOpen, 
   onClose, 
-  meetingTitle = "Vencendo a Depressão Pós-Parto",
+  salaId = "roda-primeiros-meses",
+  meetingTitle = "Roda de Acolhimento: Os Primeiros Meses",
   therapistName = "Dra. Helena Souza (CRP 06/142980)",
   meetingType = "Terapia em Grupo • Canal Host Florável"
 }) {
@@ -125,9 +135,16 @@ export default function MeetingRoomModal({
   const [feedbackEnviado, setFeedbackEnviado] = useState(false);
   const [disjuntorInfo, setDisjuntorInfo] = useState(null);
   const [localStream, setLocalStream] = useState(null);
+  const [sseBanner, setSseBanner] = useState('');
+  const [confirmingExit, setConfirmingExit] = useState(false);
+  const [showFeedbackForm, setShowFeedbackForm] = useState(false);
+  const [participantesHistorico, setParticipantesHistorico] = useState([]);
+  const [jitsiAtivo, setJitsiAtivo] = useState(false);
+  const jitsiContainerRef = useRef(null);
+  const jitsiApiRef = useRef(null);
 
-  // Captura única e contínua da Webcam (sem pedir permissão novamente entre lobby e sala)
-  const shouldCaptureCamera = isOpen && isCameraOn && stage !== 'post_call';
+  // Captura única e contínua da Webcam (sem pedir permissão novamente entre lobby e sala, desliga se Jitsi assumir)
+  const shouldCaptureCamera = isOpen && isCameraOn && stage !== 'post_call' && !jitsiAtivo;
 
   useEffect(() => {
     let cancelled = false;
@@ -152,53 +169,153 @@ export default function MeetingRoomModal({
     };
   }, [shouldCaptureCamera]);
 
-  // Sincronização em tempo real entre Abas (BroadcastChannel + Spring Boot /api/sala-ao-vivo)
+  // Sincronização em tempo real via Server-Sent Events (SSE)
   useEffect(() => {
     if (!isOpen) return;
-    let bc = null;
-    try {
-      bc = new BroadcastChannel('floravel_sala_ao_vivo');
-      bc.onmessage = (ev) => {
-        const data = ev.data || {};
-        if (data.type === 'CHAT_MSG' && data.msg) {
-          setChatMessages((prev) =>
-            prev.some((m) => m.id === data.msg.id) ? prev : [...prev, data.msg]
+    const token = typeof window !== 'undefined' ? localStorage.getItem('floravel_jwt') : null;
+
+    const aplicarEstadoInicial = (estado) => {
+      if (!estado) return;
+      if (Array.isArray(estado.mensagens) && estado.mensagens.length > 0) {
+        setChatMessages(estado.mensagens);
+      }
+      if (estado.disjuntorAcionado) {
+        setDisjuntorInfo(estado.usuarioIsoladoDisjuntor || 'Participante isolada');
+      }
+      if (estado.statusSala === 'ENCERRADA' && stage === 'in_call') {
+        setStage('post_call');
+      }
+    };
+
+    const disconnect = conectarEventosSala({
+      apiBase: API_BASE,
+      salaId,
+      token,
+      onConnected: (payload) => {
+        aplicarEstadoInicial(payload?.estado);
+        if (Array.isArray(payload?.estado?.participantes)) {
+          setParticipantesHistorico((prev) => {
+            const merged = [...prev];
+            payload.estado.participantes.forEach((p) => {
+              if (p?.nome && !merged.some((x) => x.nome === p.nome)) {
+                merged.push(p);
+              }
+            });
+            return merged;
+          });
+        }
+      },
+      onParticipantJoined: (payload) => {
+        const p = payload?.participante;
+        if (p?.nome) {
+          setParticipantesHistorico((prev) =>
+            prev.some((x) => x.nome === p.nome) ? prev : [...prev, p]
           );
-        } else if (data.type === 'DISJUNTOR_ACIONADO') {
-          setDisjuntorInfo(data.alvo || 'Participante reportada');
-        } else if (data.type === 'ROOM_ENDED' && stage === 'in_call') {
+          if (p.role !== 'MAE') {
+            setSseBanner(`${p.nome} entrou na sala de acolhimento.`);
+            setTimeout(() => setSseBanner(''), 3800);
+          }
+        }
+      },
+      onParticipantLeft: (payload) => {
+        const p = payload?.participante;
+        if (p?.nome && p.role !== 'MAE') {
+          setSseBanner(`${p.nome} saiu da sala.`);
+          setTimeout(() => setSseBanner(''), 3500);
+        }
+      },
+      onRoomStatusChanged: (payload) => {
+        if (payload?.statusSala === 'ENCERRADA' && stage === 'in_call') {
+          setShowFeedbackForm(true);
           setStage('post_call');
         }
-      };
-    } catch (_) {
-      // BroadcastChannel indisponível
+      },
+      onChatMessage: (payload) => {
+        const msg = payload?.mensagem;
+        if (msg) {
+          setChatMessages((prev) => (prev.some((m) => m.id === msg.id) ? prev : [...prev, msg]));
+        }
+      },
+      onDisjuntorAcionado: (payload) => {
+        setDisjuntorInfo(payload?.alvo || 'Participante reportada');
+      },
+    });
+
+    return () => disconnect();
+  }, [isOpen, stage, salaId]);
+
+  // Entrada/Saída na sala + Jitsi Meet SDK quando em chamada
+  useEffect(() => {
+    if (!isOpen || stage !== 'in_call') return;
+    let cancelled = false;
+    const token = typeof window !== 'undefined' ? localStorage.getItem('floravel_jwt') : null;
+    const sessaoMae = (() => {
+      try {
+        return JSON.parse(localStorage.getItem('floravel_mae_sessao') || 'null');
+      } catch {
+        return null;
+      }
+    })();
+    const nomeMae = sessaoMae?.nome || 'Mariana Silva';
+
+    if (API_BASE) {
+      entrarSala({
+        apiBase: API_BASE,
+        salaId,
+        token,
+        participante: {
+          usuarioId: sessaoMae?.usuarioId || undefined,
+          perfilId: sessaoMae?.id || undefined,
+          nome: nomeMae,
+          role: 'MAE',
+        },
+      }).catch(() => {});
     }
 
-    const syncInterval = setInterval(async () => {
+    loadJitsiExternalApi().then((JitsiAPI) => {
+      if (cancelled || !JitsiAPI || !jitsiContainerRef.current) return;
       try {
-        const res = await fetch(`${API_BASE}/api/sala-ao-vivo/estado`);
-        if (res.ok) {
-          const estado = await res.json();
-          if (Array.isArray(estado.mensagens) && estado.mensagens.length > 0) {
-            setChatMessages(estado.mensagens);
-          }
-          if (estado.disjuntorAcionado) {
-            setDisjuntorInfo(estado.usuarioIsoladoDisjuntor || 'Participante isolada');
-          }
-          if (estado.statusSala === 'ENCERRADA' && stage === 'in_call') {
-            setStage('post_call');
-          }
-        }
-      } catch (_) {
-        // Fallback offline silencioso
+        const api = new JitsiAPI('meet.jit.si', {
+          roomName: buildJitsiRoomName(salaId),
+          parentNode: jitsiContainerRef.current,
+          width: '100%',
+          height: '100%',
+          userInfo: { displayName: nomeMae },
+          configOverwrite: {
+            prejoinPageEnabled: false,
+            startWithAudioMuted: !isMicOn,
+            startWithVideoMuted: !isCameraOn,
+          },
+        });
+        jitsiApiRef.current = api;
+        setJitsiAtivo(true);
+      } catch {
+        setJitsiAtivo(false);
       }
-    }, 1500);
+    });
 
     return () => {
-      clearInterval(syncInterval);
-      if (bc) bc.close();
+      cancelled = true;
+      if (jitsiApiRef.current) {
+        try { jitsiApiRef.current.dispose(); } catch {}
+        jitsiApiRef.current = null;
+      }
+      setJitsiAtivo(false);
+      if (API_BASE) {
+        sairSala({
+          apiBase: API_BASE,
+          salaId,
+          token,
+          participante: {
+            usuarioId: sessaoMae?.usuarioId || undefined,
+            perfilId: sessaoMae?.id || undefined,
+            nome: nomeMae,
+            role: 'MAE',
+          },
+        }).catch(() => {});
+      }
     };
-  }, [isOpen, stage]);
+  }, [isOpen, stage, salaId]);
 
   const therapistImg = therapistName.toLowerCase().includes('rafael')
     ? '/img/fotopsicologo/psicologos7.jpg'
@@ -209,6 +326,7 @@ export default function MeetingRoomModal({
   const participants = [
     { 
       id: 'therapist', 
+      codigoPublico: '#FLR-P14H90',
       name: therapistName, 
       shortName: therapistName.split(' (')[0],
       role: 'Anfitriã(o) (Host) • Psicologia Perinatal', 
@@ -218,6 +336,7 @@ export default function MeetingRoomModal({
     },
     { 
       id: 'user', 
+      codigoPublico: localStorage.getItem('floravel_codigo_publico') || '#FLR-M8R4K2',
       name: 'Você (Mariana Silva)', 
       shortName: 'Você (Mariana)',
       role: 'Participante', 
@@ -228,6 +347,7 @@ export default function MeetingRoomModal({
     },
     { 
       id: 'part1', 
+      codigoPublico: '#FLR-M2C8R4',
       name: 'Camila Rocha', 
       shortName: 'Camila Rocha',
       role: 'Mãe do Gael (3m)', 
@@ -237,6 +357,7 @@ export default function MeetingRoomModal({
     },
     { 
       id: 'part2', 
+      codigoPublico: '#FLR-M9B5L7',
       name: 'Beatriz Lima', 
       shortName: 'Beatriz Lima',
       role: 'Mãe da Alice (5m)', 
@@ -244,6 +365,23 @@ export default function MeetingRoomModal({
       isSpeaking: false, 
       img: '/img/ilustracoes/acolhimento.jpg' 
     },
+  ];
+
+  const participantesRegistro = [
+    ...participants.filter((p) => !p.isUser).map((p) => ({
+      id: p.id,
+      nome: p.shortName || p.name,
+      role: p.isHost ? 'Anfitriã (Psicóloga)' : 'Participante',
+      codigoPublico: p.codigoPublico,
+    })),
+    ...participantesHistorico
+      .filter((hp) => hp?.nome && !participants.some((p) => (p.shortName || p.name) === hp.nome || p.name === hp.nome))
+      .map((hp, idx) => ({
+        id: hp.usuarioId || hp.perfilId || `sse-${idx}`,
+        nome: hp.nome,
+        role: hp.role === 'PSICOLOGO' ? 'Anfitriã (Psicóloga)' : 'Participante',
+        codigoPublico: hp.codigoPublico || `#FLR-${String(hp.usuarioId || hp.nome).slice(-6).toUpperCase().replace(/[^A-Z0-9]/g, 'X')}`,
+      })),
   ];
 
   useEffect(() => {
@@ -270,6 +408,22 @@ export default function MeetingRoomModal({
     }, 1000);
     return () => clearInterval(timer);
   }, [isOpen, stage]);
+
+  // Registra participantes da chamada no histórico de segurança para permitir denúncia posterior
+  useEffect(() => {
+    if (!isOpen || stage !== 'in_call') return;
+    registrarContatosEncontro(
+      participantesRegistro.map((p) => ({
+        id: p.id,
+        nome: p.nome,
+        codigoPublico: p.codigoPublico,
+        papel: p.role.includes('Psicóloga') ? 'psicologo' : 'mae',
+        papelLabel: p.role,
+        canal: `${meetingType} · ${meetingTitle}`,
+        tipoCanal: 'video_grupo',
+      }))
+    );
+  }, [isOpen, stage, participantesHistorico.length]);
 
   if (!isOpen) return null;
 
@@ -301,17 +455,15 @@ export default function MeetingRoomModal({
     setChatMessages((prev) => [...prev, msgObj]);
     setNewMsg('');
 
+    const token = typeof window !== 'undefined' ? localStorage.getItem('floravel_jwt') : null;
     try {
-      const bc = new BroadcastChannel('floravel_sala_ao_vivo');
-      bc.postMessage({ type: 'CHAT_MSG', msg: msgObj });
-      bc.close();
-    } catch (_) {}
-
-    try {
-      await fetch(`${API_BASE}/api/sala-ao-vivo/mensagens`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ remetente: 'Mariana Silva (Mãe)', texto, isHost: false })
+      await enviarMensagemSala({
+        apiBase: API_BASE,
+        salaId,
+        remetente: 'Mariana Silva (Mãe)',
+        texto,
+        isHost: false,
+        token,
       });
     } catch (_) {}
   };
@@ -608,7 +760,17 @@ export default function MeetingRoomModal({
 
             {/* ÁREA DE VÍDEOS */}
             <div className="flex-1 flex flex-col min-h-0 relative">
-              {layoutMode === 'spotlight' ? (
+              {sseBanner && (
+                <div className="mb-2 mx-auto px-4 py-1.5 rounded-full bg-emerald-700/90 text-white text-xs font-semibold shadow-md z-30">
+                  {sseBanner}
+                </div>
+              )}
+              <div
+                ref={jitsiContainerRef}
+                data-testid="mae-jitsi-meet-container"
+                className={jitsiAtivo ? 'flex-1 w-full rounded-2xl overflow-hidden border border-white/10 shadow-lg' : 'hidden'}
+              />
+              {!jitsiAtivo && (layoutMode === 'spotlight' ? (
                 /* MODO SPOTLIGHT: HOST GRANDE + BARRA LATERAL DE PARTICIPANTES */
                 <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-3 min-h-0">
                   
@@ -777,7 +939,7 @@ export default function MeetingRoomModal({
                     </div>
                   ))}
                 </div>
-              )}
+              ))}
 
               {/* BARRA DE LEGENDAS AO VIVO (CC) */}
               {isCaptionsOn && (
@@ -959,7 +1121,7 @@ export default function MeetingRoomModal({
               {/* BOTÃO DE SAIR DA CHAMADA (PÍLULA VERMELHA DO GOOGLE MEET) */}
               <button
                 type="button"
-                onClick={() => setStage('post_call')}
+                onClick={() => setConfirmingExit(true)}
                 className="px-6 h-11 rounded-full bg-[#ea4335] hover:bg-red-600 text-white font-bold text-sm flex items-center gap-2 transition shadow-md cursor-pointer ml-2"
                 title="Sair da reunião"
               >
@@ -994,6 +1156,40 @@ export default function MeetingRoomModal({
             </div>
 
           </footer>
+
+          {/* CONFIRMAÇÃO RÁPIDA PARA EVITAR SAÍDA ACIDENTAL */}
+          {confirmingExit && (
+            <div className="absolute inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
+              <div className="bg-white text-[#2B2829] rounded-3xl p-6 max-w-sm w-full shadow-2xl space-y-4 text-center">
+                <h3 className="text-lg font-fraunces font-bold text-stone-900">
+                  Sair da sala de acolhimento?
+                </h3>
+                <p className="text-xs text-stone-600 leading-relaxed">
+                  Você pode voltar para a chamada a qualquer momento enquanto o encontro estiver acontecendo.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-2 pt-1">
+                  <button
+                    type="button"
+                    onClick={() => setConfirmingExit(false)}
+                    className="flex-1 py-2.5 px-4 rounded-full border border-stone-300 text-xs font-bold text-stone-700 hover:bg-stone-50 transition cursor-pointer"
+                  >
+                    Continuar na sala
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setConfirmingExit(false);
+                      setShowFeedbackForm(false);
+                      setStage('post_call');
+                    }}
+                    className="flex-1 py-2.5 px-4 rounded-full bg-[#ea4335] hover:bg-red-600 text-white text-xs font-bold transition cursor-pointer"
+                  >
+                    Sair da reunião
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
 
@@ -1027,24 +1223,69 @@ export default function MeetingRoomModal({
                   </h2>
                   <p className="text-xs text-stone-500 mt-1">{meetingTitle}</p>
 
-                  <div className="mt-4 flex items-center justify-center gap-3">
+                  <div className="mt-4 flex flex-wrap items-center justify-center gap-2.5">
                     <button
                       type="button"
                       onClick={() => setStage('in_call')}
-                      className="px-4 py-2 rounded-full border border-stone-300 text-xs font-bold text-stone-700 hover:bg-stone-50 transition cursor-pointer"
+                      className="px-5 py-2.5 rounded-full bg-[#294D33] hover:bg-[#1f3c27] text-white text-xs font-bold transition cursor-pointer shadow-xs"
                     >
                       Voltar para a sala
                     </button>
                     <button
                       type="button"
                       onClick={onClose}
-                      className="px-4 py-2 rounded-full text-xs font-bold text-[#294D33] hover:underline cursor-pointer"
+                      className="px-5 py-2.5 rounded-full border border-stone-300 text-xs font-bold text-stone-700 hover:bg-stone-50 transition cursor-pointer"
                     >
                       Ir direto ao painel
                     </button>
+                    {!showFeedbackForm && (
+                      <button
+                        type="button"
+                        onClick={() => setShowFeedbackForm(true)}
+                        className="px-4 py-2.5 rounded-full text-xs font-bold text-[#294D33] hover:underline cursor-pointer"
+                      >
+                        Avaliar encontro (opcional)
+                      </button>
+                    )}
                   </div>
                 </div>
 
+                {/* REGISTRO DE PARTICIPANTES DA CALL PARA SEGURANÇA E MODERAÇÃO */}
+                <div className="mb-5 rounded-2xl border border-stone-200 bg-[#FCF7F9] p-4">
+                  <div className="flex items-center justify-between mb-2.5">
+                    <span className="text-xs font-bold text-[#1F3A27] flex items-center gap-1.5">
+                      <Users size={14} /> Participantes deste encontro
+                    </span>
+                    <span className="text-[11px] text-stone-500">Moderação segura</span>
+                  </div>
+                  <div className="space-y-2 max-h-40 overflow-y-auto">
+                    {participantesRegistro.map((p) => (
+                      <div
+                        key={p.id}
+                        className="flex items-center justify-between gap-2 rounded-xl bg-white px-3 py-2 border border-stone-200/80 text-xs"
+                      >
+                        <div className="min-w-0">
+                          <p className="font-bold text-stone-800 truncate">{p.nome}</p>
+                          <p className="text-[11px] text-stone-500">
+                            {p.role} · <span className="font-mono">{p.codigoPublico}</span>
+                          </p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => handleReportUser(`${p.nome} (${p.codigoPublico})`)}
+                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] font-bold text-red-700 bg-red-50 hover:bg-red-100 transition shrink-0 cursor-pointer"
+                          title={`Denunciar ${p.nome}`}
+                        >
+                          <ShieldAlert size={13} />
+                          <span>Denunciar</span>
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {showFeedbackForm && (
+                  <>
                 {expectativa && (
                   <div className="p-3 bg-[#FCF7F9] rounded-2xl border border-[#E8A9BB]/40 text-xs text-stone-700 mb-4">
                     <strong>O que você esperava antes de entrar:</strong> "{expectativa}"
@@ -1119,6 +1360,8 @@ export default function MeetingRoomModal({
                     Enviar Feedback e Concluir
                   </button>
                 </form>
+                  </>
+                )}
               </>
             )}
 

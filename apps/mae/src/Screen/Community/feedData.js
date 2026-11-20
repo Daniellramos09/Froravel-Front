@@ -9,13 +9,13 @@ const minutosAtras = (min) => new Date(Date.now() - min * 60 * 1000).toISOString
 
 // Autoras e autores usados nos posts de exemplo
 const AUTORES = {
-  helena: { id: 'helena-souza', name: 'Dra. Helena Souza', initials: 'HS', role: 'terapeuta', detail: 'CRP 06/142980' },
-  ana: { id: 'ana-beatriz', name: 'Dra. Ana Beatriz Lima', initials: 'AB', role: 'terapeuta', detail: 'CRP 06/118734' },
-  mariana: { id: 'mariana-silva', name: 'Mariana Silva', initials: 'MS', role: 'mae', detail: 'Puerpério · semana 7' },
-  juliana: { id: 'juliana-costa', name: 'Juliana Costa', initials: 'JC', role: 'mae', detail: 'Puerpério · semana 12' },
-  fernanda: { id: 'fernanda-lima', name: 'Fernanda Lima', initials: 'FL', role: 'mae', detail: 'Gestante · 32 semanas' },
-  beatriz: { id: 'beatriz-santos', name: 'Beatriz Santos', initials: 'BS', role: 'mae', detail: 'Bebê de 5 meses' },
-  anonima: { id: 'anonima', name: 'Mãe anônima', initials: '?', role: 'mae', detail: 'Publicou sem se identificar' },
+  helena: { id: 'helena-souza', codigoPublico: '#FLR-P14H90', name: 'Dra. Helena Souza', initials: 'HS', role: 'terapeuta', detail: 'CRP 06/142980' },
+  ana: { id: 'ana-beatriz', codigoPublico: '#FLR-P11B34', name: 'Dra. Ana Beatriz Lima', initials: 'AB', role: 'terapeuta', detail: 'CRP 06/118734' },
+  mariana: { id: 'mariana-silva', codigoPublico: '#FLR-M8R4K2', name: 'Mariana Silva', initials: 'MS', role: 'mae', detail: 'Puerpério · semana 7' },
+  juliana: { id: 'juliana-costa', codigoPublico: '#FLR-M3J7C9', name: 'Juliana Costa', initials: 'JC', role: 'mae', detail: 'Puerpério · semana 12' },
+  fernanda: { id: 'fernanda-lima', codigoPublico: '#FLR-M6F2L4', name: 'Fernanda Lima', initials: 'FL', role: 'mae', detail: 'Gestante · 32 semanas' },
+  beatriz: { id: 'beatriz-santos', codigoPublico: '#FLR-M9B5S1', name: 'Beatriz Santos', initials: 'BS', role: 'mae', detail: 'Bebê de 5 meses' },
+  anonima: { id: 'anonima', codigoPublico: '#FLR-ANON01', name: 'Mãe anônima', initials: '?', role: 'mae', detail: 'Publicou sem se identificar' },
 };
 
 function postsIniciais() {

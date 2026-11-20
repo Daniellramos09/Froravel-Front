@@ -11,6 +11,7 @@ import {
   Sparkles,
   RefreshCw,
   Info,
+  LogIn,
 } from "lucide-react";
 import {
   obterEmpresaAtual,
@@ -19,16 +20,21 @@ import {
 } from "../services/rhApi";
 import { getInitials } from "../utils/rhSession";
 
+const CNPJ_REGEX = /^(\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}|\d{14})$/;
+const CNPJ_ERROR_MESSAGE =
+  "CNPJ inválido. Informe 14 dígitos ou o formato XX.XXX.XXX/XXXX-XX.";
+
 export default function SettingsScreen({
   company: propCompany,
   session = null,
   parentLoading = false,
   parentError = null,
   onRetry,
+  onLogout,
   onCompanyUpdated,
   onTriggerToast,
 }) {
-  const isControlledByParent = propCompany !== undefined && propCompany !== null;
+  const isControlledByParent = propCompany !== undefined;
 
   const [activeTab, setActiveTab] = useState("company");
   const [localCompany, setLocalCompany] = useState(propCompany || null);
@@ -45,6 +51,7 @@ export default function SettingsScreen({
   const companyNameId = useId();
   const cnpjId = useId();
   const tabListRef = useRef(null);
+  const savingRef = useRef(false);
 
   const fetchCompany = useCallback(async () => {
     setStandaloneLoading(true);
@@ -58,8 +65,11 @@ export default function SettingsScreen({
     } catch (err) {
       setStandaloneError(
         err instanceof RhApiError
-          ? err.message
-          : "Não foi possível carregar os dados da empresa."
+          ? { message: err.message, isAuthError: err.isAuthError }
+          : {
+              message: "Não foi possível carregar os dados da empresa.",
+              isAuthError: false,
+            }
       );
     } finally {
       setStandaloneLoading(false);
@@ -67,7 +77,7 @@ export default function SettingsScreen({
   }, []);
 
   useEffect(() => {
-    if (propCompany !== undefined) return undefined;
+    if (isControlledByParent) return undefined;
     let active = true;
     obterEmpresaAtual()
       .then((emp) => {
@@ -82,8 +92,11 @@ export default function SettingsScreen({
         if (!active) return;
         setStandaloneError(
           err instanceof RhApiError
-            ? err.message
-            : "Não foi possível carregar os dados da empresa."
+            ? { message: err.message, isAuthError: err.isAuthError }
+            : {
+                message: "Não foi possível carregar os dados da empresa.",
+                isAuthError: false,
+              }
         );
       })
       .finally(() => {
@@ -92,7 +105,7 @@ export default function SettingsScreen({
     return () => {
       active = false;
     };
-  }, [propCompany]);
+  }, [isControlledByParent]);
 
   const company = propCompany || localCompany;
   const companyForm = draftForm ?? {
@@ -100,8 +113,11 @@ export default function SettingsScreen({
     cnpj: company?.cnpj || "",
   };
   const isModified = draftForm !== null;
-  const loading = propCompany === undefined ? standaloneLoading : parentLoading;
-  const loadError = propCompany === undefined ? standaloneError : parentError?.message;
+  const loading = isControlledByParent ? parentLoading : standaloneLoading;
+  const rawError = isControlledByParent ? parentError : standaloneError;
+  const activeError =
+    typeof rawError === "string" ? { message: rawError, isAuthError: false } : rawError;
+  const loadError = activeError?.message || null;
 
   const triggerNotification = (message) => {
     if (onTriggerToast) {
@@ -128,9 +144,8 @@ export default function SettingsScreen({
       }
     }
     if (field === "cnpj") {
-      const cleanCnpj = value.replace(/\D/g, "");
-      if (cleanCnpj.length !== 14) {
-        errors.cnpj = "CNPJ inválido. Digite os 14 dígitos cadastrais da empresa.";
+      if (!CNPJ_REGEX.test(value.trim())) {
+        errors.cnpj = CNPJ_ERROR_MESSAGE;
       } else {
         delete errors.cnpj;
       }
@@ -140,25 +155,27 @@ export default function SettingsScreen({
 
   const handleSaveChanges = async (e) => {
     if (e) e.preventDefault();
+    if (savingRef.current) return;
     if (!company?.id || Object.keys(validationErrors).length > 0 || !isModified) return;
 
-    const cleanCnpj = companyForm.cnpj.replace(/\D/g, "");
-    if (!companyForm.nome.trim() || cleanCnpj.length !== 14) {
+    const trimmedName = companyForm.nome.trim();
+    const trimmedCnpj = companyForm.cnpj.trim();
+    const isCnpjValid = CNPJ_REGEX.test(trimmedCnpj);
+    if (!trimmedName || !isCnpjValid) {
       setValidationErrors({
-        ...(companyForm.nome.trim() ? {} : { nome: "O nome da empresa é obrigatório." }),
-        ...(cleanCnpj.length === 14
-          ? {}
-          : { cnpj: "CNPJ inválido. Digite os 14 dígitos cadastrais da empresa." }),
+        ...(trimmedName ? {} : { nome: "O nome da empresa é obrigatório." }),
+        ...(isCnpjValid ? {} : { cnpj: CNPJ_ERROR_MESSAGE }),
       });
       return;
     }
 
+    savingRef.current = true;
     setIsSaving(true);
     setSaveError("");
     try {
       const updated = await atualizarEmpresa(company.id, {
-        nome: companyForm.nome.trim(),
-        cnpj: companyForm.cnpj.trim(),
+        nome: trimmedName,
+        cnpj: trimmedCnpj,
       });
       setLocalCompany(updated);
       setDraftForm(null);
@@ -174,6 +191,7 @@ export default function SettingsScreen({
           : "Não foi possível salvar os dados da empresa."
       );
     } finally {
+      savingRef.current = false;
       setIsSaving(false);
     }
   };
@@ -277,14 +295,26 @@ export default function SettingsScreen({
             <AlertTriangle className="w-5 h-5 text-[#9B1C1C] shrink-0 mt-0.5" aria-hidden="true" />
             <p className="text-xs sm:text-sm text-[#9B1C1C] font-medium">{loadError}</p>
           </div>
-          <button
-            type="button"
-            onClick={() => (onRetry ? onRetry() : fetchCompany())}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-stone-200 bg-white text-stone-700 text-xs font-bold hover:bg-stone-50 transition cursor-pointer shrink-0"
-          >
-            <RefreshCw className="w-3.5 h-3.5" aria-hidden="true" />
-            <span>Tentar novamente</span>
-          </button>
+          <div className="flex items-center gap-2 shrink-0">
+            {activeError?.isAuthError && onLogout && (
+              <button
+                type="button"
+                onClick={onLogout}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#294D33] text-white text-xs font-bold hover:bg-[#1e3a27] transition cursor-pointer"
+              >
+                <LogIn className="w-3.5 h-3.5" aria-hidden="true" />
+                <span>Fazer login novamente</span>
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={() => (onRetry ? onRetry() : fetchCompany())}
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-stone-200 bg-white text-stone-700 text-xs font-bold hover:bg-stone-50 transition cursor-pointer shrink-0"
+            >
+              <RefreshCw className="w-3.5 h-3.5" aria-hidden="true" />
+              <span>Tentar novamente</span>
+            </button>
+          </div>
         </div>
       )}
 

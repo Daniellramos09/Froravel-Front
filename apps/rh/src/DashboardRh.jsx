@@ -8,7 +8,6 @@ import {
   ShieldCheck,
   Activity,
   Lock,
-  Sparkles,
   CheckCircle2,
   FileSpreadsheet,
   FileCheck2,
@@ -38,6 +37,7 @@ import BillingScreen from "./screens/BillingScreen";
 import SettingsScreen from "./screens/SettingsScreen";
 import { LANDING_URL } from "./utils/appLinks";
 import { getInitials } from "./utils/rhSession";
+import { formatCsvRow } from "./utils/csvExport";
 import {
   obterEmpresaAtual,
   obterRelatorioKAnonimato,
@@ -58,9 +58,9 @@ const CustomDonutTooltip = ({ active, payload }) => {
   if (active && payload && payload.length) {
     const data = payload[0];
     return (
-      <div className="bg-white/95 backdrop-blur-md p-3 rounded-xl shadow-lg border border-slate-100 text-xs max-w-xs">
-        <p className="font-semibold text-slate-800">{data.name}</p>
-        <p className="text-lg font-bold mt-0.5" style={{ color: data.payload.color }}>
+      <div className="bg-white p-3 rounded-lg shadow-sm border border-[#E4DAD5] text-xs max-w-xs">
+        <p className="font-semibold text-[#2B2829]">{data.name}</p>
+        <p className="text-lg font-bold mt-0.5 tabular-nums" style={{ color: data.payload.color }}>
           {data.value} licença(s)
         </p>
       </div>
@@ -72,9 +72,9 @@ const CustomDonutTooltip = ({ active, payload }) => {
 const CustomBarTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-white/95 backdrop-blur-md p-3 rounded-xl shadow-lg border border-slate-100 text-xs">
-        <p className="font-semibold text-slate-800 mb-1">{label}</p>
-        <p className="font-bold text-[#294D33]">
+      <div className="bg-white p-3 rounded-lg shadow-sm border border-[#E4DAD5] text-xs">
+        <p className="font-semibold text-[#2B2829] mb-1">{label}</p>
+        <p className="font-bold text-[#294D33] tabular-nums">
           {payload[0]?.value} colaboradora(s) ativa(s)
         </p>
       </div>
@@ -196,17 +196,21 @@ export default function DashboardRh({ session = null, onLogout }) {
     setShowExportMenu(false);
     if (format === "CSV") {
       const rows = [
-        ["Setor", "ColaboradorasAtivas", "AgrupadoPorKAnonimato"].join(";"),
+        formatCsvRow(["Setor", "ColaboradorasAtivas", "AgrupadoPorKAnonimato"]),
         ...(relatorio?.setoresElegiveis || []).map((s) =>
-          [s.nomeSetor, s.colaboradorasAtivas, s.agrupadoPorKAnonimato ? "SIM" : "NAO"].join(";")
+          formatCsvRow([
+            s.nomeSetor,
+            s.colaboradorasAtivas,
+            s.agrupadoPorKAnonimato ? "SIM" : "NAO",
+          ])
         ),
         ...(relatorio?.indiceGeralAgrupadoKAnonimato?.colaboradorasAtivas > 0
           ? [
-              [
+              formatCsvRow([
                 relatorio.indiceGeralAgrupadoKAnonimato.nomeSetor,
                 relatorio.indiceGeralAgrupadoKAnonimato.colaboradorasAtivas,
                 "SIM",
-              ].join(";"),
+              ]),
             ]
           : []),
       ];
@@ -270,13 +274,13 @@ export default function DashboardRh({ session = null, onLogout }) {
   const todayFormatted = formatTodayPtBr();
 
   return (
-    <div className="min-h-screen bg-[#FCF7F9] font-sans text-stone-800 flex flex-col lg:flex-row antialiased">
+    <div className="min-h-screen bg-[#FCF7F9] font-sans text-[#2B2829] flex flex-col lg:flex-row antialiased">
       {/* Toast de Notificação */}
       {toastMessage && (
         <div
           role="status"
           aria-live="polite"
-          className="fixed top-6 right-6 z-50 flex items-center gap-2.5 bg-[#1F3224] text-white px-5 py-3 rounded-xl shadow-xl text-sm animate-fade-in border border-white/10"
+          className="fixed top-6 right-6 z-50 flex items-center gap-2.5 bg-[#1F3A27] text-white px-5 py-3 rounded-lg shadow-lg text-sm animate-fade-in border border-white/10"
         >
           <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
           <span>{toastMessage}</span>
@@ -297,7 +301,7 @@ export default function DashboardRh({ session = null, onLogout }) {
       {/* Conteúdo Principal */}
       <main className="flex-1 flex flex-col min-w-0 pb-16">
         {/* TOP BAR */}
-        <header className="sticky top-0 bg-[#FCF7F9]/90 backdrop-blur-md z-30 px-6 lg:px-10 py-4 flex items-center justify-between border-b border-stone-200/60">
+        <header className="sticky top-0 bg-[#FCF7F9] z-30 px-6 lg:px-10 py-4 flex items-center justify-between border-b border-[#E4DAD5]">
           <div className="flex items-center gap-3">
             <button
               type="button"
@@ -398,7 +402,7 @@ export default function DashboardRh({ session = null, onLogout }) {
         <div className="px-6 lg:px-10 pt-6 space-y-6 max-w-7xl">
           {activeMenu === "inicio" && (
             <>
-              {loading && !company && (
+              {loading && (
                 <div
                   data-testid="dashboard-loading"
                   aria-busy="true"
@@ -422,7 +426,7 @@ export default function DashboardRh({ session = null, onLogout }) {
                 </div>
               )}
 
-              {error && (
+              {!loading && error && (
                 <div
                   role="alert"
                   data-testid="dashboard-error"
@@ -464,27 +468,27 @@ export default function DashboardRh({ session = null, onLogout }) {
 
               {!loading && !error && company && (
                 <>
-                  {/* BANNER PRIVACIDADE (LGPD) & BOAS-VINDAS */}
-                  <div className="space-y-4">
+                  {/* BANNER EDITORIAL FLORÁVEL & PRIVACIDADE (LGPD) */}
+                  <div className="rounded-xl bg-[#F1E6E1] p-6 sm:p-8 border border-[#E4DAD5] space-y-4">
                     <div>
                       <h2
-                        className="text-2xl sm:text-3xl font-normal text-slate-900 tracking-tight flex items-center gap-2"
+                        className="text-2xl sm:text-3xl font-normal text-[#1F3A27] tracking-tight"
                         style={{ fontFamily: "'Fraunces', serif" }}
                       >
                         Olá, {company.nome}!
                       </h2>
-                      <p className="text-sm text-slate-500 mt-1">
+                      <p className="text-sm text-[#4A5E4D] mt-1.5 max-w-2xl">
                         Acompanhe em tempo real a adesão ao programa de saúde emocional materna com proteção K-Anonimato.
                       </p>
                     </div>
 
-                    <div className="inline-flex flex-wrap items-center gap-2.5 px-4 py-2 rounded-2xl bg-white border border-slate-200/90 text-xs text-slate-600 shadow-2xs">
-                      <span className="inline-flex items-center gap-1 font-bold text-[#294D33]">
-                        <ShieldCheck className="w-4 h-4 text-[#73937E]" />
+                    <div className="inline-flex flex-wrap items-center gap-2.5 px-4 py-2 rounded-lg bg-white border border-[#E4DAD5] text-xs text-[#2B2829]">
+                      <span className="inline-flex items-center gap-1.5 font-bold text-[#294D33]">
+                        <ShieldCheck className="w-4 h-4 text-[#4A5E4D]" />
                         K-Anonimato (K ≥ {parametroK}) Ativo:
                       </span>
                       <span>
-                        <strong>{totalAtivadas} colaboradora(s) ativa(s)</strong>.{" "}
+                        <strong className="tabular-nums">{totalAtivadas} colaboradora(s) ativa(s)</strong>.{" "}
                         {relatorio?.diretrizCompliance ||
                           "Nenhuma informação clínica individual é acessível ao RH."}
                       </span>
@@ -492,34 +496,30 @@ export default function DashboardRh({ session = null, onLogout }) {
                   </div>
 
                   {/* SEÇÃO 1: 4 KPIS REAIS */}
-                  <section className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4.5">
+                  <section className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
                     {/* Card 1: Licenças Ativadas */}
-                    <div className="relative overflow-hidden bg-white rounded-2xl p-5 border border-slate-100 shadow-sm transition-all duration-300 hover:shadow-md">
-                      <div
-                        aria-hidden="true"
-                        className="absolute top-0 right-0 w-24 h-24 rounded-full bg-gradient-to-br from-[#FCE7F0]/80 to-transparent blur-xl pointer-events-none"
-                      />
-                      <div className="relative z-10 flex flex-col justify-between h-full">
+                    <div className="bg-white rounded-xl p-5 border border-[#E4DAD5]">
+                      <div className="flex flex-col justify-between h-full">
                         <div className="flex items-center justify-between mb-2">
-                          <span className="text-xs font-semibold text-slate-500">
+                          <span className="text-xs font-semibold text-[#4A5E4D]">
                             Licenças Ativadas
                           </span>
-                          <Users className="w-4 h-4 text-slate-400" />
+                          <Users className="w-4 h-4 text-[#73937E]" />
                         </div>
-                        <div className="flex items-baseline gap-1.5 my-2">
-                          <span className="text-3xl font-bold text-slate-900">{totalAtivadas}</span>
-                          <span className="text-sm font-medium text-slate-400">
+                        <div className="flex items-baseline gap-1.5 my-2 tabular-nums">
+                          <span className="text-3xl font-bold text-[#1F3A27]">{totalAtivadas}</span>
+                          <span className="text-sm font-medium text-[#6B6365]">
                             / {totalEmitidas}
                           </span>
                         </div>
                         <div className="mt-2">
-                          <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                          <div className="w-full bg-[#F1E6E1] h-1.5 rounded-full overflow-hidden">
                             <div
-                              className="h-full rounded-full transition-all duration-700 bg-gradient-to-r from-[#73937E] to-[#E8A9B8]"
+                              className="h-full rounded-full transition-all duration-500 bg-[#294D33]"
                               style={{ width: `${Math.min(100, Math.max(0, taxaAdesao))}%` }}
                             />
                           </div>
-                          <span className="text-[11px] font-medium text-slate-400 mt-1.5 block">
+                          <span className="text-xs font-medium text-[#6B6365] mt-1.5 block tabular-nums">
                             {taxaAdesao}% das licenças emitidas
                           </span>
                         </div>
@@ -527,62 +527,62 @@ export default function DashboardRh({ session = null, onLogout }) {
                     </div>
 
                     {/* Card 2: Taxa de Adesão */}
-                    <div className="relative overflow-hidden bg-white rounded-2xl p-5 border border-slate-100 shadow-sm transition-all duration-300 hover:shadow-md">
-                      <div className="relative z-10 flex flex-col justify-between h-full">
+                    <div className="bg-white rounded-xl p-5 border border-[#E4DAD5]">
+                      <div className="flex flex-col justify-between h-full">
                         <div className="flex items-center justify-between mb-2">
-                          <span className="text-xs font-semibold text-slate-500">
+                          <span className="text-xs font-semibold text-[#4A5E4D]">
                             Taxa de Adesão
                           </span>
-                          <Activity className="w-4 h-4 text-slate-400" />
+                          <Activity className="w-4 h-4 text-[#73937E]" />
                         </div>
                         <div className="flex items-center gap-3 my-2">
-                          <span className="text-3xl font-bold text-slate-900">{taxaAdesao}%</span>
+                          <span className="text-3xl font-bold text-[#1F3A27] tabular-nums">{taxaAdesao}%</span>
                         </div>
-                        <p className="text-[11px] text-slate-400 mt-2 leading-tight">
+                        <p className="text-xs text-[#6B6365] mt-2 leading-tight">
                           Convites ativados sobre o total emitido pela empresa.
                         </p>
                       </div>
                     </div>
 
                     {/* Card 3: Setores Elegíveis K >= 5 */}
-                    <div className="relative overflow-hidden bg-white rounded-2xl p-5 border border-slate-100 shadow-sm transition-all duration-300 hover:shadow-md">
-                      <div className="relative z-10 flex flex-col justify-between h-full">
+                    <div className="bg-white rounded-xl p-5 border border-[#E4DAD5]">
+                      <div className="flex flex-col justify-between h-full">
                         <div className="flex items-center justify-between mb-2">
-                          <span className="text-xs font-semibold text-slate-500">
+                          <span className="text-xs font-semibold text-[#4A5E4D]">
                             Setores com K ≥ {parametroK}
                           </span>
-                          <Layers className="w-4 h-4 text-slate-400" />
+                          <Layers className="w-4 h-4 text-[#73937E]" />
                         </div>
-                        <div className="flex items-baseline gap-2 my-2">
-                          <span className="text-3xl font-bold text-slate-900">
+                        <div className="flex items-baseline gap-2 my-2 tabular-nums">
+                          <span className="text-3xl font-bold text-[#1F3A27]">
                             {setoresElegiveis.length}
                           </span>
-                          <span className="text-xs font-medium text-slate-500">
+                          <span className="text-xs font-medium text-[#6B6365]">
                             elegíveis
                           </span>
                         </div>
-                        <p className="text-[11px] text-slate-400 mt-2 leading-tight">
+                        <p className="text-xs text-[#6B6365] mt-2 leading-tight tabular-nums">
                           {indiceAgrupado?.colaboradorasAtivas ?? 0} colaboradora(s) agrupada(s) no índice geral (&lt; K).
                         </p>
                       </div>
                     </div>
 
                     {/* Card 4: Status dos Convites */}
-                    <div className="relative overflow-hidden bg-white rounded-2xl p-5 border border-slate-100 shadow-sm transition-all duration-300 hover:shadow-md">
-                      <div className="relative z-10 flex flex-col justify-between h-full">
+                    <div className="bg-white rounded-xl p-5 border border-[#E4DAD5]">
+                      <div className="flex flex-col justify-between h-full">
                         <div className="flex items-center justify-between mb-2">
-                          <span className="text-xs font-semibold text-slate-500">
+                          <span className="text-xs font-semibold text-[#4A5E4D]">
                             Status dos Convites
                           </span>
-                          <Lock className="w-4 h-4 text-slate-400" />
+                          <Lock className="w-4 h-4 text-[#73937E]" />
                         </div>
-                        <div className="flex items-baseline gap-2 my-2">
-                          <span className="text-3xl font-bold text-slate-900">{pendingCount}</span>
-                          <span className="text-xs font-medium text-slate-500">
+                        <div className="flex items-baseline gap-2 my-2 tabular-nums">
+                          <span className="text-3xl font-bold text-[#1F3A27]">{pendingCount}</span>
+                          <span className="text-xs font-medium text-[#6B6365]">
                             pendentes
                           </span>
                         </div>
-                        <p className="text-[11px] text-slate-400 mt-2 leading-tight">
+                        <p className="text-xs text-[#6B6365] mt-2 leading-tight tabular-nums">
                           {revokedCount} revogada(s) · Sigilo LGPD ativo
                         </p>
                       </div>
@@ -592,26 +592,26 @@ export default function DashboardRh({ session = null, onLogout }) {
                   {/* SEÇÃO 2: GRÁFICOS COM DADOS REAIS */}
                   <section className="grid grid-cols-1 lg:grid-cols-12 gap-6">
                     {/* Gráfico A: Status das Licenças */}
-                    <div className="lg:col-span-5 bg-white rounded-2xl p-6 border border-slate-100 shadow-sm flex flex-col justify-between">
+                    <div className="lg:col-span-5 bg-white rounded-xl p-6 border border-[#E4DAD5] flex flex-col justify-between">
                       <div>
                         <div className="flex items-start justify-between mb-4">
                           <div>
-                            <h3 className="text-sm font-bold text-slate-900">
+                            <h3 className="text-sm font-bold text-[#1F3A27]">
                               Status das Licenças
                             </h3>
-                            <span className="text-xs text-slate-400">
+                            <span className="text-xs text-[#6B6365]">
                               Distribuição operacional da carteira corporativa
                             </span>
                           </div>
                         </div>
 
                         {licenseStatusChartData.length === 0 ? (
-                          <div className="h-56 flex flex-col items-center justify-center text-center text-xs text-slate-400">
+                          <div className="h-56 flex flex-col items-center justify-center text-center text-xs text-[#6B6365]">
                             <p>Nenhuma licença emitida até o momento.</p>
                             <button
                               type="button"
                               onClick={() => setActiveMenu("licencas")}
-                              className="mt-2 font-bold text-[#294D33] hover:underline cursor-pointer"
+                              className="mt-2 font-bold text-[#294D33] underline underline-offset-4 decoration-[#294D33]/30 hover:decoration-[#294D33] cursor-pointer"
                             >
                               Convidar primeira colaboradora
                             </button>
@@ -644,10 +644,10 @@ export default function DashboardRh({ session = null, onLogout }) {
                             </ResponsiveContainer>
 
                             <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                              <span className="text-2xl font-bold text-slate-800">
+                              <span className="text-2xl font-bold text-[#1F3A27] tabular-nums">
                                 {licenses.length}
                               </span>
-                              <span className="text-[10px] uppercase font-semibold tracking-wider text-slate-400">
+                              <span className="text-xs font-medium text-[#6B6365]">
                                 Licenças
                               </span>
                             </div>
@@ -655,7 +655,7 @@ export default function DashboardRh({ session = null, onLogout }) {
                         )}
                       </div>
 
-                      <div className="pt-4 border-t border-slate-100 space-y-2">
+                      <div className="pt-4 border-t border-[#E4DAD5] space-y-2">
                         {[
                           { label: "Ativadas", count: activeCount, color: COLORS.sage },
                           { label: "Pendentes", count: pendingCount, color: COLORS.yellow },
@@ -670,30 +670,30 @@ export default function DashboardRh({ session = null, onLogout }) {
                                 className="w-2.5 h-2.5 rounded-full shrink-0"
                                 style={{ backgroundColor: item.color }}
                               />
-                              <span className="text-slate-600">{item.label}</span>
+                              <span className="text-[#4A5E4D]">{item.label}</span>
                             </div>
-                            <span className="font-bold text-slate-800">{item.count}</span>
+                            <span className="font-bold text-[#2B2829] tabular-nums">{item.count}</span>
                           </div>
                         ))}
                       </div>
                     </div>
 
                     {/* Gráfico B: Distribuição por Setor (K-Anonimato) */}
-                    <div className="lg:col-span-7 bg-white rounded-2xl p-6 border border-slate-100 shadow-sm flex flex-col justify-between">
+                    <div className="lg:col-span-7 bg-white rounded-xl p-6 border border-[#E4DAD5] flex flex-col justify-between">
                       <div>
                         <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
                           <div>
-                            <h3 className="text-sm font-bold text-slate-900">
+                            <h3 className="text-sm font-bold text-[#1F3A27]">
                               Distribuição por Setor (K-Anonimato)
                             </h3>
-                            <span className="text-xs text-slate-400">
+                            <span className="text-xs text-[#6B6365]">
                               Setores com K ≥ {parametroK} exibidos individualmente; menores agrupados
                             </span>
                           </div>
                         </div>
 
                         {sectorChartData.length === 0 ? (
-                          <div className="h-64 flex items-center justify-center text-xs text-slate-400">
+                          <div className="h-64 flex items-center justify-center text-xs text-[#6B6365]">
                             Nenhuma licença ativada para exibir distribuição setorial.
                           </div>
                         ) : (
@@ -706,24 +706,24 @@ export default function DashboardRh({ session = null, onLogout }) {
                                 <CartesianGrid
                                   strokeDasharray="3 3"
                                   vertical={false}
-                                  stroke="#F1F5F9"
+                                  stroke="#E4DAD5"
                                 />
                                 <XAxis
                                   dataKey="setor"
                                   axisLine={false}
                                   tickLine={false}
-                                  tick={{ fill: "#64748B", fontSize: 12 }}
+                                  tick={{ fill: "#4A5E4D", fontSize: 12 }}
                                 />
                                 <YAxis
                                   allowDecimals={false}
                                   axisLine={false}
                                   tickLine={false}
-                                  tick={{ fill: "#64748B", fontSize: 12 }}
+                                  tick={{ fill: "#4A5E4D", fontSize: 12 }}
                                 />
                                 <RechartsTooltip content={<CustomBarTooltip />} />
                                 <Bar
                                   dataKey="colaboradoras"
-                                  fill="#73937E"
+                                  fill="#294D33"
                                   radius={[6, 6, 0, 0]}
                                   isAnimationActive={false}
                                 />
@@ -733,12 +733,12 @@ export default function DashboardRh({ session = null, onLogout }) {
                         )}
                       </div>
 
-                      <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+                      <div className="pt-3 border-t border-[#E4DAD5] flex items-center justify-between text-xs text-[#6B6365]">
                         <span>Parâmetro mínimo de anonimato: K = {parametroK}</span>
                         <button
                           type="button"
                           onClick={() => setActiveMenu("relatorios")}
-                          className="font-semibold text-[#294D33] hover:underline inline-flex items-center gap-1 cursor-pointer"
+                          className="font-semibold text-[#294D33] underline underline-offset-4 decoration-[#294D33]/30 hover:decoration-[#294D33] inline-flex items-center gap-1 cursor-pointer"
                         >
                           <span>Abrir relatório K-Anonimato</span>
                           <ExternalLink className="w-3 h-3" />
@@ -749,27 +749,25 @@ export default function DashboardRh({ session = null, onLogout }) {
 
                   {/* SEÇÃO 3: MURALHA DE FOGO LGPD & TELEMETRIA CLÍNICA PROTEGIDA */}
                   <section className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                    <div className="lg:col-span-7 bg-white rounded-2xl p-6 border border-slate-100 shadow-sm flex flex-col justify-between space-y-4">
+                    <div className="lg:col-span-7 bg-white rounded-xl p-6 border border-[#E4DAD5] flex flex-col justify-between space-y-4">
                       <div className="flex items-start gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-[#EBF3EE] text-[#294D33] flex items-center justify-center shrink-0">
-                          <Lock className="w-5 h-5" aria-hidden="true" />
-                        </div>
+                        <Lock className="w-5 h-5 text-[#294D33] shrink-0 mt-0.5" aria-hidden="true" />
                         <div>
-                          <h3 className="text-sm font-bold text-slate-900">
-                            Muralha de Fogo LGPD & Telemetria Clínica Protegida
+                          <h3 className="text-sm font-bold text-[#1F3A27]">
+                            Muralha de Fogo LGPD &amp; Telemetria Clínica Protegida
                           </h3>
-                          <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                          <p className="text-xs text-[#4A5E4D] mt-1 leading-relaxed">
                             Para proteger o sigilo ético (CFP/LGPD), respostas de triagem clínica, diários emocionais e histórico de sessões nunca são disponibilizados ao RH. Este painel exibe exclusivamente métricas administrativas e contagens agregadas com K-Anonimato (K ≥ {parametroK}).
                           </p>
                         </div>
                       </div>
 
-                      <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                      <div className="pt-3 border-t border-[#E4DAD5] flex items-center justify-between text-xs text-[#6B6365]">
                         <span>Contrato B2B: CNPJ {company.cnpj} · Status {company.status}</span>
                         <button
                           type="button"
                           onClick={() => setActiveMenu("relatorios")}
-                          className="text-[#C96E82] font-semibold hover:underline inline-flex items-center gap-1 cursor-pointer"
+                          className="text-[#294D33] font-semibold underline underline-offset-4 decoration-[#294D33]/30 hover:decoration-[#294D33] inline-flex items-center gap-1 cursor-pointer"
                         >
                           <span>Ver detalhes anonimizados</span>
                           <ExternalLink className="w-3 h-3" />
@@ -777,26 +775,24 @@ export default function DashboardRh({ session = null, onLogout }) {
                       </div>
                     </div>
 
-                    <div className="lg:col-span-5 bg-gradient-to-br from-[#FCE7F0]/70 via-white to-white rounded-2xl p-6 border border-[#F4C4D4]/60 shadow-sm flex flex-col justify-between">
+                    <div className="lg:col-span-5 bg-[#F5ECE3] rounded-xl p-6 border border-[#E4DAD5] flex flex-col justify-between">
                       <div>
-                        <div className="flex items-center gap-2 mb-3">
-                          <div className="w-7 h-7 rounded-lg bg-[#C96E82] text-white flex items-center justify-center shadow-xs">
-                            <Sparkles className="w-4 h-4" />
-                          </div>
-                          <h3 className="text-xs font-extrabold uppercase tracking-wider text-[#C96E82]">
-                            Apoio Corporativo & Gestão de Convites
-                          </h3>
-                        </div>
-                        <p className="text-xs text-slate-600 leading-relaxed">
+                        <h3
+                          className="text-lg font-normal text-[#1F3A27] mb-2"
+                          style={{ fontFamily: "'Fraunces', serif" }}
+                        >
+                          Apoio Corporativo &amp; Gestão de Convites
+                        </h3>
+                        <p className="text-xs text-[#4A5E4D] leading-relaxed">
                           Utilize a aba de licenças para emitir novos convites corporativos ou acompanhar a adesão dos setores com privacidade garantida.
                         </p>
                       </div>
 
-                      <div className="pt-4 mt-4 border-t border-slate-100/80 flex flex-col sm:flex-row gap-2">
+                      <div className="pt-4 mt-4 border-t border-[#E4DAD5] flex flex-col sm:flex-row gap-2">
                         <button
                           type="button"
                           onClick={() => setActiveMenu("licencas")}
-                          className="flex-1 py-2.5 px-4 rounded-xl bg-[#294D33] hover:bg-[#1e3a27] text-white text-xs font-bold shadow-xs transition-all cursor-pointer"
+                          className="flex-1 py-2.5 px-4 rounded-md bg-[#294D33] hover:bg-[#1F3A27] text-white text-xs font-bold transition-colors cursor-pointer"
                         >
                           Gerenciar Licenças
                         </button>
@@ -807,7 +803,7 @@ export default function DashboardRh({ session = null, onLogout }) {
                               "Solicitação de workshop registrada para atendimento corporativo Florável."
                             )
                           }
-                          className="flex-1 py-2.5 px-4 rounded-xl bg-[#1F3224] hover:bg-[#516B55] text-white text-xs font-bold shadow-xs transition-all cursor-pointer"
+                          className="flex-1 py-2.5 px-4 rounded-md bg-white border border-[#294D33]/30 hover:border-[#294D33] text-[#294D33] text-xs font-bold transition-colors cursor-pointer"
                         >
                           Solicitar Workshop
                         </button>
@@ -827,6 +823,7 @@ export default function DashboardRh({ session = null, onLogout }) {
               parentLoading={loading}
               parentError={error}
               onRetry={loadDashboardData}
+              onLogout={onLogout}
               onLicensesUpdated={refreshLicensesAndReport}
               onTriggerToast={showToast}
             />
@@ -840,6 +837,7 @@ export default function DashboardRh({ session = null, onLogout }) {
               parentLoading={loading}
               parentError={error}
               onRetry={loadDashboardData}
+              onLogout={onLogout}
               onTriggerToast={showToast}
             />
           )}
@@ -859,6 +857,7 @@ export default function DashboardRh({ session = null, onLogout }) {
               parentLoading={loading}
               parentError={error}
               onRetry={loadDashboardData}
+              onLogout={onLogout}
               onCompanyUpdated={setCompany}
               onTriggerToast={showToast}
             />
