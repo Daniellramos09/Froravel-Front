@@ -14,7 +14,7 @@ function App() {
     return getRhAuthState();
   });
 
-  if (!authState.isAuthenticated) {
+  if (!authState.isAuthenticated || !authState.token) {
     return (
       <main className="min-h-screen bg-[#FCF7F9] flex items-center justify-center p-6 font-sans text-stone-800 antialiased">
         <div

@@ -19,13 +19,14 @@ const FILTER_OPTIONS = [
 const ALL_GROUPS = [
   {
     id: 'grp-1',
+    salaId: 'roda-primeiros-meses',
     category: 'depressao_pos_parto',
     theme: "SAÚDE EMOCIONAL",
-    title: "Vencendo a Depressão Pós-Parto",
+    title: "Roda de Acolhimento: Os Primeiros Meses",
     desc: "Espaço acolhedor para falar sobre o vazio, a culpa e a tristeza no puerpério, sem julgamentos.",
-    date: "Hoje, às 19:00",
+    date: "Hoje, às 18:00",
     prof: "Dra. Helena Souza",
-    spots: "11/15",
+    spots: "3/5",
     isLiveNow: true,
     img: "/img/ilustracoes/roda.jpg"
   },
@@ -116,6 +117,7 @@ export default function ComunidadeScreen() {
         <MeetingRoomModal
           isOpen={isMeetingOpen}
           onClose={() => setIsMeetingOpen(false)}
+          salaId={activeMeeting.salaId || activeMeeting.id}
           meetingTitle={activeMeeting.title}
           therapistName={activeMeeting.prof}
           meetingType="Roda de Conversa Florável"

@@ -38,6 +38,7 @@ import BillingScreen from "./screens/BillingScreen";
 import SettingsScreen from "./screens/SettingsScreen";
 import { LANDING_URL } from "./utils/appLinks";
 import { getInitials } from "./utils/rhSession";
+import { formatCsvRow } from "./utils/csvExport";
 import {
   obterEmpresaAtual,
   obterRelatorioKAnonimato,
@@ -196,17 +197,21 @@ export default function DashboardRh({ session = null, onLogout }) {
     setShowExportMenu(false);
     if (format === "CSV") {
       const rows = [
-        ["Setor", "ColaboradorasAtivas", "AgrupadoPorKAnonimato"].join(";"),
+        formatCsvRow(["Setor", "ColaboradorasAtivas", "AgrupadoPorKAnonimato"]),
         ...(relatorio?.setoresElegiveis || []).map((s) =>
-          [s.nomeSetor, s.colaboradorasAtivas, s.agrupadoPorKAnonimato ? "SIM" : "NAO"].join(";")
+          formatCsvRow([
+            s.nomeSetor,
+            s.colaboradorasAtivas,
+            s.agrupadoPorKAnonimato ? "SIM" : "NAO",
+          ])
         ),
         ...(relatorio?.indiceGeralAgrupadoKAnonimato?.colaboradorasAtivas > 0
           ? [
-              [
+              formatCsvRow([
                 relatorio.indiceGeralAgrupadoKAnonimato.nomeSetor,
                 relatorio.indiceGeralAgrupadoKAnonimato.colaboradorasAtivas,
                 "SIM",
-              ].join(";"),
+              ]),
             ]
           : []),
       ];
@@ -398,7 +403,7 @@ export default function DashboardRh({ session = null, onLogout }) {
         <div className="px-6 lg:px-10 pt-6 space-y-6 max-w-7xl">
           {activeMenu === "inicio" && (
             <>
-              {loading && !company && (
+              {loading && (
                 <div
                   data-testid="dashboard-loading"
                   aria-busy="true"
@@ -422,7 +427,7 @@ export default function DashboardRh({ session = null, onLogout }) {
                 </div>
               )}
 
-              {error && (
+              {!loading && error && (
                 <div
                   role="alert"
                   data-testid="dashboard-error"
@@ -827,6 +832,7 @@ export default function DashboardRh({ session = null, onLogout }) {
               parentLoading={loading}
               parentError={error}
               onRetry={loadDashboardData}
+              onLogout={onLogout}
               onLicensesUpdated={refreshLicensesAndReport}
               onTriggerToast={showToast}
             />
@@ -840,6 +846,7 @@ export default function DashboardRh({ session = null, onLogout }) {
               parentLoading={loading}
               parentError={error}
               onRetry={loadDashboardData}
+              onLogout={onLogout}
               onTriggerToast={showToast}
             />
           )}
@@ -859,6 +866,7 @@ export default function DashboardRh({ session = null, onLogout }) {
               parentLoading={loading}
               parentError={error}
               onRetry={loadDashboardData}
+              onLogout={onLogout}
               onCompanyUpdated={setCompany}
               onTriggerToast={showToast}
             />

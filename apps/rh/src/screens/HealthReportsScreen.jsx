@@ -7,6 +7,7 @@ import {
   ShieldCheck,
   Lock,
   AlertTriangle,
+  LogIn,
 } from "lucide-react";
 import {
   ResponsiveContainer,
@@ -22,6 +23,7 @@ import {
   obterRelatorioKAnonimato,
   RhApiError,
 } from "../services/rhApi";
+import { formatCsvRow } from "../utils/csvExport";
 
 const HighContrastSectorTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
@@ -53,9 +55,10 @@ export default function HealthReportsScreen({
   parentLoading = false,
   parentError = null,
   onRetry,
+  onLogout,
   onTriggerToast,
 }) {
-  const isControlledByParent = propRelatorio !== undefined && Boolean(propEmpresaId);
+  const isControlledByParent = propRelatorio !== undefined;
 
   const [localCompany, setLocalCompany] = useState(propCompany || null);
   const [localRelatorio, setLocalRelatorio] = useState(propRelatorio || null);
@@ -84,8 +87,11 @@ export default function HealthReportsScreen({
     } catch (err) {
       setStandaloneError(
         err instanceof RhApiError
-          ? err.message
-          : "Não foi possível carregar o relatório de K-Anonimato."
+          ? { message: err.message, isAuthError: err.isAuthError }
+          : {
+              message: "Não foi possível carregar o relatório de K-Anonimato.",
+              isAuthError: false,
+            }
       );
     } finally {
       setStandaloneLoading(false);
@@ -106,8 +112,11 @@ export default function HealthReportsScreen({
         if (!active) return;
         setStandaloneError(
           err instanceof RhApiError
-            ? err.message
-            : "Não foi possível carregar o relatório de K-Anonimato."
+            ? { message: err.message, isAuthError: err.isAuthError }
+            : {
+                message: "Não foi possível carregar o relatório de K-Anonimato.",
+                isAuthError: false,
+              }
         );
       })
       .finally(() => {
@@ -118,10 +127,13 @@ export default function HealthReportsScreen({
     };
   }, [isControlledByParent, loadStandalonePayload]);
 
-  const relatorio = propRelatorio !== undefined ? propRelatorio : localRelatorio;
+  const relatorio = isControlledByParent ? propRelatorio : localRelatorio;
   const company = propCompany || localCompany;
   const loading = isControlledByParent ? parentLoading : standaloneLoading;
-  const errorMessage = isControlledByParent ? parentError?.message : standaloneError;
+  const rawError = isControlledByParent ? parentError : standaloneError;
+  const activeError =
+    typeof rawError === "string" ? { message: rawError, isAuthError: false } : rawError;
+  const errorMessage = activeError?.message || null;
 
   const triggerNotification = (message) => {
     if (onTriggerToast) {
@@ -133,8 +145,15 @@ export default function HealthReportsScreen({
   };
 
   const parametroK = relatorio?.parametroKMinimo ?? 5;
-  const setoresElegiveis = relatorio?.setoresElegiveis ?? [];
+  const setoresElegiveis = Array.isArray(relatorio?.setoresElegiveis)
+    ? relatorio.setoresElegiveis
+    : [];
   const indiceAgrupado = relatorio?.indiceGeralAgrupadoKAnonimato ?? null;
+  const totalEmitidas = relatorio?.totalLicencasEmitidas ?? 0;
+  const totalAtivadas = relatorio?.totalLicencasAtivadas ?? 0;
+  const taxaAdesao =
+    relatorio?.taxaAdesaoPercentual ??
+    (totalEmitidas > 0 ? Math.round((totalAtivadas / totalEmitidas) * 1000) / 10 : 0);
 
   const chartData = [
     ...setoresElegiveis.map((s) => ({
@@ -155,17 +174,21 @@ export default function HealthReportsScreen({
 
   const handleExportCsv = () => {
     const rows = [
-      ["Setor", "ColaboradorasAtivas", "AgrupadoPorKAnonimato"].join(";"),
+      formatCsvRow(["Setor", "ColaboradorasAtivas", "AgrupadoPorKAnonimato"]),
       ...setoresElegiveis.map((s) =>
-        [s.nomeSetor, s.colaboradorasAtivas, s.agrupadoPorKAnonimato ? "SIM" : "NAO"].join(";")
+        formatCsvRow([
+          s.nomeSetor,
+          s.colaboradorasAtivas,
+          s.agrupadoPorKAnonimato ? "SIM" : "NAO",
+        ])
       ),
       ...(indiceAgrupado && indiceAgrupado.colaboradorasAtivas > 0
         ? [
-            [
+            formatCsvRow([
               indiceAgrupado.nomeSetor,
               indiceAgrupado.colaboradorasAtivas,
               "SIM",
-            ].join(";"),
+            ]),
           ]
         : []),
     ];
@@ -271,14 +294,26 @@ export default function HealthReportsScreen({
             <AlertTriangle className="w-5 h-5 text-[#9B1C1C] shrink-0 mt-0.5" aria-hidden="true" />
             <p className="text-xs sm:text-sm text-[#9B1C1C] font-medium">{errorMessage}</p>
           </div>
-          <button
-            type="button"
-            onClick={() => (onRetry ? onRetry() : fetchStandaloneReport())}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-stone-200 bg-white text-stone-700 text-xs font-bold hover:bg-stone-50 transition cursor-pointer shrink-0"
-          >
-            <RefreshCw className="w-3.5 h-3.5" aria-hidden="true" />
-            <span>Tentar novamente</span>
-          </button>
+          <div className="flex items-center gap-2 shrink-0">
+            {activeError?.isAuthError && onLogout && (
+              <button
+                type="button"
+                onClick={onLogout}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#294D33] text-white text-xs font-bold hover:bg-[#1e3a27] transition cursor-pointer"
+              >
+                <LogIn className="w-3.5 h-3.5" aria-hidden="true" />
+                <span>Fazer login novamente</span>
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={() => (onRetry ? onRetry() : fetchStandaloneReport())}
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-stone-200 bg-white text-stone-700 text-xs font-bold hover:bg-stone-50 transition cursor-pointer shrink-0"
+            >
+              <RefreshCw className="w-3.5 h-3.5" aria-hidden="true" />
+              <span>Tentar novamente</span>
+            </button>
+          </div>
         </div>
       )}
 
@@ -384,7 +419,7 @@ export default function HealthReportsScreen({
                     Licenças Emitidas
                   </span>
                   <span className="text-xl font-bold text-[#294D33]">
-                    {relatorio.totalLicencasEmitidas}
+                    {totalEmitidas}
                   </span>
                 </div>
                 <div className="p-3.5 rounded-xl bg-[#FCF7F9] border border-stone-100">
@@ -392,7 +427,7 @@ export default function HealthReportsScreen({
                     Licenças Ativadas
                   </span>
                   <span className="text-xl font-bold text-[#294D33]">
-                    {relatorio.totalLicencasAtivadas}
+                    {totalAtivadas}
                   </span>
                 </div>
                 <div className="p-3.5 rounded-xl bg-[#FCF7F9] border border-stone-100">
@@ -400,7 +435,7 @@ export default function HealthReportsScreen({
                     Taxa de Adesão
                   </span>
                   <span className="text-xl font-bold text-[#03543F]">
-                    {relatorio.taxaAdesaoPercentual}%
+                    {taxaAdesao}%
                   </span>
                 </div>
                 <div className="p-3.5 rounded-xl bg-[#FCF7F9] border border-stone-100">

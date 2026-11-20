@@ -158,10 +158,14 @@ export default function Sidebar({
                 className="flex items-center gap-2.5 min-w-0 flex-1 hover:bg-stone-50 rounded-xl p-1.5 transition-colors cursor-pointer text-left outline-none focus-visible:ring-2 focus-visible:ring-[#294D33] focus-visible:ring-offset-2"
               >
                 <div
-                  className="w-8 h-8 rounded-full bg-[#F4DDE5] text-[#294D33] font-bold text-xs flex items-center justify-center border border-[#E8A9BB]/40 shrink-0"
+                  className="w-8 h-8 rounded-full bg-[#F4DDE5] text-[#294D33] font-bold text-xs flex items-center justify-center border border-[#E8A9BB]/40 shrink-0 overflow-hidden"
                   aria-hidden="true"
                 >
-                  {initials}
+                  {session?.fotoUrl ? (
+                    <img src={session.fotoUrl} alt={displayName} className="w-full h-full object-cover" />
+                  ) : (
+                    initials
+                  )}
                 </div>
                 <div className="truncate">
                   <div className="flex items-center gap-1.5">

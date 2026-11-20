@@ -7,6 +7,7 @@ import {
   Star
 } from 'lucide-react';
 import InstallAppButton from './Components/Pwa/InstallAppButton';
+import { getApiBase, fetchCurrentUserProfile } from '@floravel/shared';
 
 // IMPORTANDO AS TELAS
 import DashboardScreen from './Screen/Dashboard/DashboardScreen';
@@ -489,11 +490,11 @@ function AppContent() {
             <div 
               className="w-9 h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden border border-[#E8A9BB]/50 shadow-2xs cursor-pointer hover:ring-2 hover:ring-[#294D33]/30 transition-all shrink-0 bg-[#F4DDE5]" 
               onClick={() => handleTabChange('perfil')}
-              title="Meu Perfil · Mariana Silva"
+              title={`Meu Perfil · ${(() => { try { return JSON.parse(localStorage.getItem('floravel_mae_sessao') || '{}')?.nome || 'Mariana Silva'; } catch { return 'Mariana Silva'; } })()}`}
             >
               <img
-                src="/img/ilustracoes/florescer.jpg"
-                alt="Mariana Silva"
+                src={(() => { try { return JSON.parse(localStorage.getItem('floravel_mae_sessao') || '{}')?.fotoUrl || '/img/ilustracoes/florescer.jpg'; } catch { return '/img/ilustracoes/florescer.jpg'; } })()}
+                alt="Meu Perfil"
                 className="w-full h-full object-cover object-top"
               />
             </div>

@@ -110,7 +110,7 @@ const QUIZ_QUESTIONS = [
   },
   {
     id: 4,
-    text: "Como está o seu coração em relação ao futuro?",
+    text: "Como está o seu coração em relação ao futuro e aos seus planos?",
     options: [
       {
         value: 0,
@@ -139,6 +139,176 @@ const QUIZ_QUESTIONS = [
         message: "O amanhã me assusta e sinto que preciso de ajuda profissional.",
         img: "/img/ilustracoes/acolhimento.jpg",
         tag: "Acolhimento urgente"
+      }
+    ]
+  },
+  {
+    id: 5,
+    text: "Nos últimos 7 dias, você tem se culpado sem necessidade quando algo dá errado?",
+    options: [
+      {
+        value: 0,
+        title: "Não, de jeito nenhum",
+        message: "Entendo que imprevistos acontecem e não carrego essa culpa.",
+        img: "/img/ilustracoes/florescer.jpg",
+        tag: "Sem culpa"
+      },
+      {
+        value: 1,
+        title: "Raramente",
+        message: "Às vezes me cobro, mas logo consigo me acolher.",
+        img: "/img/ilustracoes/autocuidado.jpg",
+        tag: "Cobrança leve"
+      },
+      {
+        value: 2,
+        title: "Sim, algumas vezes",
+        message: "Costumo achar que a culpa é minha mesmo quando não é.",
+        img: "/img/ilustracoes/pausa.jpg",
+        tag: "Autocobrança"
+      },
+      {
+        value: 3,
+        title: "Sim, na maioria das vezes",
+        message: "Me sinto culpada por quase tudo que acontece ao meu redor.",
+        img: "/img/ilustracoes/acolhimento.jpg",
+        tag: "Culpa intensa"
+      }
+    ]
+  },
+  {
+    id: 6,
+    text: "Você tem se sentido ansiosa ou preocupada sem um motivo claro?",
+    options: [
+      {
+        value: 0,
+        title: "Não, estou tranquila",
+        message: "Minhas preocupações são proporcionais à rotina com o bebê.",
+        img: "/img/ilustracoes/mae-bebe-tranquilidade.jpg",
+        tag: "Em paz"
+      },
+      {
+        value: 1,
+        title: "Quase nunca",
+        message: "Apenas em momentos pontuais do dia.",
+        img: "/img/ilustracoes/autocuidado.jpg",
+        tag: "Leve alerta"
+      },
+      {
+        value: 2,
+        title: "Sim, às vezes",
+        message: "Sinto um aperto ou inquietação mesmo quando está tudo bem.",
+        img: "/img/ilustracoes/pausa.jpg",
+        tag: "Ansiedade"
+      },
+      {
+        value: 3,
+        title: "Sim, com muita frequência",
+        message: "A preocupação constante não me dá trégua.",
+        img: "/img/ilustracoes/acolhimento.jpg",
+        tag: "Atenção"
+      }
+    ]
+  },
+  {
+    id: 7,
+    text: "Você tem sentido medo ou pânico repentino sem um motivo aparente?",
+    options: [
+      {
+        value: 0,
+        title: "Não, nunca",
+        message: "Não tenho tido crises de medo ou sobressalto.",
+        img: "/img/ilustracoes/florescer.jpg",
+        tag: "Estável"
+      },
+      {
+        value: 1,
+        title: "Raramente",
+        message: "Aconteceu pouquíssimas vezes, mas logo passou.",
+        img: "/img/ilustracoes/mae-bebe-tranquilidade.jpg",
+        tag: "Pontual"
+      },
+      {
+        value: 2,
+        title: "Sim, algumas vezes",
+        message: "Às vezes o coração dispara e bate um medo do nada.",
+        img: "/img/ilustracoes/pausa.jpg",
+        tag: "Sobressalto"
+      },
+      {
+        value: 3,
+        title: "Sim, muitas vezes",
+        message: "Sinto medo ou pânico com frequência e preciso de apoio.",
+        img: "/img/ilustracoes/acolhimento.jpg",
+        tag: "Acolhimento"
+      }
+    ]
+  },
+  {
+    id: 8,
+    text: "Você sente que as tarefas e demandas têm se acumulado além do que consegue lidar?",
+    options: [
+      {
+        value: 0,
+        title: "Consigo lidar bem",
+        message: "Mesmo com dias cheios, dou conta no meu ritmo.",
+        img: "/img/ilustracoes/roda.jpg",
+        tag: "Equilibrada"
+      },
+      {
+        value: 1,
+        title: "Na maior parte do tempo, sim",
+        message: "Às vezes aperta, mas consigo organizar o essencial.",
+        img: "/img/ilustracoes/rede.jpg",
+        tag: "Ritmo possível"
+      },
+      {
+        value: 2,
+        title: "Tenho tido dificuldade",
+        message: "Sinto que não estou conseguindo acompanhar tanta demanda.",
+        img: "/img/ilustracoes/diario.jpg",
+        tag: "Sobrecarregada"
+      },
+      {
+        value: 3,
+        title: "Não estou dando conta",
+        message: "Tudo parece pesado demais e sinto que vou desabar.",
+        img: "/img/ilustracoes/acolhimento.jpg",
+        tag: "Exausta"
+      }
+    ]
+  },
+  {
+    id: 9,
+    text: "Nos últimos 7 dias, você se sentiu tão triste a ponto de chorar?",
+    options: [
+      {
+        value: 0,
+        title: "Não, não chorei por tristeza",
+        message: "Me sinto emocionalmente estável nos últimos dias.",
+        img: "/img/ilustracoes/florescer.jpg",
+        tag: "Estável"
+      },
+      {
+        value: 1,
+        title: "Apenas ocasionalmente",
+        message: "Chorei um pouco pelo cansaço, mas me senti aliviada depois.",
+        img: "/img/ilustracoes/autocuidado.jpg",
+        tag: "Desabafo leve"
+      },
+      {
+        value: 2,
+        title: "Sim, com frequência",
+        message: "As lágrimas têm vindo facilmente e com tristeza.",
+        img: "/img/ilustracoes/pausa.jpg",
+        tag: "Sensível"
+      },
+      {
+        value: 3,
+        title: "Sim, quase todos os dias",
+        message: "Tenho chorado muito e sinto uma tristeza profunda.",
+        img: "/img/ilustracoes/acolhimento.jpg",
+        tag: "Tristeza intensa"
       }
     ]
   },
@@ -181,17 +351,23 @@ const QUIZ_QUESTIONS = [
 export default function CheckInScreen({ setActiveTab }) {
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState({});
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [anjoAcionado, setAnjoAcionado] = useState(false);
 
   const handleAnswer = (questionId, optionValue) => {
+    if (isTransitioning) return;
     const updatedAnswers = { ...answers, [questionId]: optionValue };
     setAnswers(updatedAnswers);
 
     setTimeout(() => {
       if (currentStep < QUIZ_QUESTIONS.length - 1) {
-        setCurrentStep(prev => prev + 1);
+        setIsTransitioning(true);
+        setTimeout(() => {
+          setCurrentStep(prev => prev + 1);
+          setIsTransitioning(false);
+        }, 200);
       } else {
         setIsProcessing(true);
 
@@ -242,7 +418,13 @@ export default function CheckInScreen({ setActiveTab }) {
   };
 
   const handlePrevious = () => {
-    if (currentStep > 0) setCurrentStep(prev => prev - 1);
+    if (currentStep > 0 && !isTransitioning) {
+      setIsTransitioning(true);
+      setTimeout(() => {
+        setCurrentStep(prev => prev - 1);
+        setIsTransitioning(false);
+      }, 180);
+    }
   };
 
   if (isProcessing) {
@@ -430,16 +612,27 @@ export default function CheckInScreen({ setActiveTab }) {
           ))}
         </div>
 
-        <h1 className="text-2xl sm:text-3xl font-fraunces font-bold text-stone-900 leading-snug">
-          {currentQuestion.text}
-        </h1>
-        <p className="text-xs sm:text-sm text-stone-500 mt-1">
-          Toque no card que melhor representa como você se sente agora:
-        </p>
+        <div
+          key={currentQuestion.id}
+          className={`transition-all duration-300 ease-out ${
+            isTransitioning ? 'opacity-0 translate-y-2' : 'opacity-100 translate-y-0'
+          }`}
+        >
+          <h1 className="text-2xl sm:text-3xl font-fraunces font-bold text-stone-900 leading-snug">
+            {currentQuestion.text}
+          </h1>
+          <p className="text-xs sm:text-sm text-stone-500 mt-1">
+            Toque no card que melhor representa como você se sente agora:
+          </p>
+        </div>
       </div>
 
       {/* GRID VISUAL 2x2 (1 COLUNA COMPACTA NO MOBILE, 2 COLUNAS NO DESKTOP) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div
+        className={`grid grid-cols-1 sm:grid-cols-2 gap-4 transition-all duration-300 ease-out ${
+          isTransitioning ? 'opacity-0 translate-y-3 scale-[0.99]' : 'opacity-100 translate-y-0 scale-100'
+        }`}
+      >
         {currentQuestion.options.map((option) => {
           const isSelected = answers[currentQuestion.id] === option.value;
           return (

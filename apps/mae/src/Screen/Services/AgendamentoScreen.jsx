@@ -20,6 +20,7 @@ export default function AgendamentoScreen({ setActiveTab, agendamentos, cancelar
         <MeetingRoomModal
           isOpen={isRoomOpen}
           onClose={() => setIsRoomOpen(false)}
+          salaId={selectedMeeting.salaId || selectedMeeting.id || 'ind-mariana'}
           meetingTitle={`Sessão Individual: ${selectedMeeting.profName}`}
           therapistName={selectedMeeting.profName}
           meetingType="Acolhimento Individual Online"

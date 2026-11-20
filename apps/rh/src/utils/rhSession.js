@@ -23,8 +23,12 @@ export function hidratarSessaoDoHash() {
     const authData = JSON.parse(jsonStr);
     if (authData && typeof authData === 'object') {
       localStorage.setItem(SESSION_KEY, JSON.stringify(authData));
-      if (authData.tokenSessao) localStorage.setItem(JWT_KEY, authData.tokenSessao);
-      if (authData.codigoPublico) localStorage.setItem(PUBLIC_CODE_KEY, authData.codigoPublico);
+      const normalizedToken =
+        typeof authData.tokenSessao === 'string' ? authData.tokenSessao.trim() : '';
+      if (normalizedToken) localStorage.setItem(JWT_KEY, normalizedToken);
+      const normalizedCode =
+        typeof authData.codigoPublico === 'string' ? authData.codigoPublico.trim() : '';
+      if (normalizedCode) localStorage.setItem(PUBLIC_CODE_KEY, normalizedCode);
     }
   } catch {
     /* ignore malformed #auth hash */
@@ -32,11 +36,19 @@ export function hidratarSessaoDoHash() {
   window.history.replaceState(null, '', window.location.pathname + window.location.search);
 }
 
+export function getStoredJwt() {
+  if (typeof window === 'undefined') return null;
+  const rawToken = localStorage.getItem(JWT_KEY);
+  if (typeof rawToken !== 'string') return null;
+  const trimmed = rawToken.trim();
+  return trimmed.length > 0 ? trimmed : null;
+}
+
 export function getRhAuthState() {
   if (typeof window === 'undefined') {
     return { token: null, session: null, isAuthenticated: false, isWrongRole: false };
   }
-  const token = localStorage.getItem(JWT_KEY);
+  const token = getStoredJwt();
   let session;
   try {
     const raw = localStorage.getItem(SESSION_KEY);
@@ -44,7 +56,7 @@ export function getRhAuthState() {
   } catch {
     session = null;
   }
-  const role = session?.tipoPerfil ? String(session.tipoPerfil).toUpperCase() : '';
+  const role = session?.tipoPerfil ? String(session.tipoPerfil).trim().toUpperCase() : '';
   return {
     token,
     session,

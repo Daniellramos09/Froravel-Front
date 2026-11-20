@@ -1,5 +1,5 @@
 import { getApiBase } from '@floravel/shared';
-import { JWT_KEY } from '../utils/rhSession';
+import { getStoredJwt } from '../utils/rhSession';
 
 export class RhApiError extends Error {
   constructor(message, { status = 0, error = '', validationErrors = null, path = '' } = {}) {
@@ -37,7 +37,7 @@ export function extractErrorMessage(payload, status) {
 }
 
 async function rhFetch(path, options = {}) {
-  const token = typeof window !== 'undefined' ? localStorage.getItem(JWT_KEY) : null;
+  const token = getStoredJwt();
   if (!token) {
     throw new RhApiError('Sessão não autenticada. Faça login para acessar o painel RH.', {
       status: 401,

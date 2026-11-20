@@ -1,0 +1,34 @@
+name: Floravel Frontend CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test-and-build:
+    name: Testes Unitários, Lint e Build (Monorepo)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar código do repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js 22 com cache npm
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Instalar dependências do monorepo
+        run: npm ci
+
+      - name: Rodar Lint do Dashboard RH
+        run: npm --workspace=@floravel/rh run lint
+
+      - name: Rodar todos os testes Vitest (landing, rh, shared)
+        run: npm run test:all
+
+      - name: Gerar build de produção dos 4 apps (landing, mae, psicologo, rh)
+        run: npm run build:all

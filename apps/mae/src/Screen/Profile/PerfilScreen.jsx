@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { User, Mail, Calendar, Baby, CheckCircle, Camera, Trash2, Sparkles, ShieldAlert, Copy, ShieldCheck } from 'lucide-react';
+import { getApiBase, uploadProfilePhoto, fetchCurrentUserProfile, updateProfilePhotoUrl } from '@floravel/shared';
 
 export default function PerfilScreen({ onRedoOnboarding, onOpenDenuncia }) {
   const [nome, setNome] = useState('Mariana Silva');
@@ -8,6 +9,8 @@ export default function PerfilScreen({ onRedoOnboarding, onOpenDenuncia }) {
   const [fase, setFase] = useState('Bebê de 2 meses');
   const [codigoPublico, setCodigoPublico] = useState('FLR-M8R4K2');
   const [avatar, setAvatar] = useState('/img/ilustracoes/florescer.jpg');
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
+  const [photoError, setPhotoError] = useState('');
   const [isSaved, setIsSaved] = useState(false);
   const [saveMessage, setSaveMessage] = useState('');
 
@@ -17,29 +20,69 @@ export default function PerfilScreen({ onRedoOnboarding, onOpenDenuncia }) {
       if (sessao?.nome) setNome(sessao.nome);
       if (sessao?.email) setEmail(sessao.email);
       if (sessao?.dataNascimento) setNascimento(sessao.dataNascimento);
+      if (sessao?.fotoUrl) setAvatar(sessao.fotoUrl);
       if (sessao?.codigoPublico) setCodigoPublico(sessao.codigoPublico);
       else {
         const storedCode = localStorage.getItem('floravel_codigo_publico');
         if (storedCode) setCodigoPublico(storedCode);
       }
     } catch (_) {}
+
+    const token = localStorage.getItem('floravel_jwt');
+    const apiBase = getApiBase();
+    if (token && apiBase) {
+      fetchCurrentUserProfile({ apiBase, token })
+        .then((me) => {
+          if (!me) return;
+          if (me.nome) setNome(me.nome);
+          if (me.email) setEmail(me.email);
+          if (me.codigoPublico) setCodigoPublico(me.codigoPublico);
+          if (me.fotoUrl) setAvatar(me.fotoUrl);
+        })
+        .catch(() => {});
+    }
   }, []);
 
   const fileInputRef = useRef(null);
 
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
     const file = e.target.files?.[0];
-    if (file) {
-      const url = URL.createObjectURL(file);
-      setAvatar(url);
+    if (!file) return;
+    setPhotoError('');
+    setUploadingPhoto(true);
+    try {
+      const token = localStorage.getItem('floravel_jwt');
+      const apiBase = getApiBase();
+      const result = await uploadProfilePhoto({ apiBase, file, token });
+      const novaUrl = result.fotoUrl;
+      setAvatar(novaUrl);
+      try {
+        const sessao = JSON.parse(localStorage.getItem('floravel_mae_sessao') || '{}');
+        localStorage.setItem('floravel_mae_sessao', JSON.stringify({ ...sessao, fotoUrl: novaUrl }));
+      } catch (_) {}
       setSaveMessage('Foto atualizada!');
       setIsSaved(true);
       setTimeout(() => setIsSaved(false), 3000);
+    } catch (err) {
+      setPhotoError(err?.message || 'Não foi possível enviar a foto.');
+    } finally {
+      setUploadingPhoto(false);
     }
   };
 
-  const handleRemovePhoto = () => {
-    setAvatar('/img/ilustracoes/mae-bebe-tranquilidade.jpg');
+  const handleRemovePhoto = async () => {
+    const defaultAvatar = '/img/ilustracoes/mae-bebe-tranquilidade.jpg';
+    setPhotoError('');
+    setAvatar(defaultAvatar);
+    try {
+      const token = localStorage.getItem('floravel_jwt');
+      const apiBase = getApiBase();
+      if (token && apiBase) {
+        await updateProfilePhotoUrl({ apiBase, fotoUrl: defaultAvatar, token });
+      }
+      const sessao = JSON.parse(localStorage.getItem('floravel_mae_sessao') || '{}');
+      localStorage.setItem('floravel_mae_sessao', JSON.stringify({ ...sessao, fotoUrl: defaultAvatar }));
+    } catch (_) {}
     setSaveMessage('Foto restaurada para a padrão.');
     setIsSaved(true);
     setTimeout(() => setIsSaved(false), 3000);
@@ -67,6 +110,11 @@ export default function PerfilScreen({ onRedoOnboarding, onOpenDenuncia }) {
           <div className="mb-6 p-4 rounded-2xl bg-[#EBF3ED] border border-[#294D33]/30 text-[#294D33] flex items-center gap-3 animate-fadeIn">
             <CheckCircle size={20} className="shrink-0 text-[#294D33]" />
             <p className="text-sm font-semibold">{saveMessage}</p>
+          </div>
+        )}
+        {photoError && (
+          <div className="mb-6 p-4 rounded-2xl bg-[#FDE8E8] border border-red-200 text-[#9B1C1C] text-sm font-semibold">
+            {photoError}
           </div>
         )}
 
