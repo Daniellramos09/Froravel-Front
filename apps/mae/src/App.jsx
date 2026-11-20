@@ -155,6 +155,7 @@ function AppContent() {
   const [flowersCount, setFlowersCount] = useState(12);
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
   const [isGlobalDenunciaOpen, setIsGlobalDenunciaOpen] = useState(false);
+  const [denunciaTarget, setDenunciaTarget] = useState({ targetUser: '', context: 'Plataforma Geral' });
 
   // 4. ESTADO DO QUESTIONÁRIO DE PRIMEIRO ACESSO (ANTES DO DASHBOARD)
   const [userProfile, setUserProfile] = useState(() => {
@@ -519,15 +520,18 @@ function AppContent() {
           {activeTab === 'groups' && <ComunidadeScreen />}
           {activeTab === 'feed' && (
             <FeedScreen
-              currentUser={{ id: 'mariana-silva', name: 'Mariana Silva', initials: 'MS', role: 'mae', detail: 'Puerpério · semana 7' }}
+              currentUser={{ id: 'mariana-silva', codigoPublico: localStorage.getItem('floravel_codigo_publico') || '#FLR-M8R4K2', name: 'Mariana Silva', initials: 'MS', role: 'mae', detail: 'Puerpério · semana 7' }}
               allowAnonymous
               showCrisisNote
+              onReport={({ targetUser, context }) => {
+                setDenunciaTarget({ targetUser: targetUser || '', context: context || 'Comunidade Florável' });
+                setIsGlobalDenunciaOpen(true);
+              }}
             />
           )}
           {activeTab === 'perfil' && (
             <PerfilScreen 
               onRedoOnboarding={() => setIsOnboardingOpen(true)} 
-              onOpenDenuncia={() => setIsGlobalDenunciaOpen(true)} 
             />
           )}
           {activeTab === 'feedbacks' && <FeedbacksScreen />}
@@ -595,7 +599,8 @@ function AppContent() {
         <DenunciaModal
           isOpen={isGlobalDenunciaOpen}
           onClose={() => setIsGlobalDenunciaOpen(false)}
-          context="Plataforma Geral"
+          targetUser={denunciaTarget.targetUser}
+          context={denunciaTarget.context}
         />
 
       </main>

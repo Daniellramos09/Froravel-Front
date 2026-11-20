@@ -2,7 +2,7 @@
 // Este arquivo existe igual no app da Mãe e no app do Terapeuta: se mudar um, copie para o outro.
 // Posts e comentários de terapeutas aparecem com o selo de profissional verificada.
 import { useEffect, useMemo, useState } from 'react';
-import { BadgeCheck, Heart, MessageCircle, Send, Trash2 } from 'lucide-react';
+import { BadgeCheck, Heart, MessageCircle, Send, ShieldAlert, Trash2 } from 'lucide-react';
 import { carregarFeed, salvarFeed, AUTOR_ANONIMO } from './feedData';
 
 const LIMITE = 500;
@@ -57,13 +57,14 @@ function Autor({ author, time, size = 'md' }) {
       </div>
       <p className={`text-stone-500 ${size === 'sm' ? 'text-[12px]' : 'text-[12.5px]'}`}>
         {author.detail}
+        {author.codigoPublico && <span className="font-mono text-[11px] text-stone-400"> · {author.codigoPublico}</span>}
         {time && <span> · {tempoRelativo(time)}</span>}
       </p>
     </div>
   );
 }
 
-function PostCard({ post, currentUser, onLike, onComment, onDelete }) {
+function PostCard({ post, currentUser, onLike, onComment, onDelete, onReport }) {
   const [abertos, setAbertos] = useState(false);
   const [comentario, setComentario] = useState('');
   const doUsuario = post.author.id === currentUser.id || post.mine;
@@ -89,7 +90,7 @@ function PostCard({ post, currentUser, onLike, onComment, onDelete }) {
           <Avatar author={post.author} />
           <Autor author={post.author} time={post.createdAt} />
         </div>
-        {doUsuario && (
+        {doUsuario ? (
           <button
             type="button"
             onClick={() => {
@@ -100,6 +101,22 @@ function PostCard({ post, currentUser, onLike, onComment, onDelete }) {
             title="Excluir post"
           >
             <Trash2 size={17} />
+          </button>
+        ) : onReport && (
+          <button
+            type="button"
+            onClick={() =>
+              onReport({
+                targetUser: `${post.author.name}${post.author.codigoPublico ? ` (${post.author.codigoPublico})` : ''}`,
+                context: 'Comunidade Florável · Publicação',
+              })
+            }
+            className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold text-stone-400 hover:text-red-700 hover:bg-red-50 transition cursor-pointer ${focusRing}`}
+            aria-label={`Denunciar publicação de ${post.author.name}`}
+            title="Denunciar publicação"
+          >
+            <ShieldAlert size={15} aria-hidden="true" />
+            <span className="hidden sm:inline">Denunciar</span>
           </button>
         )}
       </header>
@@ -140,18 +157,39 @@ function PostCard({ post, currentUser, onLike, onComment, onDelete }) {
           {post.comments.length === 0 && (
             <p className="text-[13.5px] text-stone-500">Seja a primeira pessoa a comentar.</p>
           )}
-          {post.comments.map((c) => (
-            <div
-              key={c.id}
-              className={`flex gap-3 rounded-2xl p-3 ${c.author.role === 'terapeuta' ? 'bg-[#EBF3ED]/70' : 'bg-[#FCF7F9]'}`}
-            >
-              <Avatar author={c.author} size="sm" />
-              <div className="min-w-0">
-                <Autor author={c.author} time={c.createdAt} size="sm" />
-                <p className="mt-1 text-[14px] leading-relaxed text-[#2B2829] break-words">{c.text}</p>
+          {post.comments.map((c) => {
+            const comentarioDoUsuario = c.author.id === currentUser.id;
+            return (
+              <div
+                key={c.id}
+                className={`flex gap-3 rounded-2xl p-3 ${c.author.role === 'terapeuta' ? 'bg-[#EBF3ED]/70' : 'bg-[#FCF7F9]'}`}
+              >
+                <Avatar author={c.author} size="sm" />
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-start justify-between gap-2">
+                    <Autor author={c.author} time={c.createdAt} size="sm" />
+                    {!comentarioDoUsuario && onReport && (
+                      <button
+                        type="button"
+                        onClick={() =>
+                          onReport({
+                            targetUser: `${c.author.name}${c.author.codigoPublico ? ` (${c.author.codigoPublico})` : ''}`,
+                            context: 'Comunidade Florável · Comentário',
+                          })
+                        }
+                        className={`p-1 rounded text-stone-400 hover:text-red-700 hover:bg-red-50 transition cursor-pointer shrink-0 ${focusRing}`}
+                        aria-label={`Denunciar comentário de ${c.author.name}`}
+                        title="Denunciar comentário"
+                      >
+                        <ShieldAlert size={14} aria-hidden="true" />
+                      </button>
+                    )}
+                  </div>
+                  <p className="mt-1 text-[14px] leading-relaxed text-[#2B2829] break-words">{c.text}</p>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
@@ -180,7 +218,7 @@ function PostCard({ post, currentUser, onLike, onComment, onDelete }) {
   );
 }
 
-export default function FeedScreen({ currentUser, allowAnonymous = false, showCrisisNote = false }) {
+export default function FeedScreen({ currentUser, allowAnonymous = false, showCrisisNote = false, onReport }) {
   const [posts, setPosts] = useState(carregarFeed);
   const [texto, setTexto] = useState('');
   const [anonima, setAnonima] = useState(false);
@@ -322,6 +360,7 @@ export default function FeedScreen({ currentUser, allowAnonymous = false, showCr
             onLike={curtir}
             onComment={comentar}
             onDelete={excluir}
+            onReport={onReport}
           />
         ))}
         {visiveis.length === 0 && (

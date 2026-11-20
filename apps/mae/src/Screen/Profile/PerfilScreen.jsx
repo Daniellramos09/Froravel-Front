@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { User, Mail, Calendar, Baby, CheckCircle, Camera, Trash2, Sparkles, ShieldAlert, Copy, ShieldCheck } from 'lucide-react';
+import { User, Mail, Calendar, Baby, CheckCircle, Camera, Trash2, Sparkles, Copy, ShieldCheck } from 'lucide-react';
 import { getApiBase, uploadProfilePhoto, fetchCurrentUserProfile, updateProfilePhotoUrl } from '@floravel/shared';
 
 export default function PerfilScreen({ onRedoOnboarding, onOpenDenuncia }) {
@@ -249,16 +249,6 @@ export default function PerfilScreen({ onRedoOnboarding, onOpenDenuncia }) {
                 >
                   <Sparkles size={14} />
                   <span>Refazer questionário de primeiro acesso</span>
-                </button>
-              )}
-              {onOpenDenuncia && (
-                <button
-                  type="button"
-                  onClick={onOpenDenuncia}
-                  className="text-red-600 font-bold hover:underline flex items-center gap-1.5 cursor-pointer"
-                >
-                  <ShieldAlert size={14} />
-                  <span>Reportar / Denunciar conta</span>
                 </button>
               )}
             </div>
