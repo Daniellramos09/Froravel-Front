@@ -168,13 +168,10 @@ export default function Sidebar({
                   )}
                 </div>
                 <div className="truncate">
-                  <div className="flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" aria-hidden="true" />
-                    <span className="text-xs font-bold text-stone-800 truncate">
-                      {displayName}
-                    </span>
-                  </div>
-                  <span className="text-[10px] text-stone-400 block truncate">
+                  <span className="text-xs font-bold text-[#2B2829] block truncate">
+                    {displayName}
+                  </span>
+                  <span className="text-[11px] text-[#6B6365] block truncate">
                     {displayEmail}
                   </span>
                 </div>
