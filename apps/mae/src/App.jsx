@@ -558,7 +558,7 @@ function AppContent() {
         </header>
 
         {/* ÁREA DINÂMICA DE CONTEÚDO */}
-        <div className="flex-1 overflow-y-auto scroll-smooth p-4 sm:p-8 lg:px-12 xl:px-16 pb-24 lg:pb-20 bg-[#FCF7F9]">
+        <div className="flex-1 overflow-y-auto scroll-smooth p-4 sm:p-8 lg:px-12 xl:px-16 pb-28 lg:pb-20 bg-[#FCF7F9]">
           {activeTab === 'home' && (
             <DashboardScreen
               setActiveTab={handleTabChange}

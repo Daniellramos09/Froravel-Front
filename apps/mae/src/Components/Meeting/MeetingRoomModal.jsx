@@ -318,9 +318,21 @@ export default function MeetingRoomModal({
             SHOW_JITSI_WATERMARK: false,
             SHOW_WATERMARK_FOR_GUESTS: false,
             SHOW_CHROME_EXTENSION_BANNER: false,
+            SHOW_PROMOTIONAL_CLOSE_PAGE: false,
+            PROMOTIONAL_PAGES_ENABLED: false,
+            HIDE_INVITE_MORE_HEADER: true,
             DEFAULT_REMOTE_DISPLAY_NAME: 'Participante',
           },
         });
+        // Ao sair da chamada pelo botão do Jitsi, vai direto para a tela pós-chamada Florável
+        // evitando a página promocional da 8x8/Jitsi no celular
+        const encerrarJitsi = () => {
+          if (cancelled) return;
+          setJitsiAtivo(false);
+          setStage('post_call');
+        };
+        api.addListener('videoConferenceLeft', encerrarJitsi);
+        api.addListener('readyToClose', encerrarJitsi);
         jitsiApiRef.current = api;
         setJitsiAtivo(true);
       } catch {
@@ -724,23 +736,23 @@ export default function MeetingRoomModal({
         <div className="w-full h-full bg-[#202124] text-white flex flex-col justify-between overflow-hidden">
           
           {/* TOPO DA SALA */}
-          <header className="h-14 px-5 flex items-center justify-between border-b border-white/10 shrink-0 bg-[#202124]">
-            <div className="flex items-center gap-3 min-w-0">
-              <div className="flex items-center gap-2 px-2.5 py-1 rounded-md bg-red-500/20 border border-red-500/40 text-red-300 text-xs font-bold">
-                <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+          <header className="min-h-14 py-2 px-3 sm:px-5 flex items-center justify-between gap-2 border-b border-white/10 shrink-0 bg-[#202124]">
+            <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+              <div className="flex items-center gap-1.5 px-2 sm:px-2.5 py-1 rounded-md bg-red-500/20 border border-red-500/40 text-red-300 text-[11px] sm:text-xs font-bold shrink-0 whitespace-nowrap">
+                <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse shrink-0" />
                 <span>AO VIVO • {formatDuration(callSeconds)}</span>
               </div>
-              <h2 className="font-bold text-sm sm:text-base text-white truncate">{meetingTitle}</h2>
-              <span className="hidden md:inline-block text-xs text-stone-400 border-l border-white/15 pl-3 truncate">
+              <h2 className="font-bold text-xs sm:text-base text-white truncate">{meetingTitle}</h2>
+              <span className="hidden lg:inline-block text-xs text-stone-400 border-l border-white/15 pl-3 truncate">
                 Host: {therapistName}
               </span>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
               <button
                 type="button"
                 onClick={copiarLinkSala}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition cursor-pointer ${
+                className={`px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition cursor-pointer shrink-0 whitespace-nowrap ${
                   copiadoLink
                     ? 'bg-emerald-600 text-white'
                     : 'bg-[#3c4043] hover:bg-[#4a4e52] text-stone-200'
@@ -751,45 +763,50 @@ export default function MeetingRoomModal({
                 <span className="hidden sm:inline">{copiadoLink ? 'Copiado!' : 'Convidar'}</span>
               </button>
 
-              <button
-                type="button"
-                onClick={() => {
-                  setLayoutMode('spotlight');
-                  setPinnedId(pinnedId === 'user' ? 'therapist' : 'user');
-                }}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition cursor-pointer ${
-                  pinnedId === 'user' && layoutMode === 'spotlight'
-                    ? 'bg-emerald-600 text-white'
-                    : 'bg-[#3c4043] hover:bg-[#4a4e52] text-emerald-300'
-                }`}
-                title="Alternar destaque da sua câmera na tela principal"
-              >
-                <Video size={15} />
-                <span className="hidden sm:inline">
-                  {pinnedId === 'user' && layoutMode === 'spotlight' ? 'Ver Host no Palco' : 'Destacar Minha Câmera'}
-                </span>
-              </button>
+              {!jitsiAtivo && (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setLayoutMode('spotlight');
+                      setPinnedId(pinnedId === 'user' ? 'therapist' : 'user');
+                    }}
+                    className={`hidden sm:flex px-3 py-1.5 rounded-lg text-xs font-bold items-center gap-1.5 transition cursor-pointer shrink-0 ${
+                      pinnedId === 'user' && layoutMode === 'spotlight'
+                        ? 'bg-emerald-600 text-white'
+                        : 'bg-[#3c4043] hover:bg-[#4a4e52] text-emerald-300'
+                    }`}
+                    title="Alternar destaque da sua câmera na tela principal"
+                  >
+                    <Video size={15} />
+                    <span>
+                      {pinnedId === 'user' && layoutMode === 'spotlight' ? 'Ver Host no Palco' : 'Destacar Minha Câmera'}
+                    </span>
+                  </button>
 
-              <button
-                type="button"
-                onClick={() => setLayoutMode(layoutMode === 'spotlight' ? 'grid' : 'spotlight')}
-                className="px-3 py-1.5 rounded-lg bg-[#3c4043] hover:bg-[#4a4e52] text-xs font-medium text-stone-200 flex items-center gap-1.5 transition cursor-pointer"
-                title="Alternar modo de visualização"
-              >
-                <LayoutGrid size={15} />
-                <span className="hidden sm:inline">
-                  {layoutMode === 'spotlight' ? 'Ver em Grade' : 'Destacar Host'}
-                </span>
-              </button>
+                  <button
+                    type="button"
+                    onClick={() => setLayoutMode(layoutMode === 'spotlight' ? 'grid' : 'spotlight')}
+                    className="hidden sm:flex px-3 py-1.5 rounded-lg bg-[#3c4043] hover:bg-[#4a4e52] text-xs font-medium text-stone-200 items-center gap-1.5 transition cursor-pointer shrink-0"
+                    title="Alternar modo de visualização"
+                  >
+                    <LayoutGrid size={15} />
+                    <span>
+                      {layoutMode === 'spotlight' ? 'Ver em Grade' : 'Destacar Host'}
+                    </span>
+                  </button>
+                </>
+              )}
 
               <button
                 type="button"
                 onClick={() => handleReportUser('Participante na reunião')}
-                className="px-3 py-1.5 rounded-lg bg-red-950/90 hover:bg-red-900 border border-red-700/60 text-red-200 text-xs font-bold flex items-center gap-1.5 transition cursor-pointer"
+                className="px-2.5 sm:px-3 py-1.5 rounded-lg bg-red-950/90 hover:bg-red-900 border border-red-700/60 text-red-200 text-[11px] sm:text-xs font-bold flex items-center gap-1.5 transition cursor-pointer shrink-0 whitespace-nowrap"
                 title="Denunciar ofensa ou xingamento na chamada"
               >
-                <ShieldAlert size={15} className="text-red-400" />
-                <span>Denunciar Conduta</span>
+                <ShieldAlert size={14} className="text-red-400 shrink-0" />
+                <span className="hidden sm:inline">Denunciar Conduta</span>
+                <span className="sm:hidden">Denunciar</span>
               </button>
             </div>
           </header>

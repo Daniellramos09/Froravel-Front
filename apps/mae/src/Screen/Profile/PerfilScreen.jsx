@@ -231,7 +231,7 @@ export default function PerfilScreen({ onRedoOnboarding, onOpenDenuncia }) {
   };
 
   return (
-    <div className="animate-fadeIn font-dmsans max-w-4xl h-full pb-16">
+    <div className="animate-fadeIn font-dmsans max-w-4xl pb-10">
       <div className="mb-10">
         <p className="text-secondary text-[14px] font-bold uppercase tracking-wider mb-2 flex items-center gap-2">
           <User size={16} /> O SEU ESPAÇO
