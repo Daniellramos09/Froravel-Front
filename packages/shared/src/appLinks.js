@@ -9,10 +9,15 @@ const isLocalEnvironment =
   (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
 
 export function getApiBase() {
-  return (
-    (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL) ||
-    'http://174.129.117.128:8080'
-  );
+  if (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL;
+  }
+  // Em produção na Vercel (HTTPS), usa a rota relativa '/api' com proxy transparente
+  // para a AWS EC2 (174.129.117.128:8080), evitando o bloqueio de Mixed Content dos navegadores.
+  if (!isLocalEnvironment && typeof window !== 'undefined') {
+    return '';
+  }
+  return 'http://174.129.117.128:8080';
 }
 
 export const APP_LINKS = {
