@@ -12,10 +12,11 @@ export function getApiBase() {
   if (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL) {
     return import.meta.env.VITE_API_URL;
   }
-  // Em produção na Vercel (HTTPS), usa a rota relativa '/api' com proxy transparente
-  // para a AWS EC2 (174.129.117.128:8080), evitando o bloqueio de Mixed Content dos navegadores.
+  // Em produção na Vercel (HTTPS), usa a rota relativa '/api-backend' com proxy transparente
+  // para a AWS EC2 (174.129.117.128:8080), permitindo que fetch(`${API_BASE}/api/...`)
+  // alcance /api-backend/api/... com validação e chamadas reais.
   if (!isLocalEnvironment && typeof window !== 'undefined') {
-    return '';
+    return '/api-backend';
   }
   return 'http://174.129.117.128:8080';
 }
