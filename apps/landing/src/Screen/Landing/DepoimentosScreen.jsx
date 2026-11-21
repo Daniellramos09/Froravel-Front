@@ -5,7 +5,7 @@ export default function DepoimentosScreen() {
     {
       nome: "Camila Moura",
       tempo: "Puérpera (bebê de 4 meses)",
-      foto: "/img/fotoMae/fotomae.jpg",
+      foto: "/img/depoimentos/depoimento-camila-moura.jpg",
       texto: "Eu achava que a vontade de chorar no fim da tarde era fraqueza. A autoavaliação da Florável me mostrou que o que eu sentia tinha nome e que pedir apoio é coragem, não culpa.",
       badge: "Triagem & Diário",
       tagBg: "bg-[#F4DDE5] text-[#294D33]"
@@ -13,7 +13,7 @@ export default function DepoimentosScreen() {
     {
       nome: "Renata Silveira",
       tempo: "Gestante (32ª semana)",
-      foto: "/img/fotoMae/fotomae1.jpg",
+      foto: "/img/jornada/jornada-etapa-01-acolher.jpg",
       texto: "Nas Rodas de Conversa encontrei mulheres que sentiam o mesmo medo da solidão que eu. Pela primeira vez na gravidez, senti que não precisava fingir plenitude o tempo todo.",
       badge: "Roda Comunitária",
       tagBg: "bg-[#FCF7F9] text-[#294D33]"
@@ -21,7 +21,7 @@ export default function DepoimentosScreen() {
     {
       nome: "Juliana Ferreira",
       tempo: "Retorno da licença (6 meses)",
-      foto: "/img/fotoMae/fotomae3.jpg",
+      foto: "/img/depoimentos/depoimento-juliana-ferreira.jpg",
       texto: "Minha empresa ofereceu a Florável como benefício. O suporte da psicóloga perinatal me deu chão para lidar com a ansiedade da separação e a volta ao escritório.",
       badge: "Florável Corporate",
       tagBg: "bg-[#F4DDE5] text-[#294D33]"

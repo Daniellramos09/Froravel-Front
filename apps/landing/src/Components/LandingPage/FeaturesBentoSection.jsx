@@ -40,12 +40,12 @@ export default function FeaturesBentoSection() {
           <div className="lg:col-span-6 relative">
             <div className="relative w-full aspect-[4/3.8] sm:aspect-[4/3.4] rounded-[2.5rem] overflow-hidden bg-white shadow-xl shadow-[#294D33]/12 border-2 border-white">
               <img
-                src="/img/hero-woman-serene.jpg"
+                src="/img/institucional/diario-respiro-autocuidado.jpg"
                 alt="Mulher serena em momento de respiro e autocuidado"
                 className="w-full h-full object-cover rounded-[2.5rem] object-center transition-transform duration-1000 hover:scale-105"
                 onError={(e) => {
                   e.currentTarget.onerror = null;
-                  e.currentTarget.src = "/img/fotoMae/fotomae3.jpg";
+                  e.currentTarget.src = "/img/jornada/jornada-etapa-01-acolher.jpg";
                 }}
               />
               {/* Gradiente sutil para legibilidade do badge */}

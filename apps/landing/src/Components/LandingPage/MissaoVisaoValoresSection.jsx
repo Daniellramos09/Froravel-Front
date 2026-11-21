@@ -79,8 +79,8 @@ export default function MissaoVisaoValoresSection() {
               {/* Foto circular no topo */}
               <div className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden mx-auto mb-6 shadow-md border-2 border-white">
                 <img
-                  src="/img/hero-woman-serene.jpg"
-                  alt="Mãe em momento sereno"
+                  src="/img/institucional/institucional-missao.jpg"
+                  alt="Mãe em acolhimento e cuidado maternal com recém-nascido"
                   className="w-full h-full object-cover object-center"
                 />
               </div>
@@ -115,8 +115,8 @@ export default function MissaoVisaoValoresSection() {
               {/* Foto circular no topo */}
               <div className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden mx-auto mb-6 shadow-md border-2 border-white">
                 <img
-                  src="/img/fotopsicologo/psicologia-terapia.jpg"
-                  alt="Psicóloga perinatal em acolhimento"
+                  src="/img/institucional/institucional-visao.jpg"
+                  alt="Psicóloga perinatal em acolhimento e escuta democrática"
                   className="w-full h-full object-cover object-center"
                 />
               </div>
