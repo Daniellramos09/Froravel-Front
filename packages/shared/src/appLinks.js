@@ -11,7 +11,7 @@ const isLocalEnvironment =
 export function getApiBase() {
   return (
     (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL) ||
-    (isLocalEnvironment ? 'http://localhost:8080' : '')
+    'http://174.129.117.128:8080'
   );
 }
 
