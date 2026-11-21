@@ -150,7 +150,60 @@ function AppContent() {
   const [hasUnread, setHasUnread] = useState(true);
   const notifRef = useRef(null);
 
-  // 3. ESTADOS GLOBAIS DE CONSULTAS E GAMIFICAÇÃO
+  // 3. ESTADOS GLOBAIS DE CONSULTAS, SESSÃO E GAMIFICAÇÃO
+  const [sessaoMae, setSessaoMae] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem('floravel_mae_sessao') || '{}') || {};
+    } catch {
+      return {};
+    }
+  });
+  const nomeUsuarioAtual = sessaoMae?.nome?.trim() || 'Mariana Silva';
+  const primeiroNomeAtual = nomeUsuarioAtual.split(' ')[0] || 'Mariana';
+  const fotoUsuarioAtual = sessaoMae?.fotoUrl || '/img/ilustracoes/florescer.jpg';
+  const codigoPublicoAtual =
+    sessaoMae?.codigoPublico || localStorage.getItem('floravel_codigo_publico') || '#FLR-M8R4K2';
+  const iniciaisUsuarioAtual = nomeUsuarioAtual
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((p) => p[0].toUpperCase())
+    .join('') || 'MS';
+
+  useEffect(() => {
+    const syncSessao = () => {
+      try {
+        setSessaoMae(JSON.parse(localStorage.getItem('floravel_mae_sessao') || '{}') || {});
+      } catch {
+        // ignore
+      }
+    };
+    window.addEventListener('floravel_sessao_atualizada', syncSessao);
+    window.addEventListener('storage', syncSessao);
+
+    const token = localStorage.getItem('floravel_jwt');
+    const apiBase = getApiBase();
+    if (token && apiBase) {
+      fetchCurrentUserProfile({ apiBase, token })
+        .then((me) => {
+          if (!me) return;
+          setSessaoMae((prev) => {
+            const atualizado = { ...prev, ...me };
+            try {
+              localStorage.setItem('floravel_mae_sessao', JSON.stringify(atualizado));
+            } catch (_) {}
+            return atualizado;
+          });
+        })
+        .catch(() => {});
+    }
+
+    return () => {
+      window.removeEventListener('floravel_sessao_atualizada', syncSessao);
+      window.removeEventListener('storage', syncSessao);
+    };
+  }, []);
+
   const [agendamentosGlobais, setAgendamentosGlobais] = useState([]);
   const [profEmFoco, setProfEmFoco] = useState(null);
   const [flowersCount, setFlowersCount] = useState(12);
@@ -348,14 +401,14 @@ function AppContent() {
         >
           <div className="relative w-10 h-10 rounded-full overflow-hidden border-2 border-[#E8A9BB]/40 shadow-2xs shrink-0 bg-[#F4DDE5]">
             <img
-              src="/img/ilustracoes/florescer.jpg"
-              alt="Mariana Silva"
+              src={fotoUsuarioAtual}
+              alt={nomeUsuarioAtual}
               className="w-full h-full object-cover object-top"
             />
           </div>
           <div className="min-w-0">
             <p className="text-[14px] font-bold text-[#2B2829] group-hover:text-[#294D33] transition leading-tight truncate">
-              Mariana Silva
+              {nomeUsuarioAtual}
             </p>
             <p className="text-[11px] text-stone-500 font-medium truncate">Puerpério • Semana 7</p>
           </div>
@@ -493,11 +546,11 @@ function AppContent() {
             <div 
               className="w-9 h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden border border-[#E8A9BB]/50 shadow-2xs cursor-pointer hover:ring-2 hover:ring-[#294D33]/30 transition-all shrink-0 bg-[#F4DDE5]" 
               onClick={() => handleTabChange('perfil')}
-              title={`Meu Perfil · ${(() => { try { return JSON.parse(localStorage.getItem('floravel_mae_sessao') || '{}')?.nome || 'Mariana Silva'; } catch { return 'Mariana Silva'; } })()}`}
+              title={`Meu Perfil · ${nomeUsuarioAtual}`}
             >
               <img
-                src={(() => { try { return JSON.parse(localStorage.getItem('floravel_mae_sessao') || '{}')?.fotoUrl || '/img/ilustracoes/florescer.jpg'; } catch { return '/img/ilustracoes/florescer.jpg'; } })()}
-                alt="Meu Perfil"
+                src={fotoUsuarioAtual}
+                alt={`Meu Perfil · ${nomeUsuarioAtual}`}
                 className="w-full h-full object-cover object-top"
               />
             </div>
@@ -509,7 +562,7 @@ function AppContent() {
           {activeTab === 'home' && (
             <DashboardScreen
               setActiveTab={handleTabChange}
-              userName="Mariana"
+              userName={primeiroNomeAtual}
               agendamentos={agendamentosGlobais}
               flowersCount={flowersCount}
               setFlowersCount={setFlowersCount}
@@ -522,7 +575,7 @@ function AppContent() {
           {activeTab === 'groups' && <ComunidadeScreen />}
           {activeTab === 'feed' && (
             <FeedScreen
-              currentUser={{ id: 'mariana-silva', codigoPublico: localStorage.getItem('floravel_codigo_publico') || '#FLR-M8R4K2', name: 'Mariana Silva', initials: 'MS', role: 'mae', detail: 'Puerpério · semana 7' }}
+              currentUser={{ id: sessaoMae?.usuarioId || 'mae-atual', codigoPublico: codigoPublicoAtual, name: nomeUsuarioAtual, initials: iniciaisUsuarioAtual, role: 'mae', detail: 'Puerpério · semana 7' }}
               allowAnonymous
               showCrisisNote
               onReport={({ targetUser, context }) => {
