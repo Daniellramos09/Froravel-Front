@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { 
   Video, VideoOff, Mic, MicOff, PhoneOff, MessageSquare, Hand, 
   ShieldAlert, Users, Heart, Send, Star, CheckCircle, Sparkles, X, 
-  Lock, Volume2, Subtitles, LayoutGrid, Maximize2, Smile, MoreVertical, Pin
+  Lock, Volume2, Subtitles, LayoutGrid, Maximize2, Smile, MoreVertical, Pin, Share2
 } from 'lucide-react';
 import DenunciaModal from '../Safety/DenunciaModal';
 import { registrarContatosEncontro } from '../../utils/contatosSeguranca';
@@ -108,6 +108,17 @@ export default function MeetingRoomModal({
   const [isMicOn, setIsMicOn] = useState(true);
   const [isCameraOn, setIsCameraOn] = useState(true);
   const [isHandRaised, setIsHandRaised] = useState(false);
+  const [copiadoLink, setCopiadoLink] = useState(false);
+
+  const copiarLinkSala = () => {
+    const roomName = buildJitsiRoomName(salaId);
+    const linkCompleto = `https://meet.jit.si/${roomName}`;
+    if (navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(linkCompleto);
+    }
+    setCopiadoLink(true);
+    setTimeout(() => setCopiadoLink(false), 3000);
+  };
   const [isCaptionsOn, setIsCaptionsOn] = useState(true);
   const [layoutMode, setLayoutMode] = useState('spotlight'); // 'spotlight' (Host em destaque) ou 'grid' (Mosaico)
   const [pinnedId, setPinnedId] = useState('therapist');
@@ -292,6 +303,16 @@ export default function MeetingRoomModal({
             enableCalendarIntegration: false,
             disableInviteFunctions: true,
             doNotStoreRoom: true,
+            // Foco na Voz & Supressão Ativa de Ruído
+            disableNoiseSuppression: false,
+            enableNoiseSuppression: true,
+            audioQuality: {
+              stereo: false, // Força Mono Direcional
+              opusMaxAverageBitrate: 32000,
+            },
+            p2p: {
+              enabled: true,
+            },
           },
           interfaceConfigOverwrite: {
             SHOW_JITSI_WATERMARK: false,
@@ -716,6 +737,20 @@ export default function MeetingRoomModal({
             </div>
 
             <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={copiarLinkSala}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition cursor-pointer ${
+                  copiadoLink
+                    ? 'bg-emerald-600 text-white'
+                    : 'bg-[#3c4043] hover:bg-[#4a4e52] text-stone-200'
+                }`}
+                title="Copiar link direto para convidar participantes para esta chamada"
+              >
+                <Share2 size={14} />
+                <span className="hidden sm:inline">{copiadoLink ? 'Copiado!' : 'Convidar'}</span>
+              </button>
+
               <button
                 type="button"
                 onClick={() => {

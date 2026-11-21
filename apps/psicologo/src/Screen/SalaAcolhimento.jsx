@@ -244,8 +244,20 @@ export default function SalaAcolhimento() {
   const [respNome, setRespNome] = useState('');
   const [respTelefone, setRespTelefone] = useState('');
   const [sinalizacaoSucesso, setSinalizacaoSucesso] = useState(false);
+  const [copiadoLink, setCopiadoLink] = useState(false);
 
   const sessaoAtiva = sessaoSelecionada || SESSOES_AGENDADAS_SALA[0];
+
+  const copiarLinkSala = () => {
+    const salaId = sessaoAtiva?.id || 'default';
+    const roomName = buildJitsiRoomName(salaId);
+    const linkCompleto = `https://meet.jit.si/${roomName}`;
+    if (navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(linkCompleto);
+    }
+    setCopiadoLink(true);
+    setTimeout(() => setCopiadoLink(false), 3000);
+  };
 
   const handleSelecionarSessao = (sessao) => {
     setSessaoSelecionada(sessao);
@@ -343,6 +355,16 @@ export default function SalaAcolhimento() {
               enableCalendarIntegration: false,
               disableInviteFunctions: true,
               doNotStoreRoom: true,
+              // Foco na Voz & Supressão Ativa de Ruído
+              disableNoiseSuppression: false,
+              enableNoiseSuppression: true,
+              audioQuality: {
+                stereo: false, // Força Mono Direcional para eliminar ruídos de fundo e ecos
+                opusMaxAverageBitrate: 32000,
+              },
+              p2p: {
+                enabled: true,
+              },
             },
             interfaceConfigOverwrite: {
               SHOW_JITSI_WATERMARK: false,
@@ -872,6 +894,20 @@ export default function SalaAcolhimento() {
             </div>
 
             <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+              <button
+                type="button"
+                onClick={copiarLinkSala}
+                className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold transition cursor-pointer ${
+                  copiadoLink
+                    ? 'bg-emerald-600 text-white'
+                    : 'bg-white/10 text-stone-200 hover:bg-white/20 border border-white/10'
+                }`}
+                title="Copiar link direto da chamada para convidar pessoas"
+              >
+                {copiadoLink ? <CheckCircle2 className="w-3.5 h-3.5 text-emerald-200" /> : <Share2 className="w-3.5 h-3.5" />}
+                <span className="hidden sm:inline">{copiadoLink ? 'Link Copiado!' : 'Convidar'}</span>
+              </button>
+
               <button
                 type="button"
                 onClick={() => {
