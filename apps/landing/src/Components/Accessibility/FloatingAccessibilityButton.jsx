@@ -2,29 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Volume2, VolumeX } from "lucide-react";
 import { useAccessibility } from "./AccessibilityContext";
 import AccessibilityModal from "./AccessibilityModal";
-
-// Ícone Universal de Acessibilidade / Cadeirante
-function WheelchairIcon({ size = 26, className = "" }) {
-  return (
-    <svg 
-      width={size} 
-      height={size} 
-      viewBox="0 0 24 24" 
-      fill="none" 
-      stroke="currentColor" 
-      strokeWidth="2.3" 
-      strokeLinecap="round" 
-      strokeLinejoin="round" 
-      className={className}
-      aria-hidden="true"
-    >
-      <circle cx="12" cy="4" r="2" />
-      <path d="M12 6v7a2 2 0 0 0 2 2h3" />
-      <path d="M8 11.5h5" />
-      <path d="M17 15a4.5 4.5 0 1 1-8.5-2" />
-    </svg>
-  );
-}
+import UniversalAccessibilityIcon from "./UniversalAccessibilityIcon";
 
 export default function FloatingAccessibilityButton() {
   const {
@@ -100,10 +78,12 @@ export default function FloatingAccessibilityButton() {
             />
           )}
 
-          {/* Ícone Universal de Acessibilidade (Cadeirante / Acesso Universal) */}
-          <WheelchairIcon 
-            size={26} 
-            className="text-white transition-transform duration-300 group-hover:scale-110 drop-shadow-xs" 
+          {/* Novo Símbolo Internacional de Acessibilidade da ONU (Inclusão Plena) */}
+          <UniversalAccessibilityIcon 
+            size={30} 
+            color="#FCF7F9"
+            accentColor="#E8A9BB"
+            className="transition-transform duration-300 group-hover:scale-110 drop-shadow-xs" 
           />
 
           {/* Badge de Leitor de Tela Ativo (se estiver falando) */}

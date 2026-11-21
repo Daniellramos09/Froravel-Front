@@ -32,7 +32,7 @@ Every feature from `ORIGINAL_REQUEST.md` and Step 0 Survey is assigned to a mile
 | # | Name | Scope | Dependencies | Status |
 |---|------|-------|-------------|--------|
 | M1 | R1 Full-Stack — E-mail, Password Reset & Shared Test Infra | F1, F2, F3, F4 (`modules/auth/**`, `Froravel-Front/package.json`, `apps/landing/**`) | none | DONE |
-| M2 | R2 Full-Stack — Dashboard RH Live Integration | F5, F6, F7 (`modules/rh/**`, `Usuario.java`, `DemoDayDataSeeder.java`, `JwtAuthInterceptor.java` RH rules, `apps/rh/**`) | M1 (for `package.json` Vitest) | BLOCKED: Quota 429 during M2 verification gate (m2_worker_1 complete) |
+| M2 | R2 Full-Stack — Dashboard RH Live Integration | F5, F6, F7 (`modules/rh/**`, `Usuario.java`, `DemoDayDataSeeder.java`, `JwtAuthInterceptor.java` RH rules, `apps/rh/**`) | M1 (for `package.json` Vitest) | DONE (Gate PASS, Iter 2: 80/80 backend, 61/61 frontend test:all, rh lint 0, build:all 4/4; stopped post-M2 per Sentinel directive) |
 | M3 | R3 Full-Stack — SalaAcolhimento Jitsi Meet & SSE | F8, F9, F10, F11 (`modules/reuniao/**`, `JwtAuthInterceptor`, `CorsConfig`, `application.properties`, `packages/shared`, `apps/psicologo/SalaAcolhimento`, `apps/mae/MeetingRoomModal`) | M2 | PLANNED |
 | M4 | R4 Full-Stack — Profile Photo Upload (S3 / Cloudflare R2) | F12, F13 (`pom.xml`, `modules/storage/**`, `modules/usuario/**`, `application.properties`, `.env.example`, `packages/shared`, `apps/mae` Profile/App/SupportNetwork, `apps/psicologo` PerfilConfiguracoes, `apps/rh` Sidebar avatar) | M3 | PLANNED |
 | M5 | Final Milestone — E2E Pass (Tiers 1–4) & Tier 5 Hardening | F14 (Full build/test/secrets gate + E2E Tiers 1–4 + Tier 5 adversarial coverage hardening) | M1, M2, M3, M4, E2E_READY | PLANNED |

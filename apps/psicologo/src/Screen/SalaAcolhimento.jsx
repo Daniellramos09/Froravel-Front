@@ -903,8 +903,8 @@ export default function SalaAcolhimento() {
           </header>
 
           {/* Área Central: Grid de Vídeos e Chat Lateral */}
-          <div className="flex-1 flex overflow-hidden p-4 gap-4">
-            <div className="relative flex-1 flex flex-col min-h-0">
+          <div className="relative flex-1 flex flex-col md:flex-row overflow-hidden p-2 sm:p-4 gap-2 sm:gap-4">
+            <div className={`relative flex-1 flex flex-col min-h-0 ${chatAberto ? 'hidden md:flex' : 'flex'}`}>
               <div
                 ref={jitsiContainerRef}
                 data-testid="jitsi-meet-container"
@@ -997,7 +997,7 @@ export default function SalaAcolhimento() {
 
             {/* Painel Lateral: Chat da Roda ou Notas Efêmeras (Zero Prontuário) */}
             {chatAberto && (
-              <div className="w-80 lg:w-96 rounded-2xl bg-stone-900/90 border border-white/10 flex flex-col overflow-hidden shrink-0 shadow-2xl backdrop-blur-md">
+              <div className="w-full md:w-80 lg:w-96 h-full rounded-2xl bg-stone-900/95 border border-white/10 flex flex-col overflow-hidden shrink-0 shadow-2xl backdrop-blur-md z-10">
                 <div className="p-3 border-b border-white/10 flex items-center justify-between gap-2">
                   <div className="flex items-center gap-1 bg-white/5 p-1 rounded-xl flex-1">
                     <button

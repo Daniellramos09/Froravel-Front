@@ -413,7 +413,7 @@ export default function DashboardLayout() {
 
         {/* BARRA INFERIOR NO CELULAR */}
         <nav
-          className="lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-white/95 backdrop-blur-md border-t border-[#E4DAD5] px-2 py-1.5 flex items-center justify-around"
+          className="lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-white/95 backdrop-blur-md border-t border-[#E4DAD5] px-1 py-1.5 flex items-center justify-around overflow-x-auto scrollbar-none"
           aria-label="Navegação principal mobile"
         >
           {menuItems.map(({ path, short, icon: Icon }) => (
@@ -422,13 +422,13 @@ export default function DashboardLayout() {
               to={path}
               end
               className={({ isActive }) =>
-                `flex flex-col items-center justify-center py-1 px-3 rounded-xl text-[11px] font-medium transition cursor-pointer ${
-                  isActive ? 'text-[#1F3A27] font-bold bg-[#F4DDE5]/60' : 'text-[#6B6365] hover:text-[#1F3A27]'
+                `flex flex-col items-center justify-center py-1 px-1.5 min-w-[48px] rounded-xl text-[10px] sm:text-[11px] font-medium transition cursor-pointer shrink-0 ${
+                  isActive ? 'text-[#1F3A27] font-bold bg-[#F4DDE5]/70 shadow-2xs' : 'text-[#6B6365] hover:text-[#1F3A27]'
                 }`
               }
             >
-              <Icon size={19} />
-              <span className="mt-0.5">{short}</span>
+              <Icon size={18} className="shrink-0" />
+              <span className="mt-0.5 leading-tight truncate">{short}</span>
             </NavLink>
           ))}
         </nav>

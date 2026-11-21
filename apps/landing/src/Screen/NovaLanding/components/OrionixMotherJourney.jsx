@@ -12,8 +12,8 @@ const JOURNEY_STEPS = [
       "Pausa de 1 Minuto",
       "Escuta sem Julgamentos",
     ],
-    image: "/img/hero-woman-serene.jpg",
-    fallbackImage: "/img/fotoMae/fotomae2.jpg",
+    image: "/img/jornada/jornada-etapa-01-acolher.jpg",
+    fallbackImage: "/img/jornada/jornada-etapa-01-acolher.jpg",
   },
   {
     number: "02",
@@ -26,8 +26,8 @@ const JOURNEY_STEPS = [
       "Diário Confidencial",
       "Check-in Emocional",
     ],
-    image: "/img/maeDescansando.jpg",
-    fallbackImage: "/img/fotoMae/fotomae1.jpg",
+    image: "/img/jornada/jornada-etapa-02-perceber.jpg",
+    fallbackImage: "/img/jornada/jornada-etapa-02-perceber.jpg",
   },
   {
     number: "03",
@@ -40,8 +40,8 @@ const JOURNEY_STEPS = [
       "Psicólogas Perinatais",
       "Valor Social",
     ],
-    image: "/img/fotopsicologo/psicologia-terapia.jpg",
-    fallbackImage: "/img/maeconversando.jpg",
+    image: "/img/jornada/jornada-etapa-03-conectar.jpg",
+    fallbackImage: "/img/jornada/jornada-etapa-03-conectar.jpg",
   },
   {
     number: "04",
@@ -54,8 +54,8 @@ const JOURNEY_STEPS = [
       "Cápsula do Tempo",
       "Bem-estar Contínuo",
     ],
-    image: "/img/1.jpg",
-    fallbackImage: "/img/fotoMae/fotomae6.jpg",
+    image: "/img/jornada/jornada-etapa-04-florescer.jpg",
+    fallbackImage: "/img/jornada/jornada-etapa-04-florescer.jpg",
   },
 ];
 

@@ -15,29 +15,7 @@ import {
   ZapOff
 } from "lucide-react";
 import { useAccessibility, FONT_SCALES, COLOR_MODES } from "./AccessibilityContext";
-
-// Ícone Universal de Acessibilidade / Cadeirante
-function WheelchairIcon({ size = 22, className = "" }) {
-  return (
-    <svg 
-      width={size} 
-      height={size} 
-      viewBox="0 0 24 24" 
-      fill="none" 
-      stroke="currentColor" 
-      strokeWidth="2.2" 
-      strokeLinecap="round" 
-      strokeLinejoin="round" 
-      className={className}
-      aria-hidden="true"
-    >
-      <circle cx="12" cy="4" r="2" />
-      <path d="M12 6v7a2 2 0 0 0 2 2h3" />
-      <path d="M8 11.5h5" />
-      <path d="M17 15a4.5 4.5 0 1 1-8.5-2" />
-    </svg>
-  );
-}
+import UniversalAccessibilityIcon from "./UniversalAccessibilityIcon";
 
 export default function AccessibilityModal({ isOpen, onClose }) {
   const {
@@ -94,7 +72,7 @@ export default function AccessibilityModal({ isOpen, onClose }) {
         {/* CABEÇALHO COM IDENTIDADE FLORÁVEL */}
         <div className="flex items-center gap-3.5 mb-6 pr-10">
           <div className="w-12 h-12 rounded-2xl bg-[#F4DDE5] text-[#294D33] flex items-center justify-center shrink-0 border border-[#E8A9BB]/40 shadow-xs">
-            <WheelchairIcon size={24} className="text-[#294D33]" />
+            <UniversalAccessibilityIcon size={26} color="#294D33" accentColor="#A8435F" />
           </div>
           <div>
             <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#EBF3ED] text-[#294D33] text-[11px] font-bold uppercase tracking-wider mb-1">

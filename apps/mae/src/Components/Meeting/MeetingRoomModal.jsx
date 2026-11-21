@@ -747,7 +747,7 @@ export default function MeetingRoomModal({
           </header>
 
           {/* CORPO PRINCIPAL: PALCO DE VÍDEOS + PAINEL LATERAL */}
-          <div className="flex-1 flex min-h-0 p-3 sm:p-4 gap-3 overflow-hidden relative">
+          <div className="flex-1 flex flex-col md:flex-row min-h-0 p-2 sm:p-4 gap-2 sm:gap-3 overflow-hidden relative">
             
             {/* REAÇÕES FLUTUANTES */}
             <div className="absolute bottom-6 left-8 z-40 pointer-events-none flex flex-col-reverse gap-2">
@@ -759,7 +759,7 @@ export default function MeetingRoomModal({
             </div>
 
             {/* ÁREA DE VÍDEOS */}
-            <div className="flex-1 flex flex-col min-h-0 relative">
+            <div className={`flex-1 flex flex-col min-h-0 relative ${sidePanel ? 'hidden md:flex' : 'flex'}`}>
               {sseBanner && (
                 <div className="mb-2 mx-auto px-4 py-1.5 rounded-full bg-emerald-700/90 text-white text-xs font-semibold shadow-md z-30">
                   {sseBanner}
@@ -952,7 +952,7 @@ export default function MeetingRoomModal({
 
             {/* PAINEL LATERAL DIREITO (CHAT OU LISTA DE PARTICIPANTES) */}
             {sidePanel && (
-              <aside className="w-80 sm:w-88 bg-white text-[#2B2829] rounded-2xl flex flex-col overflow-hidden shadow-2xl shrink-0 animate-fadeIn">
+              <aside className="w-full sm:w-80 md:w-88 bg-white text-[#2B2829] rounded-2xl flex flex-col overflow-hidden shadow-2xl shrink-0 animate-fadeIn z-10">
                 {/* Abas do Painel Lateral */}
                 <div className="p-3 border-b border-stone-200 flex items-center justify-between">
                   <div className="flex gap-1 bg-stone-100 p-1 rounded-xl">
