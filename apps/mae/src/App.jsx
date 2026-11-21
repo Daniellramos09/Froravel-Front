@@ -260,7 +260,7 @@ function AppContent() {
 
   const sidebarContent = (
     <>
-      <div className="overflow-y-auto overflow-x-hidden pr-1">
+      <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden pr-1 pb-6 scrollbar-thin">
         {/* LOGOTIPO */}
         <div className="flex items-center justify-between px-4 mb-4">
           <div 
@@ -340,8 +340,8 @@ function AppContent() {
         </div>
       </div>
 
-      {/* RODAPÉ DO PERFIL (LIMPO E SIMPLES) */}
-      <div className="flex items-center justify-between px-2 pt-4 border-t border-stone-100 shrink-0">
+      {/* RODAPÉ DO PERFIL (SEMPRE VISÍVEL E NUNCA CORTADO NO MOBILE) */}
+      <div className="flex items-center justify-between px-2 pt-3 pb-1 border-t border-stone-100 shrink-0 bg-white mt-auto">
         <div 
           className="flex items-center gap-3 p-1.5 -ml-1 rounded-2xl hover:bg-[#F4DDE5]/40 transition-all duration-200 cursor-pointer group flex-1 mr-2 min-w-0" 
           onClick={() => handleTabChange('perfil')}
@@ -408,7 +408,7 @@ function AppContent() {
             className="fixed inset-0 bg-black/40 backdrop-blur-xs animate-fadeIn"
             onClick={() => setIsMenuOpen(false)}
           />
-          <aside className="relative w-72 max-w-[85vw] bg-white h-full flex flex-col justify-between py-5 px-4 z-10 shadow-xl overflow-x-hidden">
+          <aside className="relative w-72 max-w-[85vw] bg-white h-dvh max-h-dvh flex flex-col justify-between pt-4 pb-6 px-4 z-10 shadow-2xl overflow-hidden">
             {sidebarContent}
           </aside>
         </div>
@@ -471,7 +471,7 @@ function AppContent() {
                 )}
               </button>
               {isNotifOpen && (
-                <div className="absolute right-0 mt-2 w-72 sm:w-80 bg-white rounded-3xl shadow-xl border border-stone-100 overflow-hidden animate-fadeIn z-50">
+                <div className="fixed left-3 right-3 sm:left-auto sm:right-0 top-18 sm:top-full mt-2 sm:w-80 max-w-sm sm:max-w-none mx-auto sm:mx-0 bg-white rounded-3xl shadow-2xl border border-stone-100 overflow-hidden animate-fadeIn z-50">
                   <div className="p-4 border-b border-stone-100 flex items-center justify-between">
                     <h4 className="font-bold text-[#2B2829] text-[15px]">Notificações</h4>
                     <span className="text-[12px] text-[#294D33] font-bold">Tudo lido</span>

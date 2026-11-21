@@ -338,7 +338,7 @@ export default function DashboardLayout() {
                 )}
               </button>
               {isNotifOpen && (
-                <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-3xl shadow-xl border border-[#EFE9EB] overflow-hidden animate-fadeIn z-50">
+                <div className="fixed left-3 right-3 sm:left-auto sm:right-0 top-18 sm:top-full mt-2 sm:w-96 max-w-sm sm:max-w-none mx-auto sm:mx-0 bg-white rounded-3xl shadow-2xl border border-[#EFE9EB] overflow-hidden animate-fadeIn z-50">
                   <div className="p-4 border-b border-stone-100 flex items-center justify-between bg-[#FCF7F9]">
                     <div>
                       <h4 className="font-fraunces font-bold text-[#1F3A27] text-[16px]">Notificações</h4>

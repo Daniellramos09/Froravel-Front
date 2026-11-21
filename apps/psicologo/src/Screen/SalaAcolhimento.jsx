@@ -336,6 +336,19 @@ export default function SalaAcolhimento() {
               prejoinPageEnabled: false,
               startWithAudioMuted: !micLigado,
               startWithVideoMuted: !camLigada,
+              disableDeepLinking: true,
+              chromeExtensionBanner: {
+                dontShowAgain: true,
+              },
+              enableCalendarIntegration: false,
+              disableInviteFunctions: true,
+              doNotStoreRoom: true,
+            },
+            interfaceConfigOverwrite: {
+              SHOW_JITSI_WATERMARK: false,
+              SHOW_WATERMARK_FOR_GUESTS: false,
+              SHOW_CHROME_EXTENSION_BANNER: false,
+              DEFAULT_REMOTE_DISPLAY_NAME: 'Participante',
             },
           });
           jitsiApiRef.current = api;
@@ -840,20 +853,20 @@ export default function SalaAcolhimento() {
           )}
 
           {/* Header da Chamada */}
-          <header className="h-16 bg-black/40 backdrop-blur-md border-b border-white/10 px-4 sm:px-6 flex items-center justify-between shrink-0 gap-2">
-            <div className="flex items-center gap-3 min-w-0">
+          <header className="h-16 bg-black/40 backdrop-blur-md border-b border-white/10 px-3 sm:px-6 flex items-center justify-between shrink-0 gap-2">
+            <div className="flex items-center gap-2 sm:gap-3 min-w-0">
               <span className="flex h-3 w-3 relative shrink-0">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
               </span>
               <div className="min-w-0">
-                <h2 className="text-sm font-bold tracking-wide text-white truncate max-w-xs sm:max-w-md">
+                <h2 className="text-xs sm:text-sm font-bold tracking-wide text-white truncate max-w-[130px] sm:max-w-md">
                   {sessaoAtiva.titulo}
                 </h2>
-                <p className="text-[11px] text-stone-400 flex items-center gap-2">
+                <p className="text-[10px] sm:text-[11px] text-stone-400 flex items-center gap-1.5 sm:gap-2">
                   <span>Duração: {formatarTempo(segundos)}</span>
-                  <span>•</span>
-                  <span className="text-[#E8A9BB]">Criptografia Ponta a Ponta</span>
+                  <span className="hidden xs:inline">•</span>
+                  <span className="text-[#E8A9BB] hidden xs:inline truncate">Criptografia</span>
                 </p>
               </div>
             </div>

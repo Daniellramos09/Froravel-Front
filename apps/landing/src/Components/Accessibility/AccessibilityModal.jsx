@@ -151,26 +151,38 @@ export default function AccessibilityModal({ isOpen, onClose }) {
               Ajuste todo o conteúdo do site para leitura mais nítida e confortável.
             </p>
 
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={decreaseFontSize}
-                disabled={fontScaleIndex === 0}
-                className="flex-1 py-3 px-3 rounded-xl border border-stone-200 bg-stone-50 hover:bg-white text-stone-800 font-bold text-sm transition cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-1.5"
-              >
-                <span className="text-lg">A-</span>
-                <span className="text-xs font-normal">Diminuir</span>
-              </button>
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
+              <div className="flex items-center gap-2 flex-1">
+                <button
+                  type="button"
+                  onClick={decreaseFontSize}
+                  disabled={fontScaleIndex === 0}
+                  className="flex-1 py-2.5 px-3 rounded-xl border border-stone-200 bg-stone-50 hover:bg-white text-stone-800 font-bold text-xs sm:text-sm transition cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-1.5"
+                >
+                  <span className="text-base font-bold">A-</span>
+                  <span className="text-xs font-medium">Diminuir</span>
+                </button>
 
-              <div className="flex gap-1.5">
+                <button
+                  type="button"
+                  onClick={increaseFontSize}
+                  disabled={fontScaleIndex === FONT_SCALES.length - 1}
+                  className="flex-1 py-2.5 px-3 rounded-xl border border-stone-200 bg-stone-50 hover:bg-white text-stone-800 font-bold text-xs sm:text-sm transition cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-1.5"
+                >
+                  <span className="text-base font-bold">A+</span>
+                  <span className="text-xs font-medium">Aumentar</span>
+                </button>
+              </div>
+
+              <div className="flex gap-1 sm:gap-1.5 justify-between">
                 {FONT_SCALES.map((item, idx) => (
                   <button
                     key={item.id}
                     type="button"
                     onClick={() => setFontScaleIndex(idx)}
-                    className={`w-9 h-11 rounded-xl text-xs font-bold transition cursor-pointer border ${
+                    className={`flex-1 sm:flex-none sm:w-10 h-10 rounded-xl text-xs font-bold transition cursor-pointer border ${
                       fontScaleIndex === idx
-                        ? "bg-[#294D33] text-white border-[#294D33] shadow-xs scale-105"
+                        ? "bg-[#294D33] text-white border-[#294D33] shadow-xs scale-102"
                         : "bg-stone-50 text-stone-600 border-stone-200 hover:bg-white"
                     }`}
                   >
@@ -178,16 +190,6 @@ export default function AccessibilityModal({ isOpen, onClose }) {
                   </button>
                 ))}
               </div>
-
-              <button
-                type="button"
-                onClick={increaseFontSize}
-                disabled={fontScaleIndex === FONT_SCALES.length - 1}
-                className="flex-1 py-3 px-3 rounded-xl border border-stone-200 bg-stone-50 hover:bg-white text-stone-800 font-bold text-sm transition cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-1.5"
-              >
-                <span className="text-lg">A+</span>
-                <span className="text-xs font-normal">Aumentar</span>
-              </button>
             </div>
           </div>
 

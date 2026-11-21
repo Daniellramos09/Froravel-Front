@@ -285,6 +285,19 @@ export default function MeetingRoomModal({
             prejoinPageEnabled: false,
             startWithAudioMuted: !isMicOn,
             startWithVideoMuted: !isCameraOn,
+            disableDeepLinking: true,
+            chromeExtensionBanner: {
+              dontShowAgain: true,
+            },
+            enableCalendarIntegration: false,
+            disableInviteFunctions: true,
+            doNotStoreRoom: true,
+          },
+          interfaceConfigOverwrite: {
+            SHOW_JITSI_WATERMARK: false,
+            SHOW_WATERMARK_FOR_GUESTS: false,
+            SHOW_CHROME_EXTENSION_BANNER: false,
+            DEFAULT_REMOTE_DISPLAY_NAME: 'Participante',
           },
         });
         jitsiApiRef.current = api;

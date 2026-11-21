@@ -108,7 +108,7 @@ export default function FlowerCounterBadge({
           role="tooltip"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
-          className="absolute right-0 top-full mt-2 w-72 sm:w-80 bg-white rounded-2xl p-4 shadow-xl border border-stone-100 z-50 animate-fadeIn font-dmsans text-[#2B2829] before:content-[''] before:absolute before:-top-3 before:left-0 before:right-0 before:h-3"
+          className="fixed left-3 right-3 sm:left-auto sm:right-0 top-18 sm:top-full mt-2 sm:w-80 max-w-sm sm:max-w-none mx-auto sm:mx-0 bg-white rounded-2xl p-4 shadow-2xl border border-stone-100 z-50 animate-fadeIn font-dmsans text-[#2B2829] before:content-[''] before:absolute before:-top-3 before:left-0 before:right-0 before:h-3"
         >
           {/* Cabeçalho do Popover */}
           <div className="flex items-center gap-3 mb-3">
