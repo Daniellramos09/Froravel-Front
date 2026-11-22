@@ -51,14 +51,18 @@ export default function PartnershipSection() {
               </p>
 
               {/* Indicadores Visuais de Impacto */}
-              <div className="grid grid-cols-2 gap-4 pt-2">
-                <div className="p-4 rounded-2xl bg-white/10 border border-white/15">
-                  <p className="font-serif text-3xl font-normal text-[#E8A9BB]">+1.200</p>
-                  <p className="text-xs text-white/80 font-sans mt-0.5">Acolhimentos financiados este ano</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                <div className="p-5 rounded-2xl bg-white/10 border border-white/15">
+                  <p className="font-serif text-3xl sm:text-4xl font-normal text-[#E8A9BB]">+1.200</p>
+                  <p className="text-sm sm:text-base text-[#FCF7F9]/90 font-sans mt-1">
+                    Acolhimentos financiados este ano
+                  </p>
                 </div>
-                <div className="p-4 rounded-2xl bg-white/10 border border-white/15">
-                  <p className="font-serif text-3xl font-normal text-[#E8A9BB]">100%</p>
-                  <p className="text-xs text-white/80 font-sans mt-0.5">Transparência em relatórios ESG</p>
+                <div className="p-5 rounded-2xl bg-white/10 border border-white/15">
+                  <p className="font-serif text-3xl sm:text-4xl font-normal text-[#E8A9BB]">100%</p>
+                  <p className="text-sm sm:text-base text-[#FCF7F9]/90 font-sans mt-1">
+                    Transparência em relatórios ESG
+                  </p>
                 </div>
               </div>
 
@@ -73,28 +77,28 @@ export default function PartnershipSection() {
             </div>
 
             {/* Lado Direito: Os 2 Pilares em Cards Escuros Refinados */}
-            <div className="lg:col-span-5 space-y-4">
+            <div className="lg:col-span-5 space-y-5">
               
-              <div className="p-6 rounded-3xl bg-white/5 backdrop-blur-sm border border-white/15 hover:border-white/30 transition-all">
-                <div className="flex items-center gap-3 mb-2.5">
-                  <div>
-                    <h3 className="font-serif text-lg font-normal text-white">Fundo de Acolhimento Social</h3>
-                    <p className="text-xs text-[#E8A9BB]">Acesso Universal</p>
-                  </div>
+              <div className="p-7 rounded-2xl bg-white/10 border border-white/20 hover:border-white/35 transition-all">
+                <div className="mb-3">
+                  <h3 className="font-serif text-xl sm:text-2xl font-normal text-white">
+                    Fundo de Acolhimento Social
+                  </h3>
+                  <p className="text-sm font-medium text-[#E8A9BB] mt-0.5">Acesso Universal</p>
                 </div>
-                <p className="text-xs text-white/75 leading-relaxed font-sans">
+                <p className="text-base text-[#FCF7F9]/95 leading-relaxed font-sans">
                   Sua empresa custeia sessões para mães que não podem pagar, com selo de governança e impacto medido.
                 </p>
               </div>
 
-              <div className="p-6 rounded-3xl bg-white/5 backdrop-blur-sm border border-white/15 hover:border-white/30 transition-all">
-                <div className="flex items-center gap-3 mb-2.5">
-                  <div>
-                    <h3 className="font-serif text-lg font-normal text-white">Bolsas em Saúde Perinatal</h3>
-                    <p className="text-xs text-[#E8A9BB]">Formação e Capacitação</p>
-                  </div>
+              <div className="p-7 rounded-2xl bg-white/10 border border-white/20 hover:border-white/35 transition-all">
+                <div className="mb-3">
+                  <h3 className="font-serif text-xl sm:text-2xl font-normal text-white">
+                    Bolsas em Saúde Perinatal
+                  </h3>
+                  <p className="text-sm font-medium text-[#E8A9BB] mt-0.5">Formação e Capacitação</p>
                 </div>
-                <p className="text-xs text-white/75 leading-relaxed font-sans">
+                <p className="text-base text-[#FCF7F9]/95 leading-relaxed font-sans">
                   Certificações para psicólogas de regiões periféricas atenderem voluntariamente suas comunidades.
                 </p>
               </div>

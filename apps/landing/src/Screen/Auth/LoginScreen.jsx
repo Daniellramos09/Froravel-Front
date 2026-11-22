@@ -559,7 +559,7 @@ export default function LoginScreen({ initialMode = 'login' }) {
   };
 
   const inputClass =
-    'w-full px-3 py-2 rounded-xl border border-stone-200 bg-[#f1f0ed] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#56725a]/60 text-[13px] text-gray-800 transition';
+    'w-full px-3.5 py-2.5 rounded-xl border border-stone-200 bg-[#f1f0ed] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#56725a]/60 text-sm text-gray-800 transition';
 
   const papelLabel = PAPEIS.find((p) => p.id === papel)?.label || 'Entrar';
 
@@ -573,28 +573,30 @@ export default function LoginScreen({ initialMode = 'login' }) {
           isCadastro ? 'lg:translate-x-full' : 'lg:translate-x-0'
         }`}
       >
-        <div className="w-full max-w-md my-auto py-2">
+        <div className="w-full max-w-lg my-auto py-3">
           {/* Top row: Voltar para Home + Logo compacta */}
-          <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center justify-between mb-4">
             <Link
               to="/"
-              className="inline-flex items-center gap-1.5 text-xs text-stone-500 hover:text-stone-800 transition cursor-pointer"
+              className="inline-flex items-center gap-1.5 text-xs sm:text-sm text-stone-500 hover:text-stone-800 transition cursor-pointer"
             >
-              <ArrowLeft size={14} />
+              <ArrowLeft size={15} />
               <span>Página inicial</span>
             </Link>
-            <Link to="/" className="flex items-center gap-1.5 transition-transform hover:scale-105">
-              <img src={LOGO} alt="Florável" className="h-8 w-auto object-contain" />
-              <span className="font-serif text-lg font-bold text-[#1f2a22]">florável</span>
+            <Link to="/" className="flex items-center gap-2 transition-transform hover:scale-105">
+              <img src={LOGO} alt="Florável" className="h-9 w-auto object-contain" />
+              <span className="font-serif text-lg sm:text-xl font-bold uppercase tracking-[0.06em] text-[#1f2a22]">
+                FLORÁVEL
+              </span>
             </Link>
           </div>
 
           {/* Título dinâmico + Abas deslizantes Login / Cadastro */}
-          <div className="text-center mb-3.5">
-            <h1 className="text-xl font-bold text-[#1f2a22] font-serif leading-tight">
+          <div className="text-center mb-4">
+            <h1 className="text-2xl sm:text-[1.65rem] font-bold text-[#1f2a22] font-serif leading-tight">
               {isCadastro ? 'Crie sua conta Florável' : 'Acesse seu espaço'}
             </h1>
-            <p className="text-[11.5px] text-gray-600 mt-0.5">
+            <p className="text-xs sm:text-[13px] text-gray-600 mt-1">
               {isCadastro
                 ? 'Preencha seus dados abaixo — você já sai acolhida.'
                 : 'Acolhimento, respeito e privacidade em cada etapa.'}
@@ -602,11 +604,11 @@ export default function LoginScreen({ initialMode = 'login' }) {
           </div>
 
           {/* Alternador Rápido de Modo: Entrar vs Cadastrar */}
-          <div className="grid grid-cols-2 gap-1 p-1 bg-[#edeae4] rounded-2xl mb-3">
+          <div className="grid grid-cols-2 gap-1 p-1 bg-[#edeae4] rounded-2xl mb-3.5">
             <button
               type="button"
               onClick={() => alternarModo('login')}
-              className={`py-1.5 text-xs font-bold rounded-xl transition-all cursor-pointer ${
+              className={`py-2 text-xs sm:text-sm font-bold rounded-xl transition-all cursor-pointer ${
                 !isCadastro ? 'bg-white text-[#294D33] shadow-2xs' : 'text-stone-600 hover:text-stone-900'
               }`}
             >
@@ -615,7 +617,7 @@ export default function LoginScreen({ initialMode = 'login' }) {
             <button
               type="button"
               onClick={() => alternarModo('cadastro')}
-              className={`py-1.5 text-xs font-bold rounded-xl transition-all cursor-pointer ${
+              className={`py-2 text-xs sm:text-sm font-bold rounded-xl transition-all cursor-pointer ${
                 isCadastro ? 'bg-white text-[#294D33] shadow-2xs' : 'text-stone-600 hover:text-stone-900'
               }`}
             >
@@ -624,7 +626,7 @@ export default function LoginScreen({ initialMode = 'login' }) {
           </div>
 
           {/* Seletor de Perfil Compartilhado (Mãe / Terapeuta / RH) */}
-          <div className="mb-3">
+          <div className="mb-4">
             <div className="grid grid-cols-3 gap-1.5 p-1 bg-[#edeae4] rounded-xl">
               {PAPEIS.map((p) => {
                 const ativo = papel === p.id;
@@ -637,7 +639,7 @@ export default function LoginScreen({ initialMode = 'login' }) {
                       setErroLogin('');
                       setErroCadastro('');
                     }}
-                    className={`py-1.5 px-2 text-[11px] font-bold rounded-lg transition-all cursor-pointer ${
+                    className={`py-2 px-2.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${
                       ativo
                         ? 'bg-white text-[#294D33] shadow-2xs'
                         : 'text-stone-600 hover:text-stone-900'
@@ -648,7 +650,7 @@ export default function LoginScreen({ initialMode = 'login' }) {
                 );
               })}
             </div>
-            <p className="text-[10.5px] text-stone-500 mt-1 text-center truncate">
+            <p className="text-xs text-stone-500 mt-1.5 text-center truncate">
               {PAPEIS.find((p) => p.id === papel)?.desc}
             </p>
           </div>
@@ -656,9 +658,9 @@ export default function LoginScreen({ initialMode = 'login' }) {
           {/* ======================= MODO LOGIN ======================= */}
           {!isCadastro ? (
             <div className="animate-fadeIn">
-              <form onSubmit={handleLoginSubmit} className="space-y-2.5">
+              <form onSubmit={handleLoginSubmit} className="space-y-3.5">
                 <div>
-                  <label htmlFor="email" className="block text-[11px] font-semibold text-gray-700 mb-0.5">
+                  <label htmlFor="email" className="block text-xs font-semibold text-gray-700 mb-1">
                     E-mail
                   </label>
                   <input
@@ -674,14 +676,14 @@ export default function LoginScreen({ initialMode = 'login' }) {
                 </div>
 
                 <div>
-                  <div className="flex items-center justify-between mb-0.5">
-                    <label htmlFor="senha" className="block text-[11px] font-semibold text-gray-700">
+                  <div className="flex items-center justify-between mb-1">
+                    <label htmlFor="senha" className="block text-xs font-semibold text-gray-700">
                       Senha
                     </label>
                     <button
                       type="button"
                       onClick={() => setShowForgotModal(true)}
-                      className="text-[11px] font-medium text-[#294D33] hover:underline cursor-pointer"
+                      className="text-xs font-medium text-[#294D33] hover:underline cursor-pointer"
                     >
                       Esqueceu a senha?
                     </button>
@@ -700,7 +702,7 @@ export default function LoginScreen({ initialMode = 'login' }) {
                     <button
                       type="button"
                       onClick={() => setMostrarSenha((v) => !v)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] font-medium text-[#56725a] hover:text-[#2f4a36] cursor-pointer"
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-xs font-medium text-[#56725a] hover:text-[#2f4a36] cursor-pointer"
                     >
                       {mostrarSenha ? 'Ocultar' : 'Mostrar'}
                     </button>
@@ -716,10 +718,10 @@ export default function LoginScreen({ initialMode = 'login' }) {
                 <button
                   type="submit"
                   disabled={carregandoLogin}
-                  className="w-full py-2.5 text-xs sm:text-sm rounded-xl bg-[#56725a] hover:bg-[#465e4a] active:scale-[0.99] disabled:opacity-60 text-white font-bold shadow-md shadow-[#56725a]/20 transition-all cursor-pointer flex items-center justify-center gap-2 mt-1"
+                  className="w-full py-3 text-sm rounded-xl bg-[#56725a] hover:bg-[#465e4a] active:scale-[0.99] disabled:opacity-60 text-white font-bold shadow-md shadow-[#56725a]/20 transition-all cursor-pointer flex items-center justify-center gap-2 mt-1.5"
                 >
                   <span>{carregandoLogin ? 'Conectando...' : `Entrar como ${papelLabel}`}</span>
-                  <ExternalLink size={14} />
+                  <ExternalLink size={15} />
                 </button>
               </form>
 

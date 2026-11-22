@@ -14,8 +14,8 @@ export default function FloravelLogo({ className = "", textClassName = "", iconS
       />
 
       {showText && (
-        <span className={`font-serif text-2xl md:text-[1.75rem] font-medium tracking-tight text-[#1F3224] ${textClassName}`}>
-          Florável
+        <span className={`font-serif text-xl md:text-[1.45rem] font-medium tracking-[0.06em] uppercase text-[#1F3224] ${textClassName}`}>
+          FLORÁVEL
         </span>
       )}
     </div>

@@ -304,6 +304,33 @@ export function ComoAjudaPreviewSection() {
  * Bloco 5 da Nova Home: 1 Depoimento em destaque + Convite Final ("Para que nenhuma mãe floresça sozinha").
  */
 export function ConviteFinalSection() {
+  const depoimentos = [
+    {
+      quote:
+        "“Na primeira roda de conversa eu só chorei. Foi o primeiro lugar onde ninguém tentou me corrigir ou dizer o que eu devia sentir. Só me acolheram.”",
+      nome: "Mariana S.",
+      detalhe: "Mãe do Bento (4 meses)",
+      foto: "/img/fotoMae/fotomae.jpg",
+      fallback: "/img/fotoMae/fotomae1.jpg",
+    },
+    {
+      quote:
+        "“A autoavaliação da Florável me mostrou que o que eu sentia tinha nome e que pedir apoio é coragem, não culpa.”",
+      nome: "Camila Moura",
+      detalhe: "Puérpera (bebê de 4 meses)",
+      foto: "/img/depoimentos/depoimento-camila-moura.jpg",
+      fallback: "/img/fotoMae/fotomae2.jpg",
+    },
+    {
+      quote:
+        "“O suporte da psicóloga perinatal me deu chão para lidar com a ansiedade da separação e a volta ao escritório.”",
+      nome: "Juliana Ferreira",
+      detalhe: "Retorno da licença (6 meses)",
+      foto: "/img/depoimentos/depoimento-juliana-ferreira.jpg",
+      fallback: "/img/fotoMae/fotomae3.jpg",
+    },
+  ];
+
   return (
     <section className="py-20 sm:py-28 bg-[#294D33] text-[#FCF7F9] relative overflow-hidden">
       <div
@@ -311,36 +338,53 @@ export function ConviteFinalSection() {
         className="pointer-events-none absolute -top-24 -right-24 w-96 h-96 rounded-full bg-[#E8A9BB]/15 blur-[120px]"
       />
 
-      <div className="relative z-10 mx-auto max-w-5xl px-6 lg:px-12 text-center space-y-12">
-        {/* 1 Depoimento em Destaque (conforme documentação UI/UX) */}
-        <div className="mx-auto max-w-3xl rounded-[2rem] bg-white/10 backdrop-blur-md border border-white/15 p-7 sm:p-9 text-left">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
-            <img
-              src="/img/fotoMae/fotomae.jpg"
-              alt="Mariana S., mãe participante"
-              className="w-16 h-16 rounded-full object-cover border-2 border-[#E8A9BB] shrink-0"
-              onError={(e) => {
-                e.currentTarget.onerror = null;
-                e.currentTarget.src = "/img/fotoMae/fotomae1.jpg";
-              }}
-            />
-            <div className="space-y-2">
-              <Quote size={20} className="text-[#E8A9BB]" />
-              <p className="font-serif italic text-base sm:text-lg text-white/95 leading-relaxed">
-                “Na primeira roda de conversa eu só chorei. Foi o primeiro lugar onde ninguém tentou me corrigir ou dizer o que eu devia sentir. Só me acolheram.”
-              </p>
-              <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
-                <span className="text-xs font-semibold text-[#E8A9BB] font-sans">
-                  Mariana S. &bull; Mãe do Bento (4 meses)
-                </span>
-                <Link
-                  to="/impacto"
-                  className="text-xs font-semibold text-white/85 hover:text-[#E8A9BB] underline underline-offset-4 transition"
-                >
-                  Ler mais depoimentos e impacto →
-                </Link>
-              </div>
-            </div>
+      <div className="relative z-10 mx-auto max-w-6xl px-6 lg:px-12 text-center space-y-14">
+        {/* 3 Cards de Depoimentos com alta legibilidade */}
+        <div className="space-y-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+            {depoimentos.map((dep) => (
+              <article
+                key={dep.nome}
+                className="rounded-2xl bg-white/10 border border-white/15 p-7 flex flex-col justify-between gap-6 transition-all duration-300 hover:bg-white/15"
+              >
+                <div className="space-y-3">
+                  <Quote size={20} className="text-[#E8A9BB]" />
+                  <p className="font-serif italic text-base sm:text-lg text-[#FCF7F9] leading-relaxed">
+                    {dep.quote}
+                  </p>
+                </div>
+
+                <div className="pt-4 border-t border-white/15 flex items-center gap-3.5">
+                  <img
+                    src={dep.foto}
+                    alt={dep.nome}
+                    className="w-11 h-11 rounded-full object-cover border border-[#E8A9BB]/70 shrink-0"
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = dep.fallback;
+                    }}
+                  />
+                  <div>
+                    <p className="text-sm font-semibold text-[#FCF7F9] font-sans">
+                      {dep.nome}
+                    </p>
+                    <p className="text-xs sm:text-sm text-[#E8A9BB] font-sans">
+                      {dep.detalhe}
+                    </p>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          <div>
+            <Link
+              to="/impacto"
+              className="inline-flex items-center gap-2 rounded-full border border-white/35 bg-white/10 hover:bg-white hover:text-[#294D33] text-[#FCF7F9] px-7 py-3 text-sm font-semibold transition-all duration-300"
+            >
+              <span>Ler mais depoimentos</span>
+              <ArrowRight size={16} />
+            </Link>
           </div>
         </div>
 

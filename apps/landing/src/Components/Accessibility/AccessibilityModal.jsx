@@ -39,11 +39,14 @@ export default function AccessibilityModal({ isOpen, onClose }) {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
+      window.__floravelLenis?.stop();
     } else {
       document.body.style.overflow = "unset";
+      window.__floravelLenis?.start();
     }
     return () => {
       document.body.style.overflow = "unset";
+      window.__floravelLenis?.start();
     };
   }, [isOpen]);
 
@@ -51,40 +54,45 @@ export default function AccessibilityModal({ isOpen, onClose }) {
 
   const modalContent = (
     <div 
+      data-lenis-prevent
       className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6 bg-black/45 backdrop-blur-sm animate-fadeIn"
       onClick={onClose}
     >
       <div 
-        className="bg-[#FCF7F9] rounded-[32px] p-6 sm:p-8 max-w-2xl w-full shadow-2xl border border-[#E8A9BB]/50 font-sans max-h-[90vh] overflow-y-auto relative animate-scaleUp text-[#2B2829]"
+        data-lenis-prevent
+        className="bg-[#FCF7F9] rounded-3xl max-w-2xl w-full shadow-2xl border border-[#E8A9BB]/50 font-sans max-h-[88vh] flex flex-col overflow-hidden relative animate-scaleUp text-[#2B2829]"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* BOTÃO FECHAR */}
-        <button
-          type="button"
-          onClick={onClose}
-          className="absolute top-6 right-6 w-10 h-10 rounded-full bg-white border border-[#E8A9BB]/40 text-stone-600 hover:bg-[#F4DDE5] hover:text-[#294D33] flex items-center justify-center transition cursor-pointer shadow-xs"
-          aria-label="Fechar painel de acessibilidade"
-        >
-          <X size={20} />
-        </button>
-
-        {/* CABEÇALHO COM IDENTIDADE FLORÁVEL */}
-        <div className="flex items-center gap-3.5 mb-6 pr-10">
-          <div className="w-12 h-12 rounded-2xl bg-[#F4DDE5] text-[#294D33] flex items-center justify-center shrink-0 border border-[#E8A9BB]/40 shadow-xs">
-            <UniversalAccessibilityIcon size={26} color="#294D33" accentColor="#A8435F" />
-          </div>
-          <div>
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#EBF3ED] text-[#294D33] text-[11px] font-bold uppercase tracking-wider mb-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#516B55]" />
-              Inclusão & Cuidado Universal
+        {/* CABEÇALHO FIXO COM IDENTIDADE FLORÁVEL */}
+        <div className="flex items-center justify-between gap-3.5 px-6 sm:px-8 pt-6 pb-4 border-b border-[#E8A9BB]/30 shrink-0 bg-[#FCF7F9]">
+          <div className="flex items-center gap-3.5">
+            <div className="w-11 h-11 rounded-2xl bg-[#F4DDE5] text-[#294D33] flex items-center justify-center shrink-0 border border-[#E8A9BB]/40 shadow-xs">
+              <UniversalAccessibilityIcon size={24} color="#294D33" accentColor="#A8435F" />
             </div>
-            <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#294D33] leading-tight">
-              Acessibilidade Florável
-            </h2>
+            <div>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#516B55] mb-0.5">
+                Inclusão & Cuidado Universal
+              </p>
+              <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#294D33] leading-tight">
+                Acessibilidade Florável
+              </h2>
+            </div>
           </div>
+
+          <button
+            type="button"
+            onClick={onClose}
+            className="w-10 h-10 rounded-full bg-white border border-[#E8A9BB]/40 text-stone-600 hover:bg-[#F4DDE5] hover:text-[#294D33] flex items-center justify-center transition cursor-pointer shadow-xs shrink-0"
+            aria-label="Fechar painel de acessibilidade"
+          >
+            <X size={20} />
+          </button>
         </div>
 
-        <div className="space-y-6">
+        <div
+          data-lenis-prevent
+          className="flex-1 overflow-y-auto overscroll-contain px-6 sm:px-8 py-6 space-y-6"
+        >
 
           {/* 1. AUDIODESCRIÇÃO & LEITOR DE TELA (DESTAQUE PARA DEFICIÊNCIA VISUAL) */}
           <div className="bg-white rounded-2xl p-5 border border-[#E8A9BB]/30 shadow-xs">
