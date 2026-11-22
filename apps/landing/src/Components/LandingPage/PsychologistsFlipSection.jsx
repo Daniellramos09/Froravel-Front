@@ -83,12 +83,9 @@ export default function PsychologistsFlipSection() {
       <div className="mx-auto max-w-7xl px-6 lg:px-12">
         {/* Cabeçalho centralizado inspirado na referência */}
         <div className="max-w-2xl mx-auto text-center mb-12 sm:mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#F4DDE5]/70 border border-[#E8A9BB]/50 mb-4">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#294D33]" />
-            <span className="text-[11px] uppercase tracking-[0.2em] font-semibold text-[#294D33] font-sans">
-              Rede Clínica Verificada
-            </span>
-          </div>
+          <p className="text-xs uppercase tracking-[0.18em] font-semibold text-[#516B55] font-sans mb-3">
+            Rede Clínica Verificada
+          </p>
 
           <h2 className="font-serif text-3xl sm:text-4xl lg:text-[2.9rem] font-normal text-[#294D33] leading-[1.12] tracking-[-0.015em]">
             Escuta feita por quem entende{" "}

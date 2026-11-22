@@ -66,13 +66,7 @@ export default function FeaturesBentoSection() {
               e.currentTarget.src = "/img/jornada/jornada-etapa-01-acolher.jpg";
             }}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#1F3224]/45 via-transparent to-transparent pointer-events-none" />
-          <div className="absolute bottom-6 left-6 bg-[#FCF7F9]/95 px-4 py-2 rounded-full flex items-center gap-2.5 shadow-sm">
-            <span className="w-2 h-2 rounded-full bg-[#294D33] shrink-0" />
-            <span className="text-xs font-semibold text-[#294D33] font-sans">
-              Diário Emocional • 100% Confidencial
-            </span>
-          </div>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#1F3224]/25 via-transparent to-transparent pointer-events-none" />
         </div>
 
         {/* LADO DIREITO: Texto editorial com respiro */}
@@ -289,12 +283,9 @@ export default function FeaturesBentoSection() {
         ======================================================== */}
         <div className="sr-group text-left pt-16">
           <div className="max-w-2xl mb-12">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#294D33]/15 mb-3">
-              <HeartHandshake size={14} className="text-[#294D33]" />
-              <span className="text-[11px] uppercase tracking-[0.2em] font-semibold text-[#294D33] font-sans">
-                Sustentabilidade Circular &bull; Cuidado Solidário
-              </span>
-            </div>
+            <p className="text-xs uppercase tracking-[0.18em] font-semibold text-[#516B55] font-sans mb-3">
+              Sustentabilidade Circular &bull; Cuidado Solidário
+            </p>
 
             <h3 className="font-serif text-3xl sm:text-4xl lg:text-[2.65rem] font-normal text-[#294D33] leading-tight">
               Acesso livre para todas.{" "}

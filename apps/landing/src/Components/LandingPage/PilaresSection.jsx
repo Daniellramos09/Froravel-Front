@@ -44,16 +44,9 @@ export default function PilaresSection() {
       <div className="max-w-[1560px] mx-auto px-6 lg:px-12 relative z-10">
         {/* Cabeçalho inspirado em Orionix: 'From Complexity to Clarity in 3 Steps' */}
         <div className="sr-group max-w-3xl mb-14 sm:mb-20 text-left">
-          {/* Top Badge com Ponto Rosa / Verde */}
-          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white border border-[#294D33]/10 shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_20px_-8px_rgba(0,0,0,0.06)] mb-5">
-            <span
-              className="w-2 h-2 rounded-full bg-[#E8A9BB]"
-              style={{ boxShadow: "0 0 8px rgba(232, 169, 187, 0.9)" }}
-            />
-            <span className="text-xs sm:text-sm font-semibold uppercase tracking-[0.14em] text-[#294D33]">
-              Nossos Pilares
-            </span>
-          </div>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#516B55] mb-3 font-sans">
+            Nossos Pilares
+          </p>
 
           <h2 className="font-serif text-[32px] sm:text-[44px] lg:text-[56px] font-normal text-[#294D33] leading-[1.08] tracking-[-0.025em]">
             Da sobrecarga ao acolhimento{" "}

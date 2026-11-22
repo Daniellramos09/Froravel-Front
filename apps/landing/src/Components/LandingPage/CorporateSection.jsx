@@ -195,15 +195,9 @@ export default function CorporateSection() {
             PLANOS CORPORATIVOS ESTRUTURADOS (MODELO ORIONIX PRICING)
         ======================================================== */}
         <div className="sr text-left mb-10 sm:mb-14">
-          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white border border-[#294D33]/10 shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_20px_-8px_rgba(0,0,0,0.06)] mb-4">
-            <span
-              className="w-2 h-2 rounded-full bg-[#E8A9BB]"
-              style={{ boxShadow: "0 0 8px rgba(232, 169, 187, 0.9)" }}
-            />
-            <span className="text-xs sm:text-sm font-semibold uppercase tracking-[0.14em] text-[#294D33]">
-              Planos Corporativos
-            </span>
-          </div>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#516B55] mb-3 font-sans">
+            Planos Corporativos
+          </p>
 
           <h3 className="font-serif text-[30px] sm:text-[40px] lg:text-[48px] font-normal text-[#294D33] leading-[1.1] tracking-[-0.02em]">
             Escolha o plano que melhor{" "}

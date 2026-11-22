@@ -11,9 +11,9 @@ export function ContextoHomeSection() {
       <div className="mx-auto max-w-7xl px-6 lg:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
           <div className="lg:col-span-6 text-left space-y-5">
-            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#F4DDE5] text-[#294D33] text-[11px] uppercase tracking-[0.2em] font-semibold font-sans">
+            <p className="text-xs uppercase tracking-[0.18em] font-semibold text-[#516B55] font-sans">
               Antes de ser mãe, você é você
-            </span>
+            </p>
 
             <h2 className="font-serif text-3xl sm:text-4xl lg:text-[2.8rem] font-normal text-[#294D33] leading-[1.12] tracking-[-0.015em]">
               Cuidar de quem cuida não deveria ser{" "}
@@ -120,10 +120,9 @@ export function ComoAjudaPreviewSection() {
       <div className="mx-auto max-w-7xl px-6 lg:px-12">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 text-left">
           <div className="max-w-2xl">
-            <span className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] font-semibold text-[#516B55] font-sans">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#A8435F]" />
+            <p className="text-xs uppercase tracking-[0.18em] font-semibold text-[#516B55] font-sans">
               Como a Florável ajuda
-            </span>
+            </p>
             <h2 className="mt-2 font-serif text-3xl sm:text-4xl font-normal text-[#294D33] leading-tight">
               Cuidado prático para o seu dia a dia
             </h2>

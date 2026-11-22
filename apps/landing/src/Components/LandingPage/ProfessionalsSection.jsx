@@ -97,12 +97,9 @@ export default function ProfessionalsSection() {
             CABEÇALHO EDITORIAL COM O NOVO MODELO DE PRECIFICAÇÃO
         ======================================================== */}
         <div className="sr-group max-w-3xl mb-16 sm:mb-20 text-left">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 border border-[#516B55]/30 shadow-xs mb-4">
-            <span className="w-2 h-2 rounded-full bg-[#294D33]" />
-            <span className="text-[11px] uppercase tracking-[0.2em] font-semibold text-[#294D33] font-sans">
-              Para Psicólogos e Terapeutas &bull; Modelo Justo & Social
-            </span>
-          </div>
+          <p className="text-xs uppercase tracking-[0.18em] font-semibold text-[#516B55] font-sans mb-3">
+            Para Psicólogos e Terapeutas &bull; Modelo Justo & Social
+          </p>
 
           <h2 className="font-serif text-3xl sm:text-4xl lg:text-[3.25rem] font-normal text-[#294D33] leading-[1.12] tracking-[-0.015em]">
             Clínica com propósito.{" "}
