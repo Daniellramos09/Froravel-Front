@@ -7,12 +7,12 @@ import { APP_LINKS } from "../../utils/appLinks";
 const redes = [
   { 
     nome: "Instagram", 
-    href: "https://instagram.com",
+    href: "https://www.instagram.com/floravel_oficial/",
     target: "_blank"
   },
   { 
     nome: "LinkedIn", 
-    href: "https://linkedin.com",
+    href: "https://www.linkedin.com/company/flor%C3%A1vel/",
     target: "_blank"
   },
   { 
@@ -109,6 +109,8 @@ export default function Footer() {
                   href={r.href}
                   target={r.target}
                   rel="noopener noreferrer"
+                  aria-label={r.nome}
+                  title={r.nome}
                   className="w-8 h-8 rounded-full bg-[#F4DDE5] text-[#294D33] flex items-center justify-center text-xs font-bold hover:bg-[#294D33] hover:text-[#FCF7F9] transition-colors"
                 >
                   {r.nome[0]}
