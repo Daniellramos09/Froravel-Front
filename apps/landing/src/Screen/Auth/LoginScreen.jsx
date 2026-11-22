@@ -306,6 +306,19 @@ export default function LoginScreen({ initialMode = 'login' }) {
       if (authRes.ok) {
         const authData = await authRes.json();
         const papelDestino = resolverPapelDestino(authData?.tipoPerfil, papel);
+        if (papelDestino !== papel) {
+          const rotuloConta =
+            papelDestino === 'mae'
+              ? 'Sou Mãe'
+              : papelDestino === 'terapeuta'
+              ? 'Sou Terapeuta'
+              : 'Gestão RH';
+          setErroLogin(
+            `Esta conta está cadastrada como "${rotuloConta}". Selecione a aba "${rotuloConta}" acima para entrar (ou use o Acesso Rápido Demo Day).`
+          );
+          setCarregandoLogin(false);
+          return;
+        }
         salvarSessaoLocal(authData, papelDestino);
         navigateToApp(papelDestino, authData);
         return;
