@@ -1,52 +1,26 @@
 import { useState } from "react";
-import { ShieldAlert, LogIn, LogOut } from "lucide-react";
+import { ShieldAlert, LogOut } from "lucide-react";
 import DashboardRh from "./DashboardRh";
 import {
   hidratarSessaoDoHash,
   getRhAuthState,
-  getLoginRedirectUrl,
   logoutAndRedirect,
 } from "./utils/rhSession";
+
+const DEMO_RH_SESSION = {
+  usuarioId: "demo-rh",
+  perfilId: "demo-rh",
+  nome: "Gestão RH TechMães (Demo)",
+  email: "rh@techmaes.com.br",
+  tipoPerfil: "RH",
+  isDemo: true,
+};
 
 function App() {
   const [authState] = useState(() => {
     hidratarSessaoDoHash();
     return getRhAuthState();
   });
-
-  if (!authState.isAuthenticated || !authState.token) {
-    return (
-      <main className="min-h-screen bg-[#FCF7F9] flex items-center justify-center p-6 font-sans text-stone-800 antialiased">
-        <div
-          role="alert"
-          data-testid="rh-auth-guard"
-          className="max-w-md w-full bg-white rounded-3xl p-8 border border-stone-200 shadow-sm text-center space-y-5"
-        >
-          <div className="w-12 h-12 rounded-2xl bg-[#F4DDE5] text-[#294D33] mx-auto flex items-center justify-center">
-            <ShieldAlert className="w-6 h-6" aria-hidden="true" />
-          </div>
-          <div className="space-y-2">
-            <h1
-              className="text-xl font-bold text-[#294D33]"
-              style={{ fontFamily: "'Fraunces', serif" }}
-            >
-              Sessão corporativa necessária
-            </h1>
-            <p className="text-sm text-[#516B55] leading-relaxed">
-              Faça login com uma conta de Gestão RH B2B para acessar os indicadores agregados e a gestão de licenças da sua empresa.
-            </p>
-          </div>
-          <a
-            href={getLoginRedirectUrl()}
-            className="inline-flex items-center justify-center gap-2 w-full py-3 px-5 rounded-full bg-[#294D33] hover:bg-[#1e3a27] text-white text-sm font-bold transition shadow-xs"
-          >
-            <LogIn className="w-4 h-4" aria-hidden="true" />
-            <span>Ir para Login RH</span>
-          </a>
-        </div>
-      </main>
-    );
-  }
 
   if (authState.isWrongRole) {
     return (
@@ -83,9 +57,12 @@ function App() {
     );
   }
 
+  const isDemoMode = !authState.isAuthenticated || !authState.token;
+
   return (
     <DashboardRh
-      session={authState.session}
+      session={isDemoMode ? DEMO_RH_SESSION : authState.session}
+      isDemoMode={isDemoMode}
       onLogout={() => logoutAndRedirect()}
     />
   );

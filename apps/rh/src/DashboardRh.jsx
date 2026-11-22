@@ -92,7 +92,41 @@ function formatTodayPtBr() {
   }
 }
 
-export default function DashboardRh({ session = null, onLogout }) {
+const DEMO_COMPANY = {
+  id: "demo-techmaes",
+  nome: "TechMães Tecnologia LTDA",
+  cnpj: "12.345.678/0001-90",
+  plano: "Enterprise ESG",
+  status: "ATIVA",
+};
+
+const DEMO_RELATORIO = {
+  totalLicencasEmitidas: 28,
+  totalLicencasAtivadas: 22,
+  taxaAdesaoPercentual: 78.6,
+  parametroKMinimo: 5,
+  setoresElegiveis: [
+    { nomeSetor: "Engenharia & Produto", colaboradorasAtivas: 9, agrupadoPorKAnonimato: false },
+    { nomeSetor: "Operações & Atendimento", colaboradorasAtivas: 7, agrupadoPorKAnonimato: false },
+    { nomeSetor: "Pessoas & Cultura", colaboradorasAtivas: 6, agrupadoPorKAnonimato: false },
+  ],
+  indiceGeralAgrupadoKAnonimato: {
+    nomeSetor: "Demais Áreas (Agrupado K<5)",
+    colaboradorasAtivas: 4,
+  },
+};
+
+const DEMO_LICENSES = [
+  { id: "lic-1", codigoCorporativo: "TECH-M8R4K2", setor: "Engenharia & Produto", status: "ATIVADA", dataEmissao: "2026-10-05" },
+  { id: "lic-2", codigoCorporativo: "TECH-P9L2N7", setor: "Engenharia & Produto", status: "ATIVADA", dataEmissao: "2026-10-08" },
+  { id: "lic-3", codigoCorporativo: "TECH-K3V5X1", setor: "Operações & Atendimento", status: "ATIVADA", dataEmissao: "2026-10-12" },
+  { id: "lic-4", codigoCorporativo: "TECH-J7Q4W9", setor: "Pessoas & Cultura", status: "ATIVADA", dataEmissao: "2026-10-18" },
+  { id: "lic-5", codigoCorporativo: "TECH-R2B6Y8", setor: "Engenharia & Produto", status: "PENDENTE", dataEmissao: "2026-11-02" },
+  { id: "lic-6", codigoCorporativo: "TECH-D5T8Z3", setor: "Operações & Atendimento", status: "PENDENTE", dataEmissao: "2026-11-10" },
+  { id: "lic-7", codigoCorporativo: "TECH-N4C1H6", setor: "Pessoas & Cultura", status: "REVOGADA", dataEmissao: "2026-09-20" },
+];
+
+export default function DashboardRh({ session = null, onLogout, isDemoMode = false }) {
   const [activeMenu, setActiveMenu] = useState("inicio");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showExportMenu, setShowExportMenu] = useState(false);
@@ -110,13 +144,16 @@ export default function DashboardRh({ session = null, onLogout }) {
   }, []);
 
   const fetchDashboardPayload = useCallback(async () => {
+    if (isDemoMode) {
+      return { emp: DEMO_COMPANY, rel: DEMO_RELATORIO, licList: DEMO_LICENSES };
+    }
     const emp = await obterEmpresaAtual();
     const [rel, licList] = await Promise.all([
       obterRelatorioKAnonimato(emp.id),
       listarLicencas(emp.id),
     ]);
     return { emp, rel, licList: Array.isArray(licList) ? licList : [] };
-  }, []);
+  }, [isDemoMode]);
 
   const applyFetchError = useCallback((err) => {
     if (err instanceof RhApiError) {
