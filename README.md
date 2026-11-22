@@ -98,41 +98,75 @@ flowchart LR
 ![Equipe Florável](./docs/equipe-floravel.jpg)
 -->
 
-| Foto | Integrante | Função | LinkedIn |
-| :---: | :--- | :--- | :---: |
-| ![Daniel](https://via.placeholder.com/48?text=DE) | **Daniel Expedito** | Desenvolvedor | [LinkedIn](#) |
-| ![Luiz](https://via.placeholder.com/48?text=LG) | **Luiz Gonzaga** | Desenvolvedor / UX & UI | [LinkedIn](#) |
-| ![Maria](https://via.placeholder.com/48?text=MR) | **Maria Rene** | Desenvolvedora | [LinkedIn](#) |
-| ![Gabriela](https://via.placeholder.com/48?text=GG) | **Gabriela Glicelio** | Documentarista & Financeiro | [LinkedIn](#) |
-| ![Adrielly](https://via.placeholder.com/48?text=AS) | **Adrielly Soares** | Product Owner (P.O.) | [LinkedIn](#) |
-| ![Gustavo](https://via.placeholder.com/48?text=GK) | **Gustavo Kazuhiro** | Desenvolvedor | [LinkedIn](#) |
-| ![Victor](https://via.placeholder.com/48?text=VC) | **Victor** | Scrum Master | [LinkedIn](#) |
-| ![Gabriel](https://via.placeholder.com/48?text=GB) | **Gabriel** | Desenvolvedor | [LinkedIn](#) |
-
----
-
-## 🚀 Como Executar Localmente
-
-```bash
-git clone https://github.com/Daniellramos09/Froravel-Front.git
-cd Froravel-Front
-npm install
-
-npm run dev:landing    # http://localhost:5173
-npm run dev:mae        # http://localhost:5174
-npm run dev:psicologo  # http://localhost:5175
-npm run dev:rh         # http://localhost:5176
-```
+<table align="center">
+  <tr>
+    <td align="center" width="200">
+      <img src="https://via.placeholder.com/120?text=Daniel" width="115" height="115" alt="Daniel Expedito" /><br />
+      <strong>Daniel Expedito</strong><br />
+      <sub>Desenvolvedor</sub><br />
+      <a href="#">LinkedIn</a>
+    </td>
+    <td align="center" width="200">
+      <img src="https://via.placeholder.com/120?text=Luiz" width="115" height="115" alt="Luiz Gonzaga" /><br />
+      <strong>Luiz Gonzaga</strong><br />
+      <sub>Desenvolvedor / UX &amp; UI</sub><br />
+      <a href="#">LinkedIn</a>
+    </td>
+    <td align="center" width="200">
+      <img src="https://via.placeholder.com/120?text=Maria+Rene" width="115" height="115" alt="Maria Rene" /><br />
+      <strong>Maria Rene</strong><br />
+      <sub>Desenvolvedora</sub><br />
+      <a href="#">LinkedIn</a>
+    </td>
+    <td align="center" width="200">
+      <img src="https://via.placeholder.com/120?text=Gabriela" width="115" height="115" alt="Gabriela Glicelio" /><br />
+      <strong>Gabriela Glicelio</strong><br />
+      <sub>Documentarista &amp; Financeiro</sub><br />
+      <a href="#">LinkedIn</a>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="200">
+      <img src="https://via.placeholder.com/120?text=Adrielly" width="115" height="115" alt="Adrielly Soares" /><br />
+      <strong>Adrielly Soares</strong><br />
+      <sub>Product Owner (P.O.)</sub><br />
+      <a href="#">LinkedIn</a>
+    </td>
+    <td align="center" width="200">
+      <img src="https://via.placeholder.com/120?text=Gustavo" width="115" height="115" alt="Gustavo Kazuhiro" /><br />
+      <strong>Gustavo Kazuhiro</strong><br />
+      <sub>Desenvolvedor</sub><br />
+      <a href="#">LinkedIn</a>
+    </td>
+    <td align="center" width="200">
+      <img src="https://via.placeholder.com/120?text=Victor" width="115" height="115" alt="Victor" /><br />
+      <strong>Victor</strong><br />
+      <sub>Scrum Master</sub><br />
+      <a href="#">LinkedIn</a>
+    </td>
+    <td align="center" width="200">
+      <img src="https://via.placeholder.com/120?text=Gabriel" width="115" height="115" alt="Gabriel" /><br />
+      <strong>Gabriel</strong><br />
+      <sub>Desenvolvedor</sub><br />
+      <a href="#">LinkedIn</a>
+    </td>
+  </tr>
+</table>
 
 ---
 
 ## 🙏 Agradecimentos
 
-### À Nossa Equipe
-Nosso agradecimento a **cada um dos 8 integrantes** pela dedicação em cada etapa — das conversas com mães e psicólogos até a última linha de código e deploy em nuvem: **Daniel Expedito**, **Luiz Gonzaga**, **Maria Rene**, **Gabriela Glicelio**, **Adrielly Soares**, **Gustavo Kazuhiro**, **Victor** e **Gabriel**.
+Mais do que um projeto de tecnologia, o **Florável** marcou um dos momentos mais especiais da nossa trajetória no **Instituto PROA**. Cada linha de código, cada tela desenhada e cada entrevista carrega histórias reais, superação e muita amizade.
 
-### Aos Professores do Instituto PROA
-* **Gabriel Augusto** *(Professor da Turma 5 de Java)* — o professor que passou mais tempo com a gente; nosso muito obrigado por todos os ensinamentos, dicas e por dedicar seu tempo ao nosso desenvolvimento.
-* **Débora** — obrigado por toda a ajuda no **pitch** e por conseguir as **aulas de AWS** para as turmas do PROA.
-* **Aurora** *(Professora de Comunicação)* — obrigado pelas aulas de português, construção de currículo e preparação para o pitch.
-* **Cláudia** *(Professora de Projeto)* — obrigado pela forma como conduziu toda a sequência até o projeto final e a apresentação.
+### À Nossa Equipe & À Turma 5 (Equipe 5)
+* **Aos 8 integrantes da Florável:** **Daniel Expedito**, **Luiz Gonzaga**, **Maria Rene**, **Gabriela Glicelio**, **Adrielly Soares**, **Gustavo Kazuhiro**, **Victor** e **Gabriel** — obrigado por nunca soltarem a mão um do outro nos momentos de pressão, por transformarem noites cansativas em aprendizado e por acreditarem desde o primeiro dia que podíamos criar algo com propósito real.
+* **À Equipe 5 e às demais equipes da Turma 5 de Java:** nosso carinho e gratidão imensa a todos os colegas que dividiram essa caminhada com a gente. Obrigado por cada ensinamento compartilhado, pelas trocas entre equipes, pelas dicas nos momentos em que o código travava e, acima de tudo, por tornarem o nosso ambiente muito mais leve, acolhedor e divertido todos os dias.
+
+### Aos Professores que Fizeram Parte dessa História
+* **Gabriel Augusto** *(Professor da Turma 5 de Java)* — foi quem passou mais tempo ao nosso lado nessa jornada. Obrigado de coração por cada ensinamento, por cada dica que nos destravou e por dedicar tanto do seu tempo e paciência para nos ver crescer como profissionais e como pessoas.
+* **Débora** — obrigado por acreditar no nosso projeto, por toda a ajuda na construção do **pitch** e por tornar possível as **aulas de AWS** para as turmas do PROA, que foram decisivas para colocarmos o Florável na nuvem.
+* **Aurora** *(Professora de Comunicação)* — obrigado pelas aulas de português, pelo cuidado com os nossos currículos e por nos ensinar a comunicar nossa história e nosso pitch com confiança e verdade.
+* **Cláudia** *(Professora de Projeto)* — obrigado pela forma humana e organizada como conduziu toda a sequência do projeto até o resultado final e a grande apresentação do **Demo Day**.
+
+> *Levaremos o aprendizado, os laços construídos e o orgulho de ter vivido essa jornada no **Instituto PROA** para toda a vida.* 🌸💚
