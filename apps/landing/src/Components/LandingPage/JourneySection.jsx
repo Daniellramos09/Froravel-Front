@@ -201,9 +201,9 @@ export default function JourneySection() {
       <div className="mx-auto max-w-[1560px] px-6 lg:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start relative">
           {/* 1. COLUNA ESQUERDA: PROGRESS WRAP (STICKY) */}
-          <div className="hidden lg:flex lg:col-span-2 sticky top-0 h-screen items-center justify-end overflow-visible select-none">
+          <div className="hidden lg:flex lg:col-span-3 sticky top-0 h-screen items-center justify-end overflow-visible select-none">
             <div
-              className="relative w-[780px] h-[780px] rounded-full border border-[#294D33]/14 shrink-0 transition-transform duration-100 ease-out"
+              className="relative w-[960px] h-[960px] rounded-full border border-[#294D33]/16 shrink-0 transition-transform duration-100 ease-out"
               style={{
                 transform: `rotate(${rotationDeg}deg)`,
               }}
@@ -216,23 +216,23 @@ export default function JourneySection() {
                   <div
                     key={st.number}
                     style={{ transform: `rotate(${angle}deg)` }}
-                    className="absolute top-1/2 left-0 right-0 -mt-[19px] h-[38px] pointer-events-none"
+                    className="absolute top-1/2 left-0 right-0 -mt-[24px] h-[48px] pointer-events-none"
                   >
                     {/* Ponto indicador ativo na borda direita do círculo */}
                     <button
                       type="button"
                       onClick={() => scrollToStep(idx)}
                       aria-label={`Ir para etapa ${st.number}`}
-                      className="pointer-events-auto absolute top-1/2 -translate-y-1/2 left-[771px] w-[18px] h-[18px] rounded-full flex items-center justify-center transition-opacity duration-500 cursor-pointer"
+                      className="pointer-events-auto absolute top-1/2 -translate-y-1/2 left-[949px] w-[22px] h-[22px] rounded-full flex items-center justify-center transition-opacity duration-500 cursor-pointer"
                       style={{
-                        border: "1px solid rgba(217, 138, 156, 0.42)",
+                        border: "1px solid rgba(217, 138, 156, 0.55)",
                         opacity: isAct ? 1 : 0,
                       }}
                     >
                       <span
-                        className="w-[10px] h-[10px] rounded-full bg-[#D98A9C]"
+                        className="w-[12px] h-[12px] rounded-full bg-[#D98A9C]"
                         style={{
-                          boxShadow: "0 0 6px 0px rgba(217, 138, 156, 0.75)",
+                          boxShadow: "0 0 8px 0px rgba(217, 138, 156, 0.8)",
                         }}
                       />
                     </button>
@@ -241,7 +241,7 @@ export default function JourneySection() {
                     <button
                       type="button"
                       onClick={() => scrollToStep(idx)}
-                      className={`pointer-events-auto absolute top-1/2 -translate-y-1/2 right-[-46px] font-serif text-[26px] leading-[1.4] tracking-[-0.02em] transition-colors duration-500 cursor-pointer ${
+                      className={`pointer-events-auto absolute top-1/2 -translate-y-1/2 right-[-66px] font-serif text-[36px] xl:text-[42px] leading-[1.2] tracking-[-0.02em] transition-colors duration-500 cursor-pointer ${
                         isAct
                           ? "text-[#294D33] font-normal"
                           : "text-[#A4A4A4] hover:text-[#294D33]/65 font-normal"
@@ -256,7 +256,7 @@ export default function JourneySection() {
           </div>
 
           {/* 2. COLUNA CENTRAL: SERVICE COLUMN (SCROLL NATURAL FLUIDO) */}
-          <div className="lg:col-span-6 flex flex-col items-center py-4 lg:pt-[14vh] lg:pb-[24vh]">
+          <div className="lg:col-span-5 flex flex-col items-center py-4 lg:pt-[14vh] lg:pb-[24vh]">
             {JOURNEY_STEPS.map((st, idx) => {
               const isAct = idx === activeStep;
               return (

@@ -49,86 +49,72 @@ export default function FeaturesBentoSection() {
   return (
     <section
       id="recursos"
-      className="py-20 sm:py-28 bg-[#F4DDE5]/45 relative overflow-hidden border-t border-[#E8A9BB]/35"
+      className="bg-[#F4DDE5]/45 relative overflow-hidden border-t border-[#E8A9BB]/35"
     >
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
-        {/* CABEÇALHO EDITORIAL */}
-        <div className="sr-group max-w-3xl mb-14 sm:mb-20 text-left">
-          <span className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] font-semibold text-[#516B55] font-sans mb-3">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#A8435F]" />
-            Ferramentas de Cuidado
-          </span>
-          <h2 className="font-serif text-[32px] sm:text-[44px] lg:text-[52px] font-normal text-[#294D33] leading-[1.08] tracking-[-0.02em]">
-            Tudo o que você precisa,{" "}
-            <span className="italic text-[#A8435F]">em um só lugar.</span>
-          </h2>
-          <p className="mt-4 text-[15px] sm:text-lg text-[#3A443E] leading-relaxed font-sans max-w-2xl">
-            Feito para a vida real de quem cuida, com mais tempo e espaço para respirar.
-          </p>
-        </div>
-
-        {/* ========================================================
-            1. DIÁRIO EMOCIONAL — SPLIT EDITORIAL DIRETO NA SUPERFÍCIE
-        ======================================================== */}
-        <div className="sr-group grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center pb-20 border-b border-[#294D33]/12">
-          <div className="lg:col-span-6 relative">
-            <div className="relative w-full aspect-[4/3.4] rounded-2xl overflow-hidden bg-[#294D33] shadow-lg shadow-[#294D33]/10">
-              <img
-                src="/img/institucional/diario-respiro-autocuidado.jpg"
-                alt="Mulher serena em momento de respiro e autocuidado"
-                className="w-full h-full object-cover object-center transition-transform duration-700 hover:scale-105"
-                onError={(e) => {
-                  e.currentTarget.onerror = null;
-                  e.currentTarget.src = "/img/jornada/jornada-etapa-01-acolher.jpg";
-                }}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#1F3224]/45 via-transparent to-transparent pointer-events-none" />
-              <div className="absolute bottom-4 left-4 right-4 sm:right-auto bg-[#FCF7F9]/95 px-4 py-2.5 rounded-xl flex items-center gap-2.5 shadow-sm">
-                <span className="w-2 h-2 rounded-full bg-[#294D33] shrink-0" />
-                <span className="text-xs font-semibold text-[#294D33] font-sans">
-                  Diário Emocional • Registro sem filtro • 100% Confidencial
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div className="lg:col-span-6 flex flex-col items-start text-left space-y-5">
-            <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#516B55]">
-              Refúgio Diário
+      {/* ========================================================
+          1. DIÁRIO EMOCIONAL — FULL-BLEED 50/50 (FOTO COBRE TODO O LADO ESQUERDO)
+      ======================================================== */}
+      <div className="sr-group grid grid-cols-1 lg:grid-cols-2 min-h-[540px] lg:min-h-[620px] border-b border-[#294D33]/12">
+        {/* LADO ESQUERDO: Fotografia cobrindo 100% da metade esquerda */}
+        <div className="relative min-h-[360px] lg:min-h-full w-full overflow-hidden bg-[#294D33]">
+          <img
+            src="/img/institucional/diario-respiro-autocuidado.jpg"
+            alt="Mulher serena em momento de respiro e autocuidado"
+            className="w-full h-full object-cover object-center transition-transform duration-1000 hover:scale-105"
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = "/img/jornada/jornada-etapa-01-acolher.jpg";
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#1F3224]/45 via-transparent to-transparent pointer-events-none" />
+          <div className="absolute bottom-6 left-6 bg-[#FCF7F9]/95 px-4 py-2 rounded-full flex items-center gap-2.5 shadow-sm">
+            <span className="w-2 h-2 rounded-full bg-[#294D33] shrink-0" />
+            <span className="text-xs font-semibold text-[#294D33] font-sans">
+              Diário Emocional • 100% Confidencial
             </span>
-            <h3 className="font-serif text-3xl sm:text-4xl font-normal text-[#294D33] leading-[1.15]">
-              Um lugar para respirar no seu tempo.
-            </h3>
-            <p className="text-sm sm:text-base text-[#3A443E] leading-relaxed font-sans">
-              A maternidade não vem com pausa automática. O Diário Florável é o seu refúgio: sem metas, sem cobrança e sem a obrigação de estar bem o tempo todo.
-            </p>
-
-            <div className="w-full space-y-2.5 pt-1 font-sans">
-              {[
-                "Sem notificações invasivas ou cobrança de rotina",
-                "Criptografia de ponta a ponta que protege seus desabafos",
-                "Mapa visual suave dos seus momentos de alívio e leveza",
-              ].map((line) => (
-                <div key={line} className="flex items-center gap-2.5 text-sm text-[#294D33] font-medium">
-                  <div className="w-4 h-4 rounded-full bg-[#294D33] text-white flex items-center justify-center shrink-0">
-                    <Check size={11} strokeWidth={3} />
-                  </div>
-                  <span>{line}</span>
-                </div>
-              ))}
-            </div>
-
-            <div className="pt-2">
-              <Link
-                to="/cadastro"
-                className="inline-flex items-center justify-center gap-2 py-3.5 px-7 rounded-full bg-[#294D33] hover:bg-[#1f3c27] text-[#FCF7F9] text-xs font-semibold uppercase tracking-wider shadow-sm transition"
-              >
-                <span>Começar meu registro gratuito</span>
-                <ArrowRight size={14} />
-              </Link>
-            </div>
           </div>
         </div>
+
+        {/* LADO DIREITO: Texto editorial com respiro */}
+        <div className="flex flex-col justify-center items-start text-left px-6 sm:px-12 lg:px-16 xl:px-24 py-14 lg:py-20 space-y-5">
+          <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#516B55]">
+            Refúgio Diário
+          </span>
+          <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-normal text-[#294D33] leading-[1.12]">
+            Um lugar para respirar no seu tempo.
+          </h2>
+          <p className="text-sm sm:text-base text-[#3A443E] leading-relaxed font-sans max-w-lg">
+            A maternidade não vem com pausa automática. O Diário Florável é o seu refúgio: sem metas, sem cobrança e sem a obrigação de estar bem o tempo todo.
+          </p>
+
+          <div className="w-full space-y-2.5 pt-1 font-sans">
+            {[
+              "Sem notificações invasivas ou cobrança de rotina",
+              "Criptografia de ponta a ponta que protege seus desabafos",
+              "Mapa visual suave dos seus momentos de alívio e leveza",
+            ].map((line) => (
+              <div key={line} className="flex items-center gap-2.5 text-sm text-[#294D33] font-medium">
+                <div className="w-4 h-4 rounded-full bg-[#294D33] text-white flex items-center justify-center shrink-0">
+                  <Check size={11} strokeWidth={3} />
+                </div>
+                <span>{line}</span>
+              </div>
+            ))}
+          </div>
+
+          <div className="pt-3">
+            <Link
+              to="/cadastro"
+              className="inline-flex items-center justify-center gap-2 py-3.5 px-7 rounded-full bg-[#294D33] hover:bg-[#1f3c27] text-[#FCF7F9] text-xs font-semibold uppercase tracking-wider shadow-sm transition"
+            >
+              <span>Começar meu registro gratuito</span>
+              <ArrowRight size={14} />
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-6 lg:px-12 pb-20 sm:pb-28 relative z-10">
 
         {/* ========================================================
             2. RECURSOS DA PLATAFORMA — SELETOR EDITORIAL INTERATIVO (SEM CAIXAS BRANCAS REPETIDAS)

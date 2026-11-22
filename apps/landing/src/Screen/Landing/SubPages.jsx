@@ -55,11 +55,7 @@ export function ExplorarPage() {
       <section className="py-12 sm:py-16 bg-[#FCF7F9]">
         <div className="mx-auto max-w-6xl px-6 lg:px-12">
           <div className="max-w-2xl text-left mb-10">
-            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#F4DDE5] text-[#294D33] text-[11px] uppercase tracking-[0.2em] font-semibold">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#294D33]" />
-              Explorar a Florável
-            </span>
-            <h1 className="mt-4 font-serif text-3xl sm:text-5xl font-normal text-[#294D33] leading-[1.1]">
+            <h1 className="font-serif text-3xl sm:text-5xl font-normal text-[#294D33] leading-[1.1]">
               Escolha o caminho ideal para{" "}
               <span className="italic text-[#A8435F]">o seu momento.</span>
             </h1>
