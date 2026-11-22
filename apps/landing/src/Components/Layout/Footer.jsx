@@ -23,23 +23,22 @@ const redes = [
 ];
 
 const secoes = [
-  ["Espaço da Mãe", "inicio"],
-  ["A Jornada", "jornada"],
-  ["Recursos", "recursos"],
-  ["Para Psicólogos", "psicologos"],
-  ["Florável Corporate", "corporate"],
-  ["Impacto ESG", "esg"],
-  ["Depoimentos", "depoimentos"],
-  ["Contato", "contato"]
+  { label: "Início", path: "/" },
+  { label: "Explorar a Plataforma", path: "/explorar" },
+  { label: "Sobre a Florável", path: "/sobre" },
+  { label: "Para Psicólogos", path: "/profissionais" },
+  { label: "Florável Corporate", path: "/empresas" },
+  { label: "Impacto & Depoimentos", path: "/impacto" },
+  { label: "Contato", path: "/contato" },
 ];
 
 const ferramentas = [
   { label: "Espaço da Mãe", url: APP_LINKS.mae, isExternal: true },
   { label: "Portal do Terapeuta", url: APP_LINKS.terapeuta, isExternal: true },
   { label: "Dashboard RH Corporativo", url: APP_LINKS.rh, isExternal: true },
-  { label: "Triagem Edimburgo", url: "/#jornada", isExternal: false },
-  { label: "Diário Emocional", url: "/#recursos", isExternal: false },
-  { label: "Rodas Comunitárias", url: "/#jornada", isExternal: false },
+  { label: "Triagem Edimburgo", url: "/explorar", isExternal: false },
+  { label: "Diário Emocional", url: "/explorar", isExternal: false },
+  { label: "Rodas Comunitárias", url: "/explorar", isExternal: false },
 ];
 
 const DOCUMENTOS_LEGAIS = {
@@ -124,14 +123,14 @@ export default function Footer() {
               Navegação
             </h4>
             <ul className="space-y-2 text-xs sm:text-sm">
-              {secoes.map(([label, id]) => (
-                <li key={id}>
-                  <button
-                    onClick={goTo(id)}
-                    className="text-[#516B55] hover:text-[#294D33] transition-colors cursor-pointer text-left"
+              {secoes.map((item) => (
+                <li key={item.path}>
+                  <Link
+                    to={item.path}
+                    className="text-[#516B55] hover:text-[#294D33] transition-colors"
                   >
-                    {label}
-                  </button>
+                    {item.label}
+                  </Link>
                 </li>
               ))}
             </ul>

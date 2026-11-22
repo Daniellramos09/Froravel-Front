@@ -6,20 +6,15 @@ import { useAccessibility } from "../Accessibility/AccessibilityContext";
 
 
 const navLinks = [
-  { label: "Espaço da Mãe", id: "inicio" },
-  { label: "Pilares", id: "pilares" },
-  { label: "Jornada", id: "jornada" },
-  { label: "Recursos", id: "recursos" },
-  { label: "Psicólogos", id: "psicologos" },
-  { label: "Corporate", id: "corporate" },
-  { label: "Propósito", id: "proposito" },
-  { label: "Depoimentos", id: "depoimentos" },
+  { label: "Início", path: "/" },
+  { label: "Sobre", path: "/sobre" },
+  { label: "Explorar", path: "/explorar" },
+  { label: "Contato", path: "/contato" },
 ];
 
 export default function Header() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const [active, setActive] = useState("inicio");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [portalDropdownOpen, setPortalDropdownOpen] = useState(false);
@@ -52,21 +47,6 @@ export default function Header() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  useEffect(() => {
-    if (pathname !== "/") return;
-    const els = navLinks.map(({ id }) => document.getElementById(id)).filter(Boolean);
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) setActive(e.target.id);
-        });
-      },
-      { rootMargin: "-30% 0px -60% 0px" }
-    );
-    els.forEach((el) => io.observe(el));
-    return () => io.disconnect();
-  }, [pathname]);
 
   const goTo = (id) => (e) => {
     e.preventDefault();
@@ -104,24 +84,23 @@ export default function Header() {
           </a>
 
           {/* ========================================================
-              2. NAVEGAÇÃO CENTRAL EDITORIAL (PÍLULA COMPACTA E ELEGANTE)
+              2. NAVEGAÇÃO CENTRAL EDITORIAL (PÍLULA ENXUTA COM FONTE MAIOR)
           ======================================================== */}
-          <nav className="liquid-glass hidden xl:flex items-center gap-0.5 lg:gap-1 rounded-full px-2.5 py-1.5 shrink-0">
-            {navLinks.map(({ label, id }) => {
-              const isActive = pathname === "/" && active === id;
+          <nav className="liquid-glass hidden lg:flex items-center gap-1.5 rounded-full px-3 py-1.5 shrink-0">
+            {navLinks.map(({ label, path }) => {
+              const isActive = pathname === path;
               return (
-                <a
-                  key={id}
-                  href={`#${id}`}
-                  onClick={goTo(id)}
-                  className={`relative px-3 py-1.5 text-xs font-semibold rounded-full transition-all duration-200 cursor-pointer whitespace-nowrap ${
+                <Link
+                  key={path}
+                  to={path}
+                  className={`relative px-4 py-1.5 text-[15px] font-semibold rounded-full transition-all duration-200 cursor-pointer whitespace-nowrap ${
                     isActive
                       ? "bg-[#F4DDE5] text-[#294D33] font-bold shadow-2xs"
                       : "text-[#516B55] hover:text-[#294D33] hover:bg-[#F4DDE5]/50"
                   }`}
                 >
                   {label}
-                </a>
+                </Link>
               );
             })}
           </nav>
@@ -240,7 +219,7 @@ export default function Header() {
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="xl:hidden p-2 text-[#294D33] hover:bg-[#F4DDE5] rounded-xl transition cursor-pointer shrink-0 ml-0.5"
+              className="lg:hidden p-2 text-[#294D33] hover:bg-[#F4DDE5] rounded-xl transition cursor-pointer shrink-0 ml-0.5"
               aria-label={mobileMenuOpen ? "Fechar menu de navegação" : "Abrir menu de navegação"}
               aria-expanded={mobileMenuOpen}
             >
@@ -315,17 +294,21 @@ export default function Header() {
               </div>
             </div>
 
-            {/* Links de Seções */}
+            {/* Links de Navegação */}
             <nav className="flex flex-col space-y-1 text-left">
-              {navLinks.map(({ label, id }) => (
-                <a
-                  key={id}
-                  href={`#${id}`}
-                  onClick={goTo(id)}
-                  className="py-2.5 px-3 text-sm font-semibold text-[#294D33] hover:bg-[#F4DDE5] rounded-xl transition flex items-center justify-between"
+              {navLinks.map(({ label, path }) => (
+                <Link
+                  key={path}
+                  to={path}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`py-2.5 px-3 text-[15px] font-semibold rounded-xl transition flex items-center justify-between ${
+                    pathname === path
+                      ? "bg-[#F4DDE5] text-[#294D33] font-bold"
+                      : "text-[#294D33] hover:bg-[#F4DDE5]/60"
+                  }`}
                 >
                   <span>{label}</span>
-                </a>
+                </Link>
               ))}
             </nav>
 

@@ -3,17 +3,14 @@ import { useLocation } from "react-router-dom";
 import ScrollProgress from "../../Components/Effects/ScrollProgress";
 import useScrollReveal from "../../Components/Effects/useScrollReveal";
 import HeroSection from "../../Components/LandingPage/HeroSection";
-import Sobre from "./SobreScreen";
+import {
+  ContextoHomeSection,
+  ComoAjudaPreviewSection,
+  ConviteFinalSection,
+} from "../../Components/LandingPage/HomeSummarySections";
 import PilaresSection from "../../Components/LandingPage/PilaresSection";
-import JourneySection from "../../Components/LandingPage/JourneySection";
-import FeaturesBentoSection from "../../Components/LandingPage/FeaturesBentoSection";
-import ProfessionalsSection from "../../Components/LandingPage/ProfessionalsSection";
-import CorporateSection from "../../Components/LandingPage/CorporateSection";
-import MissaoVisaoValoresSection from "../../Components/LandingPage/MissaoVisaoValoresSection";
-import PartnershipSection from "../../Components/LandingPage/PartnershipSection";
-import Depoimentos from "./DepoimentosScreen";
-import Contato from "./ContatoScreen";
- 
+import PsychologistsFlipSection from "../../Components/LandingPage/PsychologistsFlipSection";
+
 export default function Landing() {
   const { state } = useLocation();
   const rootRef = useRef(null);
@@ -28,66 +25,35 @@ export default function Landing() {
       }
     }
   }, [state]);
- 
+
   return (
     <div ref={rootRef} className="bg-[#FCF7F9] text-[#294D33] selection:bg-[#F4DDE5] selection:text-[#294D33]">
       <ScrollProgress />
 
-      {/* 1. Hero Section Editorial (Preservada com círculo botânico & figura recortada) */}
+      {/* 1. Hero — Mensagem curta de acolhimento + CTA principal */}
       <section id="inicio">
         <HeroSection />
       </section>
 
-      {/* 2. Manifesto Emocional & Filosofia da Marca (Split-Screen de alto impacto visual) */}
-      <section id="sobre">
-        <Sobre />
-      </section>
+      {/* 2. Contexto — Breve apresentação da necessidade de cuidado materno */}
+      <ContextoHomeSection />
 
-      {/* 2.5 Nossos Pilares: Acolher, Perceber e Conectar (Orionix 3 Steps) */}
+      {/* 3. Três Pilares — Acolher, Perceber e Conectar */}
       <section id="pilares">
         <PilaresSection />
       </section>
 
-      {/* 3. A Jornada da Mãe (Visual, intuitiva, ilustrada com setas, mockups e folder cards) */}
-      <section id="jornada">
-        <JourneySection />
-      </section>
-
-      {/* 4. Funcionalidades da Plataforma (Bento Grid Editorial & Seletor de Humor Interativo) */}
+      {/* 4. Como a Florável ajuda + Psicólogos (Flip Cards com + e mensagem de acolhimento) */}
       <section id="recursos">
-        <FeaturesBentoSection />
+        <ComoAjudaPreviewSection />
       </section>
 
-      {/* 5. Clínica com Propósito (Para Psicólogos e Terapeutas B2B2C com fotos reais) */}
       <section id="psicologos">
-        <ProfessionalsSection />
+        <PsychologistsFlipSection />
       </section>
 
-      {/* 6. Florável Corporate (B2B - Mini Dashboard RH & Retenção de Talentos) */}
-      <section id="corporate">
-        <CorporateSection />
-      </section>
-
-      {/* 6.5 Missão, Visão e Valores (Orionix: Where ambitious brands build their digital future) */}
-      <section id="proposito">
-        <MissaoVisaoValoresSection />
-      </section>
-
-      {/* 7. Alianças ESG e Patrocínios Sociais (Bloco Imersivo Verde Escuro #294D33) */}
-      <section id="esg">
-        <PartnershipSection />
-      </section>
-
-      {/* 8. Vozes Reais & Depoimentos (Cards com fotos reais de mães da pasta fotoMae) */}
-      <section id="depoimentos">
-        <Depoimentos />
-      </section>
-
-      {/* 9. Canal de Contato & Acolhimento */}
-      <section id="contato">
-        <Contato />
-      </section>
-
+      {/* 5. Depoimento em destaque + Convite Final ("Para que nenhuma mãe floresça sozinha") */}
+      <ConviteFinalSection />
     </div>
   );
 }
