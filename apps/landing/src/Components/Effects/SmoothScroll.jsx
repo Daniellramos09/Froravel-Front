@@ -35,6 +35,7 @@ export default function SmoothScroll({ children }) {
     });
 
     lenisRef.current = lenis;
+    window.__floravelLenis = lenis;
 
     let rafId = null;
     function raf(time) {
@@ -83,6 +84,9 @@ export default function SmoothScroll({ children }) {
       if (rafId) cancelAnimationFrame(rafId);
       lenis.destroy();
       lenisRef.current = null;
+      if (window.__floravelLenis === lenis) {
+        delete window.__floravelLenis;
+      }
     };
   }, [reducedMotion]);
 

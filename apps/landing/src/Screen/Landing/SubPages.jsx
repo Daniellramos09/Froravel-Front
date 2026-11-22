@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Heart, Stethoscope, Building2, HandHeart, Sparkles } from "lucide-react";
+import { ArrowRight, Heart, Stethoscope, Building2, HandHeart } from "lucide-react";
 import useScrollReveal from "../../Components/Effects/useScrollReveal";
 import Sobre from "./SobreScreen";
 import MissaoVisaoValoresSection from "../../Components/LandingPage/MissaoVisaoValoresSection";
@@ -29,96 +29,68 @@ function PageShell({ children }) {
 export function ExplorarPage() {
   const caminhos = [
     {
-      icon: Heart,
-      publico: "Mães & Gestantes",
-      titulo: "Acolhimento, Diário e Rodas",
-      desc: "Triagem confidencial (EPDS), diário emocional gratuito, rodas de conversa semanais e psicólogas acessíveis.",
+      titulo: "Espaço da Mãe",
+      desc: "Diário emocional, triagem EPDS e rodas gratuitas.",
       to: "/cadastro",
-      cta: "Acessar Espaço da Mãe",
-      bg: "bg-[#F4DDE5]/70",
-      border: "border-[#E8A9BB]",
     },
     {
-      icon: Stethoscope,
-      publico: "Profissionais",
-      titulo: "Psicologia Perinatal com Propósito",
-      desc: "Honorários de R$ 40 a R$ 200, apenas 5% de taxa da plataforma, vagas sociais e captação ética via rodas.",
+      titulo: "Psicologia Perinatal",
+      desc: "Rede ética com repasse justo e vagas sociais.",
       to: "/profissionais",
-      cta: "Para Profissionais",
-      bg: "bg-[#EBF1ED]",
-      border: "border-[#516B55]/30",
     },
     {
-      icon: Building2,
-      publico: "Empresas & RH",
       titulo: "Florável Corporate (B2B)",
-      desc: "Retenção de talentos no pós-licença, indicadores agregados de clima (K-Anonimato) e conformidade LGPD.",
+      desc: "Acolhimento pós-licença e indicadores com K-Anonimato.",
       to: "/empresas",
-      cta: "Para Empresas",
-      bg: "bg-white",
-      border: "border-[#E8A9BB]/50",
     },
     {
-      icon: HandHeart,
-      publico: "Parceiros & Apoiadores",
       titulo: "Impacto Social & ESG",
-      desc: "Apoie o Fundo Social Florável, patrocine atendimentos gratuitos e conheça depoimentos reais de transformação.",
+      desc: "Fundo solidário e histórias reais de transformação.",
       to: "/impacto",
-      cta: "Apoiar e ver Impacto",
-      bg: "bg-[#F4DDE5]/45",
-      border: "border-[#E8A9BB]/60",
     },
   ];
 
   return (
     <PageShell>
-      <section className="py-14 sm:py-20 bg-[#FCF7F9]">
-        <div className="mx-auto max-w-7xl px-6 lg:px-12">
-          <div className="max-w-3xl text-left mb-12">
+      <section className="py-12 sm:py-16 bg-[#FCF7F9]">
+        <div className="mx-auto max-w-6xl px-6 lg:px-12">
+          <div className="max-w-2xl text-left mb-10">
             <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#F4DDE5] text-[#294D33] text-[11px] uppercase tracking-[0.2em] font-semibold">
-              <Sparkles size={13} />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#294D33]" />
               Explorar a Florável
             </span>
             <h1 className="mt-4 font-serif text-3xl sm:text-5xl font-normal text-[#294D33] leading-[1.1]">
               Escolha o caminho ideal para{" "}
               <span className="italic text-[#A8435F]">o seu momento.</span>
             </h1>
-            <p className="mt-4 text-base sm:text-lg text-[#3A443E] leading-relaxed font-sans">
-              Reunimos aqui todos os recursos da plataforma, a jornada completa da mãe e as áreas dedicadas para especialistas, empresas e apoiadores.
-            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-            {caminhos.map((item) => {
-              const Icon = item.icon;
-              return (
-                <Link
-                  key={item.publico}
-                  to={item.to}
-                  className={`rounded-[1.75rem] ${item.bg} border ${item.border} p-6 flex flex-col justify-between text-left transition hover:-translate-y-1 hover:shadow-md group`}
-                >
-                  <div>
-                    <div className="w-11 h-11 rounded-2xl bg-white text-[#294D33] flex items-center justify-center shadow-2xs mb-4">
-                      <Icon size={21} />
-                    </div>
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#516B55]">
-                      {item.publico}
-                    </span>
-                    <h2 className="mt-1 font-serif text-xl font-semibold text-[#294D33] leading-snug">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {caminhos.map((item, idx) => (
+              <Link
+                key={item.titulo}
+                to={item.to}
+                className="group rounded-2xl bg-white/80 hover:bg-white border border-[#294D33]/10 hover:border-[#294D33]/25 px-6 py-5 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:shadow-sm flex items-center justify-between gap-4 text-left"
+              >
+                <div className="flex items-baseline gap-4 min-w-0">
+                  <span className="font-serif text-2xl text-[#A8435F]/75 group-hover:text-[#A8435F] transition-colors duration-300 shrink-0">
+                    0{idx + 1}
+                  </span>
+                  <div className="min-w-0">
+                    <h2 className="font-serif text-xl font-normal text-[#294D33] leading-snug">
                       {item.titulo}
                     </h2>
-                    <p className="mt-2 text-sm text-[#3A443E] leading-relaxed font-sans">
+                    <p className="mt-1 text-sm text-[#516B55] font-sans truncate">
                       {item.desc}
                     </p>
                   </div>
+                </div>
 
-                  <div className="mt-6 inline-flex items-center gap-1.5 text-sm font-bold text-[#294D33] group-hover:text-[#A8435F] transition">
-                    <span>{item.cta}</span>
-                    <ArrowRight size={15} className="transition-transform group-hover:translate-x-1" />
-                  </div>
-                </Link>
-              );
-            })}
+                <span className="w-9 h-9 rounded-full border border-[#294D33]/15 text-[#294D33] group-hover:bg-[#294D33] group-hover:text-white group-hover:border-[#294D33] flex items-center justify-center shrink-0 transition-all duration-300">
+                  <ArrowRight size={15} className="transition-transform duration-300 group-hover:translate-x-0.5" />
+                </span>
+              </Link>
+            ))}
           </div>
         </div>
       </section>

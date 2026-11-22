@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import { Link } from "react-router-dom";
-import { Plus, Minus, ArrowLeft, ArrowRight, HeartHandshake, Sparkles } from "lucide-react";
+import { Plus, Minus, ArrowLeft, ArrowRight, HeartHandshake } from "lucide-react";
 
 const PSYCHOLOGISTS = [
   {
@@ -59,6 +59,7 @@ const PSYCHOLOGISTS = [
 
 export default function PsychologistsFlipSection() {
   const [flippedIds, setFlippedIds] = useState({});
+  const [hoveredId, setHoveredId] = useState(null);
   const scrollContainerRef = useRef(null);
 
   const toggleCard = (id) => {
@@ -83,7 +84,7 @@ export default function PsychologistsFlipSection() {
         {/* Cabeçalho centralizado inspirado na referência */}
         <div className="max-w-2xl mx-auto text-center mb-12 sm:mb-16">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#F4DDE5]/70 border border-[#E8A9BB]/50 mb-4">
-            <Sparkles size={13} className="text-[#294D33]" />
+            <span className="w-1.5 h-1.5 rounded-full bg-[#294D33]" />
             <span className="text-[11px] uppercase tracking-[0.2em] font-semibold text-[#294D33] font-sans">
               Rede Clínica Verificada
             </span>
@@ -95,7 +96,7 @@ export default function PsychologistsFlipSection() {
           </h2>
 
           <p className="mt-4 text-base sm:text-lg text-[#516B55] font-sans leading-relaxed">
-            Clique no botão <strong className="text-[#294D33]">+</strong> em cada especialista para ler a mensagem de acolhimento dela para você.
+            Passe o mouse sobre o card ou toque no botão <strong className="text-[#294D33]">+</strong> para ler a mensagem de acolhimento dela para você.
           </p>
 
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
@@ -116,24 +117,26 @@ export default function PsychologistsFlipSection() {
           style={{ scrollbarWidth: "none" }}
         >
           {PSYCHOLOGISTS.map((psi) => {
-            const isFlipped = !!flippedIds[psi.id];
+            const isFlipped = hoveredId === psi.id || !!flippedIds[psi.id];
 
             return (
               <div
                 key={psi.id}
-                className="snap-start shrink-0 w-[290px] sm:w-[310px] h-[430px] [perspective:1200px]"
+                onMouseEnter={() => setHoveredId(psi.id)}
+                onMouseLeave={() => setHoveredId(null)}
+                className="snap-start shrink-0 w-[290px] sm:w-[310px] h-[440px] [perspective:1200px]"
               >
                 <div
-                  className={`relative w-full h-full transition-transform duration-500 [transform-style:preserve-3d] ${
+                  className={`relative w-full h-full transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] [transform-style:preserve-3d] ${
                     isFlipped ? "[transform:rotateY(180deg)]" : ""
                   }`}
                 >
                   {/* FRENTE DO CARD */}
                   <div
-                    className={`absolute inset-0 rounded-[1.75rem] ${psi.cardBg} p-5 flex flex-col justify-between border border-[#E8A9BB]/40 shadow-sm [backface-visibility:hidden]`}
+                    className={`absolute inset-0 rounded-[1.5rem] ${psi.cardBg} p-4 flex flex-col justify-between border border-[#294D33]/10 shadow-sm [backface-visibility:hidden]`}
                   >
-                    {/* Área da Foto com recorte para o botão + no topo direito */}
-                    <div className="relative w-full h-[250px] rounded-2xl overflow-hidden bg-[#294D33]">
+                    {/* Área da Foto */}
+                    <div className="relative w-full h-[265px] rounded-2xl overflow-hidden bg-[#294D33]">
                       <img
                         src={psi.foto}
                         alt={psi.nome}

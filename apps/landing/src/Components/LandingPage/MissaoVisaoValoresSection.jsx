@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Sparkles, Shield, Heart, Users, ChevronRight } from "lucide-react";
+import { Shield, Heart, Users, ChevronRight } from "lucide-react";
 
 export default function MissaoVisaoValoresSection() {
   const [selectedValor, setSelectedValor] = useState(0);
@@ -147,9 +147,13 @@ export default function MissaoVisaoValoresSection() {
           {/* CARD 3: VALORES (COM SELEÇÃO INTERATIVA DOS 8 PILARES) */}
           <div className="rounded-[32px] sm:rounded-[40px] bg-[#1F3224] text-white p-7 sm:p-9 shadow-[0px_0px_0px_1px_rgba(0,0,0,0.04),0px_1px_2px_0px_rgba(0,0,0,0.08),0px_4px_6px_0px_rgba(0,0,0,0.04),0px_40px_40px_-24px_rgba(0,0,0,0.12)] flex flex-col justify-between transition-transform duration-500 hover:-translate-y-1">
             <div>
-              {/* Emblema circular no topo */}
-              <div className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-[#294D33] flex items-center justify-center mx-auto mb-6 shadow-inner border border-white/10">
-                <Sparkles size={40} className="text-[#E8A9BB]" />
+              {/* Foto circular no topo */}
+              <div className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden mx-auto mb-6 shadow-md border-2 border-white/20">
+                <img
+                  src="/img/institucional/institucional-valores.jpg"
+                  alt="Valores éticos e acolhimento humano da Florável"
+                  className="w-full h-full object-cover object-center"
+                />
               </div>
 
               <div className="text-center mb-5">

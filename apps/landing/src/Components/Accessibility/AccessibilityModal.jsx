@@ -10,7 +10,6 @@ import {
   Eye, 
   RotateCcw, 
   MousePointer, 
-  Sparkles,
   Check,
   ZapOff
 } from "lucide-react";
@@ -76,7 +75,7 @@ export default function AccessibilityModal({ isOpen, onClose }) {
           </div>
           <div>
             <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#EBF3ED] text-[#294D33] text-[11px] font-bold uppercase tracking-wider mb-1">
-              <Sparkles size={12} className="text-[#516B55]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#516B55]" />
               Inclusão & Cuidado Universal
             </div>
             <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#294D33] leading-tight">

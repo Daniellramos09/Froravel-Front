@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, BookHeart, Users, HeartHandshake, Quote, Sparkles } from "lucide-react";
+import { ArrowRight, Plus, Minus, Quote } from "lucide-react";
 
 /**
  * Bloco 2 da Nova Home: Contexto breve e humano sobre a necessidade do cuidado materno.
@@ -61,36 +61,57 @@ export function ContextoHomeSection() {
 }
 
 /**
- * Bloco 4 da Nova Home: Prévia resumida de Como a Florável Ajuda (com links para Explorar).
+ * Bloco 4 da Nova Home: Prévia resumida de Como a Florável Ajuda (padrão editorial expansível 148.fr).
  */
 export function ComoAjudaPreviewSection() {
+  const [activeIdx, setActiveIdx] = useState(null);
+  const [mobileIdx, setMobileIdx] = useState(0);
+
   const previews = [
     {
-      icon: BookHeart,
+      shortTitle: "Diário & Triagem",
       tag: "Gratuito",
       title: "Diário Emocional & Triagem",
-      desc: "Registre seu humor em segundos e acompanhe seu bem-estar com a Escala de Edimburgo (EPDS).",
+      desc: "Registre seu humor em segundos e acompanhe seu bem-estar com a Escala de Edimburgo (EPDS) para identificar sobrecarga emocional cedo.",
+      features: ["Escala EPDS", "Registro em segundos", "100% Gratuito"],
       to: "/explorar",
       cta: "Explorar ferramentas",
-      bg: "bg-[#F4DDE5]/55",
+      bg: "bg-[#F4DDE5]",
+      text: "text-[#294D33]",
+      subText: "text-[#3A443E]",
+      pillBg: "bg-white/75 text-[#294D33] border-[#294D33]/10",
+      ctaClass: "bg-[#294D33] text-[#FCF7F9] hover:bg-[#1f3c27]",
+      iconBtnClass: "bg-white/85 text-[#294D33] hover:bg-white",
     },
     {
-      icon: Users,
+      shortTitle: "Rodas de Conversa",
       tag: "Comunidade Segura",
       title: "Rodas de Conversa",
-      desc: "Encontros semanais mediados por psicólogas para compartilhar vivências sem medo de julgamentos.",
+      desc: "Encontros semanais mediados por psicólogas perinatais para compartilhar vivências reais da maternidade sem medo de julgamentos.",
+      features: ["Mediação Clínica", "Encontros Semanais", "Acesso Aberto"],
       to: "/explorar",
       cta: "Ver como funciona",
-      bg: "bg-[#EBF1ED]/80",
+      bg: "bg-[#EBF1ED]",
+      text: "text-[#294D33]",
+      subText: "text-[#3A443E]",
+      pillBg: "bg-white/80 text-[#294D33] border-[#294D33]/10",
+      ctaClass: "bg-[#294D33] text-[#FCF7F9] hover:bg-[#1f3c27]",
+      iconBtnClass: "bg-white/85 text-[#294D33] hover:bg-white",
     },
     {
-      icon: HeartHandshake,
+      shortTitle: "Rede Clínica",
       tag: "Clínica Social",
       title: "Rede de Psicólogas Perinatais",
-      desc: "Atendimento online com profissionais verificadas pelo CRP e vagas sociais acessíveis a partir de R$ 40.",
+      desc: "Atendimento online com profissionais verificadas pelo CRP e vagas sociais acessíveis a partir de R$ 40, viabilizadas por cuidado solidário.",
+      features: ["CRP Verificado", "Vagas a R$ 40", "Atendimento Online"],
       to: "/profissionais",
       cta: "Conhecer a rede",
-      bg: "bg-[#F4DDE5]/55",
+      bg: "bg-[#294D33]",
+      text: "text-[#FCF7F9]",
+      subText: "text-[#E6EFE9]/85",
+      pillBg: "bg-white/10 text-[#FCF7F9] border-white/15",
+      ctaClass: "bg-[#E8A9BB] text-[#1F3224] hover:bg-[#f2bccb]",
+      iconBtnClass: "bg-white/15 text-[#FCF7F9] hover:bg-white/25",
     },
   ];
 
@@ -99,8 +120,8 @@ export function ComoAjudaPreviewSection() {
       <div className="mx-auto max-w-7xl px-6 lg:px-12">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 text-left">
           <div className="max-w-2xl">
-            <span className="inline-flex items-center gap-1.5 text-[11px] uppercase tracking-[0.2em] font-semibold text-[#516B55] font-sans">
-              <Sparkles size={13} className="text-[#A8435F]" />
+            <span className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] font-semibold text-[#516B55] font-sans">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#A8435F]" />
               Como a Florável ajuda
             </span>
             <h2 className="mt-2 font-serif text-3xl sm:text-4xl font-normal text-[#294D33] leading-tight">
@@ -117,38 +138,160 @@ export function ComoAjudaPreviewSection() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {previews.map((item) => {
-            const Icon = item.icon;
+        {/* Desktop: Painéis horizontais expansíveis sem reflow de texto */}
+        <div
+          className="hidden lg:flex gap-4 h-[430px]"
+          onMouseLeave={() => setActiveIdx(null)}
+        >
+          {previews.map((item, idx) => {
+            const isActive = activeIdx === idx;
+            const flexClass =
+              activeIdx === null ? "flex-1" : isActive ? "flex-[3.2]" : "flex-[0.85]";
+
             return (
               <div
                 key={item.title}
-                className={`rounded-[1.75rem] ${item.bg} p-7 border border-[#E8A9BB]/40 flex flex-col justify-between text-left transition hover:-translate-y-1 hover:shadow-md`}
+                onMouseEnter={() => setActiveIdx(idx)}
+                onClick={() => setActiveIdx((prev) => (prev === idx ? null : idx))}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    setActiveIdx((prev) => (prev === idx ? null : idx));
+                  }
+                }}
+                aria-expanded={isActive}
+                className={`relative rounded-[1.75rem] ${item.bg} ${item.text} transition-[flex-grow,flex-basis] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] overflow-hidden cursor-pointer text-left ${flexClass}`}
               >
-                <div>
-                  <div className="flex items-center justify-between mb-5">
-                    <div className="w-11 h-11 rounded-2xl bg-white text-[#294D33] flex items-center justify-center shadow-2xs">
-                      <Icon size={21} />
-                    </div>
-                    <span className="px-3 py-1 rounded-full bg-white/85 text-[11px] font-bold text-[#294D33]">
+                {/* Botão + / - fixo no topo direito */}
+                <span
+                  className={`absolute top-7 right-7 z-20 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${item.iconBtnClass}`}
+                  aria-hidden="true"
+                >
+                  {isActive ? <Minus size={18} /> : <Plus size={18} />}
+                </span>
+
+                {/* Estado recolhido (quando mouse não está ou outro card está aberto): título vertical + tag */}
+                <div
+                  className={`absolute inset-0 p-8 flex flex-col justify-between transition-opacity duration-300 ease-out ${
+                    isActive ? "opacity-0 pointer-events-none delay-0" : "opacity-100 delay-150"
+                  }`}
+                >
+                  <span
+                    className={`self-start px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border ${
+                      item.pillBg
+                    } ${activeIdx === null ? "opacity-100" : "opacity-0"} transition-opacity duration-300`}
+                  >
+                    {item.tag}
+                  </span>
+
+                  <span className="font-serif text-xl tracking-wide [writing-mode:vertical-rl] rotate-180 select-none self-start">
+                    {item.shortTitle}
+                  </span>
+                </div>
+
+                {/* Estado expandido: largura interna fixa para zero esticamento/reflow de letras */}
+                <div
+                  className={`absolute inset-y-0 left-0 w-[490px] xl:w-[540px] p-8 flex flex-col justify-between transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                    isActive
+                      ? "opacity-100 translate-y-0 delay-150"
+                      : "opacity-0 translate-y-2 pointer-events-none delay-0"
+                  }`}
+                >
+                  <div>
+                    <span
+                      className={`inline-block px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider border ${item.pillBg}`}
+                    >
                       {item.tag}
                     </span>
                   </div>
-                  <h3 className="font-serif text-xl font-semibold text-[#294D33] mb-2">
-                    {item.title}
-                  </h3>
-                  <p className="text-sm text-[#3A443E] leading-relaxed font-sans">
-                    {item.desc}
-                  </p>
+
+                  <div className="space-y-5">
+                    <div>
+                      <h3 className="font-serif text-3xl font-normal leading-tight mb-3">
+                        {item.title}
+                      </h3>
+                      <p className={`text-sm sm:text-base leading-relaxed font-sans ${item.subText}`}>
+                        {item.desc}
+                      </p>
+                    </div>
+
+                    <div className="flex flex-wrap gap-2">
+                      {item.features.map((feat) => (
+                        <span
+                          key={feat}
+                          className={`px-3 py-1 rounded-full text-xs font-medium border ${item.pillBg}`}
+                        >
+                          {feat}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div>
+                      <Link
+                        to={item.to}
+                        onClick={(e) => e.stopPropagation()}
+                        className={`inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-all duration-300 ${item.ctaClass}`}
+                      >
+                        <span>{item.cta}</span>
+                        <ArrowRight size={15} />
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Mobile/Tablet: Accordion vertical limpo */}
+        <div className="lg:hidden flex flex-col gap-4">
+          {previews.map((item, idx) => {
+            const isActive = mobileIdx === idx;
+            return (
+              <div
+                key={item.title}
+                onClick={() => setMobileIdx((prev) => (prev === idx ? -1 : idx))}
+                className={`rounded-[1.5rem] ${item.bg} ${item.text} p-6 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] text-left cursor-pointer`}
+              >
+                <div className="flex items-center justify-between gap-4">
+                  <div>
+                    <span className="text-[10px] font-bold uppercase tracking-widest opacity-80 block mb-1">
+                      {item.tag}
+                    </span>
+                    <h3 className="font-serif text-xl font-semibold">{item.title}</h3>
+                  </div>
+                  <span className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${item.iconBtnClass}`}>
+                    {isActive ? <Minus size={16} /> : <Plus size={16} />}
+                  </span>
                 </div>
 
-                <Link
-                  to={item.to}
-                  className="mt-6 inline-flex items-center gap-1.5 text-sm font-bold text-[#294D33] hover:text-[#A8435F] transition group"
-                >
-                  <span>{item.cta}</span>
-                  <ArrowRight size={15} className="transition-transform group-hover:translate-x-1" />
-                </Link>
+                {isActive && (
+                  <div className="mt-4 space-y-4">
+                    <p className={`text-sm leading-relaxed font-sans ${item.subText}`}>
+                      {item.desc}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {item.features.map((feat) => (
+                        <span
+                          key={feat}
+                          className={`px-3 py-1 rounded-full text-xs font-medium border ${item.pillBg}`}
+                        >
+                          {feat}
+                        </span>
+                      ))}
+                    </div>
+                    <Link
+                      to={item.to}
+                      onClick={(e) => e.stopPropagation()}
+                      className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition ${item.ctaClass}`}
+                    >
+                      <span>{item.cta}</span>
+                      <ArrowRight size={14} />
+                    </Link>
+                  </div>
+                )}
               </div>
             );
           })}
