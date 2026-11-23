@@ -1,7 +1,7 @@
 {
   "rewrites": [
-    { "source": "/api-backend/(.*)", "destination": "http://3.80.100.81:8080/$1" },
-    { "source": "/api/(.*)", "destination": "http://3.80.100.81:8080/api/$1" },
+    { "source": "/api-backend/(.*)", "destination": "http://98.81.150.102:8080/$1" },
+    { "source": "/api/(.*)", "destination": "http://98.81.150.102:8080/api/$1" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
