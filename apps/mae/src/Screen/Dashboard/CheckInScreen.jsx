@@ -444,107 +444,120 @@ export default function CheckInScreen({ setActiveTab }) {
 
   if (isFinished && alertaCriseQuestao10) {
     return (
-      <div className="animate-fadeIn font-dmsans min-h-full flex flex-col items-center justify-center max-w-2xl mx-auto py-8 px-4">
-        <div className="w-full rounded-3xl bg-[#18221B] text-[#FAF7F2] p-6 sm:p-10 shadow-xl border border-[#294D33]/40 space-y-6">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-[#294D33] text-[#F4DDE5] flex items-center justify-center shrink-0">
-              <HeartHandshake size={26} />
+      <div className="animate-fadeIn font-dmsans max-w-5xl mx-auto py-2 sm:py-4 px-1 sm:px-2">
+        <div className="w-full rounded-2xl bg-white text-[#2B2829] p-5 sm:p-7 border border-[#E4DAD5] shadow-xs space-y-5">
+          {/* Cabeçalho Acolhedor */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#E4DAD5]">
+            <div className="flex items-start sm:items-center gap-3.5">
+              <div className="w-12 h-12 rounded-xl bg-[#F4DDE5] text-[#294D33] flex items-center justify-center shrink-0">
+                <HeartHandshake size={26} />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-[#A8435F]">
+                  Espaço Seguro & Sem Julgamento
+                </p>
+                <h2 className="text-2xl sm:text-3xl font-fraunces font-normal text-[#1F3A27] leading-tight">
+                  Respire fundo. Você não está sozinha.
+                </h2>
+              </div>
             </div>
-            <div>
-              <span className="text-[11px] font-bold uppercase tracking-widest text-[#E8A9BB]">
-                Espaço Seguro & Sem Julgamento
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-fraunces font-bold text-white leading-tight">
-                Respire fundo. Você não está sozinha.
-              </h2>
-            </div>
+            <span className="self-start sm:self-center text-xs font-semibold text-[#294D33] bg-[#EBF3ED] border border-[#294D33]/20 px-3 py-1 rounded-full shrink-0">
+              Sigilo LGPD Garantido
+            </span>
           </div>
 
-          <p className="text-sm sm:text-base text-stone-200 leading-relaxed">
-            Sentir essa dor profunda não faz de você uma mãe ruim. O puerpério e a sobrecarga materna podem ser avassaladores, e esse peso merece acolhimento humano agora mesmo, com total sigilo.
+          <p className="text-base sm:text-lg text-[#4A5E4D] leading-relaxed">
+            Sentir essa dor profunda não faz de você uma mãe ruim. O puerpério e a sobrecarga materna podem ser pesados, e você merece acolhimento humano agora mesmo, com total sigilo.
           </p>
 
-          {/* Atalhos de 1 Clique (Zero Fricção) */}
-          <div className="space-y-3 pt-2">
-            <p className="text-xs font-bold uppercase tracking-wider text-[#E8A9BB]">
-              Canais imediatos de escuta gratuita (1 toque):
-            </p>
+          {/* Grid em 2 colunas para caber tudo visível sem precisar rolar */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+            {/* Coluna Esquerda: Canais Imediatos */}
+            <div className="lg:col-span-7 bg-[#FCF7F9] border border-[#E4DAD5] rounded-xl p-5 flex flex-col justify-between gap-4">
+              <div className="space-y-3">
+                <h3 className="text-base font-bold text-[#1F3A27]">
+                  Canais imediatos de escuta gratuita (1 toque)
+                </h3>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <a
-                href="tel:188"
-                className="flex items-center justify-center gap-2.5 bg-[#E8A9BB] hover:bg-[#f0bac9] text-[#18221B] font-bold py-4 px-5 rounded-2xl text-sm transition shadow-md cursor-pointer"
-              >
-                <PhoneCall size={18} />
-                <span>Ligar CVV (188) — 24h Gratuito</span>
-              </a>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <a
+                    href="tel:188"
+                    className="flex items-center justify-center gap-2.5 bg-[#F4DDE5] hover:bg-[#E8A9BB] text-[#1F3A27] border border-[#E8A9BB] font-bold py-4 px-4 rounded-xl text-base transition cursor-pointer text-center"
+                  >
+                    <PhoneCall size={20} className="shrink-0" />
+                    <span>Ligar CVV (188) — 24h</span>
+                  </a>
 
-              <a
-                href="https://www.cvv.org.br/chat/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2.5 bg-[#294D33] hover:bg-[#346140] text-white font-bold py-4 px-5 rounded-2xl text-sm border border-white/15 transition cursor-pointer"
-              >
-                <MessageCircleHeart size={18} />
-                <span>Chat Silencioso CVV (Sem falar)</span>
-              </a>
-            </div>
+                  <a
+                    href="https://www.cvv.org.br/chat/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2.5 bg-[#294D33] hover:bg-[#1F3A27] text-white font-bold py-4 px-4 rounded-xl text-base transition cursor-pointer text-center"
+                  >
+                    <MessageCircleHeart size={20} className="shrink-0" />
+                    <span>Chat Silencioso CVV</span>
+                  </a>
+                </div>
 
-            <p className="text-[11px] text-stone-300">
-              💡 <em>O Chat Silencioso é ideal caso você esteja amamentando no quarto ou com familiares por perto e prefira digitar em silêncio.</em>
-            </p>
-          </div>
-
-          {/* Recurso Contato de Confiança (Anjo da Guarda) — Privacidade LGPD */}
-          <div className="p-4 sm:p-5 rounded-2xl bg-white/8 border border-white/15 space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-[#F4DDE5] flex items-center gap-1.5">
-                <ShieldCheck size={16} /> Rede de Afeto ("Anjo da Guarda")
-              </span>
-              <span className="text-[10px] text-stone-300 bg-white/10 px-2.5 py-0.5 rounded-full">
-                Sigilo LGPD Garantido
-              </span>
-            </div>
-            <p className="text-xs text-stone-200 leading-relaxed">
-              Podemos enviar um aviso carinhoso ao seu contato de confiança pedindo um abraço, <strong>sem revelar suas respostas ou qualquer dado do teste</strong>:
-            </p>
-            {anjoAcionado ? (
-              <div className="p-3 rounded-xl bg-emerald-950/80 border border-emerald-500/40 text-xs text-emerald-200 font-semibold">
-                ✓ Mensagem carinhosa enviada: "Olá! Sua pessoa querida está precisando de um abraço e uma mensagem de carinho agora."
+                <p className="text-sm text-[#4A5E4D] leading-relaxed">
+                  O Chat Silencioso é ideal caso você esteja amamentando ou com familiares por perto e prefira digitar em silêncio.
+                </p>
               </div>
-            ) : (
-              <button
-                type="button"
-                onClick={() => setAnjoAcionado(true)}
-                className="w-full py-3 px-4 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-bold transition cursor-pointer"
-              >
-                Pedir um abraço ao meu Contato de Confiança
-              </button>
-            )}
-          </div>
 
-          <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-white/10 text-xs">
-            <a
-              href="tel:192"
-              className="text-stone-300 hover:text-white underline font-semibold"
-            >
-              Emergência médica física? Ligar SAMU (192)
-            </a>
-            <div className="flex gap-2 w-full sm:w-auto">
-              <button
-                type="button"
-                onClick={() => setActiveTab('appointments')}
-                className="flex-1 sm:flex-initial px-5 py-2.5 rounded-full bg-white text-[#18221B] font-bold hover:bg-stone-100 transition cursor-pointer"
-              >
-                Falar com Psicóloga Parceira
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveTab('home')}
-                className="px-4 py-2.5 rounded-full border border-white/20 text-stone-200 hover:bg-white/10 transition cursor-pointer"
-              >
-                Início
-              </button>
+              <div className="pt-3 border-t border-[#E4DAD5] flex flex-wrap items-center justify-between gap-2 text-sm">
+                <span className="text-[#4A5E4D]">Emergência médica física?</span>
+                <a
+                  href="tel:192"
+                  className="text-[#A8435F] hover:underline font-bold"
+                >
+                  Ligar SAMU (192)
+                </a>
+              </div>
+            </div>
+
+            {/* Coluna Direita: Rede de Afeto + Próximo passo */}
+            <div className="lg:col-span-5 bg-[#FCF7F9] border border-[#E4DAD5] rounded-xl p-5 flex flex-col justify-between gap-4">
+              <div className="space-y-3">
+                <h3 className="text-base font-bold text-[#1F3A27] flex items-center gap-2">
+                  <ShieldCheck size={18} className="text-[#294D33]" />
+                  <span>Rede de Afeto (&quot;Anjo da Guarda&quot;)</span>
+                </h3>
+                <p className="text-sm text-[#4A5E4D] leading-relaxed">
+                  Podemos enviar um aviso carinhoso ao seu contato de confiança pedindo um abraço,{' '}
+                  <strong className="text-[#1F3A27]">sem revelar suas respostas</strong>:
+                </p>
+
+                {anjoAcionado ? (
+                  <div className="p-3.5 rounded-xl bg-[#EBF3ED] border border-[#294D33]/30 text-sm text-[#1F3A27] font-semibold">
+                    ✓ Mensagem carinhosa enviada para seu contato de confiança.
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setAnjoAcionado(true)}
+                    className="w-full py-3.5 px-4 rounded-xl bg-[#EBF3ED] hover:bg-[#dceadf] border border-[#294D33]/25 text-[#1F3A27] text-sm sm:text-base font-bold transition cursor-pointer"
+                  >
+                    Pedir um abraço ao Contato de Confiança
+                  </button>
+                )}
+              </div>
+
+              <div className="pt-3 border-t border-[#E4DAD5] flex flex-col sm:flex-row gap-2.5">
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('appointments')}
+                  className="flex-1 px-4 py-3 rounded-xl bg-[#294D33] hover:bg-[#1F3A27] text-white text-sm sm:text-base font-bold transition cursor-pointer"
+                >
+                  Falar com Psicóloga
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('home')}
+                  className="px-4 py-3 rounded-xl bg-white border border-[#E4DAD5] text-[#4A5E4D] hover:text-[#1F3A27] text-sm sm:text-base font-semibold transition cursor-pointer"
+                >
+                  Início
+                </button>
+              </div>
             </div>
           </div>
         </div>
