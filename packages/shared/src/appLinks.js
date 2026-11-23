@@ -13,12 +13,12 @@ export function getApiBase() {
     return import.meta.env.VITE_API_URL;
   }
   // Em produção na Vercel (HTTPS), usa a rota relativa '/api-backend' com proxy transparente
-  // para a AWS EC2 (54.172.180.243:8080), permitindo que fetch(`${API_BASE}/api/...`)
+  // para a AWS EC2 (3.80.100.81:8080), permitindo que fetch(`${API_BASE}/api/...`)
   // alcance /api-backend/api/... com validação e chamadas reais.
   if (!isLocalEnvironment && typeof window !== 'undefined') {
     return '/api-backend';
   }
-  return 'http://54.172.180.243:8080';
+  return 'http://3.80.100.81:8080';
 }
 
 export const APP_LINKS = {
