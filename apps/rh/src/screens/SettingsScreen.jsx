@@ -233,7 +233,7 @@ export default function SettingsScreen({
 
       <div>
         <h2
-          className="text-2xl sm:text-3xl font-bold text-[#294D33] tracking-tight"
+          className="text-2xl sm:text-3xl font-normal text-[#1F3A27] tracking-tight"
           style={{ fontFamily: "'Fraunces', serif" }}
         >
           Configurações Corporativas

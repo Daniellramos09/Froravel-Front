@@ -64,7 +64,7 @@ export default function BillingScreen({ company = null, relatorio = null, onTrig
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1
-            className="text-2xl sm:text-3xl font-bold text-[#294D33] tracking-tight"
+            className="text-2xl sm:text-3xl font-normal text-[#1F3A27] tracking-tight"
             style={{ fontFamily: "'Fraunces', serif" }}
           >
             Faturamento
@@ -90,7 +90,7 @@ export default function BillingScreen({ company = null, relatorio = null, onTrig
                     Assinatura Ativa
                   </span>
                   <h2
-                    className="text-lg sm:text-xl font-bold text-[#294D33]"
+                    className="text-lg sm:text-xl font-normal text-[#1F3A27]"
                     style={{ fontFamily: "'Fraunces', serif" }}
                   >
                     Plano Corporativo Bem-Estar

@@ -230,7 +230,7 @@ export default function HealthReportsScreen({
       {/* HEADER */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <h1
-          className="text-2xl sm:text-3xl font-bold text-[#294D33] tracking-tight"
+          className="text-2xl sm:text-3xl font-normal text-[#1F3A27] tracking-tight"
           style={{ fontFamily: "'Fraunces', serif" }}
         >
           Relatórios de Saúde & K-Anonimato

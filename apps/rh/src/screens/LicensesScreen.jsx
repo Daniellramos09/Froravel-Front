@@ -82,6 +82,7 @@ export default function LicensesScreen({
   const [departmentFilter, setDepartmentFilter] = useState("all");
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
   const [activeMenuId, setActiveMenuId] = useState(null);
+  const [menuPos, setMenuPos] = useState({ top: 0, right: 0 });
   const [localToast, setLocalToast] = useState(null);
   const [busyId, setBusyId] = useState(null);
   const [isSubmittingInvite, setIsSubmittingInvite] = useState(false);
@@ -167,6 +168,29 @@ export default function LicensesScreen({
       active = false;
     };
   }, [isControlledByParent, loadStandalonePayload]);
+
+  // Fecha o menu de 3 pontos ao clicar fora, pressionar Escape ou rolar
+  useEffect(() => {
+    if (!activeMenuId) return;
+    const handleClose = (e) => {
+      if (e.type === "keydown" && e.key !== "Escape") return;
+      if (e.type === "mousedown") {
+        const target = e.target;
+        if (target?.closest?.('[data-license-menu="true"]') || target?.closest?.('[data-license-menu-trigger="true"]')) {
+          return;
+        }
+      }
+      setActiveMenuId(null);
+    };
+    document.addEventListener("mousedown", handleClose);
+    window.addEventListener("keydown", handleClose);
+    window.addEventListener("scroll", handleClose, true);
+    return () => {
+      document.removeEventListener("mousedown", handleClose);
+      window.removeEventListener("keydown", handleClose);
+      window.removeEventListener("scroll", handleClose, true);
+    };
+  }, [activeMenuId]);
 
   const effectiveEmpresaId = propEmpresaId || localEmpresaId;
   const licenses = useMemo(
@@ -387,7 +411,7 @@ export default function LicensesScreen({
       {/* HEADER */}
       <div className="flex items-center justify-between gap-4">
         <h1
-          className="text-2xl sm:text-3xl font-bold text-[#294D33] tracking-tight"
+          className="text-2xl sm:text-3xl font-normal text-[#1F3A27] tracking-tight"
           style={{ fontFamily: "'Fraunces', serif" }}
         >
           Licenças
@@ -466,7 +490,7 @@ export default function LicensesScreen({
               </span>
               <div className="flex items-baseline gap-1.5">
                 <span
-                  className="text-2xl sm:text-3xl font-bold text-[#294D33]"
+                  className="text-2xl sm:text-3xl font-normal text-[#1F3A27]"
                   style={{ fontFamily: "'Fraunces', serif" }}
                 >
                   {activeCount}
@@ -480,7 +504,7 @@ export default function LicensesScreen({
                 Convites Pendentes
               </span>
               <span
-                className="text-2xl sm:text-3xl font-bold text-amber-700"
+                className="text-2xl sm:text-3xl font-normal text-[#A8435F]"
                 style={{ fontFamily: "'Fraunces', serif" }}
               >
                 {pendingCount}
@@ -492,7 +516,7 @@ export default function LicensesScreen({
                 Licenças Revogadas
               </span>
               <span
-                className="text-2xl sm:text-3xl font-bold text-[#516B55]"
+                className="text-2xl sm:text-3xl font-normal text-[#516B55]"
                 style={{ fontFamily: "'Fraunces', serif" }}
               >
                 {revokedCount}
@@ -505,7 +529,7 @@ export default function LicensesScreen({
               </span>
               <div className="flex items-baseline gap-1.5">
                 <span
-                  className="text-2xl sm:text-3xl font-bold text-[#03543F]"
+                  className="text-2xl sm:text-3xl font-normal text-[#294D33]"
                   style={{ fontFamily: "'Fraunces', serif" }}
                 >
                   {adherenceRate}%
@@ -655,22 +679,22 @@ export default function LicensesScreen({
 
                           <td className="py-3 px-4">
                             {status === "ATIVADA" && (
-                              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#DEF7EC] text-[#03543F]">
+                              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-[#EBF3ED] text-[#294D33] border border-[#294D33]/20">
                                 <span
-                                  className="w-1.5 h-1.5 rounded-full bg-emerald-600"
+                                  className="w-1.5 h-1.5 rounded-full bg-[#294D33]"
                                   aria-hidden="true"
                                 />
                                 Ativa
                               </span>
                             )}
                             {status === "PENDENTE" && (
-                              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-50 text-amber-800 border border-amber-200/50">
+                              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-[#F4DDE5] text-[#7A2E44] border border-[#E8A9BB]/60">
                                 <Clock size={11} aria-hidden="true" />
                                 Pendente
                               </span>
                             )}
                             {status === "REVOGADA" && (
-                              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-stone-100 text-stone-500">
+                              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-[#F5F2F0] text-[#6B6562] border border-[#E4DAD5]">
                                 <Ban size={11} aria-hidden="true" />
                                 Revogada
                               </span>
@@ -680,60 +704,83 @@ export default function LicensesScreen({
                           <td className="py-3 px-4 text-right relative">
                             <button
                               type="button"
+                              data-license-menu-trigger="true"
                               disabled={isRowBusy}
-                              onClick={() => setActiveMenuId(isMenuOpen ? null : colab.id)}
-                              className="p-1 rounded-lg text-stone-400 hover:text-stone-700 hover:bg-stone-100 transition cursor-pointer disabled:opacity-40 focus-visible:ring-2 focus-visible:ring-[#294D33]"
+                              onClick={(e) => {
+                                if (isMenuOpen) {
+                                  setActiveMenuId(null);
+                                  return;
+                                }
+                                const rect = e.currentTarget.getBoundingClientRect();
+                                const menuHeight = status === "PENDENTE" ? 136 : 96;
+                                const openUp =
+                                  typeof window !== "undefined" &&
+                                  rect.bottom + menuHeight > window.innerHeight - 16;
+                                setMenuPos({
+                                  top: openUp ? rect.top - menuHeight - 6 : rect.bottom + 6,
+                                  right:
+                                    typeof window !== "undefined"
+                                      ? Math.max(12, window.innerWidth - rect.right)
+                                      : 16,
+                                });
+                                setActiveMenuId(colab.id);
+                              }}
+                              className="p-1.5 rounded-lg text-stone-500 hover:text-[#294D33] hover:bg-[#F4DDE5]/50 transition cursor-pointer disabled:opacity-40 focus-visible:ring-2 focus-visible:ring-[#294D33]"
                               aria-label={`Ações para ${colab.nomeColaboradora}`}
                               aria-expanded={isMenuOpen}
                             >
-                              <MoreVertical size={15} />
+                              <MoreVertical size={16} />
                             </button>
 
-                            {isMenuOpen && (
-                              <div
-                                role="menu"
-                                className="absolute right-4 top-10 z-30 w-44 rounded-xl bg-white border border-stone-200 shadow-lg py-1 text-xs text-left animate-fade-in"
-                              >
-                                {status === "PENDENTE" && (
-                                  <button
-                                    type="button"
-                                    onClick={() => handleResendInvite(colab)}
-                                    className="w-full px-3 py-2 text-stone-700 hover:bg-[#FCF7F9] flex items-center gap-2 cursor-pointer font-medium"
-                                  >
-                                    <Mail size={13} className="text-[#516B55]" />
-                                    <span>Reenviar Convite</span>
-                                  </button>
-                                )}
-                                <button
-                                  type="button"
-                                  onClick={() => handleCopyLink(colab)}
-                                  className="w-full px-3 py-2 text-stone-700 hover:bg-[#FCF7F9] flex items-center gap-2 cursor-pointer font-medium"
+                            {isMenuOpen &&
+                              createPortal(
+                                <div
+                                  role="menu"
+                                  data-license-menu="true"
+                                  style={{ top: `${menuPos.top}px`, right: `${menuPos.right}px` }}
+                                  className="fixed z-[9999] w-48 rounded-2xl bg-white border border-[#E4DAD5] shadow-xl py-1.5 text-xs text-left animate-fade-in"
                                 >
-                                  <Copy size={13} className="text-stone-400" />
-                                  <span>Copiar Link</span>
-                                </button>
-                                <div className="my-1 border-t border-stone-100" />
-                                {status === "REVOGADA" ? (
+                                  {status === "PENDENTE" && (
+                                    <button
+                                      type="button"
+                                      onClick={() => handleResendInvite(colab)}
+                                      className="w-full px-3.5 py-2 text-stone-700 hover:bg-[#FCF7F9] flex items-center gap-2 cursor-pointer font-semibold"
+                                    >
+                                      <Mail size={14} className="text-[#294D33]" />
+                                      <span>Reenviar Convite</span>
+                                    </button>
+                                  )}
                                   <button
                                     type="button"
-                                    onClick={() => handleReactivate(colab)}
-                                    className="w-full px-3 py-2 text-emerald-800 hover:bg-emerald-50 flex items-center gap-2 cursor-pointer font-medium"
+                                    onClick={() => handleCopyLink(colab)}
+                                    className="w-full px-3.5 py-2 text-stone-700 hover:bg-[#FCF7F9] flex items-center gap-2 cursor-pointer font-semibold"
                                   >
-                                    <CheckCircle2 size={13} className="text-emerald-600" />
-                                    <span>Reativar</span>
+                                    <Copy size={14} className="text-[#516B55]" />
+                                    <span>Copiar Link</span>
                                   </button>
-                                ) : (
-                                  <button
-                                    type="button"
-                                    onClick={() => handleRevoke(colab)}
-                                    className="w-full px-3 py-2 text-[#9B1C1C] hover:bg-red-50 flex items-center gap-2 cursor-pointer font-medium"
-                                  >
-                                    <Trash2 size={13} />
-                                    <span>Revogar</span>
-                                  </button>
-                                )}
-                              </div>
-                            )}
+                                  <div className="my-1 border-t border-stone-100" />
+                                  {status === "REVOGADA" ? (
+                                    <button
+                                      type="button"
+                                      onClick={() => handleReactivate(colab)}
+                                      className="w-full px-3.5 py-2 text-[#294D33] hover:bg-[#EBF3ED] flex items-center gap-2 cursor-pointer font-semibold"
+                                    >
+                                      <CheckCircle2 size={14} className="text-[#294D33]" />
+                                      <span>Reativar</span>
+                                    </button>
+                                  ) : (
+                                    <button
+                                      type="button"
+                                      onClick={() => handleRevoke(colab)}
+                                      className="w-full px-3.5 py-2 text-[#9B1C1C] hover:bg-[#FDE8E8]/60 flex items-center gap-2 cursor-pointer font-semibold"
+                                    >
+                                      <Trash2 size={14} />
+                                      <span>Revogar</span>
+                                    </button>
+                                  )}
+                                </div>,
+                                document.body
+                              )}
                           </td>
                         </tr>
                       );
