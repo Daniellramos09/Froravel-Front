@@ -125,16 +125,24 @@ export function AccessibilityProvider({ children }) {
   }, []);
 
   // Funções para aumentar e diminuir fonte do aplicativo
+  const FONT_ORDER = ["compact", "normal", "large", "extra", "huge"];
+
   const increaseFontSize = () => {
-    if (fontSize === "normal") setFontSize("large");
-    else if (fontSize === "large") setFontSize("extra");
-    else if (fontSize === "extra") setFontSize("huge");
+    const idx = FONT_ORDER.indexOf(fontSize);
+    if (idx === -1) {
+      setFontSize("large");
+    } else if (idx < FONT_ORDER.length - 1) {
+      setFontSize(FONT_ORDER[idx + 1]);
+    }
   };
 
   const decreaseFontSize = () => {
-    if (fontSize === "huge") setFontSize("extra");
-    else if (fontSize === "extra") setFontSize("large");
-    else if (fontSize === "large") setFontSize("normal");
+    const idx = FONT_ORDER.indexOf(fontSize);
+    if (idx === -1) {
+      setFontSize("normal");
+    } else if (idx > 0) {
+      setFontSize(FONT_ORDER[idx - 1]);
+    }
   };
 
   // Funções para aumentar e diminuir a legenda da narração
