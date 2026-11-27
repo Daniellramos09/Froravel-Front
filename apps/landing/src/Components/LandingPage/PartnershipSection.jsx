@@ -22,18 +22,17 @@ export default function PartnershipSection() {
     <section id="esg" className="py-12 sm:py-16 bg-[#FCF7F9] overflow-hidden border-t border-[#E8A9BB]/30">
       
       {/* ========================================================
-          BLOCO DE TRANSIÇÃO COM FUNDO IMERSIVO EM VERDE ESCURO (#294D33)
-          (Alternância de blocos contrastantes da Referência 3)
+          BLOCO EDITORIAL CLARO COM ACOLHIMENTO SUAVE
       ======================================================== */}
-      <div className="mx-4 md:mx-12 rounded-[3rem] bg-[#294D33] text-[#FCF7F9] py-16 px-6 sm:px-12 lg:px-16 shadow-2xl relative overflow-hidden">
+      <div className="mx-4 md:mx-12 rounded-[3rem] bg-[#F4DDE5]/55 border border-[#E8A9BB]/50 text-[#1F3A27] py-14 sm:py-16 px-6 sm:px-12 lg:px-16 shadow-sm relative overflow-hidden">
         {/* Luz ambiente interna suave */}
         <div 
           aria-hidden="true" 
-          className="pointer-events-none absolute -top-24 -right-24 w-96 h-96 rounded-full bg-[#E8A9BB]/15 blur-[100px]" 
+          className="pointer-events-none absolute -top-24 -right-24 w-96 h-96 rounded-full bg-white/60 blur-[100px]" 
         />
         <div 
           aria-hidden="true" 
-          className="pointer-events-none absolute -bottom-24 -left-24 w-96 h-96 rounded-full bg-[#516B55]/30 blur-[100px]" 
+          className="pointer-events-none absolute -bottom-24 -left-24 w-96 h-96 rounded-full bg-[#E8A9BB]/25 blur-[100px]" 
         />
 
         <div className="relative z-10 max-w-6xl mx-auto text-left">
@@ -42,25 +41,25 @@ export default function PartnershipSection() {
             
             {/* Lado Esquerdo: Mensagem e Impacto */}
             <div className="lg:col-span-7 space-y-6">
-              <h2 className="font-serif text-3xl sm:text-4xl lg:text-[3.25rem] font-normal text-[#FCF7F9] leading-[1.14]">
+              <h2 className="font-serif text-3xl sm:text-4xl lg:text-[3.25rem] font-normal text-[#294D33] leading-[1.14]">
                 Conectando marcas com impacto real na maternidade.
               </h2>
 
-              <p className="text-base sm:text-lg text-white/80 leading-relaxed font-sans font-normal">
-                Marcas conscientes financiam o <strong className="font-semibold text-white">Fundo de Acolhimento Florável</strong>: consultas gratuitas com psicólogas perinatais para mães em vulnerabilidade.
+              <p className="text-base sm:text-lg text-[#3A443E] leading-relaxed font-sans font-normal">
+                Marcas conscientes financiam o <strong className="font-semibold text-[#1F3A27]">Fundo de Acolhimento Florável</strong>: consultas gratuitas com psicólogas perinatais para mães em vulnerabilidade.
               </p>
 
               {/* Indicadores Visuais de Impacto */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                <div className="p-5 rounded-2xl bg-white/10 border border-white/15">
-                  <p className="font-serif text-3xl sm:text-4xl font-normal text-[#E8A9BB]">+1.200</p>
-                  <p className="text-sm sm:text-base text-[#FCF7F9]/90 font-sans mt-1">
+                <div className="p-5 rounded-2xl bg-white/85 border border-[#E8A9BB]/40 shadow-2xs">
+                  <p className="font-serif text-3xl sm:text-4xl font-normal text-[#294D33]">+1.200</p>
+                  <p className="text-sm sm:text-base text-[#4A5E4D] font-sans mt-1">
                     Acolhimentos financiados este ano
                   </p>
                 </div>
-                <div className="p-5 rounded-2xl bg-white/10 border border-white/15">
-                  <p className="font-serif text-3xl sm:text-4xl font-normal text-[#E8A9BB]">100%</p>
-                  <p className="text-sm sm:text-base text-[#FCF7F9]/90 font-sans mt-1">
+                <div className="p-5 rounded-2xl bg-white/85 border border-[#E8A9BB]/40 shadow-2xs">
+                  <p className="font-serif text-3xl sm:text-4xl font-normal text-[#294D33]">100%</p>
+                  <p className="text-sm sm:text-base text-[#4A5E4D] font-sans mt-1">
                     Transparência em relatórios ESG
                   </p>
                 </div>
@@ -69,36 +68,36 @@ export default function PartnershipSection() {
               <div className="pt-2">
                 <button
                   onClick={() => setShowModal(true)}
-                  className="group inline-flex items-center justify-center gap-3 rounded-full bg-[#E8A9BB] hover:bg-[#F4DDE5] text-[#294D33] px-8 py-4 text-base font-semibold shadow-lg transition-all duration-300 hover:scale-[1.02] cursor-pointer"
+                  className="group inline-flex items-center justify-center gap-3 rounded-full bg-[#294D33] hover:bg-[#1F3A27] text-white px-8 py-4 text-base font-semibold shadow-md transition-all duration-300 hover:scale-[1.02] cursor-pointer"
                 >
                   <span>Seja uma empresa parceira</span>
                 </button>
               </div>
             </div>
 
-            {/* Lado Direito: Os 2 Pilares em Cards Escuros Refinados */}
+            {/* Lado Direito: Os 2 Pilares em Cards Claros Refinados */}
             <div className="lg:col-span-5 space-y-5">
               
-              <div className="p-7 rounded-2xl bg-white/10 border border-white/20 hover:border-white/35 transition-all">
+              <div className="p-7 rounded-2xl bg-white border border-[#E8A9BB]/45 shadow-2xs hover:border-[#E8A9BB] transition-all">
                 <div className="mb-3">
-                  <h3 className="font-serif text-xl sm:text-2xl font-normal text-white">
+                  <h3 className="font-serif text-xl sm:text-2xl font-normal text-[#294D33]">
                     Fundo de Acolhimento Social
                   </h3>
-                  <p className="text-sm font-medium text-[#E8A9BB] mt-0.5">Acesso Universal</p>
+                  <p className="text-sm font-semibold text-[#C96E82] mt-0.5">Acesso Universal</p>
                 </div>
-                <p className="text-base text-[#FCF7F9]/95 leading-relaxed font-sans">
+                <p className="text-base text-[#3A443E] leading-relaxed font-sans">
                   Sua empresa custeia sessões para mães que não podem pagar, com selo de governança e impacto medido.
                 </p>
               </div>
 
-              <div className="p-7 rounded-2xl bg-white/10 border border-white/20 hover:border-white/35 transition-all">
+              <div className="p-7 rounded-2xl bg-white border border-[#E8A9BB]/45 shadow-2xs hover:border-[#E8A9BB] transition-all">
                 <div className="mb-3">
-                  <h3 className="font-serif text-xl sm:text-2xl font-normal text-white">
+                  <h3 className="font-serif text-xl sm:text-2xl font-normal text-[#294D33]">
                     Bolsas em Saúde Perinatal
                   </h3>
-                  <p className="text-sm font-medium text-[#E8A9BB] mt-0.5">Formação e Capacitação</p>
+                  <p className="text-sm font-semibold text-[#C96E82] mt-0.5">Formação e Capacitação</p>
                 </div>
-                <p className="text-base text-[#FCF7F9]/95 leading-relaxed font-sans">
+                <p className="text-base text-[#3A443E] leading-relaxed font-sans">
                   Certificações para psicólogas de regiões periféricas atenderem voluntariamente suas comunidades.
                 </p>
               </div>

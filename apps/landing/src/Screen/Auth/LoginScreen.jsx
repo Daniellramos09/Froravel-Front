@@ -571,13 +571,13 @@ export default function LoginScreen({ initialMode = 'login' }) {
       {/* COLUNA DE FORMULÁRIO (Desliza da esquerda para direita no Cadastro) */}
       {/* ================================================================= */}
       <div
-        className={`w-full lg:w-1/2 lg:h-dvh lg:absolute lg:top-0 lg:left-0 z-20 flex items-center justify-center px-5 py-4 sm:px-8 bg-[#faf8f4] overflow-y-auto transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-          isCadastro ? 'lg:translate-x-full' : 'lg:translate-x-0'
-        }`}
+        className={`w-full lg:w-1/2 lg:h-dvh lg:absolute lg:top-0 lg:left-0 z-20 flex items-center justify-center px-5 py-3 sm:px-8 bg-[#faf8f4] ${
+          isCadastro ? 'overflow-y-auto lg:translate-x-full' : 'lg:overflow-hidden lg:translate-x-0'
+        } transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]`}
       >
-        <div className="w-full max-w-lg my-auto py-3">
+        <div className="w-full max-w-lg my-auto py-1">
           {/* Top row: Voltar para Home + Logo compacta */}
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-3">
             <Link
               to="/"
               className="inline-flex items-center gap-1.5 text-xs sm:text-sm text-stone-500 hover:text-stone-800 transition cursor-pointer"
@@ -586,7 +586,7 @@ export default function LoginScreen({ initialMode = 'login' }) {
               <span>Página inicial</span>
             </Link>
             <Link to="/" className="flex items-center gap-2 transition-transform hover:scale-105">
-              <img src={LOGO} alt="Florável" className="h-9 w-auto object-contain" />
+              <img src={LOGO} alt="Florável" className="h-8 w-auto object-contain" />
               <span className="font-serif text-lg sm:text-xl font-bold uppercase tracking-[0.06em] text-[#1f2a22]">
                 FLORÁVEL
               </span>
@@ -594,11 +594,11 @@ export default function LoginScreen({ initialMode = 'login' }) {
           </div>
 
           {/* Título dinâmico + Abas deslizantes Login / Cadastro */}
-          <div className="text-center mb-4">
-            <h1 className="text-2xl sm:text-[1.65rem] font-bold text-[#1f2a22] font-serif leading-tight">
+          <div className="text-center mb-3">
+            <h1 className="text-2xl sm:text-[1.6rem] font-bold text-[#1f2a22] font-serif leading-tight">
               {isCadastro ? 'Crie sua conta Florável' : 'Acesse seu espaço'}
             </h1>
-            <p className="text-xs sm:text-[13px] text-gray-600 mt-1">
+            <p className="text-xs sm:text-[13px] text-gray-600 mt-0.5">
               {isCadastro
                 ? 'Preencha seus dados abaixo — você já sai acolhida.'
                 : 'Acolhimento, respeito e privacidade em cada etapa.'}
@@ -606,12 +606,12 @@ export default function LoginScreen({ initialMode = 'login' }) {
           </div>
 
           {/* Alternador Rápido de Modo: Entrar vs Cadastrar */}
-          <div className="grid grid-cols-2 gap-1 p-1 bg-[#edeae4] rounded-2xl mb-3.5">
+          <div className="grid grid-cols-2 gap-1.5 p-1 bg-[#F4DDE5]/45 border border-[#E8A9BB]/50 rounded-2xl mb-3">
             <button
               type="button"
               onClick={() => alternarModo('login')}
               className={`py-2 text-xs sm:text-sm font-bold rounded-xl transition-all cursor-pointer ${
-                !isCadastro ? 'bg-white text-[#294D33] shadow-2xs' : 'text-stone-600 hover:text-stone-900'
+                !isCadastro ? 'bg-[#294D33] text-white shadow-xs' : 'text-[#294D33] hover:bg-white/70'
               }`}
             >
               Entrar
@@ -620,7 +620,7 @@ export default function LoginScreen({ initialMode = 'login' }) {
               type="button"
               onClick={() => alternarModo('cadastro')}
               className={`py-2 text-xs sm:text-sm font-bold rounded-xl transition-all cursor-pointer ${
-                isCadastro ? 'bg-white text-[#294D33] shadow-2xs' : 'text-stone-600 hover:text-stone-900'
+                isCadastro ? 'bg-[#294D33] text-white shadow-xs' : 'text-[#294D33] hover:bg-white/70'
               }`}
             >
               Criar Conta
@@ -628,7 +628,7 @@ export default function LoginScreen({ initialMode = 'login' }) {
           </div>
 
           {/* Seletor de Perfil Compartilhado (Mãe / Terapeuta / RH) */}
-          <div className="mb-4">
+          <div className="mb-3">
             <div className="grid grid-cols-3 gap-1.5 p-1 bg-[#edeae4] rounded-xl">
               {PAPEIS.map((p) => {
                 const ativo = papel === p.id;
@@ -652,15 +652,12 @@ export default function LoginScreen({ initialMode = 'login' }) {
                 );
               })}
             </div>
-            <p className="text-xs text-stone-500 mt-1.5 text-center truncate">
-              {PAPEIS.find((p) => p.id === papel)?.desc}
-            </p>
           </div>
 
           {/* ======================= MODO LOGIN ======================= */}
           {!isCadastro ? (
             <div className="animate-fadeIn">
-              <form onSubmit={handleLoginSubmit} className="space-y-3.5">
+              <form onSubmit={handleLoginSubmit} className="space-y-2.5">
                 <div>
                   <label htmlFor="email" className="block text-xs font-semibold text-gray-700 mb-1">
                     E-mail
@@ -728,8 +725,8 @@ export default function LoginScreen({ initialMode = 'login' }) {
               </form>
 
               {/* Atalhos de Demonstração (1 Clique) */}
-              <div className="mt-4 pt-3.5 border-t border-[#d9d6cf]/60">
-                <p className="text-[10px] font-bold uppercase tracking-wider text-stone-400 text-center mb-2">
+              <div className="mt-3 pt-3 border-t border-[#d9d6cf]/60">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-stone-400 text-center mb-1.5">
                   Acesso Rápido Demo Day:
                 </p>
                 <div className="grid grid-cols-3 gap-2">
@@ -759,13 +756,13 @@ export default function LoginScreen({ initialMode = 'login' }) {
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 my-3">
+              <div className="flex items-center gap-3 my-2.5">
                 <div className="flex-1 h-px bg-[#d9d6cf]" />
                 <span className="text-[10px] text-gray-500 font-semibold">OU</span>
                 <div className="flex-1 h-px bg-[#d9d6cf]" />
               </div>
 
-              <div ref={googleBtnRef} className="w-full flex justify-center min-h-[42px]" />
+              <div ref={googleBtnRef} className="w-full flex justify-center min-h-[40px]" />
               {!googleReady && (
                 <button
                   type="button"
@@ -783,12 +780,12 @@ export default function LoginScreen({ initialMode = 'login' }) {
                 </button>
               )}
 
-              <p className="text-[11px] text-center text-gray-600 mt-3">
+              <p className="text-xs sm:text-sm text-center text-stone-700 mt-2.5">
                 Não possui uma conta?{' '}
                 <button
                   type="button"
                   onClick={() => alternarModo('cadastro')}
-                  className="font-bold text-[#2f4a36] hover:underline cursor-pointer"
+                  className="font-bold text-[#294D33] underline decoration-[#E8A9BB] underline-offset-4 hover:text-[#1F3A27] cursor-pointer"
                 >
                   Criar Conta agora
                 </button>
