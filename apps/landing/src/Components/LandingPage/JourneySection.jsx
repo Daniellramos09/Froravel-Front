@@ -34,11 +34,11 @@ const JOURNEY_STEPS = [
     stepLabel: "Conectar",
     title: "Você não precisa passar por isso sozinha.",
     description:
-      "Caminhe ao lado de outras mães em rodas semanais gratuitas e encontre psicólogas perinatais (com vagas sociais a partir de R$ 40).",
+      "Caminhe ao lado de outras mães em rodas semanais gratuitas e conecte-se com psicólogas perinatais credenciadas.",
     tags: [
       "Rodas Gratuitas",
-      "Clínica Social (R$ 40)",
-      "Psicólogas Perinatais",
+      "Rede de Psicólogas",
+      "Atendimento Online",
     ],
     image: "/img/jornada/jornada-etapa-03-conectar.jpg",
     fallbackImage: "/img/jornada/jornada-etapa-03-conectar.jpg",

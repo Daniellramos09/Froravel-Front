@@ -344,7 +344,7 @@ export default function FeaturesBentoSection() {
                     <div className="w-5 h-5 rounded-full bg-[#EBF1ED] text-[#294D33] flex items-center justify-center shrink-0 mt-0.5">
                       <Check size={12} strokeWidth={3} />
                     </div>
-                    <span><strong>Acesso à Clínica Social</strong> com psicólogas a partir de R$ 40 por sessão</span>
+                    <span><strong>Acesso à rede de psicólogas</strong> perinatais credenciadas (honorários combinados diretamente com a profissional)</span>
                   </li>
                 </ul>
               </div>

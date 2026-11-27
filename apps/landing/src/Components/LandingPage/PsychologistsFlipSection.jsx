@@ -14,7 +14,7 @@ const PSYCHOLOGISTS = [
     photoBg: "bg-[#294D33]",
     mensagem:
       "Você não precisa dar conta de tudo em silêncio. No puerpério, sentir exaustão ou tristeza não te faz menos mãe — significa apenas que você também precisa de colo, escuta e cuidado especializado.",
-    social: "Vagas sociais a R$ 40",
+    social: "Escuta clínica online acolhedora",
   },
   {
     id: "beatriz-albuquerque",
@@ -40,7 +40,7 @@ const PSYCHOLOGISTS = [
     photoBg: "bg-[#1F3224]",
     mensagem:
       "Tornar-se mãe transforma quem você é, mas não apaga a mulher que existe em você. Vamos juntas resgatar sua identidade, seus limites e sua saúde emocional no retorno ao trabalho e à rotina.",
-    social: "Vagas sociais a R$ 40",
+    social: "Escuta clínica online acolhedora",
   },
   {
     id: "helena-souza",
@@ -66,7 +66,7 @@ const PSYCHOLOGISTS = [
     photoBg: "bg-[#516B55]",
     mensagem:
       "Medo e insegurança na gestação não precisam ser silenciados. Cuidar das suas emoções antes do parto fortalece sua confiança e protege a sua saúde mental no pós-parto.",
-    social: "Vagas sociais a R$ 40",
+    social: "Escuta clínica online acolhedora",
   },
   {
     id: "rafael-mendes",
