@@ -1,5 +1,16 @@
 @import "tailwindcss";
 
+html[data-font-scale] .text-\[10px\] { font-size: calc(10px * var(--floravel-font-scale, 1)) !important; }
+html[data-font-scale] .text-\[11px\] { font-size: calc(11px * var(--floravel-font-scale, 1)) !important; }
+html[data-font-scale] .text-\[12px\] { font-size: calc(12px * var(--floravel-font-scale, 1)) !important; }
+html[data-font-scale] .text-\[13px\] { font-size: calc(13px * var(--floravel-font-scale, 1)) !important; }
+html[data-font-scale] .text-\[14px\] { font-size: calc(14px * var(--floravel-font-scale, 1)) !important; }
+html[data-font-scale] .text-\[15px\] { font-size: calc(15px * var(--floravel-font-scale, 1)) !important; }
+html[data-font-scale] .text-\[16px\] { font-size: calc(16px * var(--floravel-font-scale, 1)) !important; }
+html[data-font-scale] .text-\[17px\] { font-size: calc(17px * var(--floravel-font-scale, 1)) !important; }
+html[data-font-scale] .text-\[18px\] { font-size: calc(18px * var(--floravel-font-scale, 1)) !important; }
+html[data-font-scale] .text-\[20px\] { font-size: calc(20px * var(--floravel-font-scale, 1)) !important; }
+
 @theme {
   /* ========================================================
      BRAND GUIDE OFICIAL FLORÁVEL - TOKENS DE CORES

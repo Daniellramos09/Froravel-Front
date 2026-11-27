@@ -1,9 +1,11 @@
+import { useEffect, useState } from 'react';
 import './App.css';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 import ScrollToTop from './Components/Layout/ScrollToTop';
 import Layout from './Components/Layout/Layout';
-import { AccessibilityProvider } from './Components/Accessibility/AccessibilityContext';
+import { AccessibilityProvider, useAccessibility } from './Components/Accessibility/AccessibilityContext';
+import FloatingAccessibilityButton from './Components/Accessibility/FloatingAccessibilityButton';
 
 // Landing (Porta de entrada enxuta) e Páginas Redistribuídas
 import Landing from './Screen/Landing/Landing';
@@ -53,12 +55,37 @@ export function AppRoutes() {
   );
 }
 
+function GlobalAccessibilityLayer() {
+  const { readingGuide } = useAccessibility();
+  const [mouseY, setMouseY] = useState(0);
+
+  useEffect(() => {
+    if (!readingGuide) return;
+    const handleMouseMove = (e) => setMouseY(e.clientY);
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, [readingGuide]);
+
+  return (
+    <>
+      {readingGuide && (
+        <div
+          className="pointer-events-none fixed left-0 right-0 h-12 bg-[#F4DDE5]/40 border-y-2 border-[#E8A9BB] z-[9990] transition-all duration-75 shadow-sm"
+          style={{ top: `${mouseY - 24}px` }}
+        />
+      )}
+      <FloatingAccessibilityButton />
+    </>
+  );
+}
+
 function App() {
   return (
     <AccessibilityProvider>
       <BrowserRouter>
         <ScrollToTop />
         <AppRoutes />
+        <GlobalAccessibilityLayer />
       </BrowserRouter>
     </AccessibilityProvider>
   );

@@ -224,6 +224,36 @@ export function AccessibilityProvider({ children }) {
 
   const currentScaleObj = FONT_SCALES[fontScaleIndex] || FONT_SCALES[1];
 
+  // Aplica escala de fonte, filtro de cor e redução de movimento globalmente no <html>
+  // para funcionar em todas as rotas (/login, /cadastro, /explorar, etc.) sem quebrar position:fixed
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const html = document.documentElement;
+    html.style.fontSize = `${currentScaleObj.scale * 100}%`;
+    html.style.setProperty("--floravel-font-scale", String(currentScaleObj.scale));
+    html.dataset.fontScale = currentScaleObj.id;
+  }, [currentScaleObj]);
+
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const html = document.documentElement;
+    const filterClasses = [
+      "filter-deuteranopia",
+      "filter-protanopia",
+      "filter-tritanopia",
+      "filter-high-contrast",
+      "filter-monochrome",
+    ];
+    html.classList.remove(...filterClasses);
+    const activeClass = getFilterStyle();
+    if (activeClass) html.classList.add(activeClass);
+  }, [colorMode]);
+
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    document.documentElement.classList.toggle("reduce-motion", reducedMotion);
+  }, [reducedMotion]);
+
   return (
     <AccessibilityContext.Provider
       value={{

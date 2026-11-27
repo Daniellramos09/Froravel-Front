@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { Volume2, VolumeX } from "lucide-react";
 import { useAccessibility } from "./AccessibilityContext";
 import AccessibilityModal from "./AccessibilityModal";
@@ -38,12 +39,12 @@ export default function FloatingAccessibilityButton() {
   // Verifica se há alguma customização ativa
   const hasCustomSettings = fontScaleIndex !== 1 || colorMode !== "default" || readingGuide || reducedMotion;
 
-  return (
+  const content = (
     <>
       {/* Botão Circular Flutuante Grande no Canto Inferior Direito */}
       <aside 
         aria-label="Atalho de Acessibilidade Flutuante"
-        className="fixed bottom-6 right-6 z-40 sm:bottom-8 sm:right-8 flex items-center justify-end select-none"
+        className="fixed bottom-6 right-6 z-[9995] sm:bottom-8 sm:right-8 flex items-center justify-end select-none"
       >
         {/* Tooltip flutuante elegante ao lado esquerdo (no hover/foco em telas médias/grandes) */}
         <div
@@ -118,4 +119,6 @@ export default function FloatingAccessibilityButton() {
       />
     </>
   );
+
+  return typeof document !== "undefined" ? createPortal(content, document.body) : content;
 }
