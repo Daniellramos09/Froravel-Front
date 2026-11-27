@@ -65,10 +65,10 @@ export default function Sidebar({
                 />
                 <div>
                   <h1
-                    className="text-lg font-bold tracking-tight text-[#294D33] leading-tight"
+                    className="text-lg font-bold tracking-wider uppercase text-[#294D33] leading-tight"
                     style={{ fontFamily: "'Fraunces', serif" }}
                   >
-                    florável
+                    FLORÁVEL
                   </h1>
                   <span className="text-[11px] tracking-wider uppercase font-semibold text-stone-400 block -mt-0.5">
                     corporate

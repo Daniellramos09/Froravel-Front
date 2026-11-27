@@ -65,8 +65,8 @@ export default function Sidebar({ onNavigate, onClose, onLogout }) {
               alt="Logo Florável"
               className="h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
             />
-            <span className="text-[26px] font-fraunces text-[#294D33] font-bold tracking-tight transition-opacity duration-300 group-hover:opacity-85">
-              florável
+            <span className="text-[22px] font-fraunces text-[#294D33] font-bold tracking-wider uppercase transition-opacity duration-300 group-hover:opacity-85">
+              FLORÁVEL
             </span>
             <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-[#294D33] text-white">
               Psi

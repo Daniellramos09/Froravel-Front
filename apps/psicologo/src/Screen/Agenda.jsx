@@ -358,32 +358,30 @@ export default function Agenda() {
         </div>
       </header>
 
-      {/* PAINEL FLEXÍVEL: DIAS E QUAISQUER HORÁRIOS DISPONÍVEIS PARA AS MÃES */}
-      <section className="mt-6 rounded-3xl border border-[#EFE9EB] bg-white p-5 sm:p-7 shadow-sm">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-stone-100">
+      {/* PAINEL FLEXÍVEL: DIAS E HORÁRIOS DISPONÍVEIS PARA AS MÃES */}
+      <section className="mt-6 rounded-3xl border border-[#EFE9EB] bg-white p-6 sm:p-8 shadow-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-stone-100">
           <div>
-            <span className="text-[11px] font-bold uppercase tracking-wider text-[#294D33] flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5" /> Grade Pública Flexível na Rede de Apoio
-            </span>
-            <h2 className="font-fraunces text-xl sm:text-2xl font-bold text-[#1F3A27] mt-1">
+            <h2 className="font-fraunces text-2xl sm:text-3xl font-bold text-[#1F3A27]">
               Meus Dias e Horários Liberados para as Mães
             </h2>
+            <p className="text-base text-stone-600 mt-1">
+              Escolha em quais dias e horários as mães podem agendar com você.
+            </p>
           </div>
-          <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto">
-            <span className="text-xs font-semibold text-[#294D33] bg-[#EBF3ED] px-3.5 py-1.5 rounded-full">
-              {diasDisponiveis.length} dias ativos · {horariosDisponiveis.length} horários/dia
-            </span>
-          </div>
+          <span className="text-sm sm:text-base font-semibold text-[#294D33] bg-[#EBF3ED] px-4 py-2 rounded-full self-start sm:self-auto shrink-0">
+            {diasDisponiveis.length} dias ativos · {horariosDisponiveis.length} horários/dia
+          </span>
         </div>
 
-        <div className="mt-5 grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div className="mt-7 grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Coluna Esquerda: Dias da semana + Duração e Recorrência */}
-          <div className="lg:col-span-5 space-y-4">
+          <div className="lg:col-span-5 space-y-6">
             <div>
-              <p className="text-xs font-bold text-stone-700 mb-2.5">
-                1. Dias da semana em que você acolhe mães:
+              <p className="text-base sm:text-lg font-bold text-[#1F3A27] mb-3.5">
+                1. Dias da semana disponíveis
               </p>
-              <div className="flex flex-wrap gap-1.5">
+              <div className="flex flex-wrap gap-2.5">
                 {DIAS_SEMANA_DISPONIVEIS.map((diaNome) => {
                   const ativo = diasDisponiveis.includes(diaNome);
                   return (
@@ -394,10 +392,10 @@ export default function Agenda() {
                         toggleDiaDisponivel(diaNome);
                         showToast(`Disponibilidade de ${diaNome} atualizada!`);
                       }}
-                      className={`px-3.5 py-1.5 rounded-full text-xs font-bold border transition cursor-pointer ${
+                      className={`px-4 py-2.5 rounded-full text-sm sm:text-base font-bold border transition cursor-pointer ${
                         ativo
                           ? 'bg-[#294D33] text-white border-[#294D33] shadow-2xs'
-                          : 'bg-[#FCF7F9] text-stone-500 border-stone-200 hover:bg-stone-100'
+                          : 'bg-[#FCF7F9] text-stone-700 border-stone-200 hover:bg-stone-100'
                       }`}
                     >
                       {ativo ? `✓ ${diaNome}` : diaNome}
@@ -407,10 +405,10 @@ export default function Agenda() {
               </div>
             </div>
 
-            <div className="p-4 rounded-2xl bg-[#FCF7F9] border border-[#EFE9EB] space-y-3">
-              <div className="flex items-center justify-between gap-2">
-                <span className="text-xs font-bold text-[#1F3A27]">Duração da escuta individual:</span>
-                <div className="inline-flex rounded-full bg-white border border-stone-200 p-0.5">
+            <div className="p-5 rounded-2xl bg-[#FCF7F9] border border-[#EFE9EB] space-y-4">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <span className="text-base font-bold text-[#1F3A27]">Duração da sessão</span>
+                <div className="inline-flex rounded-full bg-white border border-stone-200 p-1">
                   {['30', '50', '90'].map((min) => (
                     <button
                       key={min}
@@ -419,10 +417,10 @@ export default function Agenda() {
                         setDuracaoPadrao(min);
                         showToast(`Duração padrão definida para ${min} minutos.`);
                       }}
-                      className={`px-2.5 py-1 rounded-full text-[11px] font-bold transition cursor-pointer ${
+                      className={`px-3.5 py-1.5 rounded-full text-sm font-bold transition cursor-pointer ${
                         duracaoPadrao === min
                           ? 'bg-[#294D33] text-white'
-                          : 'text-stone-600 hover:text-[#1F3A27]'
+                          : 'text-stone-700 hover:text-[#1F3A27]'
                       }`}
                     >
                       {min} min
@@ -431,10 +429,10 @@ export default function Agenda() {
                 </div>
               </div>
 
-              <label className="flex items-center justify-between gap-2 cursor-pointer pt-1 border-t border-stone-200/60">
-                <span className="text-xs font-semibold text-stone-600 flex items-center gap-1.5">
-                  <Repeat className="w-3.5 h-3.5 text-[#294D33]" />
-                  Repetir esta grade automaticamente toda semana
+              <label className="flex items-center justify-between gap-3 cursor-pointer pt-3 border-t border-stone-200/70">
+                <span className="text-base font-medium text-stone-700 flex items-center gap-2">
+                  <Repeat className="w-4 h-4 text-[#294D33] shrink-0" />
+                  Repetir toda semana
                 </span>
                 <input
                   type="checkbox"
@@ -447,234 +445,160 @@ export default function Agenda() {
                         : 'Recorrência semanal pausada.'
                     );
                   }}
-                  className="w-4 h-4 accent-[#294D33] rounded cursor-pointer"
+                  className="w-5 h-5 accent-[#294D33] rounded cursor-pointer"
                 />
               </label>
             </div>
           </div>
 
-          {/* Coluna Direita: Horários Padrão e Escolher Seu Horário */}
-          <div className="lg:col-span-7 space-y-4">
-            {/* 1. HORÁRIOS PADRÃO (POR TURNO) */}
-            <div className="p-4 sm:p-5 rounded-2xl bg-white border border-[#EFE9EB] shadow-2xs space-y-3.5">
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <div>
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-[#294D33]">
-                    Horários Padrão Recomendados
-                  </span>
-                  <p className="text-xs text-stone-500">
-                    Clique no horário para liberar ou pausar na sua agenda.
-                  </p>
-                </div>
+          {/* Coluna Direita: Horários por Turno + Horário Personalizado */}
+          <div className="lg:col-span-7 space-y-6">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <p className="text-base sm:text-lg font-bold text-[#1F3A27]">
+                2. Horários disponíveis
+              </p>
 
-                <div className="flex flex-wrap items-center gap-1.5">
-                  <button
-                    type="button"
-                    onClick={() => aplicarTurnoRapido(HORARIOS_PADRAO_TURNOS.manha, 'Manhã')}
-                    className="px-2.5 py-1 rounded-full bg-[#EBF3ED] text-[#294D33] text-[11px] font-bold hover:bg-[#DCE9DF] transition cursor-pointer"
-                  >
-                    + Manhã
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => aplicarTurnoRapido(HORARIOS_PADRAO_TURNOS.tarde, 'Tarde')}
-                    className="px-2.5 py-1 rounded-full bg-[#EBF3ED] text-[#294D33] text-[11px] font-bold hover:bg-[#DCE9DF] transition cursor-pointer"
-                  >
-                    + Tarde
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => aplicarTurnoRapido(HORARIOS_PADRAO_TURNOS.noite, 'Noite')}
-                    className="px-2.5 py-1 rounded-full bg-[#EBF3ED] text-[#294D33] text-[11px] font-bold hover:bg-[#DCE9DF] transition cursor-pointer"
-                  >
-                    + Noite
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setHorariosDisponiveis([]);
-                      showToast('Todos os horários foram desmarcados.');
-                    }}
-                    className="px-2.5 py-1 rounded-full bg-stone-100 text-stone-600 text-[11px] font-semibold hover:bg-stone-200 transition cursor-pointer"
-                  >
-                    Limpar
-                  </button>
-                </div>
-              </div>
-
-              {/* Grupos de Horários por Turno */}
-              <div className="space-y-3 pt-1">
-                {/* Manhã */}
-                <div>
-                  <span className="text-[11px] font-semibold text-stone-600 mb-1.5 block">
-                    Turno da Manhã:
-                  </span>
-                  <div className="flex flex-wrap gap-2">
-                    {HORARIOS_PADRAO_TURNOS.manha.map((h) => {
-                      const ativo = horariosDisponiveis.includes(h);
-                      return (
-                        <button
-                          key={h}
-                          type="button"
-                          onClick={() => {
-                            toggleHorarioDisponivel(h);
-                            showToast(`Horário ${h} ${ativo ? 'pausado' : 'liberado'} para as mães!`);
-                          }}
-                          className={`px-3.5 py-2 rounded-xl text-xs font-bold transition cursor-pointer tabular-nums ${
-                            ativo
-                              ? 'bg-[#294D33] text-white shadow-2xs'
-                              : 'bg-stone-50 text-stone-600 border border-stone-200 hover:bg-stone-100'
-                          }`}
-                        >
-                          {ativo ? `✓ ${h}` : h}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* Tarde */}
-                <div>
-                  <span className="text-[11px] font-semibold text-stone-600 mb-1.5 block">
-                    Turno da Tarde:
-                  </span>
-                  <div className="flex flex-wrap gap-2">
-                    {HORARIOS_PADRAO_TURNOS.tarde.map((h) => {
-                      const ativo = horariosDisponiveis.includes(h);
-                      return (
-                        <button
-                          key={h}
-                          type="button"
-                          onClick={() => {
-                            toggleHorarioDisponivel(h);
-                            showToast(`Horário ${h} ${ativo ? 'pausado' : 'liberado'} para as mães!`);
-                          }}
-                          className={`px-3.5 py-2 rounded-xl text-xs font-bold transition cursor-pointer tabular-nums ${
-                            ativo
-                              ? 'bg-[#294D33] text-white shadow-2xs'
-                              : 'bg-stone-50 text-stone-600 border border-stone-200 hover:bg-stone-100'
-                          }`}
-                        >
-                          {ativo ? `✓ ${h}` : h}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* Noite */}
-                <div>
-                  <span className="text-[11px] font-semibold text-stone-600 mb-1.5 block">
-                    Turno da Noite:
-                  </span>
-                  <div className="flex flex-wrap gap-2">
-                    {HORARIOS_PADRAO_TURNOS.noite.map((h) => {
-                      const ativo = horariosDisponiveis.includes(h);
-                      return (
-                        <button
-                          key={h}
-                          type="button"
-                          onClick={() => {
-                            toggleHorarioDisponivel(h);
-                            showToast(`Horário ${h} ${ativo ? 'pausado' : 'liberado'} para as mães!`);
-                          }}
-                          className={`px-3.5 py-2 rounded-xl text-xs font-bold transition cursor-pointer tabular-nums ${
-                            ativo
-                              ? 'bg-[#294D33] text-white shadow-2xs'
-                              : 'bg-stone-50 text-stone-600 border border-stone-200 hover:bg-stone-100'
-                          }`}
-                        >
-                          {ativo ? `✓ ${h}` : h}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => aplicarTurnoRapido(HORARIOS_PADRAO_TURNOS.manha, 'Manhã')}
+                  className="px-3.5 py-1.5 rounded-full bg-[#EBF3ED] text-[#294D33] text-sm font-bold hover:bg-[#DCE9DF] transition cursor-pointer"
+                >
+                  + Manhã
+                </button>
+                <button
+                  type="button"
+                  onClick={() => aplicarTurnoRapido(HORARIOS_PADRAO_TURNOS.tarde, 'Tarde')}
+                  className="px-3.5 py-1.5 rounded-full bg-[#EBF3ED] text-[#294D33] text-sm font-bold hover:bg-[#DCE9DF] transition cursor-pointer"
+                >
+                  + Tarde
+                </button>
+                <button
+                  type="button"
+                  onClick={() => aplicarTurnoRapido(HORARIOS_PADRAO_TURNOS.noite, 'Noite')}
+                  className="px-3.5 py-1.5 rounded-full bg-[#EBF3ED] text-[#294D33] text-sm font-bold hover:bg-[#DCE9DF] transition cursor-pointer"
+                >
+                  + Noite
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setHorariosDisponiveis([]);
+                    showToast('Todos os horários foram desmarcados.');
+                  }}
+                  className="px-3.5 py-1.5 rounded-full bg-stone-100 text-stone-700 text-sm font-semibold hover:bg-stone-200 transition cursor-pointer"
+                >
+                  Limpar
+                </button>
               </div>
             </div>
 
-            {/* 2. ESCOLHER SEU HORÁRIO (PERSONALIZAR HORÁRIO ESPECÍFICO) */}
-            <div className="p-4 sm:p-5 rounded-2xl bg-[#FCF7F9] border border-[#EFE9EB] space-y-3">
-              <div className="flex items-center justify-between gap-2">
-                <div>
-                  <h3 className="font-fraunces text-base font-bold text-[#1F3A27]">
-                    Escolher seu horário
-                  </h3>
-                  <p className="text-xs text-stone-500">
-                    Precisa de um horário diferente dos padrões? Adicione à sua grade com 1 clique.
-                  </p>
+            {/* Grupos de Horários por Turno */}
+            <div className="space-y-5">
+              {[
+                { label: 'Manhã', list: HORARIOS_PADRAO_TURNOS.manha },
+                { label: 'Tarde', list: HORARIOS_PADRAO_TURNOS.tarde },
+                { label: 'Noite', list: HORARIOS_PADRAO_TURNOS.noite },
+              ].map((turno) => (
+                <div key={turno.label}>
+                  <span className="text-base font-semibold text-stone-700 mb-2 block">
+                    {turno.label}
+                  </span>
+                  <div className="flex flex-wrap gap-2.5">
+                    {turno.list.map((h) => {
+                      const ativo = horariosDisponiveis.includes(h);
+                      return (
+                        <button
+                          key={h}
+                          type="button"
+                          onClick={() => {
+                            toggleHorarioDisponivel(h);
+                            showToast(`Horário ${h} ${ativo ? 'pausado' : 'liberado'} para as mães!`);
+                          }}
+                          className={`px-4 py-2.5 rounded-xl text-base font-bold transition cursor-pointer tabular-nums ${
+                            ativo
+                              ? 'bg-[#294D33] text-white shadow-2xs'
+                              : 'bg-stone-50 text-stone-700 border border-stone-200 hover:bg-stone-100'
+                          }`}
+                        >
+                          {ativo ? `✓ ${h}` : h}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
+              ))}
+            </div>
 
-              <form onSubmit={handleAdicionarHorarioCustom} className="flex flex-wrap items-center gap-2.5">
-                <div className="flex items-center gap-2 bg-white rounded-xl border border-stone-200 px-3 py-1.5 shadow-2xs">
+            {/* Adicionar Horário Personalizado */}
+            <div className="pt-5 border-t border-stone-100 space-y-3.5">
+              <form onSubmit={handleAdicionarHorarioCustom} className="flex flex-wrap items-center gap-3">
+                <label htmlFor="novoHorarioCustom" className="text-base font-semibold text-stone-700">
+                  Outro horário:
+                </label>
+                <div className="flex items-center gap-2 bg-[#FCF7F9] rounded-xl border border-stone-200 px-3.5 py-2">
                   <Clock className="w-4 h-4 text-[#294D33]" />
                   <input
                     id="novoHorarioCustom"
                     type="time"
                     value={novoHorarioCustom}
                     onChange={(e) => setNovoHorarioCustom(e.target.value)}
-                    className="text-xs font-bold text-[#1F3A27] bg-transparent outline-none tabular-nums"
+                    className="text-base font-bold text-[#1F3A27] bg-transparent outline-none tabular-nums"
                   />
                 </div>
                 <button
                   type="submit"
-                  className="inline-flex items-center gap-1.5 rounded-full bg-[#294D33] px-4 py-2 text-xs font-bold text-white hover:bg-[#1F3A27] transition cursor-pointer shadow-2xs"
+                  className="inline-flex items-center gap-2 rounded-full bg-[#294D33] px-5 py-2.5 text-sm sm:text-base font-bold text-white hover:bg-[#1F3A27] transition cursor-pointer shadow-2xs"
                 >
-                  <Plus className="w-3.5 h-3.5" />
-                  Adicionar horário à grade
+                  <Plus className="w-4 h-4" />
+                  Adicionar
                 </button>
               </form>
 
-              {/* Lista dos Horários Customizados Adicionados */}
               {catalogoHorarios.filter((h) => !HORARIOS_PADRAO_CATALOGO.includes(h)).length > 0 && (
-                <div className="pt-2 border-t border-stone-200/60">
-                  <span className="text-[11px] font-semibold text-stone-600 block mb-1.5">
-                    Seus horários personalizados ativos:
-                  </span>
-                  <div className="flex flex-wrap gap-1.5">
-                    {catalogoHorarios
-                      .filter((h) => !HORARIOS_PADRAO_CATALOGO.includes(h))
-                      .map((h) => {
-                        const ativo = horariosDisponiveis.includes(h);
-                        return (
-                          <div
-                            key={h}
-                            className={`inline-flex items-center rounded-xl border px-2.5 py-1 text-xs font-bold tabular-nums transition ${
-                              ativo
-                                ? 'bg-[#F4DDE5] text-[#1F3A27] border-[#E8A9BB]'
-                                : 'bg-white text-stone-400 border-stone-200'
-                            }`}
+                <div className="flex flex-wrap items-center gap-2.5">
+                  <span className="text-sm font-semibold text-stone-600">Personalizados:</span>
+                  {catalogoHorarios
+                    .filter((h) => !HORARIOS_PADRAO_CATALOGO.includes(h))
+                    .map((h) => {
+                      const ativo = horariosDisponiveis.includes(h);
+                      return (
+                        <div
+                          key={h}
+                          className={`inline-flex items-center rounded-xl border px-3.5 py-2 text-base font-bold tabular-nums transition ${
+                            ativo
+                              ? 'bg-[#F4DDE5] text-[#1F3A27] border-[#E8A9BB]'
+                              : 'bg-white text-stone-500 border-stone-200'
+                          }`}
+                        >
+                          <button
+                            type="button"
+                            onClick={() => toggleHorarioDisponivel(h)}
+                            className="cursor-pointer mr-2"
                           >
-                            <button
-                              type="button"
-                              onClick={() => toggleHorarioDisponivel(h)}
-                              className="cursor-pointer mr-1"
-                            >
-                              {ativo ? `✓ ${h}` : h}
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => handleRemoverHorarioCatalogo(h)}
-                              title={`Remover ${h}`}
-                              aria-label={`Remover horário ${h}`}
-                              className="text-stone-400 hover:text-red-600 transition cursor-pointer p-0.5"
-                            >
-                              <X className="w-3 h-3" />
-                            </button>
-                          </div>
-                        );
-                      })}
-                  </div>
+                            {ativo ? `✓ ${h}` : h}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoverHorarioCatalogo(h)}
+                            title={`Remover ${h}`}
+                            aria-label={`Remover horário ${h}`}
+                            className="text-stone-500 hover:text-red-600 transition cursor-pointer p-0.5"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
+                        </div>
+                      );
+                    })}
                 </div>
               )}
 
               {/* Resumo rápido dos horários liberados para as mães */}
-              <div className="pt-2 text-xs text-[#294D33] font-semibold flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-[#294D33] shrink-0" />
+              <div className="pt-2 text-base text-[#294D33] font-semibold flex items-start sm:items-center gap-2">
+                <CheckCircle2 className="w-5 h-5 text-[#294D33] shrink-0 mt-0.5 sm:mt-0" />
                 <span>
                   {horariosDisponiveis.length > 0
-                    ? `Liberados para as mães (${horariosDisponiveis.length}): ${horariosDisponiveis.join(', ')}`
+                    ? `Liberados (${horariosDisponiveis.length}): ${horariosDisponiveis.join(', ')}`
                     : 'Nenhum horário liberado no momento. Selecione acima para abrir vagas.'}
                 </span>
               </div>
