@@ -78,7 +78,7 @@ export function ComoAjudaPreviewSection() {
       cta: "Explorar ferramentas",
       bg: "bg-[#F4DDE5]",
       image: "/img/hero-woman-serene.jpg",
-      overlayGradient: "from-[#F4DDE5]/95 via-[#F4DDE5]/85 to-[#F4DDE5]/70",
+      overlayGradient: "from-[#F4DDE5]/90 via-[#F4DDE5]/72 to-[#F4DDE5]/45",
       text: "text-[#294D33]",
       subText: "text-[#3A443E]",
       pillBg: "bg-white/75 text-[#294D33] border-[#294D33]/10",
@@ -95,7 +95,7 @@ export function ComoAjudaPreviewSection() {
       cta: "Ver como funciona",
       bg: "bg-[#EBF1ED]",
       image: "/img/variasMaes.jpg",
-      overlayGradient: "from-[#EBF1ED]/95 via-[#EBF1ED]/85 to-[#EBF1ED]/70",
+      overlayGradient: "from-[#EBF1ED]/90 via-[#EBF1ED]/72 to-[#EBF1ED]/45",
       text: "text-[#294D33]",
       subText: "text-[#3A443E]",
       pillBg: "bg-white/80 text-[#294D33] border-[#294D33]/10",
@@ -112,7 +112,7 @@ export function ComoAjudaPreviewSection() {
       cta: "Conhecer a rede",
       bg: "bg-[#294D33]",
       image: "/img/dra-mariana-psicologa.jpg",
-      overlayGradient: "from-[#294D33]/95 via-[#294D33]/88 to-[#294D33]/72",
+      overlayGradient: "from-[#294D33]/92 via-[#294D33]/75 to-[#294D33]/50",
       text: "text-[#FCF7F9]",
       subText: "text-[#E6EFE9]/85",
       pillBg: "bg-white/10 text-[#FCF7F9] border-white/15",
@@ -174,7 +174,7 @@ export function ComoAjudaPreviewSection() {
                   src={item.image}
                   alt=""
                   aria-hidden="true"
-                  className="absolute inset-0 w-full h-full object-cover object-center opacity-[0.18] pointer-events-none select-none transition-transform duration-700"
+                  className="absolute inset-0 w-full h-full object-cover object-center opacity-[0.35] pointer-events-none select-none transition-transform duration-700"
                 />
                 <div
                   aria-hidden="true"
@@ -276,7 +276,7 @@ export function ComoAjudaPreviewSection() {
                   src={item.image}
                   alt=""
                   aria-hidden="true"
-                  className="absolute inset-0 w-full h-full object-cover object-center opacity-[0.16] pointer-events-none select-none"
+                  className="absolute inset-0 w-full h-full object-cover object-center opacity-[0.32] pointer-events-none select-none"
                 />
                 <div
                   aria-hidden="true"
