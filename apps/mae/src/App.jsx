@@ -541,7 +541,7 @@ function AppContent() {
                 )}
               </button>
               {isNotifOpen && (
-                <div className="fixed left-3 right-3 sm:left-auto sm:right-0 top-18 sm:top-full mt-2 sm:w-80 max-w-sm sm:max-w-none mx-auto sm:mx-0 bg-white rounded-3xl shadow-2xl border border-stone-100 overflow-hidden animate-fadeIn z-50">
+                <div className="fixed left-3 right-3 sm:absolute sm:left-auto sm:right-0 top-18 sm:top-full mt-2 sm:w-80 max-w-sm sm:max-w-none mx-auto sm:mx-0 bg-white rounded-3xl shadow-2xl border border-stone-100 overflow-hidden animate-fadeIn z-50">
                   <div className="p-4 border-b border-stone-100 flex items-center justify-between">
                     <h4 className="font-bold text-[#2B2829] text-[15px]">Notificações</h4>
                     <span className="text-[12px] text-[#294D33] font-bold">Tudo lido</span>
