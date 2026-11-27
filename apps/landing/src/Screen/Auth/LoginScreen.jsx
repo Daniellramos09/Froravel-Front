@@ -572,8 +572,8 @@ export default function LoginScreen({ initialMode = 'login' }) {
       {/* ================================================================= */}
       <div
         className={`w-full lg:w-1/2 lg:h-dvh lg:absolute lg:top-0 lg:left-0 z-20 flex items-center justify-center px-5 py-3 sm:px-8 bg-[#faf8f4] ${
-          isCadastro ? 'overflow-y-auto lg:translate-x-full' : 'lg:overflow-hidden lg:translate-x-0'
-        } transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]`}
+          isCadastro ? 'overflow-y-auto' : 'lg:overflow-hidden'
+        }`}
       >
         <div className="w-full max-w-lg my-auto py-1">
           {/* Top row: Voltar para Home + Logo compacta */}
@@ -606,12 +606,12 @@ export default function LoginScreen({ initialMode = 'login' }) {
           </div>
 
           {/* Alternador Rápido de Modo: Entrar vs Cadastrar */}
-          <div className="grid grid-cols-2 gap-1.5 p-1 bg-[#F4DDE5]/45 border border-[#E8A9BB]/50 rounded-2xl mb-3">
+          <div className="grid grid-cols-2 gap-1 p-1 bg-[#edeae4] rounded-2xl mb-3">
             <button
               type="button"
               onClick={() => alternarModo('login')}
               className={`py-2 text-xs sm:text-sm font-bold rounded-xl transition-all cursor-pointer ${
-                !isCadastro ? 'bg-[#294D33] text-white shadow-xs' : 'text-[#294D33] hover:bg-white/70'
+                !isCadastro ? 'bg-white text-[#294D33] shadow-2xs' : 'text-stone-700 hover:text-[#294D33]'
               }`}
             >
               Entrar
@@ -620,7 +620,7 @@ export default function LoginScreen({ initialMode = 'login' }) {
               type="button"
               onClick={() => alternarModo('cadastro')}
               className={`py-2 text-xs sm:text-sm font-bold rounded-xl transition-all cursor-pointer ${
-                isCadastro ? 'bg-[#294D33] text-white shadow-xs' : 'text-[#294D33] hover:bg-white/70'
+                isCadastro ? 'bg-white text-[#294D33] shadow-2xs' : 'text-stone-700 hover:text-[#294D33]'
               }`}
             >
               Criar Conta
@@ -1091,13 +1091,9 @@ export default function LoginScreen({ initialMode = 'login' }) {
       </div>
 
       {/* ================================================================= */}
-      {/* COLUNA DA IMAGEM COM FLORES (Desliza suavemente para a esquerda)  */}
+      {/* COLUNA DA IMAGEM COM FLORES (Fixa à direita)                      */}
       {/* ================================================================= */}
-      <div
-        className={`hidden lg:block lg:w-1/2 lg:h-dvh lg:absolute lg:top-0 lg:right-0 z-10 overflow-hidden transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-          isCadastro ? 'lg:-translate-x-full' : 'lg:translate-x-0'
-        }`}
-      >
+      <div className="hidden lg:block lg:w-1/2 lg:h-dvh lg:absolute lg:top-0 lg:right-0 z-10 overflow-hidden">
         <img src={LOGIN_IMAGE} alt="" className="absolute inset-0 w-full h-full object-cover" />
         <div
           className={`absolute inset-0 transition-opacity duration-500 ${
