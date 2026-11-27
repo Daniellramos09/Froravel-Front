@@ -208,7 +208,7 @@ export default function PsychologistsFlipSection() {
                 key={psi.loopKey}
                 onMouseEnter={() => setHoveredId(psi.loopKey)}
                 onMouseLeave={() => setHoveredId(null)}
-                className="shrink-0 w-[290px] sm:w-[310px] h-[440px] [perspective:1200px]"
+                className="shrink-0 w-[290px] sm:w-[310px] h-[470px] sm:h-[455px] [perspective:1200px]"
               >
                 <div
                   className={`relative w-full h-full transition-transform duration-[1300ms] ease-[cubic-bezier(0.22,1,0.36,1)] [transform-style:preserve-3d] ${
@@ -264,12 +264,12 @@ export default function PsychologistsFlipSection() {
 
                   {/* VERSO DO CARD (MENSAGEM DO PSICÓLOGO) */}
                   <div
-                    className={`absolute inset-0 rounded-[1.75rem] ${psi.cardBg} p-6 flex flex-col justify-between border border-[#294D33]/20 shadow-md [transform:rotateY(180deg)] [backface-visibility:hidden]`}
+                    className={`absolute inset-0 rounded-[1.75rem] ${psi.cardBg} p-5 sm:p-6 flex flex-col justify-between overflow-hidden border border-[#294D33]/20 shadow-md [transform:rotateY(180deg)] [backface-visibility:hidden]`}
                   >
-                    <div>
-                      <div className="flex items-start justify-between gap-3 pb-4 border-b border-[#294D33]/15">
-                        <div className="text-left">
-                          <h3 className="font-serif text-xl font-semibold text-[#294D33] leading-tight">
+                    <div className="flex-1 min-h-0 flex flex-col">
+                      <div className="flex items-start justify-between gap-2.5 pb-3 border-b border-[#294D33]/15 shrink-0">
+                        <div className="text-left min-w-0">
+                          <h3 className="font-serif text-lg sm:text-xl font-semibold text-[#294D33] leading-tight">
                             {psi.nome}
                           </h3>
                           <p className="text-xs font-medium text-[#516B55] mt-0.5 font-sans">
@@ -281,30 +281,30 @@ export default function PsychologistsFlipSection() {
                           type="button"
                           onClick={() => toggleCard(psi.loopKey)}
                           aria-label={`Voltar para foto de ${psi.nome}`}
-                          className="w-10 h-10 rounded-full bg-white text-[#294D33] hover:bg-[#FCF7F9] shadow-sm flex items-center justify-center shrink-0 transition-transform duration-200 hover:scale-110 cursor-pointer"
+                          className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white text-[#294D33] hover:bg-[#FCF7F9] shadow-sm flex items-center justify-center shrink-0 transition-transform duration-200 hover:scale-110 cursor-pointer"
                         >
                           <Minus size={18} strokeWidth={2.4} />
                         </button>
                       </div>
 
-                      <div className="mt-5 text-left">
-                        <div className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-[#A8435F] mb-2">
+                      <div className="mt-3.5 text-left flex-1 min-h-0 overflow-y-auto pr-1">
+                        <div className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-[#A8435F] mb-1.5">
                           <HeartHandshake size={14} />
                           <span>Mensagem para você</span>
                         </div>
-                        <p className="font-serif italic text-[15px] sm:text-base text-[#294D33] leading-relaxed">
+                        <p className="font-serif italic text-sm sm:text-[15px] text-[#294D33] leading-relaxed">
                           “{psi.mensagem}”
                         </p>
                       </div>
                     </div>
 
-                    <div className="pt-4 border-t border-[#294D33]/10 flex items-center justify-between">
-                      <span className="text-xs font-semibold text-[#516B55] font-sans">
+                    <div className="pt-3 border-t border-[#294D33]/10 flex items-center justify-between gap-2 shrink-0">
+                      <span className="text-[11px] sm:text-xs font-semibold text-[#516B55] font-sans truncate">
                         {psi.social}
                       </span>
                       <Link
                         to="/cadastro"
-                        className="inline-flex items-center gap-1.5 rounded-full bg-[#294D33] text-white px-4 py-2 text-xs font-semibold hover:bg-[#1f3c27] transition"
+                        className="inline-flex items-center gap-1.5 rounded-full bg-[#294D33] text-white px-4 py-2 text-xs font-semibold hover:bg-[#1f3c27] transition shrink-0"
                       >
                         <span>Agendar</span>
                         <ArrowRight size={13} />
