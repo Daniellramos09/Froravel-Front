@@ -109,11 +109,11 @@ export default function LojinhaFloresScreen({
     <div className="max-w-5xl mx-auto space-y-6 pb-12 font-dmsans animate-fadeIn">
       {/* Cabeçalho seguindo o padrão editorial de Canal de Denúncias */}
       <header className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-        <div className="space-y-1.5">
-          <h1 className="text-2xl sm:text-3xl font-fraunces font-normal text-[#1F3A27]">
+        <div className="space-y-2">
+          <h1 className="text-3xl sm:text-4xl font-fraunces font-normal text-[#1F3A27]">
             Clube & Lojinha de Flores
           </h1>
-          <p className="text-sm sm:text-base text-[#4A5E4D] leading-relaxed max-w-2xl">
+          <p className="text-base sm:text-lg text-[#4A5E4D] leading-relaxed max-w-2xl">
             Troque as flores acumuladas com seus registros e indicações por sessões gratuitas e benefícios de cuidado na Florável.
           </p>
         </div>
@@ -121,50 +121,50 @@ export default function LojinhaFloresScreen({
         <button
           type="button"
           onClick={onOpenInvite}
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#294D33] hover:bg-[#1F3A27] text-white text-xs sm:text-sm font-bold transition cursor-pointer shrink-0 self-start sm:self-auto"
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[#294D33] hover:bg-[#1F3A27] text-white text-sm sm:text-base font-bold transition cursor-pointer shrink-0 self-start sm:self-auto"
         >
-          <Share2 size={15} />
+          <Share2 size={16} />
           <span>Indicar mãe (+3 Flores)</span>
         </button>
       </header>
 
       {/* Card de Saldo */}
-      <section className="bg-white rounded-xl border border-[#E4DAD5] p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="flex items-center gap-4">
-          <div className="w-16 h-16 rounded-full bg-white border border-[#E4DAD5] overflow-hidden p-1 flex items-center justify-center shrink-0 shadow-2xs">
+      <section className="bg-white rounded-xl border border-[#E4DAD5] p-6 sm:p-7 flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+        <div className="flex items-center gap-5">
+          <div className="w-20 h-20 rounded-full bg-white border border-[#E4DAD5] overflow-hidden flex items-center justify-center shrink-0 shadow-2xs">
             <img
               src="/img/lojinha/lojinha-saldo.jpg"
               alt="Ilustração botânica do saldo de flores"
-              className="w-full h-full object-cover rounded-full"
+              className="w-full h-full object-cover rounded-full scale-110"
             />
           </div>
           <div>
-            <p className="text-xs font-semibold text-[#4A5E4D]">Seu Saldo Disponível</p>
-            <p className="text-2xl sm:text-3xl font-fraunces font-normal text-[#1F3A27] tabular-nums">
+            <p className="text-sm sm:text-base font-semibold text-[#4A5E4D]">Seu Saldo Disponível</p>
+            <p className="text-3xl sm:text-4xl font-fraunces font-normal text-[#1F3A27] tabular-nums">
               {flowersCount} {flowersCount === 1 ? 'Flor' : 'Flores'}
             </p>
           </div>
         </div>
 
-        <div className="text-xs sm:text-sm text-[#4A5E4D] bg-[#FCF7F9] border border-[#E4DAD5] rounded-lg px-4 py-3 max-w-md">
+        <div className="text-sm sm:text-base text-[#4A5E4D] bg-[#FCF7F9] border border-[#E4DAD5] rounded-lg px-5 py-3.5 max-w-md leading-relaxed">
           Cada mãe indicada soma <strong className="text-[#1F3A27]">+3 Flores</strong> no seu saldo na hora. A partir de 15 flores você já pode resgatar benefícios.
         </div>
       </section>
 
       {feedback && (
-        <div className="p-4 rounded-xl bg-[#EBF3ED] border border-[#294D33]/25 text-[#1F3A27] text-sm font-semibold flex items-center gap-2.5">
-          <CheckCircle2 size={18} className="shrink-0 text-[#294D33]" />
+        <div className="p-4 rounded-xl bg-[#EBF3ED] border border-[#294D33]/25 text-[#1F3A27] text-base font-semibold flex items-center gap-2.5">
+          <CheckCircle2 size={20} className="shrink-0 text-[#294D33]" />
           <span>{feedback}</span>
         </div>
       )}
 
       {/* Catálogo de Recompensas */}
-      <section className="space-y-4">
-        <h2 className="text-lg font-fraunces font-normal text-[#1F3A27]">
+      <section className="space-y-5">
+        <h2 className="text-xl sm:text-2xl font-fraunces font-normal text-[#1F3A27]">
           Recompensas Disponíveis
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {RECOMPENSAS.map((item) => {
             const podeResgatar = flowersCount >= item.custo;
             const faltam = Math.max(0, item.custo - flowersCount);
@@ -172,63 +172,63 @@ export default function LojinhaFloresScreen({
             return (
               <div
                 key={item.id}
-                className="bg-white rounded-xl border border-[#E4DAD5] p-5 sm:p-6 flex flex-col justify-between gap-5"
+                className="bg-white rounded-xl border border-[#E4DAD5] p-6 sm:p-7 flex flex-col justify-between gap-6"
               >
-                <div className="space-y-3">
+                <div className="space-y-4">
                   <div className="flex items-start justify-between gap-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-14 h-14 rounded-full bg-white border border-[#E4DAD5] overflow-hidden p-1 flex items-center justify-center shrink-0 shadow-2xs">
+                    <div className="flex items-center gap-3.5">
+                      <div className="w-16 h-16 sm:w-18 sm:h-18 rounded-full bg-white border border-[#E4DAD5] overflow-hidden flex items-center justify-center shrink-0 shadow-2xs">
                         <img
                           src={item.image}
                           alt={item.alt}
-                          className="w-full h-full object-cover rounded-full"
+                          className="w-full h-full object-cover rounded-full scale-110"
                           loading="lazy"
                         />
                       </div>
-                      <span className="text-xs sm:text-sm font-semibold text-[#4A5E4D]">
+                      <span className="text-sm sm:text-base font-semibold text-[#4A5E4D]">
                         {item.categoria}
                       </span>
                     </div>
 
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-[#F4DDE5]/70 border border-[#E8A9BB]/50 text-xs font-bold text-[#1F3A27] shrink-0 tabular-nums">
+                    <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-md bg-[#F4DDE5]/70 border border-[#E8A9BB]/50 text-sm font-bold text-[#1F3A27] shrink-0 tabular-nums">
                       <img src="/icons/rosa.png" alt="" aria-hidden="true" className="w-4 h-4 object-contain" />
                       {item.custo} Flores
                     </span>
                   </div>
 
                   <div>
-                    <h3 className="text-lg font-fraunces font-normal text-[#1F3A27]">
+                    <h3 className="text-xl sm:text-2xl font-fraunces font-normal text-[#1F3A27]">
                       {item.titulo}
                     </h3>
-                    <p className="text-sm text-[#4A5E4D] leading-relaxed mt-1">
+                    <p className="text-base text-[#4A5E4D] leading-relaxed mt-1.5">
                       {item.descricao}
                     </p>
                   </div>
                 </div>
 
-                <div className="pt-3 border-t border-[#E4DAD5] flex items-center justify-between gap-3">
+                <div className="pt-4 border-t border-[#E4DAD5] flex items-center justify-between gap-3">
                   {podeResgatar ? (
                     <>
-                      <span className="text-xs font-semibold text-[#294D33]">
+                      <span className="text-sm font-semibold text-[#294D33]">
                         Disponível para resgate
                       </span>
                       <button
                         type="button"
                         onClick={() => handleResgatar(item)}
-                        className="px-5 py-2.5 rounded-lg bg-[#294D33] hover:bg-[#1F3A27] text-white text-xs sm:text-sm font-bold transition cursor-pointer"
+                        className="px-5 py-2.5 rounded-lg bg-[#294D33] hover:bg-[#1F3A27] text-white text-sm sm:text-base font-bold transition cursor-pointer"
                       >
                         Trocar {item.custo} Flores
                       </button>
                     </>
                   ) : (
                     <>
-                      <span className="text-xs text-[#4A5E4D]">
+                      <span className="text-sm sm:text-base text-[#4A5E4D]">
                         Faltam <strong className="text-[#1F3A27]">{faltam}</strong> {faltam === 1 ? 'flor' : 'flores'}
                       </span>
                       <button
                         type="button"
                         onClick={onOpenInvite}
-                        className="px-4 py-2 rounded-lg bg-[#FCF7F9] hover:bg-[#F1E6E1] border border-[#E4DAD5] text-[#1F3A27] text-xs font-semibold transition cursor-pointer"
+                        className="px-5 py-2.5 rounded-lg bg-[#FCF7F9] hover:bg-[#F1E6E1] border border-[#E4DAD5] text-[#1F3A27] text-sm sm:text-base font-semibold transition cursor-pointer"
                       >
                         Ganhar flores
                       </button>

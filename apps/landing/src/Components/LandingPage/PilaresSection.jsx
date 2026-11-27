@@ -63,7 +63,7 @@ export default function PilaresSection() {
                 <img
                   src={pilar.image}
                   alt={pilar.alt}
-                  className="w-full h-full object-cover rounded-full"
+                  className="w-full h-full object-cover rounded-full scale-[1.2] saturate-[1.35] contrast-[1.06]"
                   loading="lazy"
                 />
               </div>
