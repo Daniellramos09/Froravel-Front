@@ -1,14 +1,8 @@
 import React, { useState } from 'react';
 import {
-  Flower2,
-  Gift,
   CheckCircle2,
   Share2,
   Copy,
-  Sparkles,
-  HeartHandshake,
-  BookOpen,
-  Calendar,
 } from 'lucide-react';
 
 const RECOMPENSAS = [
@@ -19,7 +13,8 @@ const RECOMPENSAS = [
     descricao:
       'Cupom para reduzir pela metade o valor da sua próxima sessão individual com psicóloga parceira.',
     categoria: 'Apoio Clínico',
-    Icon: HeartHandshake,
+    image: '/img/lojinha/lojinha-apoio-clinico.jpg',
+    alt: 'Ilustração botânica editorial de apoio clínico',
   },
   {
     id: 'sessao-gratuita-1',
@@ -28,7 +23,8 @@ const RECOMPENSAS = [
     descricao:
       'Atendimento psicológico individual de 50 minutos 100% custeado pelo Fundo Solidário Florável.',
     categoria: 'Fundo Solidário',
-    Icon: Calendar,
+    image: '/img/lojinha/lojinha-fundo-solidario.jpg',
+    alt: 'Ilustração botânica editorial do Fundo Solidário',
   },
   {
     id: 'pacote-2-sessoes',
@@ -37,7 +33,8 @@ const RECOMPENSAS = [
     descricao:
       'Duas sessões individuais para acompanhamento quinzenal contínuo com a mesma especialista.',
     categoria: 'Cuidado Contínuo',
-    Icon: Sparkles,
+    image: '/img/lojinha/lojinha-cuidado-continuo.jpg',
+    alt: 'Ilustração botânica editorial de cuidado contínuo',
   },
   {
     id: 'kit-bem-estar',
@@ -46,7 +43,8 @@ const RECOMPENSAS = [
     descricao:
       'Inclui 2 sessões individuais gratuitas, acesso prioritário às rodas temáticas e guia perinatal exclusivo.',
     categoria: 'Pacote Completo',
-    Icon: BookOpen,
+    image: '/img/lojinha/lojinha-pacote-completo.jpg',
+    alt: 'Ilustração botânica editorial do Kit Acolhimento Completo',
   },
 ];
 
@@ -112,13 +110,10 @@ export default function LojinhaFloresScreen({
       {/* Cabeçalho seguindo o padrão editorial de Canal de Denúncias */}
       <header className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div className="space-y-1.5">
-          <div className="flex items-center gap-2.5 text-[#1F3A27]">
-            <Gift size={22} aria-hidden="true" />
-            <h1 className="text-2xl sm:text-3xl font-fraunces font-normal text-[#1F3A27]">
-              Clube & Lojinha de Flores
-            </h1>
-          </div>
-          <p className="text-sm text-[#4A5E4D] leading-relaxed max-w-2xl">
+          <h1 className="text-2xl sm:text-3xl font-fraunces font-normal text-[#1F3A27]">
+            Clube & Lojinha de Flores
+          </h1>
+          <p className="text-sm sm:text-base text-[#4A5E4D] leading-relaxed max-w-2xl">
             Troque as flores acumuladas com seus registros e indicações por sessões gratuitas e benefícios de cuidado na Florável.
           </p>
         </div>
@@ -136,8 +131,12 @@ export default function LojinhaFloresScreen({
       {/* Card de Saldo */}
       <section className="bg-white rounded-xl border border-[#E4DAD5] p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-xl bg-[#F4DDE5] border border-[#E8A9BB]/50 flex items-center justify-center shrink-0">
-            <Flower2 size={28} className="text-[#A8435F]" />
+          <div className="w-16 h-16 rounded-full bg-white border border-[#E4DAD5] overflow-hidden p-1 flex items-center justify-center shrink-0 shadow-2xs">
+            <img
+              src="/img/lojinha/lojinha-saldo.jpg"
+              alt="Ilustração botânica do saldo de flores"
+              className="w-full h-full object-cover rounded-full"
+            />
           </div>
           <div>
             <p className="text-xs font-semibold text-[#4A5E4D]">Seu Saldo Disponível</p>
@@ -167,7 +166,6 @@ export default function LojinhaFloresScreen({
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {RECOMPENSAS.map((item) => {
-            const Icon = item.Icon;
             const podeResgatar = flowersCount >= item.custo;
             const faltam = Math.max(0, item.custo - flowersCount);
 
@@ -179,16 +177,21 @@ export default function LojinhaFloresScreen({
                 <div className="space-y-3">
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-lg bg-[#FCF7F9] border border-[#E4DAD5] flex items-center justify-center text-[#294D33] shrink-0">
-                        <Icon size={18} />
+                      <div className="w-14 h-14 rounded-full bg-white border border-[#E4DAD5] overflow-hidden p-1 flex items-center justify-center shrink-0 shadow-2xs">
+                        <img
+                          src={item.image}
+                          alt={item.alt}
+                          className="w-full h-full object-cover rounded-full"
+                          loading="lazy"
+                        />
                       </div>
-                      <span className="text-xs font-semibold text-[#4A5E4D]">
+                      <span className="text-xs sm:text-sm font-semibold text-[#4A5E4D]">
                         {item.categoria}
                       </span>
                     </div>
 
                     <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-[#F4DDE5]/70 border border-[#E8A9BB]/50 text-xs font-bold text-[#1F3A27] shrink-0 tabular-nums">
-                      <Flower2 size={13} className="text-[#A8435F]" />
+                      <img src="/icons/rosa.png" alt="" aria-hidden="true" className="w-4 h-4 object-contain" />
                       {item.custo} Flores
                     </span>
                   </div>
