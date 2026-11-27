@@ -77,6 +77,8 @@ export function ComoAjudaPreviewSection() {
       to: "/explorar",
       cta: "Explorar ferramentas",
       bg: "bg-[#F4DDE5]",
+      image: "/img/hero-woman-serene.jpg",
+      overlayGradient: "from-[#F4DDE5]/95 via-[#F4DDE5]/85 to-[#F4DDE5]/70",
       text: "text-[#294D33]",
       subText: "text-[#3A443E]",
       pillBg: "bg-white/75 text-[#294D33] border-[#294D33]/10",
@@ -92,6 +94,8 @@ export function ComoAjudaPreviewSection() {
       to: "/explorar",
       cta: "Ver como funciona",
       bg: "bg-[#EBF1ED]",
+      image: "/img/variasMaes.jpg",
+      overlayGradient: "from-[#EBF1ED]/95 via-[#EBF1ED]/85 to-[#EBF1ED]/70",
       text: "text-[#294D33]",
       subText: "text-[#3A443E]",
       pillBg: "bg-white/80 text-[#294D33] border-[#294D33]/10",
@@ -107,6 +111,8 @@ export function ComoAjudaPreviewSection() {
       to: "/profissionais",
       cta: "Conhecer a rede",
       bg: "bg-[#294D33]",
+      image: "/img/dra-mariana-psicologa.jpg",
+      overlayGradient: "from-[#294D33]/95 via-[#294D33]/88 to-[#294D33]/72",
       text: "text-[#FCF7F9]",
       subText: "text-[#E6EFE9]/85",
       pillBg: "bg-white/10 text-[#FCF7F9] border-white/15",
@@ -163,6 +169,18 @@ export function ComoAjudaPreviewSection() {
                 aria-expanded={isActive}
                 className={`relative rounded-[1.75rem] ${item.bg} ${item.text} transition-[flex-grow,flex-basis] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] overflow-hidden cursor-pointer text-left ${flexClass}`}
               >
+                {/* Imagem de fundo sutil (quase transparente) preservando a cor predominante */}
+                <img
+                  src={item.image}
+                  alt=""
+                  aria-hidden="true"
+                  className="absolute inset-0 w-full h-full object-cover object-center opacity-[0.18] pointer-events-none select-none transition-transform duration-700"
+                />
+                <div
+                  aria-hidden="true"
+                  className={`absolute inset-0 bg-gradient-to-r ${item.overlayGradient} pointer-events-none`}
+                />
+
                 {/* Botão + / - fixo no topo direito */}
                 <span
                   className={`absolute top-7 right-7 z-20 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${item.iconBtnClass}`}
@@ -173,7 +191,7 @@ export function ComoAjudaPreviewSection() {
 
                 {/* Estado recolhido (quando mouse não está ou outro card está aberto): título vertical + tag */}
                 <div
-                  className={`absolute inset-0 p-8 flex flex-col justify-between transition-opacity duration-300 ease-out ${
+                  className={`relative z-10 h-full p-8 flex flex-col justify-between transition-opacity duration-300 ease-out ${
                     isActive ? "opacity-0 pointer-events-none delay-0" : "opacity-100 delay-150"
                   }`}
                 >
@@ -192,7 +210,7 @@ export function ComoAjudaPreviewSection() {
 
                 {/* Estado expandido: largura interna fixa para zero esticamento/reflow de letras */}
                 <div
-                  className={`absolute inset-y-0 left-0 w-[490px] xl:w-[540px] p-8 flex flex-col justify-between transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                  className={`absolute inset-y-0 left-0 z-10 w-[490px] xl:w-[540px] p-8 flex flex-col justify-between transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
                     isActive
                       ? "opacity-100 translate-y-0 delay-150"
                       : "opacity-0 translate-y-2 pointer-events-none delay-0"
@@ -252,9 +270,19 @@ export function ComoAjudaPreviewSection() {
               <div
                 key={item.title}
                 onClick={() => setMobileIdx((prev) => (prev === idx ? -1 : idx))}
-                className={`rounded-[1.5rem] ${item.bg} ${item.text} p-6 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] text-left cursor-pointer`}
+                className={`relative overflow-hidden rounded-[1.5rem] ${item.bg} ${item.text} p-6 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] text-left cursor-pointer`}
               >
-                <div className="flex items-center justify-between gap-4">
+                <img
+                  src={item.image}
+                  alt=""
+                  aria-hidden="true"
+                  className="absolute inset-0 w-full h-full object-cover object-center opacity-[0.16] pointer-events-none select-none"
+                />
+                <div
+                  aria-hidden="true"
+                  className={`absolute inset-0 bg-gradient-to-r ${item.overlayGradient} pointer-events-none`}
+                />
+                <div className="relative z-10 flex items-center justify-between gap-4">
                   <div>
                     <span className="text-[10px] font-bold uppercase tracking-widest opacity-80 block mb-1">
                       {item.tag}
@@ -267,7 +295,7 @@ export function ComoAjudaPreviewSection() {
                 </div>
 
                 {isActive && (
-                  <div className="mt-4 space-y-4">
+                  <div className="relative z-10 mt-4 space-y-4">
                     <p className={`text-sm leading-relaxed font-sans ${item.subText}`}>
                       {item.desc}
                     </p>
