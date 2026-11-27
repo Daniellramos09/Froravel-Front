@@ -551,13 +551,13 @@ export default function SalaAcolhimento() {
         <div className="space-y-6">
           <header className="rounded-2xl bg-[#F1E6E1] p-5 sm:p-8 lg:p-10 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="text-[13.5px] md:text-[15px] text-[#4A5E4D]">
+              <p className="text-sm md:text-base text-[#4A5E4D]">
                 Consultório Virtual · Escolha um atendimento para entrar
               </p>
               <h1 className="mt-2 font-fraunces text-[30px] md:text-[38px] leading-[1.12] tracking-[-0.015em] text-[#1F3A27]">
                 Sala de acolhimento
               </h1>
-              <p className="mt-2 text-[15px] text-[#4A5E4D]">
+              <p className="mt-2 text-base text-[#4A5E4D]">
                 Selecione uma roda ou atendimento individual abaixo para testar sua câmera e iniciar a sessão.
               </p>
             </div>
@@ -566,7 +566,7 @@ export default function SalaAcolhimento() {
               <button
                 type="button"
                 onClick={() => setSomEntradaAtivo((v) => !v)}
-                className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2.5 text-xs font-bold border transition cursor-pointer ${
+                className={`inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-bold border transition cursor-pointer ${
                   somEntradaAtivo
                     ? 'bg-white border-[#294D33]/30 text-[#294D33]'
                     : 'bg-stone-100 border-stone-200 text-stone-500'
@@ -582,7 +582,7 @@ export default function SalaAcolhimento() {
                   setSalvaguardaAba('menor');
                   setSalvaguardaOpen(true);
                 }}
-                className="inline-flex items-center gap-2 rounded-full bg-amber-50 border border-amber-300 px-5 py-2.5 text-xs font-bold text-amber-900 hover:bg-amber-100 transition cursor-pointer shadow-2xs"
+                className="inline-flex items-center gap-2 rounded-full bg-amber-50 border border-amber-300 px-5 py-2.5 text-sm font-bold text-amber-900 hover:bg-amber-100 transition cursor-pointer shadow-2xs"
               >
                 <ShieldAlert className="w-4 h-4" />
                 Salvaguarda Clínica (ECA / Emergência)
@@ -590,34 +590,34 @@ export default function SalaAcolhimento() {
             </div>
           </header>
 
-          {/* Lista de Sessões Agendadas */}
-          <section className="rounded-3xl border border-[#EFE9EB] bg-white shadow-sm overflow-hidden">
-            <div className="flex flex-wrap items-center justify-between gap-3 px-6 py-5 border-b border-[#EFE9EB]">
+          {/* Lista de Sessões Agendadas — Padrão de Cards de Mães Acolhidas */}
+          <section className="space-y-4">
+            <div className="flex flex-wrap items-center justify-between gap-3 px-1">
               <div>
-                <h2 className="font-fraunces text-[22px] text-[#1F3A27]">
+                <h2 className="font-sans text-xl sm:text-2xl font-bold text-[#1F3A27]">
                   Sessões Agendadas Prontas
                 </h2>
-                <p className="text-xs text-stone-500">
+                <p className="text-sm sm:text-base text-stone-600 mt-0.5">
                   Sua câmera permanece desligada até você escolher qual sala deseja preparar.
                 </p>
               </div>
               <Link
                 to="/agenda"
-                className="rounded-full bg-[#F4DDE5] px-4 py-1.5 text-xs font-bold text-[#294D33] hover:bg-[#E8A9BB]/50 transition"
+                className="rounded-full bg-[#F4DDE5] px-5 py-2.5 text-sm font-bold text-[#294D33] hover:bg-[#E8A9BB]/50 transition"
               >
                 Gerenciar Agenda
               </Link>
             </div>
 
-            <ul className="divide-y divide-[#EFE9EB]">
+            <ul className="space-y-4">
               {SESSOES_AGENDADAS_SALA.map((s) => (
                 <li
                   key={s.id}
-                  className="p-5 sm:px-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-[#FCF7F9]/60 transition"
+                  className="rounded-3xl border border-[#EFE9EB] bg-white px-6 py-5 flex flex-col sm:flex-row sm:items-center justify-between gap-5 shadow-sm transition hover:border-[#E8A9BB]/60 hover:shadow-md"
                 >
                   <div className="flex items-start gap-4 min-w-0">
                     <div
-                      className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 ${
+                      className={`w-12 h-12 rounded-full flex items-center justify-center shrink-0 ${
                         s.tipo === 'grupo' ? 'bg-[#EBF3ED] text-[#294D33]' : 'bg-[#F4DDE5] text-[#294D33]'
                       }`}
                     >
@@ -625,9 +625,9 @@ export default function SalaAcolhimento() {
                     </div>
 
                     <div className="min-w-0">
-                      <div className="flex flex-wrap items-center gap-2 mb-1">
+                      <div className="flex flex-wrap items-center gap-2 mb-1.5">
                         <span
-                          className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full ${
+                          className={`text-xs sm:text-sm font-bold px-3 py-0.5 rounded-full ${
                             s.tipo === 'grupo'
                               ? 'bg-[#EBF3ED] text-[#294D33]'
                               : 'bg-[#F4DDE5] text-[#1F3A27]'
@@ -635,30 +635,30 @@ export default function SalaAcolhimento() {
                         >
                           {s.tipo === 'grupo' ? 'Roda em Grupo' : 'Atendimento Individual'}
                         </span>
-                        <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-stone-100 text-stone-700">
+                        <span className="text-xs sm:text-sm font-semibold px-3 py-0.5 rounded-full bg-stone-100 text-stone-700">
                           {s.statusBadge}
                         </span>
                       </div>
 
-                      <h3 className="font-fraunces text-lg sm:text-xl font-bold text-[#1F3A27]">
+                      <h3 className="font-sans text-lg sm:text-xl font-bold text-[#2B2829]">
                         {s.titulo}
                       </h3>
-                      <p className="text-xs text-stone-500 mt-0.5 flex flex-wrap items-center gap-3">
-                        <span className="inline-flex items-center gap-1">
-                          <Calendar className="w-3.5 h-3.5" /> {s.data}
+                      <p className="text-sm sm:text-base text-stone-600 mt-1 flex flex-wrap items-center gap-4">
+                        <span className="inline-flex items-center gap-1.5">
+                          <Calendar className="w-4 h-4 text-[#294D33]" /> {s.data}
                         </span>
-                        <span className="inline-flex items-center gap-1">
-                          <Clock className="w-3.5 h-3.5" /> {s.horario}
+                        <span className="inline-flex items-center gap-1.5">
+                          <Clock className="w-4 h-4 text-[#294D33]" /> {s.horario}
                         </span>
                       </p>
-                      <p className="text-xs text-[#4A5E4D] mt-1">{s.resumo}</p>
+                      <p className="text-sm sm:text-base text-[#4A5E4D] mt-1">{s.resumo}</p>
                     </div>
                   </div>
 
                   <button
                     type="button"
                     onClick={() => handleSelecionarSessao(s)}
-                    className="inline-flex items-center justify-center gap-2 rounded-full bg-[#294D33] px-5 py-2.5 text-xs font-bold text-white shadow-sm hover:bg-[#1F3A27] transition cursor-pointer shrink-0 active:scale-95"
+                    className="inline-flex items-center justify-center gap-2 rounded-full bg-[#294D33] px-6 py-3 text-sm sm:text-base font-bold text-white shadow-sm hover:bg-[#1F3A27] transition cursor-pointer shrink-0 active:scale-95"
                   >
                     <Video className="w-4 h-4" />
                     <span>Preparar Sala e Câmera</span>

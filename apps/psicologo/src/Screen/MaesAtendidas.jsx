@@ -186,18 +186,18 @@ export default function MaesAtendidas() {
 
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
-                      <p className="font-bold text-[#2B2829] text-base">{m.nome}</p>
+                      <p className="font-bold text-[#2B2829] text-lg sm:text-xl">{m.nome}</p>
                       {m.menorDeIdade && (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-50 border border-amber-200 text-[10px] font-bold text-amber-900">
-                          <Lock className="w-3 h-3" /> {m.statusSalvaguarda || 'ECA Art. 17'}
+                        <span className="inline-flex items-center gap-1 px-3 py-0.5 rounded-full bg-amber-50 border border-amber-200 text-xs font-bold text-amber-900">
+                          <Lock className="w-3.5 h-3.5" /> {m.statusSalvaguarda || 'ECA Art. 17'}
                         </span>
                       )}
                     </div>
-                    <p className="text-xs text-stone-500">{m.bebe} · {m.tempo}</p>
-                    <p className="text-sm text-[#4A5E4D] mt-1">
+                    <p className="text-sm text-stone-600 mt-0.5">{m.bebe} · {m.tempo}</p>
+                    <p className="text-sm sm:text-base text-[#4A5E4D] mt-1">
                       Próximo encontro: {formatarDia(proxima)} · {formatarHora(proxima)} · {m.grupos} roda(s)
                     </p>
-                    <p className="mt-1 text-xs text-stone-500">
+                    <p className="mt-1 text-sm text-stone-600">
                       {m.triagemCompartilhada
                         ? `Indicador de acolhimento: ${m.triagemCompartilhada.nivel} (${formatarDia(dataLocal(m.triagemCompartilhada.data))})`
                         : 'Sem check-in recente compartilhado.'}
@@ -205,8 +205,8 @@ export default function MaesAtendidas() {
                   </div>
                 </div>
 
-                <div className="hidden sm:flex items-center gap-2 text-stone-400">
-                  <span className="text-xs font-semibold text-[#294D33]">Ver vínculo</span>
+                <div className="hidden sm:flex items-center gap-2 text-stone-400 shrink-0">
+                  <span className="text-sm font-semibold text-[#294D33]">Ver vínculo</span>
                   <ChevronRight className="w-5 h-5 text-stone-400" />
                 </div>
               </button>
