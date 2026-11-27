@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import {
   Users,
   Bell,
@@ -16,6 +16,9 @@ import {
   RefreshCw,
   LogIn,
   Layers,
+  LogOut,
+  Building2,
+  Settings,
 } from "lucide-react";
 import {
   ResponsiveContainer,
@@ -130,7 +133,27 @@ export default function DashboardRh({ session = null, onLogout, isDemoMode = fal
   const [activeMenu, setActiveMenu] = useState("inicio");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showExportMenu, setShowExportMenu] = useState(false);
+  const [showNotifMenu, setShowNotifMenu] = useState(false);
+  const [notifRead, setNotifRead] = useState(false);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [toastMessage, setToastMessage] = useState(null);
+  const headerMenusRef = useRef(null);
+
+  useEffect(() => {
+    const handleOutside = (e) => {
+      if (e.type === "keydown" && e.key !== "Escape") return;
+      if (e.type === "mousedown" && headerMenusRef.current?.contains(e.target)) return;
+      setShowExportMenu(false);
+      setShowNotifMenu(false);
+      setShowProfileMenu(false);
+    };
+    document.addEventListener("mousedown", handleOutside);
+    window.addEventListener("keydown", handleOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleOutside);
+      window.removeEventListener("keydown", handleOutside);
+    };
+  }, []);
 
   const [company, setCompany] = useState(null);
   const [relatorio, setRelatorio] = useState(null);
@@ -307,8 +330,48 @@ export default function DashboardRh({ session = null, onLogout, isDemoMode = fal
       : []),
   ];
 
-  const headerInitials = getInitials(session?.nome || company?.nome || "RH");
+  const cleanDisplayName = (session?.nome || company?.nome || "RH")
+    .replace(/\([^)]*\)/g, "")
+    .trim();
+  const headerInitials = getInitials(cleanDisplayName || "RH");
   const todayFormatted = formatTodayPtBr();
+
+  const rhNotifications = [
+    {
+      id: "notif-convites",
+      title:
+        pendingCount > 0
+          ? `${pendingCount} convite(s) aguardando ativação`
+          : "Todos os convites foram ativados",
+      desc:
+        pendingCount > 0
+          ? "Colaboradoras convidadas ainda não concluíram o primeiro acesso. Clique para gerenciar."
+          : "Nenhuma pendência na emissão de licenças corporativas.",
+      time: "Agora",
+      targetTab: "licencas",
+    },
+    {
+      id: "notif-kanon",
+      title: `Proteção K-Anonimato (K ≥ ${parametroK}) ativa`,
+      desc: "Áreas com menos de 5 colaboradoras são agrupadas automaticamente no Índice Geral.",
+      time: "Hoje",
+      targetTab: "relatorios",
+    },
+    {
+      id: "notif-fatura",
+      title: "Fatura de Novembro/2026 disponível",
+      desc: `Vencimento em 05/12/2026 · ${totalEmitidas} licenças emitidas no plano corporativo.`,
+      time: "Ontem",
+      targetTab: "faturamento",
+    },
+    {
+      id: "notif-adesao",
+      title: `Taxa de adesão em ${taxaAdesao}%`,
+      desc: `${totalAtivadas} de ${totalEmitidas} colaboradoras já utilizam os recursos Florável.`,
+      time: "Esta semana",
+      targetTab: "inicio",
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-[#FCF7F9] font-sans text-[#2B2829] flex flex-col lg:flex-row antialiased">
@@ -369,7 +432,7 @@ export default function DashboardRh({ session = null, onLogout, isDemoMode = fal
             )}
           </div>
 
-          <div className="flex items-center gap-3 md:gap-4">
+          <div ref={headerMenusRef} className="flex items-center gap-3 md:gap-4">
             <span className="hidden md:inline-block text-xs font-medium text-slate-500">
               {todayFormatted}
             </span>
@@ -377,7 +440,11 @@ export default function DashboardRh({ session = null, onLogout, isDemoMode = fal
             <div className="relative">
               <button
                 type="button"
-                onClick={() => setShowExportMenu(!showExportMenu)}
+                onClick={() => {
+                  setShowExportMenu(!showExportMenu);
+                  setShowNotifMenu(false);
+                  setShowProfileMenu(false);
+                }}
                 disabled={!company}
                 className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-slate-200/80 text-xs font-semibold text-slate-700 hover:bg-slate-100 transition-colors shadow-2xs disabled:opacity-50 cursor-pointer"
               >
@@ -407,30 +474,140 @@ export default function DashboardRh({ session = null, onLogout, isDemoMode = fal
               )}
             </div>
 
-            <button
-              type="button"
-              title="Avisos de Privacidade e Adesão"
-              aria-label="Avisos de Privacidade e Adesão"
-              onClick={() =>
-                showToast(
-                  pendingCount > 0
-                    ? `Existem ${pendingCount} convite(s) corporativo(s) pendente(s) de ativação.`
-                    : "Todos os convites corporativos estão atualizados."
-                )
-              }
-              className="relative p-2 rounded-full bg-white border border-slate-200/80 text-slate-500 hover:text-slate-800 transition-colors shadow-2xs cursor-pointer"
-            >
-              <Bell className="w-4 h-4" />
-              {pendingCount > 0 && (
-                <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#C96E82]" />
-              )}
-            </button>
+            {/* NOTIFICAÇÕES */}
+            <div className="relative">
+              <button
+                type="button"
+                title="Notificações Corporativas"
+                aria-label="Notificações Corporativas"
+                aria-expanded={showNotifMenu}
+                onClick={() => {
+                  setShowNotifMenu((prev) => !prev);
+                  setShowExportMenu(false);
+                  setShowProfileMenu(false);
+                }}
+                className="relative p-2 rounded-full bg-white border border-slate-200/80 text-slate-500 hover:text-[#294D33] transition-colors shadow-2xs cursor-pointer"
+              >
+                <Bell className="w-4 h-4" />
+                {!notifRead && (
+                  <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#C96E82]" />
+                )}
+              </button>
 
-            <div
-              className="w-8 h-8 rounded-full bg-[#FCE7F0] border border-[#F4C4D4] text-[#C96E82] font-bold text-xs flex items-center justify-center"
-              aria-label={`Perfil ${session?.nome || company?.nome || "RH"}`}
-            >
-              {headerInitials}
+              {showNotifMenu && (
+                <div className="fixed left-3 right-3 sm:absolute sm:left-auto sm:right-0 top-16 sm:top-full mt-2 sm:w-80 bg-white rounded-2xl shadow-xl border border-[#E4DAD5] overflow-hidden z-50 animate-fade-in">
+                  <div className="px-4 py-3 border-b border-stone-100 flex items-center justify-between">
+                    <span className="font-semibold text-sm text-[#1F3A27]">Notificações</span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setNotifRead(true);
+                        showToast("Notificações marcadas como lidas.");
+                      }}
+                      className="text-xs font-semibold text-[#294D33] hover:underline cursor-pointer"
+                    >
+                      {notifRead ? "Tudo lido" : "Marcar como lidas"}
+                    </button>
+                  </div>
+
+                  <div className="max-h-80 overflow-y-auto divide-y divide-stone-100">
+                    {rhNotifications.map((item) => (
+                      <button
+                        key={item.id}
+                        type="button"
+                        onClick={() => {
+                          setNotifRead(true);
+                          setShowNotifMenu(false);
+                          setActiveMenu(item.targetTab);
+                        }}
+                        className="w-full text-left px-4 py-3 hover:bg-[#FCF7F9] transition-colors cursor-pointer"
+                      >
+                        <div className="flex items-center justify-between gap-2">
+                          <p className="text-xs font-bold text-[#1F3A27]">{item.title}</p>
+                          <span className="text-[10px] text-stone-400 shrink-0">{item.time}</span>
+                        </div>
+                        <p className="text-xs text-stone-600 mt-0.5 leading-relaxed">{item.desc}</p>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* PERFIL DO GESTOR RH */}
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowProfileMenu((prev) => !prev);
+                  setShowNotifMenu(false);
+                  setShowExportMenu(false);
+                }}
+                aria-expanded={showProfileMenu}
+                aria-label={`Perfil ${session?.nome || company?.nome || "RH"}`}
+                className="w-8 h-8 rounded-full bg-[#F4DDE5] border border-[#E8A9BB] text-[#294D33] font-bold text-xs flex items-center justify-center hover:ring-2 hover:ring-[#294D33]/25 transition cursor-pointer"
+              >
+                {headerInitials}
+              </button>
+
+              {showProfileMenu && (
+                <div className="fixed left-3 right-3 sm:absolute sm:left-auto sm:right-0 top-16 sm:top-full mt-2 sm:w-72 bg-white rounded-2xl shadow-xl border border-[#E4DAD5] p-4 z-50 animate-fade-in space-y-3">
+                  <div className="flex items-center gap-3 pb-3 border-b border-stone-100">
+                    <div className="w-10 h-10 rounded-full bg-[#F4DDE5] border border-[#E8A9BB] text-[#294D33] font-bold text-sm flex items-center justify-center shrink-0">
+                      {headerInitials}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-sm font-bold text-[#1F3A27] truncate">
+                        {session?.nome || "Gestão RH TechMães"}
+                      </p>
+                      <p className="text-xs text-stone-500 truncate">
+                        {session?.email || "rh@techmaes.com.br"}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-1.5 text-xs text-stone-600 bg-[#FCF7F9] rounded-xl p-3 border border-stone-100">
+                    <div className="flex items-center gap-2 text-[#1F3A27] font-semibold">
+                      <Building2 className="w-3.5 h-3.5 text-[#294D33] shrink-0" />
+                      <span className="truncate">{company?.nome || "TechMães Tecnologia LTDA"}</span>
+                    </div>
+                    <p className="text-[11px] text-stone-500 pl-5">
+                      CNPJ: {company?.cnpj || "12.345.678/0001-90"}
+                    </p>
+                    <p className="text-[11px] text-[#294D33] font-semibold pl-5">
+                      Administrador RH Corporativo
+                    </p>
+                  </div>
+
+                  <div className="space-y-1 pt-1">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowProfileMenu(false);
+                        setActiveMenu("config");
+                      }}
+                      className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-[#1F3A27] hover:bg-[#FCF7F9] transition cursor-pointer"
+                    >
+                      <Settings className="w-4 h-4 text-[#294D33]" />
+                      <span>Configurações e Conta</span>
+                    </button>
+
+                    {onLogout && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setShowProfileMenu(false);
+                          onLogout();
+                        }}
+                        className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-[#9B1C1C] hover:bg-[#FDE8E8]/60 transition cursor-pointer"
+                      >
+                        <LogOut className="w-4 h-4" />
+                        <span>Sair do painel RH</span>
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </header>
