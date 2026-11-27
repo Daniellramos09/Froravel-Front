@@ -654,9 +654,10 @@ export default function LoginScreen({ initialMode = 'login' }) {
             </div>
           </div>
 
-          {/* ======================= MODO LOGIN ======================= */}
+          {/* ======================= MODO LOGIN / CADASTRO ======================= */}
+          <div key={modo} className="animate-fadeIn transition-opacity duration-300 ease-out">
           {!isCadastro ? (
-            <div className="animate-fadeIn">
+            <div>
               <form onSubmit={handleLoginSubmit} className="space-y-2.5">
                 <div>
                   <label htmlFor="email" className="block text-xs font-semibold text-gray-700 mb-1">
@@ -1087,6 +1088,7 @@ export default function LoginScreen({ initialMode = 'login' }) {
               </p>
             </div>
           )}
+          </div>
         </div>
       </div>
 
@@ -1095,13 +1097,7 @@ export default function LoginScreen({ initialMode = 'login' }) {
       {/* ================================================================= */}
       <div className="hidden lg:block lg:w-1/2 lg:h-dvh lg:absolute lg:top-0 lg:right-0 z-10 overflow-hidden">
         <img src={LOGIN_IMAGE} alt="" className="absolute inset-0 w-full h-full object-cover" />
-        <div
-          className={`absolute inset-0 transition-opacity duration-500 ${
-            isCadastro
-              ? 'bg-gradient-to-l from-[#faf8f4]/30 via-transparent to-black/15'
-              : 'bg-gradient-to-r from-[#faf8f4]/30 via-transparent to-black/15'
-          }`}
-        />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#faf8f4]/30 via-transparent to-black/15" />
         <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/40 to-transparent" />
 
         <div className="absolute bottom-8 inset-x-8 p-6 rounded-3xl bg-white/85 backdrop-blur-md border border-white/60 shadow-lg text-[#1f2a22]">
