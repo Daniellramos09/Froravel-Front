@@ -15,11 +15,13 @@ export default function FlowerCounterBadge({
   flowersCount = 12,
   targetFlowers = 15,
   onOpenInvite,
+  onOpenLojinha,
   className = '',
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef(null);
   const leaveTimeoutRef = useRef(null);
+  const openedByHoverRef = useRef(false);
 
   const remaining = Math.max(0, targetFlowers - flowersCount);
   const progressPercent = Math.min(
@@ -52,10 +54,12 @@ export default function FlowerCounterBadge({
 
   const handleMouseEnter = () => {
     if (leaveTimeoutRef.current) clearTimeout(leaveTimeoutRef.current);
+    openedByHoverRef.current = true;
     setIsOpen(true);
   };
 
   const handleMouseLeave = () => {
+    openedByHoverRef.current = false;
     // Grace period de 200ms para evitar fechamento ao cruzar a borda
     leaveTimeoutRef.current = setTimeout(() => {
       setIsOpen(false);
@@ -65,6 +69,12 @@ export default function FlowerCounterBadge({
   const handleToggle = (e) => {
     e.stopPropagation();
     if (leaveTimeoutRef.current) clearTimeout(leaveTimeoutRef.current);
+    // Se acabou de abrir pelo hover do mouse, clicar no badge mantém aberto em vez de fechar na hora
+    if (openedByHoverRef.current) {
+      openedByHoverRef.current = false;
+      setIsOpen(true);
+      return;
+    }
     setIsOpen((prev) => !prev);
   };
 
@@ -74,6 +84,15 @@ export default function FlowerCounterBadge({
     setIsOpen(false);
     if (onOpenInvite) {
       onOpenInvite();
+    }
+  };
+
+  const handleTriggerLojinha = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsOpen(false);
+    if (onOpenLojinha) {
+      onOpenLojinha();
     }
   };
 
@@ -168,20 +187,35 @@ export default function FlowerCounterBadge({
             </p>
           </div>
 
-          {/* Dica acolhedora / Botão Funcional Indicar Mãe */}
-          <div className="flex items-center justify-between text-[11px] text-stone-500 pt-2 border-t border-stone-100">
-            <span>Ganhe ao escrever no diário ou apoiar mães</span>
-            <button
-              type="button"
-              onMouseDown={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-              }}
-              onClick={handleTriggerInvite}
-              className="text-[#294D33] font-bold hover:underline cursor-pointer shrink-0 ml-2 py-1 px-2 -mr-1 rounded-lg hover:bg-[#EBF3ED] transition-colors"
-            >
-              Indicar mãe
-            </button>
+          {/* Botões de Ação: Indicar mãe e Lojinha de Flores */}
+          <div className="flex flex-col gap-2 pt-2.5 border-t border-stone-100">
+            <div className="flex items-center justify-between text-[11px] text-stone-500">
+              <span>Ganhe +3 flores por indicação</span>
+              <button
+                type="button"
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
+                onClick={handleTriggerInvite}
+                className="text-[#294D33] font-bold hover:underline cursor-pointer shrink-0 ml-2 py-1 px-2 -mr-1 rounded-lg hover:bg-[#EBF3ED] transition-colors"
+              >
+                Indicar mãe
+              </button>
+            </div>
+            {onOpenLojinha && (
+              <button
+                type="button"
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
+                onClick={handleTriggerLojinha}
+                className="w-full py-2 px-3 rounded-xl bg-[#294D33] hover:bg-[#1F3A27] text-white text-xs font-bold transition cursor-pointer text-center"
+              >
+                Abrir Lojinha e Trocar Flores
+              </button>
+            )}
           </div>
         </div>
       )}

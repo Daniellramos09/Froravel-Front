@@ -93,6 +93,7 @@ export default function PsychologistsFlipSection() {
   const [hoveredId, setHoveredId] = useState(null);
   const [isCarouselPaused, setIsCarouselPaused] = useState(false);
   const scrollContainerRef = useRef(null);
+  const manualScrollUntilRef = useRef(0);
 
   const toggleCard = (id) => {
     setFlippedIds((prev) => ({
@@ -101,7 +102,7 @@ export default function PsychologistsFlipSection() {
     }));
   };
 
-  // Loop contínuo lento e suave (pausa automaticamente ao passar o mouse ou virar um card)
+  // Loop contínuo lento e suave (pausa automaticamente ao passar o mouse, virar card ou usar as setas)
   useEffect(() => {
     const container = scrollContainerRef.current;
     if (!container) return;
@@ -113,11 +114,12 @@ export default function PsychologistsFlipSection() {
 
     let rafId = null;
     let accum = 0;
-    const SPEED_PX_PER_FRAME = 0.42;
+    const SPEED_PX_PER_FRAME = 0.32;
 
     const tick = () => {
       const hasFlipped = Object.values(flippedIds).some(Boolean);
-      if (!isCarouselPaused && !hoveredId && !hasFlipped) {
+      const isManualScrolling = Date.now() < manualScrollUntilRef.current;
+      if (!isCarouselPaused && !hoveredId && !hasFlipped && !isManualScrolling) {
         accum += SPEED_PX_PER_FRAME;
         if (accum >= 1) {
           const step = Math.floor(accum);
@@ -141,13 +143,18 @@ export default function PsychologistsFlipSection() {
   const scrollByCard = (direction) => {
     const container = scrollContainerRef.current;
     if (!container) return;
-    const step = 330;
+    const step = 334;
     const half = container.scrollWidth / 2;
+
+    // Pausa o auto-scroll durante a transição das setas para não cancelar o scrollBy
+    manualScrollUntilRef.current = Date.now() + 750;
+
     if (direction === "prev" && container.scrollLeft <= step && half > 0) {
       container.scrollLeft += half;
-    } else if (direction === "next" && half > 0 && container.scrollLeft >= half) {
+    } else if (direction === "next" && half > 0 && container.scrollLeft + step >= half) {
       container.scrollLeft -= half;
     }
+
     container.scrollBy({
       left: direction === "next" ? step : -step,
       behavior: "smooth",
@@ -204,7 +211,7 @@ export default function PsychologistsFlipSection() {
                 className="shrink-0 w-[290px] sm:w-[310px] h-[440px] [perspective:1200px]"
               >
                 <div
-                  className={`relative w-full h-full transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] [transform-style:preserve-3d] ${
+                  className={`relative w-full h-full transition-transform duration-[1300ms] ease-[cubic-bezier(0.22,1,0.36,1)] [transform-style:preserve-3d] ${
                     isFlipped ? "[transform:rotateY(180deg)]" : ""
                   }`}
                 >

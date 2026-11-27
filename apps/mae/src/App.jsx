@@ -4,7 +4,7 @@ import { createPortal } from 'react-dom';
 import {
   Home, ClipboardList, HeartHandshake, MessageSquare, Calendar, Bell,
   LogOut, ArrowRight, ChevronLeft, BookOpen, Eye, Menu, X, Users,
-  Star, ShieldAlert
+  Star, ShieldAlert, Gift
 } from 'lucide-react';
 import InstallAppButton from './Components/Pwa/InstallAppButton';
 import { getApiBase, fetchCurrentUserProfile } from '@floravel/shared';
@@ -21,6 +21,7 @@ import BibliotecaScreen from './Screen/Community/BibliotecaScreen';
 import FeedbacksScreen from './Screen/Feedback/FeedbacksScreen';
 import AcessibilidadeScreen from './Screen/Accessibility/AcessibilidadeScreen';
 import DenunciasScreen from './Screen/Safety/DenunciasScreen';
+import LojinhaFloresScreen from './Screen/Gamification/LojinhaFloresScreen';
 
 // CONTEXTO E BARRA DE ACESSIBILIDADE
 import {
@@ -206,7 +207,19 @@ function AppContent() {
 
   const [agendamentosGlobais, setAgendamentosGlobais] = useState([]);
   const [profEmFoco, setProfEmFoco] = useState(null);
-  const [flowersCount, setFlowersCount] = useState(12);
+  const [flowersCount, setFlowersCount] = useState(() => {
+    try {
+      const saved = Number(localStorage.getItem('floravel_flores_saldo'));
+      return Number.isFinite(saved) && saved >= 0 ? saved : 12;
+    } catch {
+      return 12;
+    }
+  });
+  useEffect(() => {
+    try {
+      localStorage.setItem('floravel_flores_saldo', String(flowersCount));
+    } catch {}
+  }, [flowersCount]);
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
   const [isGlobalDenunciaOpen, setIsGlobalDenunciaOpen] = useState(false);
   const [denunciaTarget, setDenunciaTarget] = useState({ targetUser: '', targetCodigoPublico: '', context: 'Plataforma Geral' });
@@ -292,8 +305,10 @@ function AppContent() {
         return 'Feedbacks & Avaliações';
       case 'accessibility':
         return 'Acessibilidade & Inclusão';
+      case 'flores':
+        return 'Clube & Lojinha de Flores';
       default:
-        return 'Florável';
+        return 'FLORÁVEL';
     }
   };
 
@@ -363,6 +378,7 @@ function AppContent() {
           <NavItem icon={<Users size={20} />} label="Comunidade" active={activeTab === 'feed'} onClick={() => handleTabChange('feed')} />
           <NavItem icon={<Calendar size={20} />} label="Meus Agendamentos" active={activeTab === 'booking'} onClick={() => handleTabChange('booking')} />
           <NavItem icon={<BookOpen size={20} />} label="Biblioteca & Conteúdos" active={activeTab === 'library'} onClick={() => handleTabChange('library')} />
+          <NavItem icon={<Gift size={20} />} label="Lojinha de Flores" active={activeTab === 'flores'} onClick={() => handleTabChange('flores')} />
           <NavItem icon={<ShieldAlert size={20} />} label="Denúncias" active={activeTab === 'safety'} onClick={() => handleTabChange('safety')} />
           <NavItem icon={<Eye size={20} />} label="Acessibilidade" active={activeTab === 'accessibility'} onClick={() => handleTabChange('accessibility')} />
         </nav>
@@ -502,6 +518,7 @@ function AppContent() {
               flowersCount={flowersCount}
               targetFlowers={15}
               onOpenInvite={() => setIsInviteModalOpen(true)}
+              onOpenLojinha={() => handleTabChange('flores')}
             />
 
             <div className="hidden md:block">
@@ -604,6 +621,14 @@ function AppContent() {
             />
           )}
           {activeTab === 'accessibility' && <AcessibilidadeScreen />}
+          {activeTab === 'flores' && (
+            <LojinhaFloresScreen
+              flowersCount={flowersCount}
+              onSpendFlowers={(custo) => setFlowersCount((prev) => Math.max(0, prev - custo))}
+              onOpenInvite={() => setIsInviteModalOpen(true)}
+              onGoToNetwork={() => handleTabChange('network')}
+            />
+          )}
 
           {activeTab === 'booking' && (
             <AgendamentoScreen
@@ -656,7 +681,7 @@ function AppContent() {
         <InviteModal
           isOpen={isInviteModalOpen}
           onClose={() => setIsInviteModalOpen(false)}
-          userName="Mariana"
+          userName={primeiroNomeAtual}
           flowersCount={flowersCount}
           onInviteSuccess={(bonus) => setFlowersCount((prev) => prev + bonus)}
         />
