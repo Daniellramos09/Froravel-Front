@@ -43,8 +43,8 @@ export default function ApoioScreen({ setActiveTab }) {
         <p className="text-secondary text-[14px] font-bold uppercase tracking-wider mb-2 flex items-center gap-2">
           <HeartHandshake size={16} /> ESCUTA QUE ACOLHE
         </p>
-        <h1 className="text-[32px] md:text-[40px] font-fraunces font-bold text-primary mb-2">Sua rede de apoio</h1>
-        <p className="text-gray2 text-[18px]">Encontre alguém para caminhar com você. No seu tempo, do seu jeito.</p>
+        <h1 className="text-2xl sm:text-3xl font-fraunces font-normal text-[#1F3A27] mb-1.5">Sua rede de apoio</h1>
+        <p className="text-sm text-[#4A5E4D] leading-relaxed">Encontre alguém para caminhar com você. No seu tempo, do seu jeito.</p>
       </div>
 
       <div className="relative mb-8 max-w-3xl">

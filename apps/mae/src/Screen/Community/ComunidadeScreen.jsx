@@ -9,7 +9,7 @@ import { getIllustrationBgClass } from '../../utils/illustrationFrame';
 
 const FILTER_OPTIONS = [
   { id: 'todas', label: 'Todas as rodas' },
-  { id: 'ao_vivo', label: '🔴 Ao vivo agora' },
+  { id: 'ao_vivo', label: 'Ao vivo agora' },
   { id: 'depressao_pos_parto', label: 'Depressão Pós-Parto' },
   { id: 'sobrecarga_burnout', label: 'Sobrecarga & Burnout' },
   { id: 'ansiedade_sono', label: 'Ansiedade & Sono' },
@@ -133,14 +133,14 @@ export default function ComunidadeScreen() {
 
       {/* CABEÇALHO LIMPO */}
       <div className="mb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-3">
-        <div>
-          <p className="text-[#516B55] text-xs font-bold uppercase tracking-wider mb-1 flex items-center gap-1.5">
-            <MessageSquare size={14} /> JUNTAS, SOMOS REDE
-          </p>
-          <h1 className="text-2xl sm:text-4xl font-fraunces font-bold text-[#294D33]">
-            Rodas de Conversa
-          </h1>
-          <p className="text-stone-600 text-sm sm:text-base mt-0.5">
+        <div className="space-y-1.5">
+          <div className="flex items-center gap-2.5 text-[#1F3A27]">
+            <MessageSquare size={22} aria-hidden="true" />
+            <h1 className="text-2xl sm:text-3xl font-fraunces font-normal text-[#1F3A27]">
+              Rodas de Conversa
+            </h1>
+          </div>
+          <p className="text-sm text-[#4A5E4D] leading-relaxed">
             Escolha um tema abaixo e participe dos encontros por vídeo dentro da plataforma.
           </p>
         </div>

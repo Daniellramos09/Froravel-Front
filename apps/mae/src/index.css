@@ -89,7 +89,27 @@ button:active {
 /* 4. REGRAS GLOBAIS DE ACESSIBILIDADE */
 html {
   transition: font-size 0.25s ease-out;
+  --floravel-font-scale: 1;
 }
+
+/* Garante que classes com valores fixos em px também escalem quando o usuário altera o tamanho das letras */
+html[data-font-scale] .text-\[10px\] { font-size: calc(10px * var(--floravel-font-scale, 1)) !important; }
+html[data-font-scale] .text-\[11px\] { font-size: calc(11px * var(--floravel-font-scale, 1)) !important; }
+html[data-font-scale] .text-\[12px\] { font-size: calc(12px * var(--floravel-font-scale, 1)) !important; }
+html[data-font-scale] .text-\[13px\] { font-size: calc(13px * var(--floravel-font-scale, 1)) !important; }
+html[data-font-scale] .text-\[14px\] { font-size: calc(14px * var(--floravel-font-scale, 1)) !important; }
+html[data-font-scale] .text-\[15px\] { font-size: calc(15px * var(--floravel-font-scale, 1)) !important; }
+html[data-font-scale] .text-\[16px\] { font-size: calc(16px * var(--floravel-font-scale, 1)) !important; }
+html[data-font-scale] .text-\[17px\] { font-size: calc(17px * var(--floravel-font-scale, 1)) !important; }
+html[data-font-scale] .text-\[18px\] { font-size: calc(18px * var(--floravel-font-scale, 1)) !important; }
+html[data-font-scale] .text-\[20px\] { font-size: calc(20px * var(--floravel-font-scale, 1)) !important; }
+html[data-font-scale] .text-\[22px\] { font-size: calc(22px * var(--floravel-font-scale, 1)) !important; }
+html[data-font-scale] .text-\[24px\] { font-size: calc(24px * var(--floravel-font-scale, 1)) !important; }
+html[data-font-scale] .text-\[26px\] { font-size: calc(26px * var(--floravel-font-scale, 1)) !important; }
+html[data-font-scale] .text-\[28px\] { font-size: calc(28px * var(--floravel-font-scale, 1)) !important; }
+html[data-font-scale] .text-\[32px\] { font-size: calc(32px * var(--floravel-font-scale, 1)) !important; }
+html[data-font-scale] .text-\[36px\] { font-size: calc(36px * var(--floravel-font-scale, 1)) !important; }
+html[data-font-scale] .text-\[40px\] { font-size: calc(40px * var(--floravel-font-scale, 1)) !important; }
 
 .font-scale-normal {
   font-size: 16px;

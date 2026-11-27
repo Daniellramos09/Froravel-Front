@@ -1,4 +1,4 @@
-import { HeartHandshake, Share2, Sparkles, Gift, ArrowRight } from 'lucide-react';
+import { HeartHandshake, Share2, Sparkles, Gift, ArrowRight, Flower2 } from 'lucide-react';
 
 export default function GamificationCard({ onGenerateLink, flowersCount = 12, targetFlowers = 15 }) {
   const progressPercent = Math.min(100, Math.round((flowersCount / targetFlowers) * 100));
@@ -42,7 +42,7 @@ export default function GamificationCard({ onGenerateLink, flowersCount = 12, ta
               </span>
               <div className="text-[24px] sm:text-[26px] font-fraunces font-bold text-[#294D33] flex items-center gap-2">
                 <span>{flowersCount} Flores Acumuladas</span>
-                <span className="text-[22px]">🌸</span>
+                <Flower2 size={22} className="text-[#A8435F] shrink-0" />
               </div>
             </div>
           </div>

@@ -117,13 +117,13 @@ const DEMO_RELATORIO = {
 };
 
 const DEMO_LICENSES = [
-  { id: "lic-1", codigoCorporativo: "TECH-M8R4K2", setor: "Engenharia & Produto", status: "ATIVADA", dataEmissao: "2026-10-05" },
-  { id: "lic-2", codigoCorporativo: "TECH-P9L2N7", setor: "Engenharia & Produto", status: "ATIVADA", dataEmissao: "2026-10-08" },
-  { id: "lic-3", codigoCorporativo: "TECH-K3V5X1", setor: "Operações & Atendimento", status: "ATIVADA", dataEmissao: "2026-10-12" },
-  { id: "lic-4", codigoCorporativo: "TECH-J7Q4W9", setor: "Pessoas & Cultura", status: "ATIVADA", dataEmissao: "2026-10-18" },
-  { id: "lic-5", codigoCorporativo: "TECH-R2B6Y8", setor: "Engenharia & Produto", status: "PENDENTE", dataEmissao: "2026-11-02" },
-  { id: "lic-6", codigoCorporativo: "TECH-D5T8Z3", setor: "Operações & Atendimento", status: "PENDENTE", dataEmissao: "2026-11-10" },
-  { id: "lic-7", codigoCorporativo: "TECH-N4C1H6", setor: "Pessoas & Cultura", status: "REVOGADA", dataEmissao: "2026-09-20" },
+  { id: "lic-1", nomeColaboradora: "Mariana Costa", emailCorporativo: "mariana.costa@techmaes.com.br", departamento: "Engenharia & Produto", codigoCorporativo: "TECH-M8R4K2", status: "ATIVADA", dataConvite: "2026-10-05" },
+  { id: "lic-2", nomeColaboradora: "Camila Rocha", emailCorporativo: "camila.rocha@techmaes.com.br", departamento: "Engenharia & Produto", codigoCorporativo: "TECH-P9L2N7", status: "ATIVADA", dataConvite: "2026-10-08" },
+  { id: "lic-3", nomeColaboradora: "Beatriz Lima", emailCorporativo: "beatriz.lima@techmaes.com.br", departamento: "Operações & Atendimento", codigoCorporativo: "TECH-K3V5X1", status: "ATIVADA", dataConvite: "2026-10-12" },
+  { id: "lic-4", nomeColaboradora: "Juliana Ferreira", emailCorporativo: "juliana.ferreira@techmaes.com.br", departamento: "Pessoas & Cultura", codigoCorporativo: "TECH-J7Q4W9", status: "ATIVADA", dataConvite: "2026-10-18" },
+  { id: "lic-5", nomeColaboradora: "Fernanda Almeida", emailCorporativo: "fernanda.almeida@techmaes.com.br", departamento: "Engenharia & Produto", codigoCorporativo: "TECH-R2B6Y8", status: "PENDENTE", dataConvite: "2026-11-02" },
+  { id: "lic-6", nomeColaboradora: "Larissa Mendes", emailCorporativo: "larissa.mendes@techmaes.com.br", departamento: "Operações & Atendimento", codigoCorporativo: "TECH-D5T8Z3", status: "PENDENTE", dataConvite: "2026-11-10" },
+  { id: "lic-7", nomeColaboradora: "Patrícia Souza", emailCorporativo: "patricia.souza@techmaes.com.br", departamento: "Pessoas & Cultura", codigoCorporativo: "TECH-N4C1H6", status: "REVOGADA", dataConvite: "2026-09-20" },
 ];
 
 export default function DashboardRh({ session = null, onLogout, isDemoMode = false }) {

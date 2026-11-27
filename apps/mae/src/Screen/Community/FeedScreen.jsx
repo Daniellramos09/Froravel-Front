@@ -266,11 +266,11 @@ export default function FeedScreen({ currentUser, allowAnonymous = false, showCr
 
   return (
     <div className="w-full max-w-2xl mx-auto font-dmsans text-[#2B2829] animate-fadeIn">
-      <header>
-        <h1 className="font-fraunces text-[30px] md:text-[38px] leading-[1.12] tracking-[-0.015em] text-[#1F3A27]">
+      <header className="space-y-1.5">
+        <h1 className="text-2xl sm:text-3xl font-fraunces font-normal text-[#1F3A27]">
           Comunidade
         </h1>
-        <p className="mt-2 text-[15px] text-[#4A5E4D]">
+        <p className="text-sm text-[#4A5E4D] leading-relaxed">
           {ehTerapeuta
             ? 'Compartilhe orientações com as mães. Seus posts aparecem com o selo de terapeuta.'
             : 'Um espaço para dividir o dia, pedir apoio e acolher outras mães.'}

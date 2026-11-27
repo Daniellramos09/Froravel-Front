@@ -124,7 +124,7 @@ export default function PerfilScreen({ onRedoOnboarding, onOpenDenuncia }) {
       );
       window.dispatchEvent(new Event('floravel_sessao_atualizada'));
     } catch (_) {}
-    setSaveMessage('Informações do perfil atualizadas com sucesso! 🌸');
+    setSaveMessage('Informações do perfil atualizadas com sucesso.');
     setIsSaved(true);
     setTimeout(() => setIsSaved(false), 3500);
   };
@@ -232,12 +232,12 @@ export default function PerfilScreen({ onRedoOnboarding, onOpenDenuncia }) {
 
   return (
     <div className="animate-fadeIn font-dmsans max-w-4xl pb-10">
-      <div className="mb-10">
-        <p className="text-secondary text-[14px] font-bold uppercase tracking-wider mb-2 flex items-center gap-2">
-          <User size={16} /> O SEU ESPAÇO
-        </p>
-        <h1 className="text-[32px] md:text-[40px] font-fraunces font-bold text-primary mb-2">Meu Perfil</h1>
-        <p className="text-gray2 text-[18px]">Faça a gestão das suas informações e preferências pessoais.</p>
+      <div className="mb-8 space-y-1.5">
+        <div className="flex items-center gap-2.5 text-[#1F3A27]">
+          <User size={22} aria-hidden="true" />
+          <h1 className="text-2xl sm:text-3xl font-fraunces font-normal text-[#1F3A27]">Meu Perfil</h1>
+        </div>
+        <p className="text-sm text-[#4A5E4D] leading-relaxed">Faça a gestão das suas informações e preferências pessoais.</p>
       </div>
 
       <div className="bg-white p-8 md:p-10 rounded-3xl border border-gray5 shadow-sm relative">

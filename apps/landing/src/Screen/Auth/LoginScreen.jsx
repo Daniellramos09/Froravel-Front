@@ -12,6 +12,8 @@ import {
   Lock,
   PhoneCall,
   AlertCircle,
+  Stethoscope,
+  Building2,
 } from 'lucide-react';
 
 const LOGIN_IMAGE = '/login-bg.png';
@@ -733,25 +735,25 @@ export default function LoginScreen({ initialMode = 'login' }) {
                 <div className="grid grid-cols-3 gap-2">
                   <a
                     href={APP_LINKS.mae}
-                    className="p-1.5 text-center rounded-xl bg-[#FCE7F0] border border-[#E8A9BB]/40 hover:bg-[#F4DDE5] transition shadow-2xs"
+                    className="p-2 text-center rounded-xl bg-[#FCE7F0] border border-[#E8A9BB]/40 hover:bg-[#F4DDE5] transition shadow-2xs inline-flex items-center justify-center gap-1.5"
                   >
-                    <span className="text-sm mr-1">🌸</span>
+                    <HeartHandshake size={14} className="text-[#294D33]" />
                     <span className="text-[11px] font-bold text-[#294D33]">Mãe</span>
                   </a>
 
                   <a
                     href={APP_LINKS.terapeuta}
-                    className="p-1.5 text-center rounded-xl bg-[#EBF3EE] border border-[#73937E]/30 hover:bg-[#EBF3EE]/80 transition shadow-2xs"
+                    className="p-2 text-center rounded-xl bg-[#EBF3EE] border border-[#73937E]/30 hover:bg-[#EBF3EE]/80 transition shadow-2xs inline-flex items-center justify-center gap-1.5"
                   >
-                    <span className="text-sm mr-1">🩺</span>
+                    <Stethoscope size={14} className="text-[#294D33]" />
                     <span className="text-[11px] font-bold text-[#294D33]">Terapeuta</span>
                   </a>
 
                   <a
                     href={APP_LINKS.rh}
-                    className="p-1.5 text-center rounded-xl bg-[#FDF4E7] border border-[#E8BA85]/40 hover:bg-[#FDF4E7]/80 transition shadow-2xs"
+                    className="p-2 text-center rounded-xl bg-[#FDF4E7] border border-[#E8BA85]/40 hover:bg-[#FDF4E7]/80 transition shadow-2xs inline-flex items-center justify-center gap-1.5"
                   >
-                    <span className="text-sm mr-1">🏢</span>
+                    <Building2 size={14} className="text-[#294D33]" />
                     <span className="text-[11px] font-bold text-[#294D33]">RH B2B</span>
                   </a>
                 </div>

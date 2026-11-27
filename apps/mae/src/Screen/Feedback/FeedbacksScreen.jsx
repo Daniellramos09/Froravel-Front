@@ -99,11 +99,11 @@ export default function FeedbacksScreen() {
       
       {/* CABEÇALHO LIMPO */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-fraunces font-bold text-[#294D33]">
+        <div className="space-y-1">
+          <h1 className="text-2xl sm:text-3xl font-fraunces font-normal text-[#1F3A27]">
             Feedbacks
           </h1>
-          <p className="text-xs sm:text-sm text-stone-500 mt-0.5">
+          <p className="text-sm text-[#4A5E4D]">
             Relatos reais de mães sobre nossas rodas e atendimentos.
           </p>
         </div>

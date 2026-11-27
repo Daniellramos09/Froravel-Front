@@ -4,10 +4,11 @@ import React, { createContext, useContext, useState, useEffect, useRef } from "r
 const AccessibilityContext = createContext();
 
 export const FONT_SIZES = {
-  normal: { id: "normal", label: "Normal (100%)", scale: "text-base", zoom: 100, rootScale: "100%" },
-  large: { id: "large", label: "Grande (115%)", scale: "text-lg", zoom: 115, rootScale: "115%" },
-  extra: { id: "extra", label: "Extra (130%)", scale: "text-xl", zoom: 130, rootScale: "128%" },
-  huge: { id: "huge", label: "Máxima (145%)", scale: "text-2xl", zoom: 145, rootScale: "140%" },
+  compact: { id: "compact", label: "Compacta (90%)", scale: "text-sm", zoom: 90, rootScale: "90%", factor: 0.9 },
+  normal: { id: "normal", label: "Normal (100%)", scale: "text-base", zoom: 100, rootScale: "100%", factor: 1 },
+  large: { id: "large", label: "Grande (115%)", scale: "text-lg", zoom: 115, rootScale: "115%", factor: 1.15 },
+  extra: { id: "extra", label: "Extra (130%)", scale: "text-xl", zoom: 130, rootScale: "130%", factor: 1.3 },
+  huge: { id: "huge", label: "Máxima (145%)", scale: "text-2xl", zoom: 145, rootScale: "145%", factor: 1.45 },
 };
 
 export const COLOR_MODES = {
@@ -81,11 +82,13 @@ export function AccessibilityProvider({ children }) {
   const [currentTabSpoken, setCurrentTabSpoken] = useState("home");
   const currentUtteranceRef = useRef(null);
 
-  // Aplica a escala de fonte na raiz do documento (HTML), permitindo que todos os rem do Tailwind escalem proporcionalmente
+  // Aplica a escala de fonte na raiz do documento (HTML), permitindo que todos os rem e px escalem proporcionalmente
   useEffect(() => {
     if (typeof document !== "undefined") {
-      const scale = FONT_SIZES[fontSize]?.rootScale || "115%";
-      document.documentElement.style.fontSize = scale;
+      const cfg = FONT_SIZES[fontSize] || FONT_SIZES.large;
+      document.documentElement.style.fontSize = cfg.rootScale;
+      document.documentElement.style.setProperty("--floravel-font-scale", String(cfg.factor || 1));
+      document.documentElement.dataset.fontScale = cfg.id;
       localStorage.setItem("floravel_font_size", fontSize);
     }
   }, [fontSize]);

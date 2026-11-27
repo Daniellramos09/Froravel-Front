@@ -8,6 +8,7 @@ import {
   HeartHandshake,
   MessageCircle,
   Gift,
+  Flower2,
   Sparkles,
   UserPlus,
   Send,
@@ -27,7 +28,7 @@ export default function InviteModal({
   const [friendName, setFriendName] = useState("");
   const [friendContact, setFriendContact] = useState("");
   const [customMessage, setCustomMessage] = useState(
-    "Oi querida! Lembrei de você com carinho. O Florável tem sido meu respiro nessa montanha-russa da maternidade. Quero te convidar para conhecer nosso espaço de acolhimento 🌸"
+    "Oi querida! Lembrei de você com carinho. O Florável tem sido meu respiro nessa montanha-russa da maternidade. Quero te convidar para conhecer nosso espaço de acolhimento."
   );
   const [step, setStep] = useState("form"); // 'form' | 'success'
   const [lastInvited, setLastInvited] = useState(null);
@@ -128,8 +129,8 @@ export default function InviteModal({
 
         {/* CABEÇALHO */}
         <div className="flex items-center gap-3.5 mb-5 pr-8">
-          <div className="w-12 h-12 rounded-2xl bg-[#F4DDE5] text-[#294D33] flex items-center justify-center text-xl shrink-0 shadow-xs">
-            🌸
+          <div className="w-12 h-12 rounded-2xl bg-[#F4DDE5] text-[#294D33] flex items-center justify-center shrink-0 shadow-xs">
+            <Flower2 size={22} className="text-[#A8435F]" />
           </div>
           <div>
             <div className="inline-flex items-center gap-1 text-[11px] font-bold text-[#294D33] uppercase tracking-wider bg-[#EBF3ED] px-2.5 py-0.5 rounded-full mb-0.5">
@@ -151,8 +152,9 @@ export default function InviteModal({
               <p className="text-xs text-stone-600">A mãe indicada ganha acesso acolhedor imediato</p>
             </div>
           </div>
-          <span className="text-xs font-bold bg-white text-[#294D33] px-3 py-1 rounded-full shadow-2xs border border-[#294D33]/10 tabular-nums">
-            Saldo: {flowersCount} 🌸
+          <span className="text-xs font-bold bg-white text-[#294D33] px-3 py-1 rounded-full shadow-2xs border border-[#294D33]/10 tabular-nums inline-flex items-center gap-1">
+            <span>Saldo: {flowersCount}</span>
+            <Flower2 size={13} className="text-[#A8435F]" />
           </span>
         </div>
 
@@ -260,7 +262,7 @@ export default function InviteModal({
 
             <div className="p-3 bg-[#FCF7F9] rounded-2xl border border-[#E8A9BB]/40 flex items-center justify-between text-xs font-medium text-[#294D33]">
               <span>Novo saldo acumulado:</span>
-              <span className="font-bold text-base">{flowersCount} 🌸</span>
+              <span className="font-bold text-base inline-flex items-center gap-1">{flowersCount} <Flower2 size={15} className="text-[#A8435F]" /></span>
             </div>
 
             <div className="space-y-2 pt-2">

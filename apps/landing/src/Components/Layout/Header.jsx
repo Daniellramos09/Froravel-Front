@@ -125,9 +125,9 @@ export default function Header() {
 
               {/* Menu Suspenso dos 3 Portais Integrados */}
               {portalDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-80 bg-white rounded-3xl shadow-xl border border-stone-100 p-2.5 z-50 animate-fadeIn text-left space-y-1">
-                  <div className="px-3 py-1.5 border-b border-stone-100 mb-1">
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-stone-400">
+                <div className="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-sm border border-[#E4DAD5] p-2.5 z-50 animate-fadeIn text-left space-y-1">
+                  <div className="px-3 py-1.5 border-b border-[#E4DAD5] mb-1">
+                    <p className="text-[11px] font-semibold text-[#4A5E4D]">
                       Escolha seu ambiente de acesso
                     </p>
                   </div>
@@ -136,18 +136,13 @@ export default function Header() {
                   <Link
                     to="/login?perfil=mae"
                     onClick={() => setPortalDropdownOpen(false)}
-                    className="flex items-start gap-3 p-2.5 rounded-2xl hover:bg-[#FCF7F9] transition group"
+                    className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-[#FCF7F9] transition group"
                   >
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between">
-                        <p className="text-xs font-bold text-[#294D33] group-hover:text-[#1e3c27]">
-                          Espaço da Mãe
-                        </p>
-                        <span className="text-[10px] font-semibold text-emerald-800 bg-emerald-50 px-1.5 py-0.5 rounded-md">
-                          Ativo
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-stone-500 leading-tight mt-0.5">
+                      <p className="text-xs font-bold text-[#1F3A27] group-hover:text-[#294D33]">
+                        Espaço da Mãe
+                      </p>
+                      <p className="text-[11px] text-[#4A5E4D] leading-tight mt-0.5">
                         Diário emocional, triagem EPDS, rodas e rede de apoio solidária
                       </p>
                     </div>
@@ -157,18 +152,13 @@ export default function Header() {
                   <Link
                     to="/login?perfil=terapeuta"
                     onClick={() => setPortalDropdownOpen(false)}
-                    className="flex items-start gap-3 p-2.5 rounded-2xl hover:bg-[#FCF7F9] transition group"
+                    className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-[#FCF7F9] transition group"
                   >
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between">
-                        <p className="text-xs font-bold text-[#294D33] group-hover:text-[#1e3c27]">
-                          Portal do Terapeuta
-                        </p>
-                        <span className="text-[10px] font-semibold text-emerald-800 bg-emerald-50 px-1.5 py-0.5 rounded-md">
-                          Clínico
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-stone-500 leading-tight mt-0.5">
+                      <p className="text-xs font-bold text-[#1F3A27] group-hover:text-[#294D33]">
+                        Portal do Terapeuta
+                      </p>
+                      <p className="text-[11px] text-[#4A5E4D] leading-tight mt-0.5">
                         Agenda clínica, mães atendidas e sala de acolhimento
                       </p>
                     </div>
@@ -178,17 +168,12 @@ export default function Header() {
                   <Link
                     to="/login?perfil=rh"
                     onClick={() => setPortalDropdownOpen(false)}
-                    className="flex items-start gap-3 p-2.5 rounded-2xl hover:bg-[#FCF7F9] transition group"
+                    className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-[#FCF7F9] transition group"
                   >
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between">
-                        <p className="text-xs font-bold text-[#294D33] group-hover:text-[#1e3c27]">
-                          Dashboard RH
-                        </p>
-                        <span className="text-[10px] font-semibold text-amber-800 bg-amber-50 px-1.5 py-0.5 rounded-md">
-                          B2B
-                        </span>
-                      </div>
+                      <p className="text-xs font-bold text-[#1F3A27] group-hover:text-[#294D33]">
+                        Dashboard RH
+                      </p>
                       <p className="text-[11px] text-stone-500 leading-tight mt-0.5">
                         Gestão de licenças, relatórios de saúde e faturamento
                       </p>

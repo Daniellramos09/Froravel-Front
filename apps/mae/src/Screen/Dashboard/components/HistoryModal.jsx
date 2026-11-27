@@ -3,11 +3,11 @@ import { createPortal } from 'react-dom';
 import { X, Calendar, ArrowRight, ShieldCheck } from 'lucide-react';
 
 const RECENT_RECORDS = [
-  { date: 'Hoje (01/11)', mood: '🌸 Serena', epds: 'Triagem estável', notes: 'Conseguiu dormir melhor à tarde. Bebê mamou tranquilo.', status: 'low' },
-  { date: 'Ontem (31/10)', mood: '🌿 Apoiada', epds: '-', notes: 'Roda de conversa com outras mães trouxe muito alívio.', status: 'low' },
-  { date: '30/10', mood: '☕ Cansada', epds: '-', notes: 'Noite com cólica e despertares de hora em hora.', status: 'medium' },
-  { date: '29/10', mood: '🤍 Acolhida', epds: '-', notes: 'Parceiro assumiu o banho do bebê, tempo para um banho quente.', status: 'low' },
-  { date: '18/10', mood: '🌧️ Sensível', epds: 'EPDS: 6/30 (Baixo risco)', notes: 'Triagem quinzenal realizada. Sensação de baby blues passageiro.', status: 'low' },
+  { date: 'Hoje (01/11)', mood: 'Serena', epds: 'Triagem estável', notes: 'Conseguiu dormir melhor à tarde. Bebê mamou tranquilo.', status: 'low' },
+  { date: 'Ontem (31/10)', mood: 'Apoiada', epds: '-', notes: 'Roda de conversa com outras mães trouxe muito alívio.', status: 'low' },
+  { date: '30/10', mood: 'Cansada', epds: '-', notes: 'Noite com cólica e despertares de hora em hora.', status: 'medium' },
+  { date: '29/10', mood: 'Acolhida', epds: '-', notes: 'Parceiro assumiu o banho do bebê, tempo para um banho quente.', status: 'low' },
+  { date: '18/10', mood: 'Sensível', epds: 'EPDS: 6/30 (Baixo risco)', notes: 'Triagem quinzenal realizada. Sensação de baby blues passageiro.', status: 'low' },
 ];
 
 export default function HistoryModal({ isOpen, onClose, onStartQuiz }) {

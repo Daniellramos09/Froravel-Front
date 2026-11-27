@@ -507,7 +507,7 @@ export default function Agenda() {
                 {/* Manhã */}
                 <div>
                   <span className="text-[11px] font-semibold text-stone-600 mb-1.5 block">
-                    🌅 Turno da Manhã:
+                    Turno da Manhã:
                   </span>
                   <div className="flex flex-wrap gap-2">
                     {HORARIOS_PADRAO_TURNOS.manha.map((h) => {
@@ -536,7 +536,7 @@ export default function Agenda() {
                 {/* Tarde */}
                 <div>
                   <span className="text-[11px] font-semibold text-stone-600 mb-1.5 block">
-                    ☀️ Turno da Tarde:
+                    Turno da Tarde:
                   </span>
                   <div className="flex flex-wrap gap-2">
                     {HORARIOS_PADRAO_TURNOS.tarde.map((h) => {
@@ -565,7 +565,7 @@ export default function Agenda() {
                 {/* Noite */}
                 <div>
                   <span className="text-[11px] font-semibold text-stone-600 mb-1.5 block">
-                    🌙 Turno da Noite:
+                    Turno da Noite:
                   </span>
                   <div className="flex flex-wrap gap-2">
                     {HORARIOS_PADRAO_TURNOS.noite.map((h) => {

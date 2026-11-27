@@ -15,11 +15,6 @@ const redes = [
     href: "https://www.linkedin.com/company/flor%C3%A1vel/",
     target: "_blank"
   },
-  { 
-    nome: "WhatsApp", 
-    href: "https://api.whatsapp.com/send?text=Ol%C3%A1!%20Gostaria%20de%20saber%20mais%20sobre%20a%20Flor%C3%A1vel.",
-    target: "_blank"
-  },
 ];
 
 const secoes = [
@@ -111,9 +106,19 @@ export default function Footer() {
                   rel="noopener noreferrer"
                   aria-label={r.nome}
                   title={r.nome}
-                  className="w-8 h-8 rounded-full bg-[#F4DDE5] text-[#294D33] flex items-center justify-center text-xs font-bold hover:bg-[#294D33] hover:text-[#FCF7F9] transition-colors"
+                  className="w-9 h-9 rounded-full bg-[#F4DDE5] text-[#294D33] flex items-center justify-center hover:bg-[#294D33] hover:text-[#FCF7F9] transition-colors"
                 >
-                  {r.nome[0]}
+                  {r.nome === "Instagram" ? (
+                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+                      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                      <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+                    </svg>
+                  ) : (
+                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                      <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z" />
+                    </svg>
+                  )}
                 </a>
               ))}
             </div>

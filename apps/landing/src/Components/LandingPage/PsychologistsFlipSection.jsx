@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Plus, Minus, ArrowLeft, ArrowRight, HeartHandshake } from "lucide-react";
 
@@ -55,11 +55,43 @@ const PSYCHOLOGISTS = [
       "Quando uma mulher compartilha o que sente em uma roda segura, outras mães percebem que não estão sozinhas. A escuta em comunidade cura a solidão silenciosa da maternidade.",
     social: "Rodas gratuitas semanais",
   },
+  {
+    id: "juliana-martins",
+    nome: "Dra. Juliana Martins",
+    cargo: "Psicóloga Obstétrica",
+    subtitulo: "Gestação de Risco & Medo do Parto",
+    crp: "CRP 06/17305",
+    foto: "/img/fotopsicologo/download8.jpg",
+    cardBg: "bg-[#F4DDE5]",
+    photoBg: "bg-[#516B55]",
+    mensagem:
+      "Medo e insegurança na gestação não precisam ser silenciados. Cuidar das suas emoções antes do parto fortalece sua confiança e protege a sua saúde mental no pós-parto.",
+    social: "Vagas sociais a R$ 40",
+  },
+  {
+    id: "rafael-mendes",
+    nome: "Dr. Rafael Mendes",
+    cargo: "Psicólogo Clínico",
+    subtitulo: "Parentalidade & Rede Familiar",
+    crp: "CRP 06/16542",
+    foto: "/img/fotopsicologo/psicologos7.jpg",
+    cardBg: "bg-[#EBF1ED]",
+    photoBg: "bg-[#1F3224]",
+    mensagem:
+      "Acolher quem cuida transforma toda a família. Trabalhamos juntos para reconstruir limites saudáveis, descanso possível e apoio emocional real na rotina com o bebê.",
+    social: "Atendimento online acolhedor",
+  },
+];
+
+const LOOP_PSYCHOLOGISTS = [
+  ...PSYCHOLOGISTS.map((p) => ({ ...p, loopKey: `a-${p.id}` })),
+  ...PSYCHOLOGISTS.map((p) => ({ ...p, loopKey: `b-${p.id}` })),
 ];
 
 export default function PsychologistsFlipSection() {
   const [flippedIds, setFlippedIds] = useState({});
   const [hoveredId, setHoveredId] = useState(null);
+  const [isCarouselPaused, setIsCarouselPaused] = useState(false);
   const scrollContainerRef = useRef(null);
 
   const toggleCard = (id) => {
@@ -69,10 +101,54 @@ export default function PsychologistsFlipSection() {
     }));
   };
 
+  // Loop contínuo lento e suave (pausa automaticamente ao passar o mouse ou virar um card)
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const prefersReducedMotion =
+      typeof window !== "undefined" &&
+      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion) return;
+
+    let rafId = null;
+    let accum = 0;
+    const SPEED_PX_PER_FRAME = 0.42;
+
+    const tick = () => {
+      const hasFlipped = Object.values(flippedIds).some(Boolean);
+      if (!isCarouselPaused && !hoveredId && !hasFlipped) {
+        accum += SPEED_PX_PER_FRAME;
+        if (accum >= 1) {
+          const step = Math.floor(accum);
+          accum -= step;
+          container.scrollLeft += step;
+          const half = container.scrollWidth / 2;
+          if (half > 0 && container.scrollLeft >= half) {
+            container.scrollLeft -= half;
+          }
+        }
+      }
+      rafId = window.requestAnimationFrame(tick);
+    };
+
+    rafId = window.requestAnimationFrame(tick);
+    return () => {
+      if (rafId) window.cancelAnimationFrame(rafId);
+    };
+  }, [isCarouselPaused, hoveredId, flippedIds]);
+
   const scrollByCard = (direction) => {
-    if (!scrollContainerRef.current) return;
+    const container = scrollContainerRef.current;
+    if (!container) return;
     const step = 330;
-    scrollContainerRef.current.scrollBy({
+    const half = container.scrollWidth / 2;
+    if (direction === "prev" && container.scrollLeft <= step && half > 0) {
+      container.scrollLeft += half;
+    } else if (direction === "next" && half > 0 && container.scrollLeft >= half) {
+      container.scrollLeft -= half;
+    }
+    container.scrollBy({
       left: direction === "next" ? step : -step,
       behavior: "smooth",
     });
@@ -107,21 +183,25 @@ export default function PsychologistsFlipSection() {
           </div>
         </div>
 
-        {/* Carrossel horizontal de Flip Cards */}
+        {/* Carrossel horizontal de Flip Cards (Loop Infinito Lento) */}
         <div
           ref={scrollContainerRef}
-          className="flex gap-6 overflow-x-auto pb-6 snap-x snap-mandatory scrollbar-none"
+          onMouseEnter={() => setIsCarouselPaused(true)}
+          onMouseLeave={() => setIsCarouselPaused(false)}
+          onTouchStart={() => setIsCarouselPaused(true)}
+          onTouchEnd={() => setIsCarouselPaused(false)}
+          className="flex gap-6 overflow-x-auto pb-6 scrollbar-none"
           style={{ scrollbarWidth: "none" }}
         >
-          {PSYCHOLOGISTS.map((psi) => {
-            const isFlipped = hoveredId === psi.id || !!flippedIds[psi.id];
+          {LOOP_PSYCHOLOGISTS.map((psi) => {
+            const isFlipped = hoveredId === psi.loopKey || !!flippedIds[psi.loopKey];
 
             return (
               <div
-                key={psi.id}
-                onMouseEnter={() => setHoveredId(psi.id)}
+                key={psi.loopKey}
+                onMouseEnter={() => setHoveredId(psi.loopKey)}
                 onMouseLeave={() => setHoveredId(null)}
-                className="snap-start shrink-0 w-[290px] sm:w-[310px] h-[440px] [perspective:1200px]"
+                className="shrink-0 w-[290px] sm:w-[310px] h-[440px] [perspective:1200px]"
               >
                 <div
                   className={`relative w-full h-full transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] [transform-style:preserve-3d] ${
@@ -148,7 +228,7 @@ export default function PsychologistsFlipSection() {
                       {/* Botão circular + no canto superior direito */}
                       <button
                         type="button"
-                        onClick={() => toggleCard(psi.id)}
+                        onClick={() => toggleCard(psi.loopKey)}
                         aria-label={`Ler mensagem de ${psi.nome}`}
                         className="absolute top-3 right-3 w-10 h-10 rounded-full bg-white text-[#294D33] hover:bg-[#FCF7F9] shadow-md flex items-center justify-center transition-transform duration-200 hover:scale-110 cursor-pointer"
                       >
@@ -192,7 +272,7 @@ export default function PsychologistsFlipSection() {
 
                         <button
                           type="button"
-                          onClick={() => toggleCard(psi.id)}
+                          onClick={() => toggleCard(psi.loopKey)}
                           aria-label={`Voltar para foto de ${psi.nome}`}
                           className="w-10 h-10 rounded-full bg-white text-[#294D33] hover:bg-[#FCF7F9] shadow-sm flex items-center justify-center shrink-0 transition-transform duration-200 hover:scale-110 cursor-pointer"
                         >

@@ -950,15 +950,15 @@ export default function SupportNetworkScreen({
   // =========================================================
   return (
     <div className="animate-fadeIn font-dmsans max-w-[1080px] mx-auto pb-16 antialiased text-[#2B2829]">
-      {/* Cabeçalho Padronizado com a Tipografia de Rodas de Conversa */}
-      <header className="mb-10">
-        <p className="text-apoio text-[14px] font-bold uppercase tracking-wider mb-2 flex items-center gap-2">
-          <HeartHandshake size={16} /> ESCUTA ÉTICA E ESPECIALIZADA
-        </p>
-        <h1 className="text-[32px] md:text-[40px] font-fraunces font-bold text-primary mb-2">
-          Rede de apoio profissional
-        </h1>
-        <p className="text-gray2 text-[18px]">
+      {/* Cabeçalho Padronizado com Canal de Denúncias */}
+      <header className="mb-8 space-y-1.5">
+        <div className="flex items-center gap-2.5 text-[#1F3A27]">
+          <HeartHandshake size={22} aria-hidden="true" />
+          <h1 className="text-2xl sm:text-3xl font-fraunces font-normal text-[#1F3A27]">
+            Rede de apoio profissional
+          </h1>
+        </div>
+        <p className="text-sm text-[#4A5E4D] leading-relaxed max-w-2xl">
           Psicólogas certificadas com atendimento gratuito pelo Fundo Florável ou valores sociais acessíveis. Toque em uma profissional para ver sua abordagem e agendar.
         </p>
       </header>

@@ -36,14 +36,14 @@ export default function AgendamentoScreen({ setActiveTab, agendamentos, cancelar
       />
 
       <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <p className="text-apoio text-[13px] font-bold uppercase tracking-wider mb-1.5 flex items-center gap-2">
-            <Calendar size={16} /> SEU TEMPO DE CUIDADO
-          </p>
-          <h1 className="text-[32px] md:text-[40px] font-fraunces font-bold text-primary mb-1">
-            Meus Agendamentos
-          </h1>
-          <p className="text-gray2 text-[16px]">
+        <div className="space-y-1.5">
+          <div className="flex items-center gap-2.5 text-[#1F3A27]">
+            <Calendar size={22} aria-hidden="true" />
+            <h1 className="text-2xl sm:text-3xl font-fraunces font-normal text-[#1F3A27]">
+              Meus Agendamentos
+            </h1>
+          </div>
+          <p className="text-sm text-[#4A5E4D] leading-relaxed">
             Seus próximos encontros de escuta e acolhimento in-app.
           </p>
         </div>

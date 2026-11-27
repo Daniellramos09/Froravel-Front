@@ -1,5 +1,5 @@
 // src/Screen/Dashboard/components/TopFlowerGamification.jsx
-import { Share2, Sparkles } from 'lucide-react';
+import { Share2, Sparkles, Flower2 } from 'lucide-react';
 
 export default function TopFlowerGamification({ flowersCount = 12, targetFlowers = 15, onOpenInvite }) {
   const remaining = Math.max(0, targetFlowers - flowersCount);
@@ -9,8 +9,8 @@ export default function TopFlowerGamification({ flowersCount = 12, targetFlowers
     <div className="bg-white border border-stone-200/90 rounded-3xl p-3.5 sm:px-5 sm:py-3 shadow-xs hover:shadow-sm transition-all duration-300 flex flex-wrap items-center justify-between gap-3 sm:gap-6">
       {/* Ícone e Saldo de Flores com visual claro */}
       <div className="flex items-center gap-3">
-        <div className="w-12 h-12 rounded-2xl bg-[#F4DDE5] text-[#294D33] flex items-center justify-center text-2xl shrink-0 shadow-2xs">
-          🌸
+        <div className="w-12 h-12 rounded-2xl bg-[#F4DDE5] text-[#294D33] flex items-center justify-center shrink-0 shadow-2xs">
+          <Flower2 size={22} className="text-[#A8435F]" />
         </div>
         <div>
           <div className="flex items-center gap-2">

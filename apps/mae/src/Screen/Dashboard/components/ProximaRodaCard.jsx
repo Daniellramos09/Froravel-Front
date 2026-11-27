@@ -8,7 +8,7 @@ export default function ProximaRodaCard({ onJoinRoom, onNavigateToGroups }) {
   const handleWhatsAppReminder = () => {
     setLembreteAtivo(true);
     const text = encodeURIComponent(
-      "Olá! Seu lembrete da Roda Florável: 'O Sono e a Sanidade Materna' acontece terça às 15h. Vaga confirmada! 🌸"
+      "Olá! Seu lembrete da Roda Florável: 'O Sono e a Sanidade Materna' acontece terça às 15h. Vaga confirmada."
     );
     window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
   };

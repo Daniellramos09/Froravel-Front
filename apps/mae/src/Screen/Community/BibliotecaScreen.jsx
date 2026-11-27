@@ -137,8 +137,8 @@ export default function BibliotecaScreen() {
         <p className="text-primary text-[14px] font-bold uppercase tracking-wider mb-2 flex items-center gap-2">
           <BookOpen size={16} /> INFORMAÇÃO QUE CURA
         </p>
-        <h1 className="text-[32px] md:text-[40px] font-fraunces font-bold text-gray1 mb-2">Conteúdos e Biblioteca</h1>
-        <p className="text-gray2 text-[18px]">Artigos, vídeos e guias escritos por especialistas, para você ler no seu tempo.</p>
+        <h1 className="text-2xl sm:text-3xl font-fraunces font-normal text-[#1F3A27] mb-1.5">Conteúdos e Biblioteca</h1>
+        <p className="text-sm text-[#4A5E4D] leading-relaxed">Artigos, vídeos e guias escritos por especialistas, para você ler no seu tempo.</p>
       </div>
 
       {/* BARRA DE PESQUISA E FILTROS */}

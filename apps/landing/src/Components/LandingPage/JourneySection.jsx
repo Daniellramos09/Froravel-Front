@@ -163,10 +163,10 @@ export default function JourneySection() {
       </div>
 
       {/* =====================================================================
-          MOBILE / TABLET: SELETOR DE ETAPAS (TABS LIMPAS SEM ARCO STICKY)
+          MOBILE / TABLET: SELETOR DE ETAPAS (STICKY LIMPO NO SCROLL)
       ===================================================================== */}
-      <div className="lg:hidden mx-auto max-w-[1560px] px-6 pb-2">
-        <div className="flex items-center gap-2 overflow-x-auto pb-3 pt-1 no-scrollbar">
+      <div className="lg:hidden sticky top-[62px] z-20 bg-[#FCF7F9]/95 backdrop-blur-sm border-b border-[#E8A9BB]/20 mx-auto max-w-[1560px] px-4 sm:px-6">
+        <div className="flex items-center gap-2 overflow-x-auto py-2.5 no-scrollbar">
           {JOURNEY_STEPS.map((st, idx) => {
             const isAct = idx === activeStep;
             return (
@@ -200,10 +200,10 @@ export default function JourneySection() {
       ===================================================================== */}
       <div className="mx-auto max-w-[1560px] px-6 lg:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start relative">
-          {/* 1. COLUNA ESQUERDA: PROGRESS WRAP (STICKY) */}
+          {/* 1. COLUNA ESQUERDA: PROGRESS WRAP (STICKY RESPONSIVO) */}
           <div className="hidden lg:flex lg:col-span-3 sticky top-0 h-screen items-center justify-end overflow-visible select-none">
             <div
-              className="relative w-[960px] h-[960px] rounded-full border border-[#294D33]/16 shrink-0 transition-transform duration-100 ease-out"
+              className="relative w-[680px] h-[680px] xl:w-[900px] xl:h-[900px] rounded-full border border-[#294D33]/16 shrink-0 transition-transform duration-100 ease-out"
               style={{
                 transform: `rotate(${rotationDeg}deg)`,
               }}
@@ -223,7 +223,7 @@ export default function JourneySection() {
                       type="button"
                       onClick={() => scrollToStep(idx)}
                       aria-label={`Ir para etapa ${st.number}`}
-                      className="pointer-events-auto absolute top-1/2 -translate-y-1/2 left-[949px] w-[22px] h-[22px] rounded-full flex items-center justify-center transition-opacity duration-500 cursor-pointer"
+                      className="pointer-events-auto absolute top-1/2 -translate-y-1/2 right-[-11px] w-[22px] h-[22px] rounded-full flex items-center justify-center transition-opacity duration-500 cursor-pointer"
                       style={{
                         border: "1px solid rgba(217, 138, 156, 0.55)",
                         opacity: isAct ? 1 : 0,
@@ -241,7 +241,7 @@ export default function JourneySection() {
                     <button
                       type="button"
                       onClick={() => scrollToStep(idx)}
-                      className={`pointer-events-auto absolute top-1/2 -translate-y-1/2 right-[-66px] font-serif text-[36px] xl:text-[42px] leading-[1.2] tracking-[-0.02em] transition-colors duration-500 cursor-pointer ${
+                      className={`pointer-events-auto absolute top-1/2 -translate-y-1/2 right-[-58px] xl:right-[-66px] font-serif text-[30px] xl:text-[42px] leading-[1.2] tracking-[-0.02em] transition-colors duration-500 cursor-pointer ${
                         isAct
                           ? "text-[#294D33] font-normal"
                           : "text-[#A4A4A4] hover:text-[#294D33]/65 font-normal"
