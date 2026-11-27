@@ -230,12 +230,12 @@ export default function PerfilConfiguracoes() {
         <div className="rounded-2xl bg-[#EBF3ED]/80 border border-[#294D33]/20 p-4 mb-6">
           <div className="flex items-start gap-3">
             <ShieldCheck className="w-5 h-5 text-[#294D33] shrink-0 mt-0.5" />
-            <div className="text-xs text-[#1F3A27]">
-              <p className="font-bold text-[13px] text-[#1F3A27]">
-                Compromisso Ético & Transparência (Diretriz do Conselho Federal de Psicologia)
+            <div className="text-sm text-[#1F3A27]">
+              <p className="font-bold text-sm sm:text-base text-[#1F3A27]">
+                Compromisso Ético & Transparência (CFP)
               </p>
-              <p className="text-stone-600 mt-1 leading-relaxed">
-                Os selos da Florável são <strong>atestados de credenciamento técnico, conformidade documental (CRP ativo) e áreas de atuação</strong> (como rodas comunitárias e acolhimento social). Conforme as normas éticas do CFP, <strong>os selos não representam ranqueamento nem indicam qualidade superior ou inferior do atendimento clínico</strong> — garantindo que todas as mães saibam que qualquer profissional credenciada na plataforma oferece acolhimento técnico, ético e humanizado com a mesma excelência.
+              <p className="text-stone-700 mt-1 leading-relaxed">
+                Os selos atestam <strong>credenciamento técnico (CRP ativo)</strong> e áreas de atuação. Conforme o CFP, <strong>não representam ranqueamento</strong> entre profissionais.
               </p>
             </div>
           </div>

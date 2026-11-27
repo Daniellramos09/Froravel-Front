@@ -594,7 +594,7 @@ export default function SalaAcolhimento() {
           <section className="space-y-4">
             <div className="flex flex-wrap items-center justify-between gap-3 px-1">
               <div>
-                <h2 className="font-sans text-xl sm:text-2xl font-bold text-[#1F3A27]">
+                <h2 className="font-dmsans text-xl sm:text-2xl font-bold text-[#1F3A27]">
                   Sessões Agendadas Prontas
                 </h2>
                 <p className="text-sm sm:text-base text-stone-600 mt-0.5">
@@ -640,7 +640,7 @@ export default function SalaAcolhimento() {
                         </span>
                       </div>
 
-                      <h3 className="font-sans text-lg sm:text-xl font-bold text-[#2B2829]">
+                      <h3 className="font-dmsans text-lg sm:text-xl font-bold text-[#2B2829]">
                         {s.titulo}
                       </h3>
                       <p className="text-sm sm:text-base text-stone-600 mt-1 flex flex-wrap items-center gap-4">
