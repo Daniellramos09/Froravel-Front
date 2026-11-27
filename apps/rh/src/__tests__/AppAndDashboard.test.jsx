@@ -123,10 +123,10 @@ describe('App & DashboardRh live integration', () => {
     expect(document.body.textContent).not.toContain('TechCorp');
     expect(document.body.textContent).not.toContain('42 / 50');
 
-    // Navigate to billing safe fallback
+    // Navigate to billing view
     const user = userEvent.setup();
     await user.click(screen.getByRole('button', { name: /Faturamento/i }));
-    expect(screen.getByText('Integração de Faturamento Indisponível')).toBeInTheDocument();
+    expect(screen.getByText('Plano Corporativo Bem-Estar')).toBeInTheDocument();
 
     // Logout clears session keys
     await user.click(screen.getByRole('button', { name: 'Sair do painel RH' }));
