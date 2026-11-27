@@ -131,8 +131,8 @@ export default function ComunidadeScreen() {
         context="Rodas de Conversa"
       />
 
-      {/* CABEÇALHO LIMPO */}
-      <div className="mb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+      {/* CABEÇALHO LIMPO — PADRÃO CANAL DE DENÚNCIAS */}
+      <header className="mb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-3">
         <div className="space-y-1.5">
           <div className="flex items-center gap-2.5 text-[#1F3A27]">
             <MessageSquare size={22} aria-hidden="true" />
@@ -140,7 +140,7 @@ export default function ComunidadeScreen() {
               Rodas de Conversa
             </h1>
           </div>
-          <p className="text-sm text-[#4A5E4D] leading-relaxed">
+          <p className="text-sm sm:text-base text-[#4A5E4D] leading-relaxed max-w-2xl">
             Escolha um tema abaixo e participe dos encontros por vídeo dentro da plataforma.
           </p>
         </div>
@@ -148,12 +148,12 @@ export default function ComunidadeScreen() {
         <button
           type="button"
           onClick={() => setIsDenunciaOpen(true)}
-          className="px-3.5 py-2 rounded-full bg-white border border-stone-200 text-xs font-bold text-stone-500 hover:text-red-600 hover:border-red-200 flex items-center gap-1.5 self-start sm:self-auto transition cursor-pointer shrink-0"
+          className="px-4 py-2 rounded-lg bg-white border border-[#E4DAD5] text-xs sm:text-sm font-semibold text-[#4A5E4D] hover:text-[#9B1C1C] hover:border-red-200 flex items-center gap-1.5 self-start sm:self-auto transition cursor-pointer shrink-0"
         >
-          <ShieldAlert size={14} className="text-red-500" />
+          <ShieldAlert size={15} className="text-[#9B1C1C]" />
           <span>Denunciar</span>
         </button>
-      </div>
+      </header>
 
       {/* BARRA DE FILTROS SELECIONÁVEIS (SCROLL HORIZONTAL NO MOBILE) */}
       <div className="flex items-center gap-2 overflow-x-auto pb-3 mb-6 -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap no-scrollbar">
@@ -185,10 +185,10 @@ export default function ComunidadeScreen() {
           return (
             <div 
               key={group.id} 
-              className="bg-white rounded-3xl border border-stone-200/90 overflow-hidden flex flex-col hover:shadow-md transition group"
+              className="bg-white rounded-xl border border-[#E4DAD5] overflow-hidden flex flex-col hover:border-[#E8A9BB] transition group"
             >
               {/* IMAGEM DO CARD */}
-              <div className="h-52 sm:h-56 relative overflow-hidden bg-stone-100">
+              <div className="h-52 sm:h-56 relative overflow-hidden bg-[#FCF7F9]">
                 <img 
                   src={group.img} 
                   alt={group.title} 
@@ -196,16 +196,16 @@ export default function ComunidadeScreen() {
                 />
 
                 {isRecommended && (
-                  <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-[#294D33] text-white text-[11px] font-bold flex items-center gap-1 shadow-sm">
-                    <Star size={11} className="fill-amber-400 text-amber-400" />
+                  <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-[#294D33] text-white text-xs font-medium flex items-center gap-1.5 shadow-sm">
+                    <Star size={12} className="fill-amber-400 text-amber-400" />
                     <span>Recomendado para você</span>
                   </div>
                 )}
 
                 {group.isLiveNow && (
-                  <span className="absolute bottom-3 right-3 px-2.5 py-1 rounded-full bg-red-600 text-white text-[11px] font-bold flex items-center gap-1.5 shadow-sm">
-                    <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
-                    AO VIVO
+                  <span className="absolute bottom-3 right-3 px-3 py-1 rounded-full bg-[#F4DDE5] border border-[#E8A9BB] text-[#1F3A27] text-xs font-semibold flex items-center gap-1.5 shadow-sm">
+                    <span className="w-2 h-2 rounded-full bg-[#294D33]" />
+                    Ao vivo agora
                   </span>
                 )}
               </div>
@@ -213,27 +213,27 @@ export default function ComunidadeScreen() {
               {/* CONTEÚDO DO CARD */}
               <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between">
                 <div>
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-[#516B55]">
+                  <span className="text-xs font-medium text-[#516B55]">
                     {group.theme}
                   </span>
-                  <h3 className="text-xl font-fraunces font-bold text-stone-900 mt-1 mb-2 leading-snug">
+                  <h3 className="text-xl sm:text-2xl font-fraunces font-normal text-[#1F3A27] mt-1 mb-2 leading-snug">
                     {group.title}
                   </h3>
-                  <p className="text-xs sm:text-sm text-stone-600 leading-relaxed mb-5">
+                  <p className="text-sm sm:text-base text-[#4A5E4D] leading-relaxed mb-5">
                     {group.desc}
                   </p>
                 </div>
                 
                 <div>
-                  <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mb-5 text-xs text-stone-600 font-medium border-t border-stone-100 pt-4">
+                  <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mb-5 text-xs sm:text-sm text-[#4A5E4D] font-medium border-t border-[#E4DAD5] pt-4">
                     <span className="flex items-center gap-1.5">
-                      <Calendar size={14} className="text-[#516B55]" /> {group.date}
+                      <Calendar size={14} className="text-[#294D33]" /> {group.date}
                     </span>
                     <span className="flex items-center gap-1.5">
-                      <HeartHandshake size={14} className="text-[#516B55]" /> {group.prof}
+                      <HeartHandshake size={14} className="text-[#294D33]" /> {group.prof}
                     </span>
                     <span className="flex items-center gap-1.5">
-                      <Users size={14} className="text-[#516B55]" /> {isSubscribed ? 'Inscrita' : `${group.spots} vagas`}
+                      <Users size={14} className="text-[#294D33]" /> {isSubscribed ? 'Inscrita' : `${group.spots} vagas`}
                     </span>
                   </div>
                   
@@ -241,7 +241,7 @@ export default function ComunidadeScreen() {
                     <button 
                       type="button"
                       onClick={() => handleOpenRoom(group)}
-                      className="w-full py-3.5 rounded-full text-sm font-bold flex items-center justify-center gap-2 bg-[#294D33] text-white hover:bg-[#1f3c27] transition shadow-xs cursor-pointer active:scale-98"
+                      className="w-full py-3 rounded-lg text-sm sm:text-base font-semibold flex items-center justify-center gap-2 bg-[#294D33] text-white hover:bg-[#1f3c27] transition cursor-pointer active:scale-98"
                     >
                       <Video size={17} />
                       <span>Entrar no Canal da Reunião</span>
@@ -250,7 +250,7 @@ export default function ComunidadeScreen() {
                     <button 
                       type="button"
                       onClick={() => handleSubscribe(group.id)}
-                      className="w-full py-3.5 rounded-full text-sm font-bold flex items-center justify-center gap-2 bg-[#F4DDE5] text-[#294D33] hover:bg-[#E8A9BB]/50 transition cursor-pointer"
+                      className="w-full py-3 rounded-lg text-sm sm:text-base font-semibold flex items-center justify-center gap-2 bg-[#F4DDE5] text-[#1F3A27] hover:bg-[#E8A9BB]/50 transition cursor-pointer"
                     >
                       <span>Garantir minha vaga</span>
                     </button>

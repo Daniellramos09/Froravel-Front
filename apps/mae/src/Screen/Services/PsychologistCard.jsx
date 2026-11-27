@@ -79,91 +79,69 @@ export default function PsychologistCard({ professional, onSelectAgenda }) {
         </div>
       </div>
 
-      {/* Conteúdo com Hierarquia Limpa (sem quebras apertadas nas estrelas) */}
+      {/* Conteúdo com Hierarquia Limpa (padrão editorial do perfil) */}
       <div className="flex-1 min-w-0 flex flex-col justify-between w-full">
         <div>
           {/* Linha 1: Especialidade + CRP em linha limpa */}
-          <div className="flex items-center justify-between gap-3 mb-1.5">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-secondary truncate">
-              {professional.spec}
-            </span>
-            <span className="text-[11px] text-gray4 font-mono font-medium whitespace-nowrap shrink-0">
-              {professional.crp || "CRP 06/142980"}
+          <div className="flex items-center justify-between gap-3 mb-1">
+            <span className="text-xs font-medium text-[#516B55] truncate">
+              {professional.spec} · {professional.crp || "CRP 06/142980"}
             </span>
           </div>
 
           {/* Nome da Profissional */}
           <h3
             id={`prof-name-${professional.id}`}
-            className="text-[22px] sm:text-[24px] font-fraunces font-bold text-gray1 mb-2 leading-tight group-hover:text-primary transition-colors"
+            className="text-[22px] sm:text-[24px] font-fraunces font-normal text-[#1F3A27] mb-2 leading-tight group-hover:text-[#294D33] transition-colors"
           >
             {professional.name}
           </h3>
 
-          {/* Linha 2: Faixa organizada de Estrelas Positivas + Patente / Impulso Recém-Chegada */}
-          <div className="flex flex-wrap items-center gap-2 mb-3">
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 border border-amber-200/80 text-amber-900 text-[11.5px] font-bold whitespace-nowrap">
-              <span className="inline-flex items-center gap-0.5" aria-hidden="true">
-                {[1, 2, 3, 4, 5].map((n) => (
-                  <Star
-                    key={n}
-                    size={11}
-                    className={
-                      n <= Math.round(Number(nota))
-                        ? "fill-amber-400 text-amber-500"
-                        : "text-amber-200"
-                    }
-                  />
-                ))}
-              </span>
-              <span className="tabular-nums">{nota}</span>
-              <span className="font-medium text-amber-800/80">
+          {/* Linha 2: Estrelas limpas (sem fundo amarelo) + Selo */}
+          <div className="flex flex-wrap items-center gap-2.5 mb-2.5">
+            <span className="inline-flex items-center gap-1.5 text-sm whitespace-nowrap">
+              <Star size={14} className="fill-amber-400 text-amber-500 shrink-0" />
+              <span className="font-semibold text-[#1F3A27] tabular-nums">{nota}</span>
+              <span className="text-[#4A5E4D]">
                 · {totalEstrelas} estrelas
               </span>
             </span>
 
             {professional.patenteNome && (
-              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#EBF3ED] text-[#1F3A27] text-[11px] font-bold whitespace-nowrap">
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full bg-[#EBF3ED] text-[#1F3A27] text-xs font-medium whitespace-nowrap">
                 {professional.patenteNome}
-              </span>
-            )}
-
-            {professional.isNewcomer && (
-              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#FCE7F0] border border-[#E8A9BB]/50 text-[#7A2D46] text-[11px] font-bold whitespace-nowrap">
-                <Sparkles size={11} />
-                Nova na Rede · Impulso
               </span>
             )}
           </div>
 
           {/* Abordagem e modalidade */}
           {professional.approach && (
-            <p className="text-[14px] sm:text-[14.5px] text-gray3 leading-relaxed mb-3">
-              <strong className="text-gray2 font-semibold">Abordagem:</strong> {professional.approach}
+            <p className="text-sm text-[#4A5E4D] leading-relaxed mb-3">
+              Abordagem: <strong className="text-[#1F3A27] font-medium">{professional.approach}</strong>
               {professional.modality && ` · ${professional.modality}`}
             </p>
           )}
         </div>
 
-        {/* Rodapé com Destaque para Valor Social / Gratuito e CTA */}
-        <div className="mt-1 pt-3 border-t border-gray5 flex flex-wrap items-center justify-between gap-3">
+        {/* Rodapé limpo */}
+        <div className="mt-1 pt-3 border-t border-[#E4DAD5] flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             {isSocialPrice ? (
-              <span className="inline-flex items-center px-3 py-1 rounded-full bg-superficie text-primary font-bold text-[12px] border border-secondary/20 shadow-2xs">
+              <span className="inline-flex items-center px-3 py-1 rounded-full bg-[#EBF3ED] text-[#1F3A27] font-medium text-xs">
                 Gratuito · Fundo Florável
               </span>
             ) : (
-              <span className="text-[15px] font-bold font-fraunces text-gray1">
+              <span className="text-base font-fraunces font-normal text-[#1F3A27]">
                 {professional.priceFormatted || `R$ ${professional.price},00`}
-                <span className="text-[12px] font-normal text-gray3 font-dmsans">
+                <span className="text-xs font-normal text-[#4A5E4D] font-dmsans">
                   {" "}
-                  / sessão social
+                  / sessão
                 </span>
               </span>
             )}
           </div>
 
-          <span className="inline-flex items-center gap-1.5 text-[14px] font-bold text-primary group-hover:text-apoio group-hover:translate-x-1 transition-all">
+          <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#294D33] group-hover:translate-x-1 transition-all">
             <span>Ver perfil e horários</span>
             <ArrowRight size={16} aria-hidden="true" />
           </span>

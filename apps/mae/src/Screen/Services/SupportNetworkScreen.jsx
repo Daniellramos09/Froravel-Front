@@ -579,18 +579,23 @@ export default function SupportNetworkScreen({
                   >
                     {profEmFoco.name}
                   </h1>
-                  <div className="mt-2.5 flex flex-wrap items-center gap-2.5">
-                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-900 text-[12px] font-bold whitespace-nowrap">
-                      <Star size={12} className="fill-amber-400 text-amber-500" />
-                      {Number(profEmFoco.rating || 4.9).toFixed(1)} · {profEmFoco.positiveStarsCount || sessionsCount} estrelas
+                  <div className="mt-2.5 flex flex-wrap items-center gap-3">
+                    <span className="inline-flex items-center gap-1.5 text-sm whitespace-nowrap">
+                      <Star size={14} className="fill-amber-400 text-amber-500" />
+                      <span className="font-semibold text-[#1F3A27] tabular-nums">
+                        {Number(profEmFoco.rating || 4.9).toFixed(1)}
+                      </span>
+                      <span className="text-[#4A5E4D]">
+                        · {profEmFoco.positiveStarsCount || sessionsCount} estrelas
+                      </span>
                     </span>
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-[#E4DAD5] text-[11.5px] font-bold text-[#1F3A27]">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-[#E4DAD5] text-xs font-medium text-[#1F3A27]">
                       <FloravelMedalBadge
                         variant={profEmFoco.patenteVariant || "guardia"}
                         tier={profEmFoco.patenteTier || "ouro_floravel"}
-                        size={22}
+                        size={20}
                       />
-                      <span>{profEmFoco.patenteNome || "Patente Florável"}</span>
+                      <span>{profEmFoco.patenteNome || "Selo Experiência Perinatal"}</span>
                     </div>
                   </div>
                   <p className="text-[13px] text-[#6B6365] mt-2">
