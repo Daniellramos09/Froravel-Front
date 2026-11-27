@@ -37,7 +37,7 @@ export default function PilaresSection() {
         className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[46rem] h-[36rem] rounded-full bg-[#F4DDE5]/30 blur-[140px] -z-10"
       />
 
-      <div className="max-w-[1560px] mx-auto px-6 lg:px-12 relative z-10">
+      <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
         {/* Cabeçalho */}
         <div className="sr-group max-w-3xl mb-14 sm:mb-20 text-left">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#516B55] mb-3 font-sans">
