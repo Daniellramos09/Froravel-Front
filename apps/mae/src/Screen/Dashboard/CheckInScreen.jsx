@@ -604,15 +604,15 @@ export default function CheckInScreen({ setActiveTab }) {
     <div className="animate-fadeIn font-dmsans max-w-4xl mx-auto pt-2 pb-12">
       {/* Topo Compacto e Barra de Progresso */}
       <div className="mb-6 sm:mb-8">
-        <div className="flex justify-between items-center text-xs text-stone-500 font-bold uppercase tracking-wider mb-2.5">
-          <span className="flex items-center gap-1.5 text-[#294D33]">
-            <Sparkles size={14} /> Check-in Emocional ({currentStep + 1} de {QUIZ_QUESTIONS.length})
+        <div className="flex justify-between items-center text-xs text-[#4A5E4D] font-semibold mb-2.5">
+          <span className="flex items-center gap-1.5 text-[#1F3A27]">
+            <Sparkles size={14} className="text-[#294D33]" /> Check-in Emocional ({currentStep + 1} de {QUIZ_QUESTIONS.length})
           </span>
           {currentStep > 0 && (
             <button
               type="button"
               onClick={handlePrevious}
-              className="text-stone-500 hover:text-stone-900 flex items-center gap-1 cursor-pointer"
+              className="text-[#4A5E4D] hover:text-[#1F3A27] flex items-center gap-1 cursor-pointer"
             >
               <ArrowLeft size={14} /> Voltar
             </button>
@@ -624,7 +624,7 @@ export default function CheckInScreen({ setActiveTab }) {
             <div
               key={index}
               className={`flex-1 h-full rounded-full transition-all duration-300 ${
-                index <= currentStep ? 'bg-[#294D33]' : 'bg-stone-200'
+                index <= currentStep ? 'bg-[#294D33]' : 'bg-[#E4DAD5]'
               }`}
             />
           ))}
@@ -636,10 +636,10 @@ export default function CheckInScreen({ setActiveTab }) {
             isTransitioning ? 'opacity-0 translate-y-2' : 'opacity-100 translate-y-0'
           }`}
         >
-          <h1 className="text-2xl sm:text-3xl font-fraunces font-bold text-stone-900 leading-snug">
+          <h1 className="text-2xl sm:text-3xl font-fraunces font-normal text-[#1F3A27] leading-snug">
             {currentQuestion.text}
           </h1>
-          <p className="text-xs sm:text-sm text-stone-500 mt-1">
+          <p className="text-sm text-[#4A5E4D] leading-relaxed mt-1.5">
             Toque no card que melhor representa como você se sente agora:
           </p>
         </div>
@@ -658,25 +658,25 @@ export default function CheckInScreen({ setActiveTab }) {
               key={option.value}
               type="button"
               onClick={() => handleAnswer(currentQuestion.id, option.value)}
-              className={`group text-left rounded-3xl overflow-hidden border transition-all duration-200 flex sm:flex-col bg-white cursor-pointer active:scale-[0.99] ${
+              className={`group text-left rounded-xl overflow-hidden border transition-all duration-200 flex sm:flex-col bg-white cursor-pointer active:scale-[0.99] ${
                 isSelected
-                  ? 'border-[#294D33] ring-2 ring-[#294D33] shadow-md'
-                  : 'border-stone-200/90 hover:border-[#E8A9BB] hover:shadow-md'
+                  ? 'border-[#294D33] ring-2 ring-[#294D33]/25 shadow-sm'
+                  : 'border-[#E4DAD5] hover:border-[#294D33]/40'
               }`}
             >
               {/* Fotografia Editorial */}
-              <div className="w-28 sm:w-full h-28 sm:h-48 relative shrink-0 overflow-hidden bg-stone-100">
+              <div className="w-28 sm:w-full h-28 sm:h-48 relative shrink-0 overflow-hidden bg-[#FCF7F9]">
                 <img
                   src={option.img}
                   alt={option.title}
                   className="w-full h-full object-cover object-top transition duration-500 group-hover:scale-105"
                 />
-                <span className="hidden sm:inline-block absolute top-3 left-3 px-2.5 py-1 rounded-full bg-black/55 backdrop-blur-xs text-white text-[11px] font-bold">
+                <span className="hidden sm:inline-block absolute top-3 left-3 px-2.5 py-1 rounded-md bg-white/90 text-[#1F3A27] text-xs font-semibold border border-[#E4DAD5]">
                   {option.tag}
                 </span>
                 {isSelected && (
-                  <div className="absolute inset-0 bg-[#294D33]/30 flex items-center justify-center">
-                    <div className="w-10 h-10 rounded-full bg-white text-[#294D33] flex items-center justify-center shadow-md">
+                  <div className="absolute inset-0 bg-[#294D33]/25 flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-full bg-white text-[#294D33] flex items-center justify-center shadow-sm">
                       <CheckCircle size={22} />
                     </div>
                   </div>
@@ -685,10 +685,10 @@ export default function CheckInScreen({ setActiveTab }) {
 
               {/* Mensagem Representativa */}
               <div className="p-4 sm:p-5 flex-1 flex flex-col justify-center">
-                <span className="sm:hidden text-[10px] font-bold uppercase tracking-wider text-[#294D33] mb-0.5">
+                <span className="sm:hidden text-xs font-semibold text-[#294D33] mb-0.5">
                   {option.tag}
                 </span>
-                <h3 className="text-base sm:text-lg font-fraunces font-bold text-stone-900 group-hover:text-[#294D33] transition">
+                <h3 className="text-base sm:text-lg font-fraunces font-normal text-[#1F3A27] group-hover:text-[#294D33] transition">
                   {option.title}
                 </h3>
                 <p className="text-xs sm:text-sm text-stone-600 mt-1 leading-relaxed">
