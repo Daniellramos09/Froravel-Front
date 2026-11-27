@@ -451,158 +451,74 @@ export default function Agenda() {
             </div>
           </div>
 
-          {/* Coluna Direita: Horários por Turno + Horário Personalizado */}
-          <div className="lg:col-span-7 space-y-6">
+          {/* Coluna Direita: A própria psicóloga define seus horários */}
+          <div className="lg:col-span-7 space-y-5">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <p className="text-base sm:text-lg font-bold text-[#1F3A27]">
-                2. Horários disponíveis
+                2. Meus horários liberados
               </p>
-
-              <div className="flex flex-wrap items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => aplicarTurnoRapido(HORARIOS_PADRAO_TURNOS.manha, 'Manhã')}
-                  className="px-3.5 py-1.5 rounded-full bg-[#EBF3ED] text-[#294D33] text-sm font-bold hover:bg-[#DCE9DF] transition cursor-pointer"
-                >
-                  + Manhã
-                </button>
-                <button
-                  type="button"
-                  onClick={() => aplicarTurnoRapido(HORARIOS_PADRAO_TURNOS.tarde, 'Tarde')}
-                  className="px-3.5 py-1.5 rounded-full bg-[#EBF3ED] text-[#294D33] text-sm font-bold hover:bg-[#DCE9DF] transition cursor-pointer"
-                >
-                  + Tarde
-                </button>
-                <button
-                  type="button"
-                  onClick={() => aplicarTurnoRapido(HORARIOS_PADRAO_TURNOS.noite, 'Noite')}
-                  className="px-3.5 py-1.5 rounded-full bg-[#EBF3ED] text-[#294D33] text-sm font-bold hover:bg-[#DCE9DF] transition cursor-pointer"
-                >
-                  + Noite
-                </button>
+              {horariosDisponiveis.length > 0 && (
                 <button
                   type="button"
                   onClick={() => {
                     setHorariosDisponiveis([]);
-                    showToast('Todos os horários foram desmarcados.');
+                    showToast('Todos os horários foram removidos.');
                   }}
                   className="px-3.5 py-1.5 rounded-full bg-stone-100 text-stone-700 text-sm font-semibold hover:bg-stone-200 transition cursor-pointer"
                 >
-                  Limpar
+                  Limpar todos
                 </button>
-              </div>
-            </div>
-
-            {/* Grupos de Horários por Turno */}
-            <div className="space-y-5">
-              {[
-                { label: 'Manhã', list: HORARIOS_PADRAO_TURNOS.manha },
-                { label: 'Tarde', list: HORARIOS_PADRAO_TURNOS.tarde },
-                { label: 'Noite', list: HORARIOS_PADRAO_TURNOS.noite },
-              ].map((turno) => (
-                <div key={turno.label}>
-                  <span className="text-base font-semibold text-stone-700 mb-2 block">
-                    {turno.label}
-                  </span>
-                  <div className="flex flex-wrap gap-2.5">
-                    {turno.list.map((h) => {
-                      const ativo = horariosDisponiveis.includes(h);
-                      return (
-                        <button
-                          key={h}
-                          type="button"
-                          onClick={() => {
-                            toggleHorarioDisponivel(h);
-                            showToast(`Horário ${h} ${ativo ? 'pausado' : 'liberado'} para as mães!`);
-                          }}
-                          className={`px-4 py-2.5 rounded-xl text-base font-bold transition cursor-pointer tabular-nums ${
-                            ativo
-                              ? 'bg-[#294D33] text-white shadow-2xs'
-                              : 'bg-stone-50 text-stone-700 border border-stone-200 hover:bg-stone-100'
-                          }`}
-                        >
-                          {ativo ? `✓ ${h}` : h}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Adicionar Horário Personalizado */}
-            <div className="pt-5 border-t border-stone-100 space-y-3.5">
-              <form onSubmit={handleAdicionarHorarioCustom} className="flex flex-wrap items-center gap-3">
-                <label htmlFor="novoHorarioCustom" className="text-base font-semibold text-stone-700">
-                  Outro horário:
-                </label>
-                <div className="flex items-center gap-2 bg-[#FCF7F9] rounded-xl border border-stone-200 px-3.5 py-2">
-                  <Clock className="w-4 h-4 text-[#294D33]" />
-                  <input
-                    id="novoHorarioCustom"
-                    type="time"
-                    value={novoHorarioCustom}
-                    onChange={(e) => setNovoHorarioCustom(e.target.value)}
-                    className="text-base font-bold text-[#1F3A27] bg-transparent outline-none tabular-nums"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="inline-flex items-center gap-2 rounded-full bg-[#294D33] px-5 py-2.5 text-sm sm:text-base font-bold text-white hover:bg-[#1F3A27] transition cursor-pointer shadow-2xs"
-                >
-                  <Plus className="w-4 h-4" />
-                  Adicionar
-                </button>
-              </form>
-
-              {catalogoHorarios.filter((h) => !HORARIOS_PADRAO_CATALOGO.includes(h)).length > 0 && (
-                <div className="flex flex-wrap items-center gap-2.5">
-                  <span className="text-sm font-semibold text-stone-600">Personalizados:</span>
-                  {catalogoHorarios
-                    .filter((h) => !HORARIOS_PADRAO_CATALOGO.includes(h))
-                    .map((h) => {
-                      const ativo = horariosDisponiveis.includes(h);
-                      return (
-                        <div
-                          key={h}
-                          className={`inline-flex items-center rounded-xl border px-3.5 py-2 text-base font-bold tabular-nums transition ${
-                            ativo
-                              ? 'bg-[#F4DDE5] text-[#1F3A27] border-[#E8A9BB]'
-                              : 'bg-white text-stone-500 border-stone-200'
-                          }`}
-                        >
-                          <button
-                            type="button"
-                            onClick={() => toggleHorarioDisponivel(h)}
-                            className="cursor-pointer mr-2"
-                          >
-                            {ativo ? `✓ ${h}` : h}
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => handleRemoverHorarioCatalogo(h)}
-                            title={`Remover ${h}`}
-                            aria-label={`Remover horário ${h}`}
-                            className="text-stone-500 hover:text-red-600 transition cursor-pointer p-0.5"
-                          >
-                            <X className="w-4 h-4" />
-                          </button>
-                        </div>
-                      );
-                    })}
-                </div>
               )}
-
-              {/* Resumo rápido dos horários liberados para as mães */}
-              <div className="pt-2 text-base text-[#294D33] font-semibold flex items-start sm:items-center gap-2">
-                <CheckCircle2 className="w-5 h-5 text-[#294D33] shrink-0 mt-0.5 sm:mt-0" />
-                <span>
-                  {horariosDisponiveis.length > 0
-                    ? `Liberados (${horariosDisponiveis.length}): ${horariosDisponiveis.join(', ')}`
-                    : 'Nenhum horário liberado no momento. Selecione acima para abrir vagas.'}
-                </span>
-              </div>
             </div>
+
+            <form onSubmit={handleAdicionarHorarioCustom} className="flex flex-wrap items-center gap-3">
+              <div className="flex items-center gap-2 bg-[#FCF7F9] rounded-xl border border-stone-200 px-4 py-2.5">
+                <Clock className="w-4 h-4 text-[#294D33]" />
+                <input
+                  id="novoHorarioCustom"
+                  type="time"
+                  value={novoHorarioCustom}
+                  onChange={(e) => setNovoHorarioCustom(e.target.value)}
+                  className="text-base font-bold text-[#1F3A27] bg-transparent outline-none tabular-nums"
+                />
+              </div>
+              <button
+                type="submit"
+                className="inline-flex items-center gap-2 rounded-full bg-[#294D33] px-5 py-2.5 text-sm sm:text-base font-bold text-white hover:bg-[#1F3A27] transition cursor-pointer shadow-2xs"
+              >
+                <Plus className="w-4 h-4" />
+                Adicionar horário
+              </button>
+            </form>
+
+            {horariosDisponiveis.length > 0 ? (
+              <div className="flex flex-wrap gap-2.5 pt-1">
+                {horariosDisponiveis.map((h) => (
+                  <div
+                    key={h}
+                    className="inline-flex items-center gap-2 rounded-xl bg-[#EBF3ED] border border-[#294D33]/20 px-4 py-2.5 text-base font-bold text-[#1F3A27] tabular-nums"
+                  >
+                    <span>{h}</span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        toggleHorarioDisponivel(h);
+                        showToast(`Horário ${h} removido.`);
+                      }}
+                      title={`Remover ${h}`}
+                      aria-label={`Remover horário ${h}`}
+                      className="text-[#516B55] hover:text-[#9B1C1C] transition cursor-pointer p-0.5"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-base text-stone-500">
+                Nenhum horário configurado. Escolha um horário acima e clique em Adicionar horário.
+              </p>
+            )}
           </div>
         </div>
       </section>
