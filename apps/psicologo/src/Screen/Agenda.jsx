@@ -358,104 +358,88 @@ export default function Agenda() {
         </div>
       </header>
 
-      {/* PAINEL FLEXÍVEL: DIAS E HORÁRIOS DISPONÍVEIS PARA AS MÃES */}
-      <section className="mt-6 rounded-3xl border border-[#EFE9EB] bg-white p-6 sm:p-8 shadow-sm">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-stone-100">
-          <div>
-            <h2 className="font-fraunces text-2xl sm:text-3xl font-bold text-[#1F3A27]">
-              Meus Dias e Horários Liberados para as Mães
-            </h2>
-            <p className="text-base text-stone-600 mt-1">
-              Escolha em quais dias e horários as mães podem agendar com você.
-            </p>
-          </div>
-          <span className="text-sm sm:text-base font-semibold text-[#294D33] bg-[#EBF3ED] px-4 py-2 rounded-full self-start sm:self-auto shrink-0">
-            {diasDisponiveis.length} dias ativos · {horariosDisponiveis.length} horários/dia
-          </span>
-        </div>
+      {/* PAINEL FLEXÍVEL: DISPONIBILIDADE DA PSICÓLOGA */}
+      <section className="mt-6 rounded-3xl border border-[#EFE9EB] bg-white p-6 sm:p-8 shadow-sm space-y-6">
+        <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-stone-100">
+          <h2 className="font-fraunces text-2xl sm:text-[26px] font-normal text-[#1F3A27]">
+            Meus Dias e Horários
+          </h2>
 
-        <div className="mt-7 grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Coluna Esquerda: Dias da semana + Duração e Recorrência */}
-          <div className="lg:col-span-5 space-y-6">
-            <div>
-              <p className="text-base sm:text-lg font-bold text-[#1F3A27] mb-3.5">
-                1. Dias da semana disponíveis
-              </p>
-              <div className="flex flex-wrap gap-2.5">
-                {DIAS_SEMANA_DISPONIVEIS.map((diaNome) => {
-                  const ativo = diasDisponiveis.includes(diaNome);
-                  return (
-                    <button
-                      key={diaNome}
-                      type="button"
-                      onClick={() => {
-                        toggleDiaDisponivel(diaNome);
-                        showToast(`Disponibilidade de ${diaNome} atualizada!`);
-                      }}
-                      className={`px-4 py-2.5 rounded-full text-sm sm:text-base font-bold border transition cursor-pointer ${
-                        ativo
-                          ? 'bg-[#294D33] text-white border-[#294D33] shadow-2xs'
-                          : 'bg-[#FCF7F9] text-stone-700 border-stone-200 hover:bg-stone-100'
-                      }`}
-                    >
-                      {ativo ? `✓ ${diaNome}` : diaNome}
-                    </button>
-                  );
-                })}
-              </div>
+          <div className="flex flex-wrap items-center gap-4">
+            <div className="inline-flex items-center gap-1 rounded-full bg-[#FCF7F9] border border-stone-200 p-1">
+              {['30', '50', '90'].map((min) => (
+                <button
+                  key={min}
+                  type="button"
+                  onClick={() => {
+                    setDuracaoPadrao(min);
+                    showToast(`Duração padrão definida para ${min} minutos.`);
+                  }}
+                  className={`px-3.5 py-1.5 rounded-full text-sm font-semibold transition cursor-pointer ${
+                    duracaoPadrao === min
+                      ? 'bg-[#294D33] text-white'
+                      : 'text-stone-700 hover:text-[#1F3A27]'
+                  }`}
+                >
+                  {min} min
+                </button>
+              ))}
             </div>
 
-            <div className="p-5 rounded-2xl bg-[#FCF7F9] border border-[#EFE9EB] space-y-4">
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <span className="text-base font-bold text-[#1F3A27]">Duração da sessão</span>
-                <div className="inline-flex rounded-full bg-white border border-stone-200 p-1">
-                  {['30', '50', '90'].map((min) => (
-                    <button
-                      key={min}
-                      type="button"
-                      onClick={() => {
-                        setDuracaoPadrao(min);
-                        showToast(`Duração padrão definida para ${min} minutos.`);
-                      }}
-                      className={`px-3.5 py-1.5 rounded-full text-sm font-bold transition cursor-pointer ${
-                        duracaoPadrao === min
-                          ? 'bg-[#294D33] text-white'
-                          : 'text-stone-700 hover:text-[#1F3A27]'
-                      }`}
-                    >
-                      {min} min
-                    </button>
-                  ))}
-                </div>
-              </div>
+            <label className="inline-flex items-center gap-2 cursor-pointer text-sm sm:text-base font-medium text-stone-700">
+              <input
+                type="checkbox"
+                checked={recorrenciaSemanal}
+                onChange={(e) => {
+                  setRecorrenciaSemanal(e.target.checked);
+                  showToast(
+                    e.target.checked
+                      ? 'Recorrência semanal ativada na Rede de Apoio.'
+                      : 'Recorrência semanal pausada.'
+                  );
+                }}
+                className="w-4 h-4 accent-[#294D33] rounded cursor-pointer"
+              />
+              <span>Repetir toda semana</span>
+            </label>
+          </div>
+        </div>
 
-              <label className="flex items-center justify-between gap-3 cursor-pointer pt-3 border-t border-stone-200/70">
-                <span className="text-base font-medium text-stone-700 flex items-center gap-2">
-                  <Repeat className="w-4 h-4 text-[#294D33] shrink-0" />
-                  Repetir toda semana
-                </span>
-                <input
-                  type="checkbox"
-                  checked={recorrenciaSemanal}
-                  onChange={(e) => {
-                    setRecorrenciaSemanal(e.target.checked);
-                    showToast(
-                      e.target.checked
-                        ? 'Recorrência semanal ativada na Rede de Apoio.'
-                        : 'Recorrência semanal pausada.'
-                    );
-                  }}
-                  className="w-5 h-5 accent-[#294D33] rounded cursor-pointer"
-                />
-              </label>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Coluna Esquerda: Dias da semana em linha única */}
+          <div className="lg:col-span-5">
+            <p className="text-base font-semibold text-[#1F3A27] mb-3">
+              Dias disponíveis
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {DIAS_SEMANA_DISPONIVEIS.map((diaNome) => {
+                const ativo = diasDisponiveis.includes(diaNome);
+                return (
+                  <button
+                    key={diaNome}
+                    type="button"
+                    onClick={() => {
+                      toggleDiaDisponivel(diaNome);
+                      showToast(`Disponibilidade de ${diaNome} atualizada!`);
+                    }}
+                    className={`px-4 py-2.5 rounded-full text-sm sm:text-base font-semibold border transition cursor-pointer ${
+                      ativo
+                        ? 'bg-[#294D33] text-white border-[#294D33]'
+                        : 'bg-[#FCF7F9] text-stone-700 border-stone-200 hover:bg-stone-100'
+                    }`}
+                  >
+                    {diaNome.slice(0, 3)}
+                  </button>
+                );
+              })}
             </div>
           </div>
 
           {/* Coluna Direita: A própria psicóloga define seus horários */}
-          <div className="lg:col-span-7 space-y-5">
+          <div className="lg:col-span-7 space-y-4">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <p className="text-base sm:text-lg font-bold text-[#1F3A27]">
-                2. Meus horários liberados
+              <p className="text-base font-semibold text-[#1F3A27]">
+                Horários liberados
               </p>
               {horariosDisponiveis.length > 0 && (
                 <button
@@ -464,7 +448,7 @@ export default function Agenda() {
                     setHorariosDisponiveis([]);
                     showToast('Todos os horários foram removidos.');
                   }}
-                  className="px-3.5 py-1.5 rounded-full bg-stone-100 text-stone-700 text-sm font-semibold hover:bg-stone-200 transition cursor-pointer"
+                  className="text-sm font-semibold text-stone-500 hover:text-[#9B1C1C] transition cursor-pointer"
                 >
                   Limpar todos
                 </button>
@@ -472,16 +456,13 @@ export default function Agenda() {
             </div>
 
             <form onSubmit={handleAdicionarHorarioCustom} className="flex flex-wrap items-center gap-3">
-              <div className="flex items-center gap-2 bg-[#FCF7F9] rounded-xl border border-stone-200 px-4 py-2.5">
-                <Clock className="w-4 h-4 text-[#294D33]" />
-                <input
-                  id="novoHorarioCustom"
-                  type="time"
-                  value={novoHorarioCustom}
-                  onChange={(e) => setNovoHorarioCustom(e.target.value)}
-                  className="text-base font-bold text-[#1F3A27] bg-transparent outline-none tabular-nums"
-                />
-              </div>
+              <input
+                id="novoHorarioCustom"
+                type="time"
+                value={novoHorarioCustom}
+                onChange={(e) => setNovoHorarioCustom(e.target.value)}
+                className="bg-[#FCF7F9] rounded-xl border border-stone-200 px-4 py-2.5 text-base font-bold text-[#1F3A27] outline-none tabular-nums focus:border-[#294D33]"
+              />
               <button
                 type="submit"
                 className="inline-flex items-center gap-2 rounded-full bg-[#294D33] px-5 py-2.5 text-sm sm:text-base font-bold text-white hover:bg-[#1F3A27] transition cursor-pointer shadow-2xs"
