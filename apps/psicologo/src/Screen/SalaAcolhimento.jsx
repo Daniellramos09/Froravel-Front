@@ -594,7 +594,7 @@ export default function SalaAcolhimento() {
           <section className="space-y-4">
             <div className="flex flex-wrap items-center justify-between gap-3 px-1">
               <div>
-                <h2 className="font-dmsans text-xl sm:text-2xl font-bold text-[#1F3A27]">
+                <h2 className="text-xl sm:text-2xl font-bold text-[#2B2829]">
                   Sessões Agendadas Prontas
                 </h2>
                 <p className="text-sm sm:text-base text-stone-600 mt-0.5">
@@ -625,9 +625,12 @@ export default function SalaAcolhimento() {
                     </div>
 
                     <div className="min-w-0">
-                      <div className="flex flex-wrap items-center gap-2 mb-1.5">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <h3 className="font-bold text-[#2B2829] text-lg sm:text-xl">
+                          {s.titulo}
+                        </h3>
                         <span
-                          className={`text-xs sm:text-sm font-bold px-3 py-0.5 rounded-full ${
+                          className={`text-xs font-bold px-2.5 py-0.5 rounded-full ${
                             s.tipo === 'grupo'
                               ? 'bg-[#EBF3ED] text-[#294D33]'
                               : 'bg-[#F4DDE5] text-[#1F3A27]'
@@ -635,15 +638,12 @@ export default function SalaAcolhimento() {
                         >
                           {s.tipo === 'grupo' ? 'Roda em Grupo' : 'Atendimento Individual'}
                         </span>
-                        <span className="text-xs sm:text-sm font-semibold px-3 py-0.5 rounded-full bg-stone-100 text-stone-700">
+                        <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-stone-100 text-stone-700">
                           {s.statusBadge}
                         </span>
                       </div>
 
-                      <h3 className="font-dmsans text-lg sm:text-xl font-bold text-[#2B2829]">
-                        {s.titulo}
-                      </h3>
-                      <p className="text-sm sm:text-base text-stone-600 mt-1 flex flex-wrap items-center gap-4">
+                      <p className="text-sm text-stone-600 mt-0.5 flex flex-wrap items-center gap-3">
                         <span className="inline-flex items-center gap-1.5">
                           <Calendar className="w-4 h-4 text-[#294D33]" /> {s.data}
                         </span>
